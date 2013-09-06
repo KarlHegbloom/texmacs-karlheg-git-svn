@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html htmltest)
-  (:use (convert html htmlout) (convert tools output)))
+;; (texmacs-module (convert html htmltest)
+;;   (:use (convert html htmlout) (convert tools output)))
+
+(define-module (convert html htmltest)
+  :use-module (texmacs-core))
+
+(use-modules (convert html htmlout) (convert tools output))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Html output

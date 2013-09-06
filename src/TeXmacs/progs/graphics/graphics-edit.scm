@@ -13,10 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-edit)
-  (:use (graphics graphics-env)
-        (graphics graphics-single)
-        (graphics graphics-group)))
+;; (texmacs-module (graphics graphics-edit)
+;;   (:use (graphics graphics-env)
+;;         (graphics graphics-single)
+;;         (graphics graphics-group)))
+
+(define-module (graphics graphics-edit)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-env)
+             (graphics graphics-single)
+             (graphics graphics-group))
 
 
 ;; TODO:

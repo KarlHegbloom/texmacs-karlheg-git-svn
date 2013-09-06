@@ -15,8 +15,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog cpp-edit)
-  (:use (prog prog-edit)))
+;; (texmacs-module (prog cpp-edit)
+;;   (:use (prog prog-edit)))
+
+(define-module (prog cpp-edit)
+  :use-module (texmacs-core))
+
+(use-modules (prog prog-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Preferences for syntax highlighting

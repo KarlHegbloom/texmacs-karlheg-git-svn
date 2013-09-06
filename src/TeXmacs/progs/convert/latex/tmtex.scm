@@ -11,13 +11,23 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex)
-  (:use (convert tools tmpre)
-	(convert tools old-tmtable)
-	(convert tools tmlength)
-	(convert rewrite tmtm-brackets)
-	(convert latex texout)
-	(convert latex latex-tools)))
+;; (texmacs-module (convert latex tmtex)
+;;   (:use (convert tools tmpre)
+;; 	(convert tools old-tmtable)
+;; 	(convert tools tmlength)
+;; 	(convert rewrite tmtm-brackets)
+;; 	(convert latex texout)
+;; 	(convert latex latex-tools)))
+
+(define-module (convert latex tmtex)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmpre)
+             (convert tools old-tmtable)
+             (convert tools tmlength)
+             (convert rewrite tmtm-brackets)
+             (convert latex texout)
+             (convert latex latex-tools))
 
 (use-modules (ice-9 format))
 

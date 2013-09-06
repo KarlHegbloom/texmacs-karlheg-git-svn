@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-plugins)
-  (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+;; (texmacs-module (kernel texmacs tm-plugins)
+;;   (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+
+(define-module (kernel texmacs tm-plugins)
+  :use-module (texmacs-core))
+
+(use-modules (kernel texmacs tm-define) (kernel texmacs tm-modes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lazy exports from other modules

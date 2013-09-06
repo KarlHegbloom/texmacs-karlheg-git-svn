@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-edit)
-  (:use (utils library tree)
-        (utils library cursor)
-        (dynamic dynamic-drd)
-        (generic generic-edit)))
+;; (texmacs-module (dynamic fold-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(dynamic dynamic-drd)
+;; 	(generic generic-edit)))
+
+(define-module (dynamic fold-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils library cursor)
+             (dynamic dynamic-drd)
+             (generic generic-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dynamic movements for fold tags and switches

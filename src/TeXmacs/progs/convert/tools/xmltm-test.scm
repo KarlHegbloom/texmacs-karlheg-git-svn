@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools xmltm-test)
-  (:use (convert tools xmltm)))
+;; (texmacs-module (convert tools xmltm-test)
+;;   (:use (convert tools xmltm)))
+
+(define-module (convert tools xmltm-test)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools xmltm))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Parser

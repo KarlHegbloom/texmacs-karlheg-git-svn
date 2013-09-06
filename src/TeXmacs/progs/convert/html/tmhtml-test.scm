@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html tmhtml-test)
-  (:use (convert html tmhtml) (convert tools sxml)))
+;; (texmacs-module (convert html tmhtml-test)
+;;   (:use (convert html tmhtml) (convert tools sxml)))
+
+(define-module (convert html tmhtml-test)
+  :use-module (texmacs-core))
+
+(use-modules (convert html tmhtml) (convert tools sxml))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic conversions

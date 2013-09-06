@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text std-text-edit)
-  (:use (utils library tree)
-	(utils edit variants)
-	(text std-text-drd)))
+;; (texmacs-module (text std-text-edit)
+;;   (:use (utils library tree)
+;; 	(utils edit variants)
+;; 	(text std-text-drd)))
+
+(define-module (text std-text-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils edit variants)
+             (text std-text-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting a title and an abstract

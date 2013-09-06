@@ -11,13 +11,23 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html htmltm)
-  (:use
-    (convert tools tmlength) (convert tools tmcolor)
-    (convert tools old-tmtable) (convert tools stm)
-    (convert tools sxml)  (convert tools sxhtml)
-    (convert tools environment)
-    (convert tools xmltm) (convert mathml mathtm)))
+;; (texmacs-module (convert html htmltm)
+;;   (:use
+;;     (convert tools tmlength) (convert tools tmcolor)
+;;     (convert tools old-tmtable) (convert tools stm)
+;;     (convert tools sxml)  (convert tools sxhtml)
+;;     (convert tools environment)
+;;     (convert tools xmltm) (convert mathml mathtm)))
+
+(define-module (convert html htmltm)
+  :use-module (texmacs-core))
+
+(use-modules
+ (convert tools tmlength) (convert tools tmcolor)
+ (convert tools old-tmtable) (convert tools stm)
+ (convert tools sxml)  (convert tools sxhtml)
+ (convert tools environment)
+ (convert tools xmltm) (convert mathml mathtm))
 
 (define (assoc-string-ci key alist)
   (list-find alist (lambda (pair) (string-ci=? key (car pair)))))

@@ -18,10 +18,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-widgets)
-  (:use (doc apidoc-funcs)
-        (doc apidoc-collect)
-        (kernel texmacs tm-preferences)))
+;; (texmacs-module (doc apidoc-widgets)
+;;   (:use (doc apidoc-funcs)
+;;         (doc apidoc-collect)
+;;         (kernel texmacs tm-preferences)))
+
+(define-module (doc apidoc-widgets)
+  :use-module (texmacs-core))
+
+(use-modules (doc apidoc-funcs)
+             (doc apidoc-collect)
+             (kernel texmacs tm-preferences))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; A contextual help widget

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus main-menu)
-  (:use (utils library cursor)))
+;; (texmacs-module (texmacs menus main-menu)
+;;   (:use (utils library cursor)))
+
+(define-module (texmacs menus main-menu)
+  :use-module (texmacs-core))
+
+(use-modules (utils library cursor))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Main dynamic, extensible or user defined submenus

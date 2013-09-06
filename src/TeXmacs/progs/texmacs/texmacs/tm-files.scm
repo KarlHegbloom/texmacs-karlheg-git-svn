@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs texmacs tm-files)
-  (:use (texmacs texmacs tm-server)
-        (texmacs texmacs tm-print)))
+;; (texmacs-module (texmacs texmacs tm-files)
+;;   (:use (texmacs texmacs tm-server)
+;;         (texmacs texmacs tm-print)))
+
+(define-module (texmacs texmacs tm-files)
+  :use-module (texmacs-core))
+
+(use-modules (texmacs texmacs tm-server)
+             (texmacs texmacs tm-print))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous subroutines

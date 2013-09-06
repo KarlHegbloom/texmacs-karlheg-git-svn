@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel old-gui old-gui-factory)
-  (:use (kernel old-gui old-gui-widget)))
+;; (texmacs-module (kernel old-gui old-gui-factory)
+;;   (:use (kernel old-gui old-gui-widget)))
+
+(define-module (kernel old-gui old-gui-factory)
+  :use-module (texmacs-core))
+
+(use-modules (kernel old-gui old-gui-widget))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Building content

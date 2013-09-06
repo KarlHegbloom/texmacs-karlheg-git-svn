@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-kbd)
-  (:use (math math-kbd)    
-        (dynamic calc-table)))
+;; (texmacs-module (dynamic calc-kbd)
+;;   (:use (math math-kbd)    
+;;         (dynamic calc-table)))
+
+(define-module (dynamic calc-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (math math-kbd)    
+             (dynamic calc-table))
 
 (kbd-map
   (:require (inside? 'calc-table))

@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text format-text-edit)
-  (:use (utils base environment)
-	(generic format-edit)))
+;; (texmacs-module (text format-text-edit)
+;;   (:use (utils base environment)
+;; 	(generic format-edit)))
+
+(define-module (text format-text-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils base environment)
+             (generic format-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modifying paragraph properties

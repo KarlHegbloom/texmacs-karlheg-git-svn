@@ -11,7 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils library length))
+;; (texmacs-module (utils library length))
+
+(define-module (utils library length)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel boot debug)
+             (kernel texmacs tm-define))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Length arithmetic
@@ -33,3 +41,4 @@
 
 (tm-define (length-zero? len)
   (= 0 (length-decode len)))
+

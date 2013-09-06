@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-x))
+;; (texmacs-module (fonts fonts-x))
+
+(define-module (fonts fonts-x)
+  :use-module (texmacs-core))
 
 (set-font-rules
   '(((x-times rm medium right $s $d) (x adobe-times-medium-r-normal $s $d))

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math format-math-menu)
-  (:use (generic format-edit)))
+;; (texmacs-module (math format-math-menu)
+;;   (:use (generic format-edit)))
+
+(define-module (math format-math-menu)
+  :use-module (texmacs-core))
+
+(use-modules (generic format-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; What kind of math font are we using?

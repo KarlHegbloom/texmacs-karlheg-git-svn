@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel gui menu-define)
-  (:use (kernel gui gui-markup)))
+;; (texmacs-module (kernel gui menu-define)
+;;   (:use (kernel gui gui-markup)))
+
+(define-module (kernel gui menu-define)
+  :use-module (texmacs-core))
+
+(use-modules (kernel gui gui-markup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Definition of dynamic menus

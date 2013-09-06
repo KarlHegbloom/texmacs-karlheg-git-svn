@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools sxml))
+;; (texmacs-module (convert tools sxml))
+
+(define-module (convert tools sxml)
+  :use-module (texmacs-core))
 
 (define (as-string s)
   (cond ((symbol? s) (symbol->string s))

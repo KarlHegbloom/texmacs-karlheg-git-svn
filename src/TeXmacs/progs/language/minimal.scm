@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (language minimal))
+;; (texmacs-module (language minimal))
+
+(define-module (language minimal)
+  :use-module (texmacs-core))
 
 (define-language minimal-operators
   (:synopsis "operators for a minimal test language")

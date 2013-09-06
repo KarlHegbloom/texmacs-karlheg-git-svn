@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel gui gui-markup)
-  (:use (kernel regexp regexp-match)))
+;; (texmacs-module (kernel gui gui-markup)
+;;   (:use (kernel regexp regexp-match)))
+
+(define-module (kernel gui gui-markup)
+  :use-module (texmacs-core))
+
+(use-modules (kernel regexp regexp-match))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Style constants

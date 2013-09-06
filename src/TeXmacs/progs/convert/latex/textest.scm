@@ -11,10 +11,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex textest)
-  (:use
-    (convert tools tmpre) (convert tools output)
-    (convert latex tmtex) (convert latex texout)))
+;; (texmacs-module (convert latex textest)
+;;   (:use
+;;     (convert tools tmpre) (convert tools output)
+;;     (convert latex tmtex) (convert latex texout)))
+
+(define-module (convert latex textest)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmpre) (convert tools output)
+             (convert latex tmtex) (convert latex texout))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX output

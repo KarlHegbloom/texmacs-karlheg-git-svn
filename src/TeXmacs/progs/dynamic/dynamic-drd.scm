@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic dynamic-drd)
-  (:use (utils edit variants)))
+;; (texmacs-module (dynamic dynamic-drd)
+;;   (:use (utils edit variants)))
+
+(define-module (dynamic dynamic-drd)
+  :use-module (texmacs-core))
+
+(use-modules (utils edit variants))
 
 ;; fold <-> unfold toggles
 

@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-states))
+;; (texmacs-module (kernel texmacs tm-states))
+
+(define-module (kernel texmacs tm-states)
+  :use-module (texmacs-core))
 
 ;; Low-level API
 (define-public (state-create slotlist)

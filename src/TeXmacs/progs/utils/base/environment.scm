@@ -11,7 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils base environment))
+;; (texmacs-module (utils base environment))
+
+(define-module (utils base environment)
+  :use-module (texmacs-core))
+
+(use-modules (kernel logic logic-rules)
+             (kernel logic logic-data))
 
 (logic-table env-var-description%
   ("color" "Foreground colour")

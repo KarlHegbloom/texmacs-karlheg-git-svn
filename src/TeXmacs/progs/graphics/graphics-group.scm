@@ -13,10 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-group)
-  (:use (graphics graphics-env)
-        (graphics graphics-single)
-        (kernel gui kbd-handlers)))
+;; (texmacs-module (graphics graphics-group)
+;;   (:use (graphics graphics-env)
+;;         (graphics graphics-single)
+;;         (kernel gui kbd-handlers)))
+
+(define-module (graphics graphics-group)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-env)
+             (graphics graphics-single)
+             (kernel gui kbd-handlers))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Group edit mode

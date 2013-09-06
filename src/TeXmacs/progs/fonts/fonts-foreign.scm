@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-foreign))
+;; (texmacs-module (fonts fonts-foreign))
+
+(define-module (fonts fonts-foreign)
+  :use-module (texmacs-core))
 
 (set-font-rules
   '(;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

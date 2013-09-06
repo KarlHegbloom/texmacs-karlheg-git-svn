@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools environment-test)
-  (:use (convert tools environment)))
+;; (texmacs-module (convert tools environment-test)
+;;   (:use (convert tools environment)))
+
+(define-module (convert tools environment-test)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools environment))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dynamic environments

@@ -16,7 +16,17 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel regexp regexp-select))
+;; (texmacs-module (kernel regexp regexp-select))
+(define-module (kernel regexp regexp-select)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel library base)
+             (kernel library list)
+             (kernel library tree)
+             (kernel library content)
+             (kernel regexp regexp-match))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Intersections of matches
@@ -257,16 +267,17 @@
     ;; (display* "sols= " sols "\n")
     (map cadr sols)))
 
-(if (os-mingw?) ;; mingw guile does not define select
-    (with-module texmacs-user
-      (define-public (select . args) (apply tm-select args)))
-    (with-module texmacs-user
-      (begin (define-public guile-select select)
-	     (define-public (select . args)
-	       (import-from (kernel regexp regexp-select))
-	       (if (= (length args) 2)
-		   (apply tm-select args)
-		   (apply guile-select args))))))
+;; TODO: commented out for now
+;; (if (os-mingw?) ;; mingw guile does not define select
+;;     (with-module texmacs-user
+;;       (define-public (select . args) (apply tm-select args)))
+;;     (with-module texmacs-user
+;;       (begin (define-public guile-select select)
+;; 	     (define-public (select . args)
+;; 	       (import-from (kernel regexp regexp-select))
+;; 	       (if (= (length args) 2)
+;; 		   (apply tm-select args)
+;; 		   (apply guile-select args))))))
 
 (define-public (tm-ref t . l)
   (and (tm? t)

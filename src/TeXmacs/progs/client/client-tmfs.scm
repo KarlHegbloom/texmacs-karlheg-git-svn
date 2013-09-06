@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (client client-tmfs)
-  (:use (client client-base)
-        (client client-resource)))
+;; (texmacs-module (client client-tmfs)
+;;   (:use (client client-base)
+;;         (client client-resource)))
+
+(define-module (client client-tmfs)
+  :use-module (texmacs-core))
+
+(use-modules (client client-base)
+             (client client-resource))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Useful subroutines

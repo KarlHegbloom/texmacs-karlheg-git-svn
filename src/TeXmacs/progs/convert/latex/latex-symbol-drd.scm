@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex latex-symbol-drd))
+;; (texmacs-module (convert latex latex-symbol-drd))
+
+(define-module (convert latex latex-symbol-drd)
+  :use-module (texmacs-core))
 
 (logic-group latex-ams-symbol%
   ;;`

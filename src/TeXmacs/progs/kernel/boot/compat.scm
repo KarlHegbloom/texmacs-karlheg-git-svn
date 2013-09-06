@@ -11,7 +11,11 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel boot compat))
+;; (texmacs-module (kernel boot compat))
+(define-module (kernel boot compat)
+  :use-module (texmacs-core))
+
+(use-modules (kernel library base))
 
 (define cout-port
   (make-soft-port

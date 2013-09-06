@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (client client-resource)
-  (:use (client client-base)))
+;; (texmacs-module (client client-resource)
+;;   (:use (client client-base)))
+
+(define-module (client client-resource)
+  :use-module (texmacs-core))
+
+(use-modules (client client-base))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Local cache with resource properties

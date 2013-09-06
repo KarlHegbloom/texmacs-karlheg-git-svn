@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs keyboard prefix-kbd)
-  (:use (utils library cursor)
-	(utils edit selections)
-	(texmacs texmacs tm-server)
-	(texmacs texmacs tm-files)
-	(generic generic-edit)))
+;; (texmacs-module (texmacs keyboard prefix-kbd)
+;;   (:use (utils library cursor)
+;; 	(utils edit selections)
+;; 	(texmacs texmacs tm-server)
+;; 	(texmacs texmacs tm-files)
+;; 	(generic generic-edit)))
+
+(define-module (texmacs keyboard prefix-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (utils library cursor)
+             (utils edit selections)
+             (texmacs texmacs tm-server)
+             (texmacs texmacs tm-files)
+             (generic generic-edit))
 
 (set-variant-keys "tab" "S-tab")
 

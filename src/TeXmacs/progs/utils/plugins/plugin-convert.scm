@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils plugins plugin-convert)
-  (:use (convert rewrite tmtm-brackets)))
+;; (texmacs-module (utils plugins plugin-convert)
+;;   (:use (convert rewrite tmtm-brackets)))
+
+(define-module (utils plugins plugin-convert)
+  :use-module (texmacs-core))
+
+(use-modules (convert rewrite tmtm-brackets))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Main conversion routines

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog format-prog-menu)
-  (:use (generic format-edit)))
+;; (texmacs-module (prog format-prog-menu)
+;;   (:use (generic format-edit)))
+
+(define-module (prog format-prog-menu)
+  :use-module (texmacs-core))
+
+(use-modules (generic format-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The Font submenu in prog mode

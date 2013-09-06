@@ -11,16 +11,29 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html tmhtml)
-  (:use (convert tools tmconcat)
-	(convert mathml tmmath)
-	(convert tools stm)
-	(convert tools tmlength)
-	(convert tools tmtable)
-	(convert tools old-tmtable)
-	(convert tools sxml)
-	(convert tools sxhtml)
-	(convert html htmlout)))
+;; (texmacs-module (convert html tmhtml)
+;;   (:use (convert tools tmconcat)
+;; 	(convert mathml tmmath)
+;; 	(convert tools stm)
+;; 	(convert tools tmlength)
+;; 	(convert tools tmtable)
+;; 	(convert tools old-tmtable)
+;; 	(convert tools sxml)
+;; 	(convert tools sxhtml)
+;; 	(convert html htmlout)))
+
+(define-module (convert html tmhtml)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmconcat)
+             (convert mathml tmmath)
+             (convert tools stm)
+             (convert tools tmlength)
+             (convert tools tmtable)
+             (convert tools old-tmtable)
+             (convert tools sxml)
+             (convert tools sxhtml)
+             (convert html htmlout))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization

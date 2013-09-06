@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic document-part)
-  (:use (generic document-edit) (text tm-structure)))
+;; (texmacs-module (generic document-part)
+;;   (:use (generic document-edit) (text tm-structure)))
+
+(define-module (generic document-part)
+  :use-module (texmacs-core))
+
+(use-modules (generic document-edit) (text tm-structure))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flatten old-style projects into one file

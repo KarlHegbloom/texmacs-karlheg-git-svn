@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils plugins plugin-cmd)
-  (:use (utils plugins plugin-eval)))
+;; (texmacs-module (utils plugins plugin-cmd)
+;;   (:use (utils plugins plugin-eval)))
+
+(define-module (utils plugins plugin-cmd)
+  :use-module (texmacs-core))
+
+(use-modules (utils plugins plugin-eval))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; serialization

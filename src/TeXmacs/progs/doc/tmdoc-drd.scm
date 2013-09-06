@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-drd)
-  (:use (utils edit variants)))
+;; (texmacs-module (doc tmdoc-drd)
+;;   (:use (utils edit variants)))
+
+(define-module (doc tmdoc-drd)
+  :use-module (texmacs-core))
+
+(use-modules (utils edit variants))
 
 ;; General groups
 

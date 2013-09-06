@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-springer)
-  (:use (convert latex tmtex)))
+;; (texmacs-module (convert latex tmtex-springer)
+;;   (:use (convert latex tmtex)))
+
+(define-module (convert latex tmtex-springer)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex tmtex))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Springer style options

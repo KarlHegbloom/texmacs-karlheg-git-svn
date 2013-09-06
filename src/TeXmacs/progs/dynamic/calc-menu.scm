@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-menu)
-  (:use (dynamic calc-table)))
+;; (texmacs-module (dynamic calc-menu)
+;;   (:use (dynamic calc-table)))
+
+(define-module (dynamic calc-menu)
+  :use-module (texmacs-core))
+
+(use-modules (dynamic calc-table))
 
 (menu-bind calc-table-menu
   ("Textual spreadsheet" (make-calc-table 'textual-table))

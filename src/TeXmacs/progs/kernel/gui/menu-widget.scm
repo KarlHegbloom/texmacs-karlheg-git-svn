@@ -13,8 +13,13 @@
 ;; See menu-define.scm for the grammar of menus
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel gui menu-widget)
-  (:use (kernel gui menu-define) (kernel gui kbd-define)))
+;; (texmacs-module (kernel gui menu-widget)
+;;   (:use (kernel gui menu-define) (kernel gui kbd-define)))
+
+(define-module (kernel gui menu-widget)
+  :use-module (texmacs-core))
+
+(use-modules (kernel gui menu-define) (kernel gui kbd-define))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menu grammar

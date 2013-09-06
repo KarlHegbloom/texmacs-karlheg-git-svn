@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-adobe))
+;; (texmacs-module (fonts fonts-adobe))
+
+(define-module (fonts fonts-adobe)
+  :use-module (texmacs-core))
 
 (set-font-rules
   '(((avant-garde rm medium right $s $d) (ec avant-garde-rm $s $d))

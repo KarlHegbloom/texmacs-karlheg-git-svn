@@ -13,8 +13,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel logic logic-test)
-  (:use (kernel logic logic-rules) (kernel logic logic-query)))
+;; (texmacs-module (kernel logic logic-test)
+;;   (:use (kernel logic logic-rules) (kernel logic logic-query)))
+
+(define-module (kernel logic logic-test)
+  :use-module (texmacs-core))
+
+(use-modules (kernel logic logic-rules) (kernel logic logic-query))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Examples of rules

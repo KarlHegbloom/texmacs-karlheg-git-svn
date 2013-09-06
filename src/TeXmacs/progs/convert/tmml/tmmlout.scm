@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tmml tmmlout)
-  (:use (convert tools output)))
+;; (texmacs-module (convert tmml tmmlout)
+;;   (:use (convert tools output)))
+
+(define-module (convert tmml tmmlout)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools output))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Determining output layout

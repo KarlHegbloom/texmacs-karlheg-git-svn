@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-ams)
-  (:use (convert latex tmtex)))
+;; (texmacs-module (convert latex tmtex-ams)
+;;   (:use (convert latex tmtex)))
+
+(define-module (convert latex tmtex-ams)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex tmtex))
 
 (tm-define (tmtex-transform-style x)
   (:mode ams-style?) x)

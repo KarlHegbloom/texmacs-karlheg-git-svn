@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex ieeetr)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex ieeetr)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex ieeetr)
+  :use-module (texmacs-core))
+
+(use-modules (bibtex bib-utils) (bibtex plain))
 
 (bib-define-style "ieeetr" "plain")
 

@@ -13,8 +13,13 @@
 ;; See menu-define.scm for the grammar of menus
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel gui menu-test)
-  (:use (kernel gui menu-widget)))
+;; (texmacs-module (kernel gui menu-test)
+;;   (:use (kernel gui menu-widget)))
+
+(define-module (kernel gui menu-test)
+  :use-module (texmacs-core))
+
+(use-modules (kernel gui menu-widget))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some test widgets

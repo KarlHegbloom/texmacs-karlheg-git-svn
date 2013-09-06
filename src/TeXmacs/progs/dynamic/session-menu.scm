@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic session-menu)
-  (:use (dynamic session-edit)
-        (generic generic-menu)))
+;; (texmacs-module (dynamic session-menu)
+;;   (:use (dynamic session-edit)
+;;         (generic generic-menu)))
+
+(define-module (dynamic session-menu)
+  :use-module (texmacs-core))
+
+(use-modules (dynamic session-edit)
+             (generic generic-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting sessions

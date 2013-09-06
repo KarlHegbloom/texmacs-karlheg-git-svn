@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel gui kbd-handlers)
-  (:use (kernel texmacs tm-define)))
+;; (texmacs-module (kernel gui kbd-handlers)
+;;   (:use (kernel texmacs tm-define)))
+
+(define-module (kernel gui kbd-handlers)
+  :use-module (texmacs-core))
+
+(use-modules (kernel texmacs tm-define))
 
 (tm-define ShiftMask     256)
 (tm-define LockMask      512)

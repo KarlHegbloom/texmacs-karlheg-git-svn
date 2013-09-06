@@ -63,6 +63,9 @@
 /* Define to 1 if the system has the type `time_t'. */
 #undef HAVE_TIME_T
 
+/* Define this if the `scm_t_subr' type is available. */
+#undef HAVE_TYPE_SCM_T_SUBR
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
@@ -141,11 +144,11 @@
 /* Use imlib2 library */
 #undef USE_IMLIB2
 
+/* Use Sparkle framework */
+#undef USE_SPARKLE
+
 /* Use sqlite3 library */
 #undef USE_SQLITE3
-
-/* Use the Sparkle framework (MacOS) or DLL (Windows) */
-#undef USE_SPARKLE
 
 /* Use C++ stack backtraces */
 #undef USE_STACK_TRACE

@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-menu)
-  (:use (graphics graphics-env)
-	(graphics graphics-main)
-        (graphics graphics-edit)))
+;; (texmacs-module (graphics graphics-menu)
+;;   (:use (graphics graphics-env)
+;; 	(graphics graphics-main)
+;;         (graphics graphics-edit)))
+
+(define-module (graphics graphics-menu)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-env)
+             (graphics graphics-main)
+             (graphics graphics-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Submenus

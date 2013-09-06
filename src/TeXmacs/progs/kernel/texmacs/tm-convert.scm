@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-convert)
-  (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+;; (texmacs-module (kernel texmacs tm-convert)
+;;   (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+
+(define-module (kernel texmacs tm-convert)
+  :use-module (texmacs-core))
+
+(use-modules (kernel texmacs tm-define) (kernel texmacs tm-modes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lazy formats

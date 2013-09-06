@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex alpha)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex alpha)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex alpha)
+  :use-module (texmacs-core))
+
+(use-modules (bibtex bib-utils) (bibtex plain))
 
 (bib-define-style "alpha" "plain")
 

@@ -12,8 +12,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-env)
-  (:use (graphics graphics-utils)))
+;; (texmacs-module (graphics graphics-env)
+;;   (:use (graphics graphics-utils)))
+
+(define-module (graphics graphics-env)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-utils))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; State variables & history for the current graphics context

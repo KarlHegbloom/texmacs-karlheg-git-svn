@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (table table-kbd)
-  (:use (generic generic-kbd)
-	(table table-edit)))
+;; (texmacs-module (table table-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(table table-edit)))
+
+(define-module (table table-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (table table-edit))
 
 (kbd-map
   (:mode in-table?)

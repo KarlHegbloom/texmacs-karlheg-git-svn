@@ -13,10 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-single)
-  (:use (graphics graphics-object)
-        (graphics graphics-env)
-        (graphics graphics-main)))
+;; (texmacs-module (graphics graphics-single)
+;;   (:use (graphics graphics-object)
+;;         (graphics graphics-env)
+;;         (graphics graphics-main)))
+
+(define-module (graphics graphics-single)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-object)
+             (graphics graphics-env)
+             (graphics graphics-main))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic operations

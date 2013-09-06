@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-truetype))
+;; (texmacs-module (fonts fonts-truetype))
+
+(define-module (fonts fonts-truetype)
+  :use-module (texmacs-core))
 
 (set-font-rules
   `(((luxi tt bold slanted $s $d) (truetype luximbi $s $d))

@@ -13,8 +13,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel regexp regexp-test)
-  (:use (kernel regexp regexp-match)))
+;; (texmacs-module (kernel regexp regexp-test)
+;;   (:use (kernel regexp regexp-match)))
+
+(define-module (kernel regexp regexp-test)
+  :use-module (texmacs-core))
+
+(use-modules (kernel regexp regexp-match))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Example of a grammar for regular expressions

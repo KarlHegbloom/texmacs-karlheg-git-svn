@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex latex-drd)
-  (:use (convert latex latex-symbol-drd)
-	(convert latex latex-texmacs-drd)))
+;; (texmacs-module (convert latex latex-drd)
+;;   (:use (convert latex latex-symbol-drd)
+;; 	(convert latex latex-texmacs-drd)))
+
+(define-module (convert latex latex-drd)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex latex-symbol-drd)
+             (convert latex latex-texmacs-drd))
 
 (logic-rules
   ((latex-tag% 'x) (latex-arity% 'x 'y)))

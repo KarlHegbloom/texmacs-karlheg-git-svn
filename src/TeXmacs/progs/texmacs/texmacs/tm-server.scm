@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs texmacs tm-server)
-  (:use (generic document-edit)))
+;; (texmacs-module (texmacs texmacs tm-server)
+;;   (:use (generic document-edit)))
+
+(define-module (texmacs texmacs tm-server)
+  :use-module (texmacs-core))
+
+(use-modules (generic document-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Preferences

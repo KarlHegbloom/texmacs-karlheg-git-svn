@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math math-kbd)
-  (:use (generic generic-kbd)
-	(utils edit auto-close)
-	(generic format-edit)
-	(math math-edit)
-	(table table-edit)))
+;; (texmacs-module (math math-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(utils edit auto-close)
+;; 	(generic format-edit)
+;; 	(math math-edit)
+;; 	(table table-edit)))
+
+(define-module (math math-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (utils edit auto-close)
+             (generic format-edit)
+             (math math-edit)
+             (table table-edit))
 
 (kbd-map
   (:mode in-math?)

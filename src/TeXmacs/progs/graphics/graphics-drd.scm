@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-drd)
-  (:use (utils library cursor)
-        (utils library tree)
-        (utils edit variants)))
+;; (texmacs-module (graphics graphics-drd)
+;;   (:use (utils library cursor)
+;;         (utils library tree)
+;;         (utils edit variants)))
+
+(define-module (graphics graphics-drd)
+  :use-module (texmacs-core))
+
+(use-modules (utils library cursor)
+             (utils library tree)
+             (utils edit variants))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Properties of the graphical tags

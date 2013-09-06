@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tmml tmmltm)
-  (:use (convert tools tmconcat)))
+;; (texmacs-module (convert tmml tmmltm)
+;;   (:use (convert tools tmconcat)))
+
+(define-module (convert tmml tmmltm)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmconcat))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Provide the inverse functionality of tmmlout

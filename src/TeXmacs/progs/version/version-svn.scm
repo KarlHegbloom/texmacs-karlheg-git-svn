@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (version version-svn)
-  (:use (version version-tmfs)))
+;; (texmacs-module (version version-svn)
+;;   (:use (version version-tmfs)))
+
+(define-module (version version-svn)
+  :use-module (texmacs-core))
+
+(use-modules (version version-tmfs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Useful subroutines

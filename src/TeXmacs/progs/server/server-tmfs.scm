@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (server server-tmfs)
-  (:use (server server-resource)))
+;; (texmacs-module (server server-tmfs)
+;;   (:use (server server-resource)))
+
+(define-module (server server-tmfs)
+  :use-module (texmacs-core))
+
+(use-modules (server server-resource))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repository

@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-ec))
+;; (texmacs-module (fonts fonts-ec))
+
+(define-module (fonts fonts-ec)
+  :use-module (texmacs-core))
 
 (set-font-rules
   '(((roman rm medium right $s $d) (ec ecrm $s $d))

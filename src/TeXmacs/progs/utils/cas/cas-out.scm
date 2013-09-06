@@ -12,8 +12,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils cas cas-out)
-  (:use (convert tools tmconcat) (utils cas cas-rewrite)))
+;; (texmacs-module (utils cas cas-out)
+;;   (:use (convert tools tmconcat) (utils cas cas-rewrite)))
+
+(define-module (utils cas cas-out)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmconcat) (utils cas cas-rewrite))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; How to print special operators

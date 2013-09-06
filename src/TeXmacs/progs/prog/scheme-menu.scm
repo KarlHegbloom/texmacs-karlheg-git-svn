@@ -15,8 +15,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog scheme-menu)
-  (:use (prog scheme-tools)))
+;; (texmacs-module (prog scheme-menu)
+;;   (:use (prog scheme-tools)))
+
+(define-module (prog scheme-menu)
+  :use-module (texmacs-core))
+
+(use-modules (prog scheme-tools))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Contextual menu

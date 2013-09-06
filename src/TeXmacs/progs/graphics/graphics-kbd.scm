@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-kbd)
-  (:use (generic generic-kbd)
-        (graphics graphics-env)
-	(graphics graphics-main)
-	(graphics graphics-edit)))
+;; (texmacs-module (graphics graphics-kbd)
+;;   (:use (generic generic-kbd)
+;;         (graphics graphics-env)
+;; 	(graphics graphics-main)
+;; 	(graphics graphics-edit)))
+
+(define-module (graphics graphics-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (graphics graphics-env)
+             (graphics graphics-main)
+             (graphics graphics-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Various contexts

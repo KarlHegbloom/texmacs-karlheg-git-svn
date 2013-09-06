@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text std-text-natbib))
+;; (texmacs-module (text std-text-natbib))
+
+(define-module (text std-text-natbib)
+  :use-module (texmacs-core))
 
 (define (natbib-author s)
   (let* ((i (string-index s #\()))

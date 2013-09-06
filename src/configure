@@ -7141,6 +7141,24 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CXXFLAGS=""
 
+# scm_t_subr is used in scm_c_define_gsubr() since 2.0.5 and later
+if test -z "$GUILE_CFLAGS"; then
+  CXXFLAGS="`guile-config compile`"
+else
+  CXXFLAGS="$GUILE_CFLAGS"
+fi
+ac_fn_cxx_check_type "$LINENO" "scm_t_subr" "ac_cv_type_scm_t_subr" "
+#include <libguile.h>
+
+"
+if test "x$ac_cv_type_scm_t_subr" = xyes; then :
+
+$as_echo "#define HAVE_TYPE_SCM_T_SUBR 1" >>confdefs.h
+
+fi
+
+CXXFLAGS=""
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if statically linking with guile works" >&5
 $as_echo_n "checking if statically linking with guile works... " >&6; }
 SAVE_CPPFLAGS="$CPPFLAGS"

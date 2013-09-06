@@ -12,7 +12,10 @@
 ;; Things to do:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus developer-menu))
+;; (texmacs-module (texmacs menus developer-menu))
+
+(define-module (texmacs menus developer-menu)
+  :use-module (texmacs-core))
 
 (use-modules (prog scheme-tools) (prog scheme-menu)
              (doc apidoc) (doc apidoc-widgets)

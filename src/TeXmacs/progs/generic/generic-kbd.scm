@@ -11,18 +11,33 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic generic-kbd)
-  (:use (texmacs keyboard prefix-kbd)
-        (utils edit variants)
-        (utils edit auto-close)
-        (utils library cursor)
-        (generic generic-edit)
-        (generic format-edit)
-        (generic format-geometry-edit)
-        (source source-edit)
-        (texmacs texmacs tm-files)
-        (texmacs texmacs tm-print)
-        (doc help-funcs)))
+;; (texmacs-module (generic generic-kbd)
+;;   (:use (texmacs keyboard prefix-kbd)
+;;         (utils edit variants)
+;;         (utils edit auto-close)
+;;         (utils library cursor)
+;;         (generic generic-edit)
+;;         (generic format-edit)
+;;         (generic format-geometry-edit)
+;;         (source source-edit)
+;;         (texmacs texmacs tm-files)
+;;         (texmacs texmacs tm-print)
+;;         (doc help-funcs)))
+
+(define-module (generic generic-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (texmacs keyboard prefix-kbd)
+             (utils edit variants)
+             (utils edit auto-close)
+             (utils library cursor)
+             (generic generic-edit)
+             (generic format-edit)
+             (generic format-geometry-edit)
+             (source source-edit)
+             (texmacs texmacs tm-files)
+             (texmacs texmacs tm-print)
+             (doc help-funcs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General shortcuts for all modes

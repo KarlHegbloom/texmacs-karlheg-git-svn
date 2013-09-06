@@ -13,9 +13,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex latex-tools)
-  (:use (convert latex latex-drd)
-	(convert latex texout)))
+;; (texmacs-module (convert latex latex-tools)
+;;   (:use (convert latex latex-drd)
+;; 	(convert latex texout)))
+
+(define-module (convert latex latex-tools)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex latex-drd)
+             (convert latex texout))
 
 (tm-define tmtex-use-catcodes? #f)
 (tm-define tmtex-use-unicode? #f)

@@ -15,7 +15,15 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel regexp regexp-match))
+;; (texmacs-module (kernel regexp regexp-match))
+(define-module (kernel regexp regexp-match)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel library base)
+             (kernel library tree)
+             (kernel library content))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Intersections and unions of solution sets

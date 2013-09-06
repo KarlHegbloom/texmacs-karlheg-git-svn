@@ -11,8 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel library tree)
-  (:use (kernel library list)))
+;; (texmacs-module (kernel library tree)
+;;   (:use (kernel library list)))
+
+(define-module (kernel library tree)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel library base)
+             (kernel library list))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Extra routines on trees

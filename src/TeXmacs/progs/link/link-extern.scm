@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (link link-extern)
-  (:use (link link-edit) (link link-navigate)))
+;; (texmacs-module (link link-extern)
+;;   (:use (link link-edit) (link link-navigate)))
+
+(define-module (link link-extern)
+  :use-module (texmacs-core))
+
+(use-modules (link link-edit) (link link-navigate))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File registry

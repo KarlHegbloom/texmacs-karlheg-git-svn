@@ -19,9 +19,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
-(texmacs-module (doc apidoc)
-  (:use (kernel gui gui-markup) 
-        (doc apidoc-markup) (doc apidoc-funcs) (doc apidoc-collect)))
+;; (texmacs-module (doc apidoc)
+;;   (:use (kernel gui gui-markup) 
+;;         (doc apidoc-markup) (doc apidoc-funcs) (doc apidoc-collect)))
+
+(define-module (doc apidoc)
+  :use-module (texmacs-core))
+
+(use-modules (kernel gui gui-markup) 
+             (doc apidoc-markup) (doc apidoc-funcs) (doc apidoc-collect))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Internal

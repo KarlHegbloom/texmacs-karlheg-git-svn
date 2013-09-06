@@ -12,9 +12,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert images tmimage)
-  (:use (convert tmml tmmlout)
-        (convert tmml tmtmml)))
+;; (texmacs-module (convert images tmimage)
+;;   (:use (convert tmml tmmlout)
+;;         (convert tmml tmtmml)))
+
+(define-module (convert images tmimage)
+  :use-module (texmacs-core))
+
+(use-modules (convert tmml tmmlout)
+             (convert tmml tmtmml))
 
 ;; (display "Texmacs] Loading module tmimage\n")
 

@@ -26,8 +26,13 @@
 ;;    add them to the completions tree.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog scheme-autocomplete)
-  (:use (utils library ptrees)))
+;; (texmacs-module (prog scheme-autocomplete)
+;;   (:use (utils library ptrees)))
+
+(define-module (prog scheme-autocomplete)
+  :use-module (texmacs-core))
+
+(use-modules (utils library ptrees))
 
 (define completions (make-ptree))
 

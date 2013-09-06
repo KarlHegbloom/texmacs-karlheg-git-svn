@@ -18,8 +18,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc docgrep)
-  (:use (doc help-funcs)))
+;; (texmacs-module (doc docgrep)
+;;   (:use (doc help-funcs)))
+
+(define-module (doc docgrep)
+  :use-module (texmacs-core))
+
+(use-modules (doc help-funcs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Get scores for the different files

@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (version version-tmfs))
+;; (texmacs-module (version version-tmfs))
+
+(define-module (version version-tmfs)
+  :use-module (texmacs-core))
 
 (define version-tool-table (make-ahash-table))
 (define version-tool-loaded (make-ahash-table))

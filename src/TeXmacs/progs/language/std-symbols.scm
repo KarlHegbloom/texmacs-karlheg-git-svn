@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (language std-symbols))
+;; (texmacs-module (language std-symbols))
+
+(define-module (language std-symbols)
+  :use-module (texmacs-core))
 
 (define-language std-symbols
   (:synopsis "default semantics for mathematical symbols")

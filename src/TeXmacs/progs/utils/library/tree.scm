@@ -11,7 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils library tree))
+;; (texmacs-module (utils library tree))
+
+(define-module (utils library tree)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel boot debug)
+             (kernel texmacs tm-define))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; In place versions of fundamental modification routines

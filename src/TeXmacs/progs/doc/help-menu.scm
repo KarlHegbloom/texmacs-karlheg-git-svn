@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc help-menu)
-  (:use (doc help-funcs))); (doc apidoc)))
+;; (texmacs-module (doc help-menu)
+;;   (:use (doc help-funcs))); (doc apidoc)))
+
+(define-module (doc help-menu)
+  :use-module (texmacs-core))
+
+(use-modules (doc help-funcs))); (doc apidoc))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The Help menu

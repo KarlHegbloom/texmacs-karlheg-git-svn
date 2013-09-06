@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (link link-navigate)
-  (:use (utils library cursor) (link link-edit) (link link-extern)
-        (generic generic-edit)))
+;; (texmacs-module (link link-navigate)
+;;   (:use (utils library cursor) (link link-edit) (link link-extern)
+;;         (generic generic-edit)))
+
+(define-module (link link-navigate)
+  :use-module (texmacs-core))
+
+(use-modules (utils library cursor) (link link-edit) (link link-extern)
+             (generic generic-edit))
 
 ; FIXME: remove these two and find a better way
 (define (escape-link-args s)

@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic format-menu)
-  (:use (generic generic-edit)
-	(generic format-edit)
-	(generic format-geometry-edit)))
+;; (texmacs-module (generic format-menu)
+;;   (:use (generic generic-edit)
+;; 	(generic format-edit)
+;; 	(generic format-geometry-edit)))
+
+(define-module (generic format-menu)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-edit)
+             (generic format-edit)
+             (generic format-geometry-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menus for fonts

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (version version-compare)
-  (:use (version version-edit)))
+;; (texmacs-module (version version-compare)
+;;   (:use (version version-edit)))
+
+(define-module (version version-compare)
+  :use-module (texmacs-core))
+
+(use-modules (version version-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Versioning grain

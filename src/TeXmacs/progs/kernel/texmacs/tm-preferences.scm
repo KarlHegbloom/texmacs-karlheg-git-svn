@@ -11,8 +11,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-preferences)
-  (:use (kernel texmacs tm-define)))
+;; (texmacs-module (kernel texmacs tm-preferences)
+;;   (:use (kernel texmacs tm-define)))
+
+(define-module (kernel texmacs tm-preferences)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel boot debug)
+             (kernel texmacs tm-define))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Defining preference call back routines

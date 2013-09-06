@@ -11,7 +11,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel library content))
+;; (texmacs-module (kernel library content))
+(define-module (kernel library content)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel library base)
+             (kernel library list)
+             (kernel library tree))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Routines for general content

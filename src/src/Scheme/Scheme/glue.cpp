@@ -9,6 +9,8 @@
 * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ******************************************************************************/
 
+#include <libguile.h>
+
 #include "glue.hpp"
 
 #include "promise.hpp"
@@ -1015,12 +1017,14 @@ tmscm_to_list_tree (tmscm  p) {
 #include "../Glue/glue_server.cpp"
 
 void
-initialize_glue () {
+initialize_glue (void *unused) {
   tmscm_install_procedure ("tree?",  treeP, 1, 0, 0);
   tmscm_install_procedure ("tm?",  contentP, 1, 0, 0);
   tmscm_install_procedure ("observer?",  observerP, 1, 0, 0);
   tmscm_install_procedure ("url?",  urlP, 1, 0, 0);
   tmscm_install_procedure ("blackbox?",  blackboxP, 1, 0, 0);
+  
+  scm_c_export("tree?", "tm?", "observer?", "url?", "blackbox?", NULL);
   
   initialize_glue_basic ();
   initialize_glue_editor ();

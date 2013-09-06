@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-menu)
-  (:use (text text-menu)
-        (doc tmdoc-edit)
-        (doc apidoc-menu)))
+;; (texmacs-module (doc tmdoc-menu)
+;;   (:use (text text-menu)
+;;         (doc tmdoc-edit)
+;;         (doc apidoc-menu)))
+
+(define-module (doc tmdoc-menu)
+  :use-module (texmacs-core))
+
+(use-modules (text text-menu)
+             (doc tmdoc-edit)
+             (doc apidoc-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menus for TeXmacs documentation

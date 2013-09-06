@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic insert-menu)
-  (:use (generic generic-edit)
-	(generic format-edit)
-	(generic format-geometry-edit)))
+;; (texmacs-module (generic insert-menu)
+;;   (:use (generic generic-edit)
+;; 	(generic format-edit)
+;; 	(generic format-geometry-edit)))
+
+(define-module (generic insert-menu)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-edit)
+             (generic format-edit)
+             (generic format-geometry-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Insert links

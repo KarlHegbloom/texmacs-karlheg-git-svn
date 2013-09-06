@@ -10,8 +10,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text cyrillic jcuken-kbd)
-  (:use (text text-kbd)))
+;; (texmacs-module (text cyrillic jcuken-kbd)
+;;   (:use (text text-kbd)))
+
+(define-module (text cyrillic jcuken-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (text text-kbd))
 
 (kbd-map
   (:mode in-cyrillic-jcuken?)

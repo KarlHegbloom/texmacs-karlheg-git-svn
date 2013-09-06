@@ -13,8 +13,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-utils)
-  (:use (graphics graphics-drd)))
+;; (texmacs-module (graphics graphics-utils)
+;;   (:use (graphics graphics-drd)))
+
+(define-module (graphics graphics-utils)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic scheme processing

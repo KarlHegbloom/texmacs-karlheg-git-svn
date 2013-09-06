@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel boot prologue)
-  (:use (kernel boot ahash-table)))
+;; (texmacs-module (kernel boot prologue)
+;;   (:use (kernel boot ahash-table)))
+
+(define-module (kernel boot prologue)
+  :use-module (texmacs-core))
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Additional support for loading modules
@@ -35,7 +40,7 @@
 	     (loaded (ahash-ref module-loaded-table module)))
 	(ahash-set! module-loaded-table module #t)
 	;;(if (not loaded) (display* "TeXmacs] Loading module " module* "\n"))
-	(if (not loaded) (load-module module)))))
+	(if (not loaded) (reload-module module)))))
 
 ;; FIXME: why does this not work?
 ;(define-public (module-load name)

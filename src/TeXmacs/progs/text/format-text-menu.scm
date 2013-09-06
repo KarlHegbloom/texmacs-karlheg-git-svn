@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text format-text-menu)
-  (:use (text format-text-edit)))
+;; (texmacs-module (text format-text-menu)
+;;   (:use (text format-text-edit)))
+
+(define-module (text format-text-menu)
+  :use-module (texmacs-core))
+
+(use-modules (text format-text-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The Font submenu in text mode

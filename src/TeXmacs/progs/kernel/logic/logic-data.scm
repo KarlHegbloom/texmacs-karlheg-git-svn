@@ -11,8 +11,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel logic logic-data)
-  (:use (kernel logic logic-rules) (kernel logic logic-query)))
+;; (texmacs-module (kernel logic logic-data)
+;;   (:use (kernel logic logic-rules) (kernel logic logic-query)))
+
+(define-module (kernel logic logic-data)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel logic logic-rules)
+             (kernel logic logic-query))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Useful subroutines

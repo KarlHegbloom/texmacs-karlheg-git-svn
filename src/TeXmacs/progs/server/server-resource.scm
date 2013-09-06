@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (server server-resource)
-  (:use (server server-base)))
+;; (texmacs-module (server server-resource)
+;;   (:use (server server-base)))
+
+(define-module (server server-resource)
+  :use-module (texmacs-core))
+
+(use-modules (server server-base))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Execution of SQL commands

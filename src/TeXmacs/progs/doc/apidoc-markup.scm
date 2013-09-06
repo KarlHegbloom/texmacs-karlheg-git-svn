@@ -17,9 +17,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-markup)
-  (:use (doc apidoc-funcs)
-        (kernel gui gui-markup)))
+;; (texmacs-module (doc apidoc-markup)
+;;   (:use (doc apidoc-funcs)
+;;         (kernel gui gui-markup)))
+
+(define-module (doc apidoc-markup)
+  :use-module (texmacs-core))
+
+(use-modules (doc apidoc-funcs)
+             (kernel gui gui-markup))
 
 (tm-define (doc-module-synopsis tname)
   ;TODO

@@ -15,9 +15,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-menu)
-  (:use (prog scheme-tools)
-        (doc apidoc-widgets)))
+;; (texmacs-module (doc apidoc-menu)
+;;   (:use (prog scheme-tools)
+;;         (doc apidoc-widgets)))
+
+(define-module (doc apidoc-menu)
+  :use-module (texmacs-core))
+
+(use-modules (prog scheme-tools)
+             (doc apidoc-widgets))
 
 (menu-bind apidoc-manual-menu
   ("Insert symbol documentation" (interactive ask-insert-symbol-doc))

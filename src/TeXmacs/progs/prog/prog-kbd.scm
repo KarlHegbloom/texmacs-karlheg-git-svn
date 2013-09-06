@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog prog-kbd)
-  (:use (kernel gui kbd-define)
-        (utils edit selections)
-        (prog scheme-tools) (prog scheme-edit)))
+;; (texmacs-module (prog prog-kbd)
+;;   (:use (kernel gui kbd-define)
+;;         (utils edit selections)
+;;         (prog scheme-tools) (prog scheme-edit)))
+
+(define-module (prog prog-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (kernel gui kbd-define)
+             (utils edit selections)
+             (prog scheme-tools) (prog scheme-edit))
 
 (kbd-map
   (:require (in-prog-scheme?))

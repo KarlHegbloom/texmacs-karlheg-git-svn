@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-menu)
-  (:use (dynamic fold-edit)
-        (generic generic-menu)))
+;; (texmacs-module (dynamic fold-menu)
+;;   (:use (dynamic fold-edit)
+;;         (generic generic-menu)))
+
+(define-module (dynamic fold-menu)
+  :use-module (texmacs-core))
+
+(use-modules (dynamic fold-edit)
+             (generic generic-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menus for direct folding and switching

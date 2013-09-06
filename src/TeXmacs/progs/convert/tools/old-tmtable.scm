@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools old-tmtable)
-  (:use (convert tools tmlength) (convert tools tmcolor)))
+;; (texmacs-module (convert tools old-tmtable)
+;;   (:use (convert tools tmlength) (convert tools tmcolor)))
+
+(define-module (convert tools old-tmtable)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmlength) (convert tools tmcolor))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities

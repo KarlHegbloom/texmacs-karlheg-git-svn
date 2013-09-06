@@ -17,48 +17,41 @@
 (define developer-mode?
   (equal? (cpp-get-preference "developer tool" "off") "on"))
 
-(define (%new-read-hook sym) (noop)) ; for autocompletion
-
-;; FIXME: how do we update this list dynamically?
-(define keywords-which-define
-  '(define define-macro define define-macro provide-public
-     tm-define tm-define-macro tm-menu menu-bind tm-widget))
-
-(define old-read read)
-(define (new-read port)
-  "A redefined reader which stores line number and file name in symbols."
-  ;; FIXME: handle overloaded redefinitions
-  (let ((form (old-read port)))
-    (if (and (pair? form) (member (car form) keywords-which-define))
-      (let* ((l (source-property form 'line))
-             (c (source-property form 'column))
-             (f (source-property form 'filename))
-             (sym  (if (pair? (cadr form)) (caadr form) (cadr form))))
-        (if (symbol? sym) ; Just in case
-          (let ((old (or (symbol-property sym 'defs) '()))
-                (new `(,f ,l ,c)))
-            (%new-read-hook sym)
-            (if (not (member new old))
-              (set-symbol-property! sym 'defs (cons new old)))))))
-    form))
-
-
-(define old-primitive-load primitive-load)
-(define (new-primitive-load filename)
-  ;; We explicitly circumvent guile's decision to set the current-reader
-  ;; to #f inside ice-9/boot-9.scm, try-module-autoload
-  (with-fluids ((current-reader read))
-               (old-primitive-load filename)))
-
+(define-public %new-read-hook #f)
+(define-public keywords-which-define #f)
 (if developer-mode?
     (begin
-      (module-export! (current-module)
-                      '(%new-read-hook old-read
-                        new-read keywords-which-define))
-      (set! read new-read)
-      (module-export! (current-module)
-                      '(old-primitive-load new-primitive-load))
-      (set! primitive-load new-primitive-load)))
+      (set! %new-read-hook (lambda (sym) (noop))) ; for autocompletion
+      
+      ;; FIXME: how do we update this list dynamically? 
+      (set! keywords-which-define 
+            '(define define-macro define-public define-public-macro provide-public
+                     tm-define tm-define-macro tm-menu menu-bind tm-widget))
+      (let ((old-read read))
+        (set! read
+              (lambda (port)
+                "A redefined reader which stores line number and file name in symbols."
+                ;; FIXME: handle overloaded redefinitions
+                (let ((form (old-read port)))
+                  (if (and (pair? form) (member (car form) keywords-which-define))
+                      (let* ((l (source-property form 'line))
+                             (c (source-property form 'column))
+                             (f (source-property form 'filename))
+                             (sym  (if (pair? (cadr form)) (caadr form) (cadr form))))
+                        (if (symbol? sym) ; Just in case
+                            (let ((old (or (symbol-property sym 'defs) '()))
+                                  (new `(,f ,l ,c)))
+                              (%new-read-hook sym)
+                              (if (not (member new old))
+                                  (set-symbol-property! sym 'defs (cons new old)))))))
+                  form))))
+      (let ((old-primitive-load primitive-load))
+        (set! primitive-load
+              (lambda (filename)
+                ;; We explicitly circumvent guile's decision to set the current-reader
+                ;; to #f inside ice-9/boot-9.scm, try-module-autoload
+                (with-fluids ((current-reader read))
+                     (old-primitive-load filename)))))))
 
 ;; TODO: scheme file caching using (set! primitive-load ...) and
 ;; (set! %search-load-path)
@@ -77,31 +70,43 @@
 ;; (set! primitive-load new-primitive-load)
 
 ;(display "Booting TeXmacs kernel functionality\n")
-(if (os-mingw?)
-    (load "kernel/boot/boot.scm")
-    (load (url-concretize "$TEXMACS_PATH/progs/kernel/boot/boot.scm")))
-(inherit-modules (kernel boot compat) (kernel boot abbrevs)
-                 (kernel boot debug) (kernel boot srfi)
-                 (kernel boot ahash-table) (kernel boot prologue))
-(inherit-modules (kernel library base) (kernel library list)
-                 (kernel library tree) (kernel library content))
-(inherit-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
-(inherit-modules (kernel logic logic-rules) (kernel logic logic-query)
-                 (kernel logic logic-data))
-(inherit-modules (kernel texmacs tm-define)
-                 (kernel texmacs tm-preferences) (kernel texmacs tm-modes)
-                 (kernel texmacs tm-plugins) (kernel texmacs tm-secure)
-                 (kernel texmacs tm-convert) (kernel texmacs tm-dialogue)
-                 (kernel texmacs tm-language) (kernel texmacs tm-file-system)
-                 (kernel texmacs tm-states))
-(inherit-modules (kernel gui gui-markup)
-                 (kernel gui menu-define) (kernel gui menu-widget)
-                 (kernel gui kbd-define) (kernel gui kbd-handlers)
-                 (kernel gui menu-test)
-                 (kernel old-gui old-gui-widget)
-                 (kernel old-gui old-gui-factory)
-                 (kernel old-gui old-gui-form)
-                 (kernel old-gui old-gui-test))
+
+(cond-expand (guile-2)
+             (else (define include load)))
+
+;; (if (os-mingw?)
+;;     (include "kernel/boot/boot.scm")
+;;     (include (url-concretize "$TEXMACS_PATH/progs/kernel/boot/boot.scm")))
+(define boot-file-path
+  (if (os-mingw?)
+      "kernel/boot/boot.scm"
+      (url-concretize "$TEXMACS_PATH/progs/kernel/boot/boot.scm")))
+;; (include boot-file-path)
+(include "kernel/boot/boot.scm")
+
+(use-modules (kernel boot compat) (kernel boot abbrevs)
+             (kernel boot debug) (kernel boot srfi)
+             (kernel boot ahash-table) (kernel boot prologue))
+(use-modules (kernel library base) (kernel library list)
+             (kernel library tree) (kernel library content))
+
+(use-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
+(use-modules (kernel logic logic-rules) (kernel logic logic-query)
+             (kernel logic logic-data))
+(use-modules (kernel texmacs tm-define)
+             (kernel texmacs tm-preferences) (kernel texmacs tm-modes)
+             (kernel texmacs tm-plugins) (kernel texmacs tm-secure)
+             (kernel texmacs tm-convert) (kernel texmacs tm-dialogue)
+             (kernel texmacs tm-language) (kernel texmacs tm-file-system)
+             (kernel texmacs tm-states))
+(use-modules (kernel gui gui-markup)
+             (kernel gui menu-define) (kernel gui menu-widget)
+             (kernel gui kbd-define) (kernel gui kbd-handlers)
+             (kernel gui menu-test)
+             (kernel old-gui old-gui-widget)
+             (kernel old-gui old-gui-factory)
+             (kernel old-gui old-gui-form)
+             (kernel old-gui old-gui-test))
 ;(display* "time: " (- (texmacs-time) boot-start) "\n")
 
 ;(display "Booting utilities\n")

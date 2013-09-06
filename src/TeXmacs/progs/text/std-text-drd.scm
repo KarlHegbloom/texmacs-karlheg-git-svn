@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text std-text-drd)
-  (:use (utils edit variants)))
+;; (texmacs-module (text std-text-drd)
+;;   (:use (utils edit variants)))
+
+(define-module (text std-text-drd)
+  :use-module (texmacs-core))
+
+(use-modules (utils edit variants))
 
 ;; General groups
 

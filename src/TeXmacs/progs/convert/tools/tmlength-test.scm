@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools tmlength-regtest)
-  (:use (convert tools tmlength)))
+;; (texmacs-module (convert tools tmlength-regtest)
+;;   (:use (convert tools tmlength)))
+
+(define-module (convert tools tmlength-regtest)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmlength))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Regtest routines for tmlength

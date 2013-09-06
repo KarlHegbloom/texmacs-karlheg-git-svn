@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text text-menu)
-  (:use (text format-text-edit)
-        (text std-text-edit)
-        (text tm-structure)
-        (generic document-menu)))
+;; (texmacs-module (text text-menu)
+;;   (:use (text format-text-edit)
+;;         (text std-text-edit)
+;;         (text tm-structure)
+;;         (generic document-menu)))
+
+(define-module (text text-menu)
+  :use-module (texmacs-core))
+
+(use-modules (text format-text-edit)
+             (text std-text-edit)
+             (text tm-structure)
+             (generic document-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Document headers

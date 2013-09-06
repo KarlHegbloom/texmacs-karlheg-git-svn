@@ -634,6 +634,21 @@ AC_TRY_COMPILE([
 ])
 CXXFLAGS=""
 
+# scm_t_subr is used in scm_c_define_gsubr() since 2.0.5 and later
+if test -z "$GUILE_CFLAGS"; then
+  CXXFLAGS="`guile-config compile`"
+else
+  CXXFLAGS="$GUILE_CFLAGS"
+fi
+AC_CHECK_TYPE([scm_t_subr],
+  [AC_DEFINE([HAVE_TYPE_SCM_T_SUBR], [1],
+  [Define this if the `scm_t_subr' type is available.])],
+  [],
+  [
+#include <libguile.h>
+  ])
+CXXFLAGS=""
+
 AC_MSG_CHECKING([if statically linking with guile works])
 SAVE_CPPFLAGS="$CPPFLAGS"
 SAVE_LDFLAGS="$LDFLAGS"

@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text text-kbd)
-  (:use (generic generic-kbd)
-	(utils edit auto-close)
-	(text format-text-edit)))
+;; (texmacs-module (text text-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(utils edit auto-close)
+;; 	(text format-text-edit)))
+
+(define-module (text text-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (utils edit auto-close)
+             (text format-text-edit))
 
 (kbd-map
   (:mode in-text?)

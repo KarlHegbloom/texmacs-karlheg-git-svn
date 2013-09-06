@@ -16,8 +16,13 @@
 ;;    for a simple bibliography browser widget, for instance.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex bib-complete)
-  (:use (utils library ptrees)))
+;; (texmacs-module (bibtex bib-complete)
+;;   (:use (utils library ptrees)))
+
+(define-module (bibtex bib-complete)
+  :use-module (texmacs-core))
+
+(use-modules (utils library ptrees))
 
 (define parse-times (make-ahash-table))
 (define parse-results (make-ahash-table))

@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math math-markup))
+;; (texmacs-module (math math-markup))
+
+(define-module (math math-markup)
+  :use-module (texmacs-core))
 
 (tm-define (math-check t)
   (:secure #t)

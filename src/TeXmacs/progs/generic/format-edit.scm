@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic format-edit)
-  (:use (utils base environment)
-	(utils edit selections)
-	(generic generic-edit)))
+;; (texmacs-module (generic format-edit)
+;;   (:use (utils base environment)
+;; 	(utils edit selections)
+;; 	(generic generic-edit)))
+
+(define-module (generic format-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils base environment)
+             (utils edit selections)
+             (generic generic-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modifying environment variables

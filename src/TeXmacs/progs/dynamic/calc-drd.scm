@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-drd)
-  (:use (dynamic dynamic-drd)))
+;; (texmacs-module (dynamic calc-drd)
+;;   (:use (dynamic dynamic-drd)))
+
+(define-module (dynamic calc-drd)
+  :use-module (texmacs-core))
+
+(use-modules (dynamic dynamic-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Groups

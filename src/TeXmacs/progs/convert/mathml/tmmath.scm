@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert mathml tmmath)
-  (:use (convert tools tmconcat)
-	(convert tools tmtable)
-	(convert mathml mathml-drd)
-	(convert rewrite tmtm-brackets)))
+;; (texmacs-module (convert mathml tmmath)
+;;   (:use (convert tools tmconcat)
+;; 	(convert tools tmtable)
+;; 	(convert mathml mathml-drd)
+;; 	(convert rewrite tmtm-brackets)))
+
+(define-module (convert mathml tmmath)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools tmconcat)
+             (convert tools tmtable)
+             (convert mathml mathml-drd)
+             (convert rewrite tmtm-brackets))
 
 (define tmmath-env (make-ahash-table))
 

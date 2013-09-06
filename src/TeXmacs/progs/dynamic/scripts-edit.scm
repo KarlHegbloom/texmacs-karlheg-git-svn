@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic scripts-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-	(utils plugins plugin-cmd)
-	(convert tools tmconcat)
-	(dynamic scripts-drd)))
+;; (texmacs-module (dynamic scripts-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(utils plugins plugin-cmd)
+;; 	(convert tools tmconcat)
+;; 	(dynamic scripts-drd)))
+
+(define-module (dynamic scripts-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils library cursor)
+             (utils plugins plugin-cmd)
+             (convert tools tmconcat)
+             (dynamic scripts-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some switches

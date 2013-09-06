@@ -21,9 +21,15 @@
 ;;  - this list
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-funcs)
-  (:use (convert rewrite init-rewrite) (doc apidoc-collect) 
-        (kernel gui gui-markup)))
+;; (texmacs-module (doc apidoc-funcs)
+;;   (:use (convert rewrite init-rewrite) (doc apidoc-collect) 
+;;         (kernel gui gui-markup)))
+
+(define-module (doc apidoc-funcs)
+  :use-module (texmacs-core))
+
+(use-modules (convert rewrite init-rewrite) (doc apidoc-collect) 
+             (kernel gui gui-markup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Conversions related to modules:

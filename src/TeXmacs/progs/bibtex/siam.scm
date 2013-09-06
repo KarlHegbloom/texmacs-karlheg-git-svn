@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex siam)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex siam)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex siam)
+  :use-module (texmacs-core))
+
+(use-modules (bibtex bib-utils) (bibtex plain))
 
 (bib-define-style "siam" "plain")
 

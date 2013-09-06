@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-edit)
-  (:use (text tm-structure)
-        (link locus-edit)
-        (dynamic session-edit)
-        (dynamic scripts-edit)
-        (dynamic calc-drd)))
+;; (texmacs-module (dynamic calc-edit)
+;;   (:use (text tm-structure)
+;;         (link locus-edit)
+;;         (dynamic session-edit)
+;;         (dynamic scripts-edit)
+;;         (dynamic calc-drd)))
+
+(define-module (dynamic calc-edit)
+  :use-module (texmacs-core))
+
+(use-modules (text tm-structure)
+             (link locus-edit)
+             (dynamic session-edit)
+             (dynamic scripts-edit)
+             (dynamic calc-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Spreadsheet evaluation

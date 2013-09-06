@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (version version-kbd)
-  (:use (generic generic-kbd)
-	(version version-compare)))
+;; (texmacs-module (version version-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(version version-compare)))
+
+(define-module (version version-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (version version-compare))
 
 (kbd-map
   (:mode with-versioning-tool?)

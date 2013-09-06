@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex abbrv)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex abbrv)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex abbrv)
+  :use-module (texmacs-core))
+
+(use-modules (bibtex bib-utils) (bibtex plain))
 
 (bib-define-style "abbrv" "plain")
 

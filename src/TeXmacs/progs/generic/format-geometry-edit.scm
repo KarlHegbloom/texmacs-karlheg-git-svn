@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic format-geometry-edit)
-  (:use (utils edit selections)
-	(generic generic-edit)))
+;; (texmacs-module (generic format-geometry-edit)
+;;   (:use (utils edit selections)
+;; 	(generic generic-edit)))
+
+(define-module (generic format-geometry-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils edit selections)
+             (generic generic-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customizable step changes for length modifications

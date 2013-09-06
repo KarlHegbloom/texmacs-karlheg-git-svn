@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (language std-math)
-  (:use (language std-symbols)))
+;; (texmacs-module (language std-math)
+;;   (:use (language std-symbols)))
+
+(define-module (language std-math)
+  :use-module (texmacs-core))
+
+(use-modules (language std-symbols))
 
 (define-language std-math-operators
   (:synopsis "standard mathematical operators")

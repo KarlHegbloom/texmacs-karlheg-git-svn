@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-markup)
-  (:use (graphics graphics-drd)))
+;; (texmacs-module (graphics graphics-markup)
+;;   (:use (graphics graphics-drd)))
+
+(define-module (graphics graphics-markup)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Definition of graphical macros

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-kbd)
-  (:use (text std-text-kbd)))
+;; (texmacs-module (doc tmdoc-kbd)
+;;   (:use (text std-text-kbd)))
+
+(define-module (doc tmdoc-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (text std-text-kbd))
 
 (kbd-map
   (:mode in-manual?)

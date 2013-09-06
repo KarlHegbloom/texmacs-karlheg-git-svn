@@ -24,8 +24,13 @@
 ;; "technical report"
 ;; "volume"
 
-(texmacs-module (bibtex plain)
-  (:use (bibtex bib-utils)))
+;; (texmacs-module (bibtex plain)
+;;   (:use (bibtex bib-utils)))
+
+(define-module (bibtex plain)
+  :use-module (texmacs-core))
+
+(use-modules (bibtex bib-utils))
 
 (bib-define-style "plain" "plain")
 

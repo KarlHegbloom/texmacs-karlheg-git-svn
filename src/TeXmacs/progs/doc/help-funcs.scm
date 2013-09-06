@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc help-funcs)
-  (:use (texmacs texmacs tm-files)))
+;; (texmacs-module (doc help-funcs)
+;;   (:use (texmacs texmacs tm-files)))
+
+(define-module (doc help-funcs)
+  :use-module (texmacs-core))
+
+(use-modules (texmacs texmacs tm-files))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading help buffers

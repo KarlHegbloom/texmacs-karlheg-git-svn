@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic generic-doc)
-  (:use (generic generic-menu)))
+;; (texmacs-module (generic generic-doc)
+;;   (:use (generic generic-menu)))
+
+(define-module (generic generic-doc)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Brief description of the tag

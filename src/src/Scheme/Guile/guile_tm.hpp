@@ -75,7 +75,7 @@
 #define scm_is_double scm_is_real
 #define scm_new_procedure(name,r,a,b,c) scm_c_define_gsubr(name,a,b,c,(scm_t_subr)r)
 #define scm_lookup_string(name) scm_variable_ref(scm_c_lookup(name))
-#define scm_long2scm scm_long2num
+#define scm_long2scm scm_from_long
 #define scm_scm2long(x) scm_num2long(x,SCM_ARG1,"scm2long")
 #define scm_double2scm scm_from_double
 #define scm_scm2double scm_to_double
@@ -183,7 +183,9 @@ typedef SCM (*scm_t_catch_handler) (void *data, SCM tag, SCM throw_args);
 #define SCM_ARG8 8
 #define SCM_ARG9 9
 
-#ifdef DOTS_OK
+#ifdef HAVE_TYPE_SCM_T_SUBR
+typedef scm_t_subr FN;
+#elif DOTS_OK
 typedef SCM (*FN)(...);
 #else
 typedef SCM (*FN)();
@@ -259,6 +261,7 @@ string tmscm_to_symbol (tmscm obj);
 
 
 tmscm eval_scheme_file (string name);
+tmscm eval_scheme_file_in_load_path (string name);
 tmscm eval_scheme (string s);
 tmscm call_scheme (tmscm fun);
 tmscm call_scheme (tmscm fun, tmscm a1);

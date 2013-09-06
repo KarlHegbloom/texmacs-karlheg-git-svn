@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus file-menu)
-  (:use
+;; (texmacs-module (texmacs menus file-menu)
+;;   (:use
+;;     (utils library cursor)
+;;     (texmacs texmacs tm-server)
+;;     (texmacs texmacs tm-files)
+;;     (texmacs texmacs tm-print)))
+
+(define-module (texmacs menus file-menu)
+  :use-module (texmacs-core))
+
+(use-modules
     (utils library cursor)
     (texmacs texmacs tm-server)
     (texmacs texmacs tm-files)
-    (texmacs texmacs tm-print)))
+    (texmacs texmacs tm-print))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dynamic menu for existing buffers

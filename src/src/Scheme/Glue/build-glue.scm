@@ -201,9 +201,22 @@
         (build-declare-routine (car l))
 	(build-declare-routines (cdr l)))))
 
+(define (build-export-routine l)
+  (let ((name (car l)))
+    (output "    \"" name "\",\n")))
+  
+(define (build-export-routines l)
+  (if (not (null? l))
+      (begin
+        (build-export-routine (car l))
+        (build-export-routines (cdr l)))))
+
 (define (build-initialization name l)
   (output "\nvoid\n" name " () {\n")
   (build-declare-routines l)
+  (output "  scm_c_export(\n")
+  (build-export-routines l)
+  (output "    NULL);\n")
   (output "}\n"))
 
 ;; Main build routines

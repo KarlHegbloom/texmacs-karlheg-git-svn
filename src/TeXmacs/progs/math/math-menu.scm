@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math math-menu)
-  (:use (table table-edit)))
+;; (texmacs-module (math math-menu)
+;;   (:use (table table-edit)))
+
+(define-module (math math-menu)
+  :use-module (texmacs-core))
+
+(use-modules (table table-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting mathematical markup

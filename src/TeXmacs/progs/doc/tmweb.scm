@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmweb)
-  (:use (texmacs texmacs tm-files)))
+;; (texmacs-module (doc tmweb)
+;;   (:use (texmacs texmacs tm-files)))
+
+(define-module (doc tmweb)
+  :use-module (texmacs-core))
+
+(use-modules (texmacs texmacs tm-files))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Building a web site

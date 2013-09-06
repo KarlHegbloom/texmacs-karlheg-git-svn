@@ -10,8 +10,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-acm)
-  (:use (convert latex tmtex)))
+;; (texmacs-module (convert latex tmtex-acm)
+;;   (:use (convert latex tmtex)))
+
+(define-module (convert latex tmtex-acm)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex tmtex))
 
 (tm-define (tmtex-transform-style x)
   (:mode acm-style?)

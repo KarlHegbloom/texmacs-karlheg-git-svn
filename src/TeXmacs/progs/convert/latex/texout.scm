@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex texout)
-  (:use (convert latex latex-tools)
-	(convert tools output)))
+;; (texmacs-module (convert latex texout)
+;;   (:use (convert latex latex-tools)
+;; 	(convert tools output)))
+
+(define-module (convert latex texout)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex latex-tools)
+             (convert tools output))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interface for unicode output

@@ -30,7 +30,10 @@
 ;;    (i.e. linked with <branch>) anywhere in the manuals.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-collect))
+;; (texmacs-module (doc apidoc-collect))
+
+(define-module (doc apidoc-collect)
+  :use-module (texmacs-core))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Internal variables and generic one-use routines.

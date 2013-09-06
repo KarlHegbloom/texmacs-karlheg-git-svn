@@ -30,8 +30,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel logic logic-rules)
-  (:use (kernel logic logic-bind) (kernel logic logic-unify)))
+;; (texmacs-module (kernel logic logic-rules)
+;;   (:use (kernel logic logic-bind) (kernel logic logic-unify)))
+
+(define-module (kernel logic logic-rules)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel logic logic-bind)
+             (kernel logic logic-unify))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting new rules

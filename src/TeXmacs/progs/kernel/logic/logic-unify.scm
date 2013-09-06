@@ -11,8 +11,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel logic logic-unify)
-  (:use (kernel logic logic-bind)))
+;; (texmacs-module (kernel logic logic-unify)
+;;   (:use (kernel logic logic-bind)))
+
+(define-module (kernel logic logic-unify)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel logic logic-bind))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Unification

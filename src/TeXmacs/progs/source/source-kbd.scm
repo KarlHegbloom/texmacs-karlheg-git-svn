@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (source source-kbd)
-  (:use (generic generic-kbd)
-	(source source-edit)))
+;; (texmacs-module (source source-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(source source-edit)))
+
+(define-module (source source-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (source source-edit))
 
 (kbd-map
   ("altcmd )" (make-style-with "src-compact" "none"))

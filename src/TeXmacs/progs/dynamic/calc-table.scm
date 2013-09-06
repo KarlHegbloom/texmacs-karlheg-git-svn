@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-table)
-  (:use (dynamic calc-edit)))
+;; (texmacs-module (dynamic calc-table)
+;;   (:use (dynamic calc-edit)))
+
+(define-module (dynamic calc-table)
+  :use-module (texmacs-core))
+
+(use-modules (dynamic calc-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutines for naming cells

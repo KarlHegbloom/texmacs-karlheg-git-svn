@@ -12,8 +12,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-object)
-  (:use (graphics graphics-utils)))
+;; (texmacs-module (graphics graphics-object)
+;;   (:use (graphics graphics-utils)))
+
+(define-module (graphics graphics-object)
+  :use-module (texmacs-core))
+
+(use-modules (graphics graphics-utils))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutines for calculating with the graphical object

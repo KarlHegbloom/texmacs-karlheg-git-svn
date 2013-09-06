@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math math-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-	(utils edit auto-close)
-	(math math-drd)))
+;; (texmacs-module (math math-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(utils edit auto-close)
+;; 	(math math-drd)))
+
+(define-module (math math-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils library cursor)
+             (utils edit auto-close)
+             (math math-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some drd properties, which should go into table-drd.scm later on

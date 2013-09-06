@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex acm)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex acm)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex acm)
+  :use-module (texmacs-core))
+
+(use-modules (bibtex bib-utils) (bibtex plain))
 
 (bib-define-style "acm" "plain")
 

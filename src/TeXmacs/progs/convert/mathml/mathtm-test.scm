@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert mathml mathtm-test)
-  (:use (convert html htmltm)))
+;; (texmacs-module (convert mathml mathtm-test)
+;;   (:use (convert html htmltm)))
+
+(define-module (convert mathml mathtm-test)
+  :use-module (texmacs-core))
+
+(use-modules (convert html htmltm))
 
 (tm-define (regtest-mathtm)
   (define (with-math x) `(with "mode" "math" ,x))

@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog scheme-edit)
-  (:use (prog prog-edit)
-        (prog scheme-tools) (prog scheme-autocomplete)
-	(utils misc tm-keywords)))
+;; (texmacs-module (prog scheme-edit)
+;;   (:use (prog prog-edit)
+;;         (prog scheme-tools) (prog scheme-autocomplete)
+;; 	(utils misc tm-keywords)))
+
+(define-module (prog scheme-edit)
+  :use-module (texmacs-core))
+
+(use-modules (prog prog-edit)
+             (prog scheme-tools) (prog scheme-autocomplete)
+             (utils misc tm-keywords))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Treatment of special characters

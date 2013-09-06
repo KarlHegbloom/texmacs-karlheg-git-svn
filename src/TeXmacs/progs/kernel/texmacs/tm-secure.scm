@@ -11,8 +11,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-secure)
-  (:use (kernel texmacs tm-define) (kernel texmacs tm-plugins)))
+;; (texmacs-module (kernel texmacs tm-secure)
+;;   (:use (kernel texmacs tm-define) (kernel texmacs tm-plugins)))
+
+;; (define-module (kernel texmacs tm-secure)
+;;   :use-module (texmacs-core))
+
+(define-module (kernel texmacs tm-secure)
+  :use-module (texmacs-core))
+
+(use-modules (kernel texmacs tm-define) (kernel texmacs tm-plugins))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Primitive secure functions

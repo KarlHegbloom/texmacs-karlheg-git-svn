@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html htmltm-test)
-  (:use (convert html htmltm) (convert tools xmltm)
-	(convert tools sxml) (convert tools sxhtml)))
+;; (texmacs-module (convert html htmltm-test)
+;;   (:use (convert html htmltm) (convert tools xmltm)
+;; 	(convert tools sxml) (convert tools sxhtml)))
+
+(define-module (convert html htmltm-test)
+  :use-module (texmacs-core))
+  
+(use-modules (convert html htmltm) (convert tools xmltm)
+             (convert tools sxml) (convert tools sxhtml))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Markup

@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic generic-menu)
-  (:use (utils edit variants)
-	(generic generic-edit)
-	(generic format-edit)
-	(generic format-geometry-edit)
-        (source source-edit)))
+;; (texmacs-module (generic generic-menu)
+;;   (:use (utils edit variants)
+;; 	(generic generic-edit)
+;; 	(generic format-edit)
+;; 	(generic format-geometry-edit)
+;;         (source source-edit)))
+
+(define-module (generic generic-menu)
+  :use-module (texmacs-core))
+
+(use-modules (utils edit variants)
+             (generic generic-edit)
+             (generic format-edit)
+             (generic format-geometry-edit)
+             (source source-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Focus predicates

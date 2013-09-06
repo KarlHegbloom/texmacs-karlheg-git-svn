@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-markup))
+;; (texmacs-module (doc tmdoc-markup))
+
+(define-module (doc tmdoc-markup)
+  :use-module (texmacs-core))
 
 (tm-define (tmdoc-render-keys s)
   (:secure #t)

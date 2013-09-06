@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic scripts-menu)
-  (:use (dynamic scripts-edit)))
+;; (texmacs-module (dynamic scripts-menu)
+;;   (:use (dynamic scripts-edit)))
+
+(define-module (dynamic scripts-menu)
+  :use-module (texmacs-core))
+
+(use-modules (dynamic scripts-edit))
 
 (menu-bind scripts-eval-menu
   (when (script-evaluable?)

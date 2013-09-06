@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus view-menu)
-  (:use
+;; (texmacs-module (texmacs menus view-menu)
+;;   (:use
+;;     (texmacs texmacs tm-view)
+;;     (texmacs texmacs tm-server)
+;;     (texmacs texmacs tm-files)))
+
+(define-module (texmacs menus view-menu)
+  :use-module (texmacs-core))
+
+(use-modules
     (texmacs texmacs tm-view)
     (texmacs texmacs tm-server)
-    (texmacs texmacs tm-files)))
+    (texmacs texmacs tm-files))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The View menu

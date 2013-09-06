@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html htmlout)
-  (:use (convert tools output)))
+;; (texmacs-module (convert html htmlout)
+;;   (:use (convert tools output)))
+
+(define-module (convert html htmlout)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools output))
 
 (define preformatted? #f)
 

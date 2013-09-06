@@ -11,9 +11,15 @@
 ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert bibtex bibtexout)
-  (:use (convert tools output))
-  (:use (convert latex texout)))
+;; (texmacs-module (convert bibtex bibtexout)
+;;   (:use (convert tools output))
+;;   (:use (convert latex texout)))
+
+(define-module (convert bibtex bibtexout)
+  :use-module (texmacs-core))
+
+(use-modules (convert tools output)
+             (convert latex texout))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Entries output

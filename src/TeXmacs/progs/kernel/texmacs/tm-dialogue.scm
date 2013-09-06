@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-dialogue)
-  (:use (kernel texmacs tm-define)))
+;; (texmacs-module (kernel texmacs tm-dialogue)
+;;   (:use (kernel texmacs tm-define)))
+
+(define-module (kernel texmacs tm-dialogue)
+  :use-module (texmacs-core))
+
+(use-modules (kernel texmacs tm-define))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Questions with user interaction

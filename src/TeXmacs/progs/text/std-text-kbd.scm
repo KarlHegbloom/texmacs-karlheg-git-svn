@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text std-text-kbd)
-  (:use (text text-kbd)
-	(text format-text-edit)
-	(text std-text-edit)))
+;; (texmacs-module (text std-text-kbd)
+;;   (:use (text text-kbd)
+;; 	(text format-text-edit)
+;; 	(text std-text-edit)))
+
+(define-module (text std-text-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (text text-kbd)
+             (text format-text-edit)
+             (text std-text-edit))
 
 (kbd-map
   (:mode in-std-text?)

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (link link-edit)
-  (:use (link locus-edit)))
+;; (texmacs-module (link link-edit)
+;;   (:use (link locus-edit)))
+
+(define-module (link link-edit)
+  :use-module (texmacs-core))
+
+(use-modules (link locus-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Current link mode

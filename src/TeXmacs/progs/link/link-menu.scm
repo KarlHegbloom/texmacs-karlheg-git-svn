@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (link link-menu)
-  (:use (link link-edit) (link link-navigate) (link link-extract)))
+;; (texmacs-module (link link-menu)
+;;   (:use (link link-edit) (link link-navigate) (link link-extract)))
+
+(define-module (link link-menu)
+  :use-module (texmacs-core))
+
+(use-modules (link link-edit) (link link-navigate) (link link-extract))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rendering of loci

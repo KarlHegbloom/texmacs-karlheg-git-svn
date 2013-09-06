@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-revtex)
-  (:use (convert latex tmtex)))
+;; (texmacs-module (convert latex tmtex-revtex)
+;;   (:use (convert latex tmtex)))
+
+(define-module (convert latex tmtex-revtex)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex tmtex))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; RevTeX style options

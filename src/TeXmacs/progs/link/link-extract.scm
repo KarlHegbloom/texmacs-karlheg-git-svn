@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (link link-extract)
-  (:use (link link-navigate)))
+;; (texmacs-module (link link-extract)
+;;   (:use (link link-navigate)))
+
+(define-module (link link-extract)
+  :use-module (texmacs-core))
+
+(use-modules (link link-navigate))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutines

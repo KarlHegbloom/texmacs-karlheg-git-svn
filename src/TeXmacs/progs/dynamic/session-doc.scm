@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic session-doc)
-  (:use (generic generic-doc)
-        (dynamic session-menu)))
+;; (texmacs-module (dynamic session-doc)
+;;   (:use (generic generic-doc)
+;;         (dynamic session-menu)))
+
+(define-module (dynamic session-doc)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-doc)
+             (dynamic session-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Insert and remove fields

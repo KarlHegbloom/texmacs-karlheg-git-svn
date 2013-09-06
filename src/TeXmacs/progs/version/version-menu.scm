@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (version version-menu)
-  (:use (version version-compare)
-        (version version-tmfs)))
+;; (texmacs-module (version version-menu)
+;;   (:use (version version-compare)
+;;         (version version-tmfs)))
+
+(define-module (version version-menu)
+  :use-module (texmacs-core))
+
+(use-modules (version version-compare)
+             (version version-tmfs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Main version menu

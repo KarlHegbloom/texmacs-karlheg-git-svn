@@ -11,10 +11,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (table table-edit)
-  (:use (utils library tree)
-	(utils base environment)
-	(utils edit variants)))
+;; (texmacs-module (table table-edit)
+;;   (:use (utils library tree)
+;; 	(utils base environment)
+;; 	(utils edit variants)))
+
+(define-module (table table-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils base environment)
+             (utils edit variants))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some drd properties, which should go into table-drd.scm later on

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-beamer)
-  (:use (convert latex tmtex)))
+;; (texmacs-module (convert latex tmtex-beamer)
+;;   (:use (convert latex tmtex)))
+
+(define-module (convert latex tmtex-beamer)
+  :use-module (texmacs-core))
+
+(use-modules (convert latex tmtex))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Beamer style options

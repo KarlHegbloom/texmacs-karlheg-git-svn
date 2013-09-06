@@ -11,7 +11,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel logic logic-bind))
+;; (texmacs-module (kernel logic logic-bind))
+(define-module (kernel logic logic-bind)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs)
+             (kernel logic logic-unify))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Is an expression a free variable?

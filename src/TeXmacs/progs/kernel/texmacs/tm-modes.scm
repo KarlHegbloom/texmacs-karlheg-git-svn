@@ -11,10 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-modes)
-  (:use
-    (kernel logic logic-rules) (kernel logic logic-query) (kernel logic logic-data)
-    (kernel texmacs tm-plugins) (kernel texmacs tm-preferences)))
+;; (texmacs-module (kernel texmacs tm-modes)
+;;   (:use
+;;     (kernel logic logic-rules) (kernel logic logic-query) (kernel logic logic-data)
+;;     (kernel texmacs tm-plugins) (kernel texmacs tm-preferences)))
+
+(define-module (kernel texmacs tm-modes)
+  :use-module (texmacs-core))
+
+(use-modules (kernel logic logic-rules)
+             (kernel logic logic-query)
+             (kernel logic logic-data)
+             (kernel texmacs tm-plugins)
+             (kernel texmacs tm-preferences))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Defining new modes

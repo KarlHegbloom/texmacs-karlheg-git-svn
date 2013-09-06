@@ -11,11 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-edit)
-  (:use (utils library tree)
-	(utils edit variants)
-	(text std-text-edit)
-	(doc tmdoc-drd)))
+;; (texmacs-module (doc tmdoc-edit)
+;;   (:use (utils library tree)
+;; 	(utils edit variants)
+;; 	(text std-text-edit)
+;; 	(doc tmdoc-drd)))
+
+(define-module (doc tmdoc-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils edit variants)
+             (text std-text-edit)
+             (doc tmdoc-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting meta data

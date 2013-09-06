@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog prog-menu)
-  (:use (prog format-prog-menu)
-	(generic insert-menu)))
+;; (texmacs-module (prog prog-menu)
+;;   (:use (prog format-prog-menu)
+;; 	(generic insert-menu)))
+
+(define-module (prog prog-menu)
+  :use-module (texmacs-core))
+
+(use-modules (prog format-prog-menu)
+             (generic insert-menu))
 
 (menu-bind prog-icons
   (link prog-format-icons)

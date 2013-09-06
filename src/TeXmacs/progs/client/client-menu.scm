@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (client client-menu)
-  (:use (client client-base)
-        (client client-tmfs)))
+;; (texmacs-module (client client-menu)
+;;   (:use (client client-base)
+;;         (client client-tmfs)))
+
+(define-module (client client-menu)
+  :use-module (texmacs-core))
+
+(use-modules (client client-base)
+             (client client-tmfs))
 
 ;;(menu-bind account-menu
 ;;  ("Nickname" (remote-interactive-set-user-property "Nickname"))

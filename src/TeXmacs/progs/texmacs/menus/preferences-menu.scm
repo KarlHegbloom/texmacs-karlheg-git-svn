@@ -11,15 +11,26 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus preferences-menu)
-  (:use
+;; (texmacs-module (texmacs menus preferences-menu)
+;;   (:use
+;;     (utils edit auto-close)
+;;     (texmacs texmacs tm-server)
+;;     (texmacs texmacs tm-view)
+;;     (texmacs texmacs tm-print)
+;;     (texmacs keyboard config-kbd)
+;;     (convert latex init-latex)))
+
+(define-module (texmacs menus preferences-menu)
+  :use-module (texmacs-core))
+
+(use-modules
     (utils edit auto-close)
     (texmacs texmacs tm-server)
     (texmacs texmacs tm-view)
     (texmacs texmacs tm-print)
     (texmacs keyboard config-kbd)
     (convert latex init-latex)
-    (language natural)))
+    (language natural))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Preferred scripting language

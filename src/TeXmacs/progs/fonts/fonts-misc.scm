@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-misc))
+;; (texmacs-module (fonts fonts-misc))
+
+(define-module (fonts fonts-misc)
+  :use-module (texmacs-core))
 
 (set-font-rules
   '(((tc rm medium right $s $d) (tex tcrm $s $d))

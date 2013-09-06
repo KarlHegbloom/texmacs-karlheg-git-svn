@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text cyrillic translit-kbd)
-  (:use (text text-kbd)))
+;; (texmacs-module (text cyrillic translit-kbd)
+;;   (:use (text text-kbd)))
+
+(define-module (text cyrillic translit-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (text text-kbd))
 
 (kbd-map
   (:mode in-cyrillic-translit?)

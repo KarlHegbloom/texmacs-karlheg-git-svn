@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (version version-edit)
-  (:use (version version-drd)))
+;; (texmacs-module (version version-edit)
+;;   (:use (version version-drd)))
+
+(define-module (version version-edit)
+  :use-module (texmacs-core))
+
+(use-modules (version version-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Important predicates

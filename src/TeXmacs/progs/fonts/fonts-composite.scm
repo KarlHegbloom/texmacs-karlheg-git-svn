@@ -11,7 +11,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts fonts-composite))
+;; (texmacs-module (fonts fonts-composite))
+
+(define-module (fonts fonts-composite)
+  :use-module (texmacs-core))
 
 (set-font-rules
   '(((modern $v $a $b $s $d)

@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic document-doc)
-  (:use (generic generic-doc)
-        (generic document-menu)))
+;; (texmacs-module (generic document-doc)
+;;   (:use (generic generic-doc)
+;;         (generic document-menu)))
+
+(define-module (generic document-doc)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-doc)
+             (generic document-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Top-level document documentation

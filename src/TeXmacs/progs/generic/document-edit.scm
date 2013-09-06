@@ -11,10 +11,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic document-edit)
-  (:use (utils base environment)
-        (utils library length)
-        (generic generic-edit)))
+;; (texmacs-module (generic document-edit)
+;;   (:use (utils base environment)
+;;         (utils library length)
+;;         (generic generic-edit)))
+
+(define-module (generic document-edit)
+  :use-module (texmacs-core))
+
+(use-modules (kernel logic logic-data)
+             (kernel logic logic-rules)
+             (utils base environment)
+             (utils library length)
+             (generic generic-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Document style and packages

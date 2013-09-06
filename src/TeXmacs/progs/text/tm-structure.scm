@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text tm-structure)
-  (:use (text std-text-drd)))
+;; (texmacs-module (text tm-structure)
+;;   (:use (text std-text-drd)))
+
+(define-module (text tm-structure)
+  :use-module (texmacs-core))
+
+(use-modules (text std-text-drd))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Extra subroutines on lists

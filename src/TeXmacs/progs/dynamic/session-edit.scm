@@ -11,12 +11,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic session-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-	(utils plugins plugin-cmd)
-	(dynamic session-drd)
-	(dynamic fold-edit)))
+;; (texmacs-module (dynamic session-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(utils plugins plugin-cmd)
+;; 	(dynamic session-drd)
+;; 	(dynamic fold-edit)))
+
+(define-module (dynamic session-edit)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree)
+             (utils library cursor)
+             (utils plugins plugin-cmd)
+             (dynamic session-drd)
+             (dynamic fold-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Switches

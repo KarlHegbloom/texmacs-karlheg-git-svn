@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (table table-doc)
-  (:use (generic generic-doc)))
+;; (texmacs-module (table table-doc)
+;;   (:use (generic generic-doc)))
+
+(define-module (table table-doc)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-doc))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Insert and remove children

@@ -11,8 +11,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils edit variants)
-  (:use (utils library tree)))
+;; (texmacs-module (utils edit variants)
+;;   (:use (utils library tree)))
+
+(define-module (utils edit variants)
+  :use-module (texmacs-core))
+
+(use-modules (utils library tree))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Definition of tag groups (could be done using drds in the future)

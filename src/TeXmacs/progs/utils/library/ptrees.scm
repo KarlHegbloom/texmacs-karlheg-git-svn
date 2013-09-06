@@ -15,7 +15,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils library ptrees))
+;; (texmacs-module (utils library ptrees))
+
+(define-module (utils library ptrees)
+  :use-module (texmacs-core))
 
 (define (pt-marker . l)
   (if (null? l) (acons "" '() '()) (acons "" '() (car l))))

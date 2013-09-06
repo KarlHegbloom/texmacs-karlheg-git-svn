@@ -11,9 +11,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-kbd)
-  (:use (generic generic-kbd)
-	(dynamic fold-edit)))
+;; (texmacs-module (dynamic fold-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(dynamic fold-edit)))
+
+(define-module (dynamic fold-kbd)
+  :use-module (texmacs-core))
+
+(use-modules (generic generic-kbd)
+             (dynamic fold-edit))
 
 (kbd-map
   ("ir-up" (screens-switch-to :previous))
