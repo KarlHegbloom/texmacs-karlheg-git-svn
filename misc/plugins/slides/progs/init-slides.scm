@@ -19,7 +19,8 @@
 (lazy-define (slides iterate-buffer) clear-output)
 
 (define (slides-initialize)
-  (menu-extend insert-fold-menu
+  (tm-menu (insert-fold-menu)
+    (former)
     ---
     ("Make slides" (make-slides))
     ("Make slides here" (make-slides-here))
