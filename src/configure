@@ -2913,11 +2913,11 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking current Subversion revision number" >&5
 $as_echo_n "checking current Subversion revision number... " >&6; }
 SVNREV=`svnversion -n . 2>/dev/null`
-SVNREV=${SVNREV/:/_}
+SVNREV=${SVNREV/:/-}
 if { test "$SVNREV" = "Unversioned directory"; } ; then
    SVNREV=`(git svn info | grep '^Revision' | cut -f2 -d' ') 2>/dev/null`
    if { ! test "$SVNREV" = ""; } ; then
-      SVNREV="$SVNREV"_gitsvn_`git log -n 1 --oneline | cut -f1 -d' '`;
+      SVNREV="$SVNREV"-gitsvn-`git log -n 1 --oneline | cut -f1 -d' '`;
    fi;
 fi
 if { test "$SVNREV" = "" || test "$SVNREV" = "exported"; } ; then
