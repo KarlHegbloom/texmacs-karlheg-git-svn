@@ -2105,6 +2105,8 @@ pdf_hummus_renderer_rep::toc_entry (string kind, string title, SI x, SI y) {
   if (kind == "toc-3") ls= 5;
   if (kind == "toc-4") ls= 6;
   if (kind == "toc-5") ls= 7;
+  if (kind == "toc-6") ls= 8;
+  if (kind == "toc-7") ls= 9;
 
   outlines << outline_data(title, page_num, to_x(x), to_y(y+20*pixel), ls);
 }
