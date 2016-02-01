@@ -3,7 +3,8 @@
 
 (define (satellite-initialize)
   (import-from (satellite))
-  (menu-extend tools-menu
+  (tm-menu (tools-menu)
+    (former)
     (-> "Satellite" (link satellite-menu))))
 
 (plugin-configure plug-sat
