@@ -16,17 +16,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(lazy-define (positions) position-remember-ia)
+(lazy-define (positions) position-jump-ia)
+(lazy-define (positions) position-forget-ia)
+
+(lazy-keyboard (kbd-positions) always?)
+
 (define (positions-initialize)
-  (lazy-define (positions) position-remember-ia)
-  (lazy-define (positions) position-jump-ia)
-  (lazy-define (positions) position-forget-ia)
-  (menu-extend tools-menu
-    ---
+  (tm-menu (tools-menu)
+    (former)
     (-> "Positions"
-	("Remember position" (position-remember-ia))
-	("Jump to position" (position-jump-ia))
-	("Forget position" (position-forget-ia))))
-  (lazy-keyboard (kbd-positions) always?))
+        ("Remember position" (position-remember-ia))
+        ("Jump to position" (position-jump-ia))
+        ("Forget position" (position-forget-ia)))))
 
 (plugin-configure positions
   (:require #t)
