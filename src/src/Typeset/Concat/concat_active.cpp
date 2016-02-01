@@ -172,8 +172,16 @@ concater_rep::typeset_locus (tree t, path ip) {
   if (build_locus (env, t, ids, col, ref, anchor)) {
     marker (descend (ip, 0));
     tree old= env->local_begin (COLOR, col);
-    typeset (t[last], descend (ip, last));
+/*    typeset (t[last], descend (ip, last));
+    env->local_end (COLOR, old);*/
+// pdf hlink are created at the post_display typesetting step only for locus_box (see change_boxes.cpp)
+// for some reason hlink loci were not typeset as locus_box (code commented just above)
+// minimal modification (copied from below) that enable hlinks to become pdf hlinks :
+    box b= typeset_as_concat (env, t[last], descend (ip, last));
     env->local_end (COLOR, old);
+    print (locus_box (ip, b, ids, env->pixel, ref, anchor));
+// end changes
+
     marker (descend (ip, 1));
   }
   else {
