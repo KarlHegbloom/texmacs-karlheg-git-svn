@@ -2,3 +2,4 @@ src/packages/debian/files
 src/debian
 src/packages/debian/texmacs.debhelper.log
 src/packages/debian/texmacs/
+texmacs*deb
