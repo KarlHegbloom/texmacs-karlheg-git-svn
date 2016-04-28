@@ -15,4 +15,4 @@ export GUILE_VERSION="`pkg-config --modversion guile-1.8`"
 #export CCACHE_PREFIX=/usr/bin/distcc
 #export DISTCC_HOSTS="localhost/8 192.168.1.64/4"
 #export DEB_BUILD_OPTIONS=parallel=12
-export DEB_BUILD_OPTIONS=parallel=7
+export DEB_BUILD_OPTIONS=parallel=8
