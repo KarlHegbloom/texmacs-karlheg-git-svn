@@ -264,10 +264,17 @@
 (define (bib-file? f)
   (and (url? f) (== (url-suffix f) "bib")))
 
+(tm-define (is-tm-bibtex-style? style)
+  (let ((style (or (and (string-starts? style "tm-")
+                        (string-drop style 3))
+                   style)))
+    (not
+     (not
+      (search-path %load-path (string-append "bibtex/" style ".scm"))))))
+
 (define (bib-compile-sub prefix style names . bib-files)
   (set! names (list-remove-duplicates names))
-  (if (in? style (list "tm-abbrv" "tm-acm" "tm-alpha" "tm-elsart-num"
-                       "tm-ieeetr" "tm-plain" "tm-siam" "tm-unsrt"))
+  (if (is-tm-bibtex-style? style)
       (let* ((all-files `(,@bib-files :default :attached))
              (l (apply bib-retrieve-entries (cons names all-files)))
              (bl (map db->bib (map cdr l)))
