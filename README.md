@@ -1,6 +1,6 @@
 # Mirror of GNU TeXmacs svn repository #
 
-This repository is a mirror of the GNU TeXmacs svn repository created using `git svn`. The default branch here is called `oaktree`, and the upstream branch is called `trunk`. My branch contains a few changes that I will try and send upstream. It can be used to produce a deb package:
+This repository is a mirror of the GNU TeXmacs svn repository created using `git svn`. The default branch here is called `oaktree`, and the upstream branch is called `svn-trunk`. My branch contains a few changes that I will try and send upstream. It can be used to produce a deb package:
 
     cd src
     ln -s packages/debian .
