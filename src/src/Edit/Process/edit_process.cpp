@@ -110,16 +110,13 @@ edit_process_rep::generate_bibliography (
       }
     }
     else t= bibtex_load_bbl (bib, bbl_file);
+    // cout << "bibtex_load_bbl:" << t << "\n";// DEBUG
   }
   else {
     if (!bibtex_present () && !starts (style, "tm-")) {
-      if (style == "abbrv") style= "tm-abbrv";
-      else if (style == "acm") style= "tm-acm";
-      else if (style == "alpha") style= "tm-alpha";
-      else if (style == "elsart-num") style= "tm-elsart-num";
-      else if (style == "ieeetr") style= "tm-ieeetr";
-      else if (style == "siam") style= "tm-siam";
-      else if (style == "unsrt") style= "tm-unsrt";
+      if (as_bool (call (string ("is-tm-bibtex-style?"), "tm-" * style))) {
+	style= "tm-" * style;
+      }
       else style= "tm-plain";
     }
     if (supports_db () && !is_rooted (bib_file))
