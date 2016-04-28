@@ -369,9 +369,21 @@
       (htmltm-image env a c)))
 
 (define (htmltm-wikipedia-span env a c)
-  (if (== (shtml-attr-non-null a 'class) "texhtml")
-      (list `(math ,(htmltm-args-serial env c)))
-      (htmltm-pass env a c)))
+  (cond
+   ((== (shtml-attr-non-null a 'class) "texhtml")
+    (list `(math ,(htmltm-args-serial env c))))
+   ;;
+   ;; ad-hoc, only for pasting Juris-M / Zotero bibliography entries.
+   ;;
+   ;; Todo: Complete this to handle more styles?
+   ;;
+   ((== (shtml-attr-non-null a 'style) "font-variant:small-caps;")
+    (list `(with "font-shape" "small-caps" ,(htmltm-args-serial env c))))
+   (#t (htmltm-pass env a c))))
+
+  ;; (if (== (shtml-attr-non-null a 'class) "texhtml")
+  ;;     (list `(math ,(htmltm-args-serial env c)))
+  ;;     (htmltm-pass env a c)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Special rules for improving Scilab documentation rendering
