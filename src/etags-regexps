@@ -1,0 +1,4 @@
+{scheme}/(define-public ((?\([^ ]+\)/
+{scheme}/(define-public-macro ((?\([^ ]+\)/
+{scheme}/(tm-define ((?\([^ ]+\)/
+{scheme}/(tm-define-macro ((?\([^ ]+\)/
