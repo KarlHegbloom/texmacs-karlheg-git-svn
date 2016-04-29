@@ -1,0 +1,3 @@
+#!/bin/zsh
+etags --regex=@etags-regexps **/*.scm **/*.hpp **/*.cpp
+ebrowse **/*.hpp **/*.cpp
