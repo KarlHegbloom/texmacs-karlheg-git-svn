@@ -1,3 +1,3 @@
 #!/bin/zsh
-etags --regex=@etags-regexps **/*.scm **/*.hpp **/*.cpp
-ebrowse **/*.hpp **/*.cpp
+etags --regex=@etags-regexps TeXmacs/**/*.scm src/**/*.hpp src/**/*.cpp plugins/**/*.scm plugins/**/*.cpp plugins/**/*.h plugins/**/*.c
+ebrowse src/**/*.hpp src/**/*.cpp

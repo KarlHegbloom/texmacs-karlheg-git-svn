@@ -1,4 +1,6 @@
-{scheme}/(define-public ((?\([^ ]+\)/
-{scheme}/(define-public-macro ((?\([^ ]+\)/
-{scheme}/(tm-define ((?\([^ ]+\)/
-{scheme}/(tm-define-macro ((?\([^ ]+\)/
+{scheme}/(define-public +((?\([^ ]+\)/\1/
+{scheme}/(define-public-macro ((?\([^ ]+\)/\1/
+{scheme}/(tm-define +((?\([^ ]+\)/\1/
+{scheme}/(tm-define-macro +((?\([^ ]+\)/\1/
+{scheme}/(define +((?\([^ ]+\)/\1/
+{scheme}/(texmacs-module +(\([^ ]+ *\([^ ]\)*\)/\1/
