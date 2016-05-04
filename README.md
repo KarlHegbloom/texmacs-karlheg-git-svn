@@ -11,4 +11,13 @@ This repository is a mirror of the GNU TeXmacs svn repository created using `git
 
 You will need to have git-svn installed for the version number thing to work right.
 
+**NO WARRANTY:** I will put binary build releases here:
+
+[https://github.com/KarlHegbloom/texmacs/releases](https://github.com/KarlHegbloom/texmacs/releases)
+
+*They are development snapshot builds.* I use these binaries myself
+and they tend to be reasonably usable. If one is especially broken I
+will take care to remove it.
+
+
 Karl M. Hegbloom <karl.hegbloom@gmail.com>
