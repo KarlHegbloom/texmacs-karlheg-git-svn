@@ -1,0 +1,12 @@
+src/packages/debian/files
+src/debian
+src/packages/debian/texmacs.debhelper.log
+src/packages/debian/texmacs/
+texmacs*deb
+src/packages/debian/.debhelper
+src/TeXmacs/progs/tm-mode.elc
+src/cscope.files
+src/cscope.out
+src/packages/debian/debhelper-build-stamp
+src/BROWSE
+src/TAGS

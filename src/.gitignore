@@ -1,0 +1,9 @@
+/config.log
+/config.status
+/Makefile
+/SVNREV
+packages/debian/texmacs-dbgsym/
+packages/debian/texmacs.postinst.debhelper
+packages/debian/texmacs.prerm.debhelper
+packages/debian/texmacs.substvars
+misc/admin/appcast.xml

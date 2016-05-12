@@ -91,8 +91,8 @@
 	   (cons 'document
 		 (sublist-listenv lenv (tree->stree (buffer-tree))))))) 
       (if (!= (convert the-tree "texmacs-tree" "verbatim-snippet") "")
-	  (begin     
-	    (switch-to-active-buffer the-nw-buff) ;"trick" to test if the buffer already exists... 
+	  (begin
+	    (switch-to-buffer the-nw-buff) ;"trick" to test if the buffer already exists... 
 ;Joris : il faudrait faire qch de mieux pour tester si une fenêtre existe déjà...
 	    (if (not (equal? src-buff  (get-strg-name-buffer))) (kill-buffer))
 	    (new-buffer)  
