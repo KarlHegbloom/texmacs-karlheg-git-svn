@@ -41,7 +41,7 @@ CXXCAIRO = @CAIRO_CXX@
 CXXIMLIB2 = @IMLIB2_CFLAGS@
 CXXSQLITE3 = @SQLITE3_CXX@
 CXXFREETYPE = @FREETYPE_CFLAGS@
-CXXICONV = @ICONV_CXX@
+CXXICONV = @LTLIBICONV@
 CXXGUILE = @GUILE_CFLAGS@
 CXXSPARKLE = @SPARKLE_CXX@
 CXXPDF = @PDF_CFLAGS@
@@ -60,6 +60,7 @@ LDGUI = $(LD@CONFIG_GUI@)
 LDIMLIB2 = @IMLIB2_LDFLAGS@
 LDFREETYPE = @FREETYPE_LDFLAGS@
 #LDGUILE = @GUILE_LDFLAGS@
+LDICONV = @LIBICONV@
 
 AR = ar
 ARFLAGS = -r
@@ -419,9 +420,9 @@ TEXMACS_objects := $(strip $(call uses,system kernel data graphics\
  plugins x11 os qt gs cocoa style typeset edit scheme texmacs pdf\
  freetype windowsres)) $(texmacs_c_deps)
 
-link_options:=-L$(tmsrc)/lib $(LDRT) -lm -lz $(LDPATH) $(LDGUI) $(LDICONV) \
-   $(LDGUILE) $(LDAXEL) $(LDCAIRO) $(LDIMLIB2) $(LDSQLITE3) $(LDFREETYPE) \
-   $(LDDL) $(LDSPARKLE)
+link_options:=-L$(tmsrc)/lib $(LDRT) -lm $(LDPATH) $(LDGUI) $(LDICONV) \
+   $(LDAXEL) $(LDCAIRO) $(LDIMLIB2) $(LDSQLITE3) $(LDFREETYPE) \
+   $(LDSPARKLE) -lz
 
 $(tmsrc)/bin/texmacs.bin: Objects/texmacs-$(link).bin
 	$(CP) $^ $@
