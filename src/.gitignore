@@ -7,3 +7,8 @@ packages/debian/texmacs.postinst.debhelper
 packages/debian/texmacs.prerm.debhelper
 packages/debian/texmacs.substvars
 misc/admin/appcast.xml
+config.guess
+config.sub
+misc/autotroll/config.guess
+misc/autotroll/config.sub
+misc/tm-devel-mac/config.guess
