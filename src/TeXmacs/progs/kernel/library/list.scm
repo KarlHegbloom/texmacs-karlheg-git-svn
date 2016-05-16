@@ -108,7 +108,7 @@
   (reverse (cddr (reverse l))))
 
 (define-public (cDDDr l)
-  "Remove two last elements from @l"
+  "Remove three last elements from @l"
   (reverse (cdddr (reverse l))))
 
 (define-public (cDdr l)
