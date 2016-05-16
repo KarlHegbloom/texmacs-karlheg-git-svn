@@ -10,3 +10,5 @@ src/cscope.out
 src/packages/debian/debhelper-build-stamp
 src/BROWSE
 src/TAGS
+src/cscope.out.in
+src/cscope.out.po
