@@ -35,4 +35,11 @@ PATH="$TEXMACS_BIN_PATH/bin:$PATH"
 @CONFIG_LIB_PATH@="$TEXMACS_BIN_PATH/lib${@CONFIG_LIB_PATH@+":$@CONFIG_LIB_PATH@"}"
 export PATH @CONFIG_LIB_PATH@
 
-exec texmacs.bin "$@" < /dev/null
+if [ "$1" = "--gdb" ]; then
+    shift
+    stty -tostop
+    exec gdb -s /usr/lib/debug$TEXMACS_BIN_PATH/bin/texmacs.bin \
+         -args $TEXMACS_BIN_PATH/bin/texmacs.bin "$@"
+else
+    exec texmacs.bin "$@" < /dev/null
+fi
