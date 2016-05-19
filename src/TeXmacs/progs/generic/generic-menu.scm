@@ -111,6 +111,9 @@
   (cond ((== type "length") (rich-length->tm s))
 	(else s)))
 
+(tm-define (focus-tree-modified t)
+  (noop))
+
 (tm-menu (string-input-icon t i)
   (let* ((name (tree-child-name* t i))
          (type (tree-child-type t i))
@@ -122,7 +125,8 @@
          (w (type->width type))
          (setter (lambda (x)
 		   (when x
-                     (tree-set (focus-tree) i (inputter-encode x type))))))
+                     (tree-set (focus-tree) i (inputter-encode x type))
+                     (focus-tree-modified (focus-tree))))))
     (assuming (== name "")
       //)
     (assuming (!= name "")
@@ -148,7 +152,8 @@
          (fm (type->format type))
          (setter (lambda (x)
 		   (when x
-		     (tree-set (focus-tree) i (inputter-encode x type))))))
+		     (tree-set (focus-tree) i (inputter-encode x type))
+                     (focus-tree-modified (focus-tree))))))
     (assuming (!= name "")
       (when (inputter-active? (tree-ref t i) type)
         ((eval s)
@@ -264,6 +269,8 @@
 
 (tm-menu (focus-position-float-menu t))
 
+(tm-menu (focus-animate-menu t))
+
 (tm-menu (focus-style-options-menu t)
   (with opts (search-tag-options t)
     (if (nnull? opts)
@@ -297,6 +304,7 @@
           (dynamic (focus-variant-menu t)))))
   (dynamic (focus-toggle-menu t))
   (dynamic (focus-position-float-menu t))
+  (dynamic (focus-animate-menu t))
   (assuming (focus-has-preferences? t)
     (-> "Preferences"
         (dynamic (focus-preferences-menu t))))
@@ -394,11 +402,14 @@
 
 (tm-menu (focus-position-float-icons t))
 
+(tm-menu (focus-animate-icons t))
+
 (tm-menu (focus-tag-extra-icons t))
 
 (tm-menu (focus-tag-icons t)
   (dynamic (focus-toggle-icons t))
   (dynamic (focus-position-float-icons t))
+  (dynamic (focus-animate-icons t))
   (mini #t
     (with l (focus-variants-of t)
       (assuming (<= (length l) 1)

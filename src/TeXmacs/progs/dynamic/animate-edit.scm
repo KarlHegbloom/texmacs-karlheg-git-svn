@@ -18,6 +18,80 @@
         (generic generic-edit)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Useful subroutines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (reset-players t)
+  (players-set-elapsed t 0.0)
+  (update-players (tree->path t) #t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Time bending
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (anim-get-accelerate t)
+  (cond ((not (tree? t)) #f)
+        ((tree-is? t 'anim-accelerate) t)
+        ((tree-is? t :up 'anim-accelerate) (tree-up t))
+        ((tree-in? t (animation-tag-list)) t)
+        (else #f)))
+
+(tm-define (accelerate-get-type t)
+  (and-with a (anim-get-accelerate t)
+    (or (and (tree-func? a 'anim-accelerate 2)
+             (tree->stree (tree-ref a 1)))
+        "normal")))
+
+(tm-define (accelerate-test-type? dummy new-type)
+  (with t (tree-innermost 'anim-accelerate #t)
+    (tm-equal? (accelerate-get-type t) new-type)))
+
+(tm-define (accelerate-set-type t new-type)
+  (:check-mark "*" accelerate-test-type?)
+  (and-with a (anim-get-accelerate t)
+    (if (tree-func? a 'anim-accelerate 2)
+        (if (== new-type "normal")
+            (tree-remove-node! a 0)
+            (tree-set (tree-ref a 1) new-type))
+        (if (!= new-type "normal")
+            (tree-set! a `(anim-accelerate ,a ,new-type))))
+    (reset-players a)))
+
+(tm-define (accelerate-get-reverse? t)
+  (and-with s (accelerate-get-type t)
+    (string-starts? s "reverse")))
+
+(tm-define (accelerate-test-reverse? dummy)
+  (with t (tree-innermost 'anim-accelerate #t)
+    (accelerate-get-reverse? t)))
+
+(tm-define (accelerate-toggle-reverse? t)
+  (:check-mark "*" accelerate-test-reverse?)
+  (accelerate-set-type**
+   t (accelerate-get-type* t) (not (accelerate-get-reverse? t))))
+
+(tm-define (accelerate-get-type* t)
+  (and-with s (accelerate-get-type t)
+    (cond ((== s "reverse") "normal")
+          ((string-starts? s "reverse-") (string-drop s 8))
+          (else s))))
+
+(tm-define (accelerate-test-type*? dummy new-type)
+  (with t (tree-innermost 'anim-accelerate #t)
+    (tm-equal? (accelerate-get-type* t) new-type)))
+
+(define (accelerate-set-type** t new-type reverse?)
+  (if reverse?
+      (if (== new-type "normal")
+          (accelerate-set-type t "reverse")
+          (accelerate-set-type t (string-append "reverse-" new-type)))
+      (accelerate-set-type t new-type)))
+
+(tm-define (accelerate-set-type* t new-type)
+  (:check-mark "*" accelerate-test-type*?)
+  (accelerate-set-type** t new-type (accelerate-get-reverse? t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start and end editing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
