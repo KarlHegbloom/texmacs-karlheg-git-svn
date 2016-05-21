@@ -111,9 +111,6 @@
   (cond ((== type "length") (rich-length->tm s))
 	(else s)))
 
-(tm-define (focus-tree-modified t)
-  (noop))
-
 (tm-menu (string-input-icon t i)
   (let* ((name (tree-child-name* t i))
          (type (tree-child-type t i))
@@ -268,8 +265,8 @@
      (inactive-toggle t))))
 
 (tm-menu (focus-position-float-menu t))
-
 (tm-menu (focus-animate-menu t))
+(tm-menu (focus-misc-menu t))
 
 (tm-menu (focus-style-options-menu t)
   (with opts (search-tag-options t)
@@ -305,6 +302,7 @@
   (dynamic (focus-toggle-menu t))
   (dynamic (focus-position-float-menu t))
   (dynamic (focus-animate-menu t))
+  (dynamic (focus-misc-menu t))
   (assuming (focus-has-preferences? t)
     (-> "Preferences"
         (dynamic (focus-preferences-menu t))))
@@ -401,15 +399,15 @@
      (inactive-toggle t))))
 
 (tm-menu (focus-position-float-icons t))
-
 (tm-menu (focus-animate-icons t))
-
+(tm-menu (focus-misc-icons t))
 (tm-menu (focus-tag-extra-icons t))
 
 (tm-menu (focus-tag-icons t)
   (dynamic (focus-toggle-icons t))
   (dynamic (focus-position-float-icons t))
   (dynamic (focus-animate-icons t))
+  (dynamic (focus-misc-icons t))
   (mini #t
     (with l (focus-variants-of t)
       (assuming (<= (length l) 1)

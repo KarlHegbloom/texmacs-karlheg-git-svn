@@ -15,8 +15,10 @@
 #include "image_files.hpp"
 #include "frame.hpp"
 
-int std_shrinkf= 5;
-double retina_scale= 1.0;
+int    std_shrinkf  = 5;
+bool   retina_manual= false;
+int    retina_factor= 1;
+double retina_scale = 1.0;
 
 /******************************************************************************
 * Constructors and handles

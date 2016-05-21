@@ -164,15 +164,6 @@
 	(else
 	  (insert-go-to w (list (- (tm-arity w) 1) 0)))))
 
-(tm-define (make-effect . args)
-  (if (selection-active-any?)
-      (let* ((selection (selection-tree))
-             (ins `(,(car args) ,selection ,@(cdr args)))
-             (end (path-end selection '())))
-        (clipboard-cut "nowhere")
-        (insert-go-to ins (cons 0 end)))
-      (insert-go-to `(,(car args) "" ,@(cdr args)) (list 0 0))))
-
 (tm-define (toggle-with-like w back)
   (with t (if (and (selection-active-any?)
 		   (== (selection-tree) (path->tree (selection-path))))
@@ -220,8 +211,9 @@
 (tm-define (customizable-parameters t)
   (list))
 
-(tm-define (tree-with-set t var val)
-  (tree-set! t `(with ,var ,val ,t))
+(tm-define (tree-with-set t . l)
+  (focus-tree-modified t)
+  (tree-set! t `(with ,@l ,t))
   (with-simplify t)
   (with-merge t))
 
@@ -264,3 +256,88 @@
 (tm-define (make-new-dpage)
   (make 'new-dpage)
   (insert-return))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Effects
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(blur gaussian-blur oval-blur rectangular-blur)))
+  (list (list "blur-pen-width" "Pen width")
+        (list "blur-pen-height" "Pen height")
+        (list "blur-pen-angle" "Pen angle")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(motion-blur)))
+  (list (list "blur-pen-dx" "Pen dx")
+        (list "blur-pen-dy" "Pen dy")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(outline gaussian-outline
+                          oval-outline rectangular-outline)))
+  (list (list "outline-pen-width" "Pen width")
+        (list "outline-pen-height" "Pen height")
+        (list "outline-pen-angle" "Pen angle")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(motion-outline)))
+  (list (list "outline-pen-dx" "Pen dx")
+        (list "outline-pen-dy" "Pen dy")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(thicken gaussian-thicken
+                          oval-thicken rectangular-thicken)))
+  (list (list "thicken-pen-width" "Pen width")
+        (list "thicken-pen-height" "Pen height")
+        (list "thicken-pen-angle" "Pen angle")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(motion-thicken)))
+  (list (list "thicken-pen-dx" "Pen dx")
+        (list "thicken-pen-dy" "Pen dy")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(erode gaussian-erode oval-erode rectangular-erode)))
+  (list (list "erode-pen-width" "Pen width")
+        (list "erode-pen-height" "Pen height")
+        (list "erode-pen-angle" "Pen angle")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(motion-erode)))
+  (list (list "erode-pen-dx" "Pen dx")
+        (list "erode-pen-dy" "Pen dy")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(shadow shadowed-raise)))
+  (list (list "shadow-dx" "Dx")
+        (list "shadow-dy" "Dy")
+        (list "shadow-color" "Color")
+        (list "shadow-blur-radius" "Blur radius")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(engrave)))
+  (list (list "engrave-dx" "Dx")
+        (list "engrave-dy" "Dy")
+        (list "engrave-color" "Color")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(emboss)))
+  (list (list "emboss-dx" "Dx")
+        (list "emboss-dy" "Dy")
+        (list "emboss-color" "Color")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(outlined-engrave)))
+  (list (list "engrave-dx" "Dx")
+        (list "engrave-dy" "Dy")
+        (list "outline-pen-width" "Pen width")
+        (list "outline-pen-height" "Pen height")
+        (list "outline-pen-angle" "Pen angle")))
+
+(tm-define (customizable-parameters t)
+  (:require (tree-in? t '(outlined-emboss)))
+  (list (list "emboss-dx" "Dx")
+        (list "emboss-dy" "Dy")
+        (list "outline-pen-width" "Pen width")
+        (list "outline-pen-height" "Pen height")
+        (list "outline-pen-angle" "Pen angle")))
