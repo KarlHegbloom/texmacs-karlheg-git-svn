@@ -23,7 +23,7 @@ AC_MSG_CHECKING(current Subversion revision number)
 SVNREV=`svnversion -n . 2>/dev/null`
 SVNREV=${SVNREV/:/-}
 if { test "$SVNREV" = "Unversioned directory"; } ; then
-   SVNREV=`(git rev-list --max-count=100 --first-parent --pretty=medium HEAD@{0} | sed -rne '/git-svn-id:/ {s,.*://.*@([^ ]+).*,\1,p ;/./ q 0}') 2>/dev/null`
+   SVNREV=`(git rev-list --max-count=100 --pretty=medium HEAD@{0} | sed -rne '/git-svn-id:/ {s,.*://.*@([^ ]+).*,\1,p ;/./ q 0}') 2>/dev/null`
    if { ! test "$SVNREV" = ""; } ; then
       SVNREV="$SVNREV"-gitsvn-`git log --oneline | wc -l`-`git log -n 1 --oneline | cut -f1 -d' '`;
    fi;
