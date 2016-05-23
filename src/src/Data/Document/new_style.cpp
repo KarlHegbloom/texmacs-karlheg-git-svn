@@ -15,6 +15,12 @@
 #include "convert.hpp"
 #include "../../Typeset/env.hpp"
 
+#define CACHE_FILE_NAME_USE_MD5SUM 1
+
+#ifdef CACHE_FILE_NAME_USE_MD5SUM
+#include "../../Plugins/Pdf/PDFWriter/MD5Generator.h"
+#endif
+
 /******************************************************************************
 * Global data
 ******************************************************************************/
@@ -73,6 +79,29 @@ preprocess_style (tree st, url name) {
 * Caching style files on disk
 ******************************************************************************/
 
+#ifdef CACHE_FILE_NAME_USE_MD5SUM
+static void
+cache_file_name_sub (tree t, MD5Generator &md5) {
+    if (is_atomic (t)) {
+        std::string s (as_charp(t->label));
+        md5.Accumulate(s);
+        return;
+    }
+    else {
+        int i, n= N(t);
+        for (i=0; i<n; i++)
+            cache_file_name_sub (t[i], md5);
+        return;
+    }
+}
+
+static string
+cache_file_name (tree t) {
+    MD5Generator md5;
+    cache_file_name_sub (t, md5);
+    return string (md5.ToString().c_str());
+}
+#else
 static string
 cache_file_name (tree t) {
   if (is_atomic (t)) return replace (t->label, "/", "%");
@@ -84,6 +113,7 @@ cache_file_name (tree t) {
     return s * "__";
   }
 }
+#endif
 
 void
 style_invalidate_cache () {
