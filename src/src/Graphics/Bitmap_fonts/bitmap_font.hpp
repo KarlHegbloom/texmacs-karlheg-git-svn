@@ -102,6 +102,7 @@ glyph bar_right   (glyph gl1, glyph gl2);
 glyph bar_bottom  (glyph gl1, glyph gl2);
 glyph copy        (glyph gl);
 glyph simplify    (glyph gl);
+glyph padded      (glyph gl, int l, int t, int r, int b);
 glyph clip        (glyph gl, SI x1, SI y1, SI x2, SI y3);
 glyph hor_flip    (glyph gl);
 glyph ver_flip    (glyph gl);
@@ -119,6 +120,7 @@ glyph deepen      (glyph gl, double yf, SI penw);
 glyph widen       (glyph gl, double xf, SI penw);
 glyph bolden      (glyph gl, SI dpen, SI dtot, SI dver);
 glyph make_bbb    (glyph gl, int code, SI penw, SI penh, SI fatw);
+glyph distorted   (glyph gl, tree kind, SI em, int c);
 glyph transform   (glyph gl, frame fr);
 glyph rotate      (glyph gl, double angle, double ox, double oy);
 glyph curly       (glyph gl);
@@ -167,5 +169,6 @@ font_glyphs extended (font_glyphs fng, double xf, SI penw);
 font_metric bolden (font_metric fnm, SI dtot, SI dver);
 font_glyphs bolden (font_glyphs fng, SI dpen, SI dtot, SI dver);
 font_glyphs make_bbb (font_glyphs fng, SI penw, SI penh, SI fatw);
+font_glyphs distorted (font_glyphs fng, tree kind, SI em);
 
 #endif // defined BITMAP_FONT_H
