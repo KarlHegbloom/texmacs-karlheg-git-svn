@@ -25,6 +25,16 @@
   (players-set-elapsed t 0.0)
   (update-players (tree->path t) #t))
 
+(tm-define (anim-play t)
+  (when (tree? t)
+    (if (tree-is? t :up 'anim-accelerate)
+        (set! t (tree-up t)))
+    (reset-players t)))
+
+(tm-define (anim-play*)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (anim-play t)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Parameters for various animation tags
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -109,20 +119,25 @@
 ;; Time bending
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (animation-tag-list*)
+  (append '(anim-static anim-dynamic)
+          (animation-tag-list)))
+
 (tm-define (anim-get-accelerate t)
   (cond ((not (tree? t)) #f)
         ((tree-is? t 'anim-accelerate) t)
         ((tree-is? t :up 'anim-accelerate) (tree-up t))
         ((and (tree-is? t :up 'with) (tree-is? t :up :up 'anim-accelerate))
          (tree-up (tree-up t)))
-        ((and (tree-is? t :up 'with) (tree-in? t (animation-tag-list)))
+        ((and (tree-is? t :up 'with) (tree-in? t (animation-tag-list*)))
          (tree-up t))
-        ((tree-in? t (animation-tag-list)) t)
+        ((tree-in? t (animation-tag-list*)) t)
         (else #f)))
 
 (tm-define (accelerate-get-type t)
-  (and-with a (anim-get-accelerate t)
-    (or (and (tree-func? a 'anim-accelerate 2)
+  (with a (anim-get-accelerate t)
+    (or (and a
+             (tree-func? a 'anim-accelerate 2)
              (tree->stree (tree-ref a 1)))
         "normal")))
 
@@ -155,8 +170,8 @@
    t (accelerate-get-type* t) (not (accelerate-get-reverse? t))))
 
 (tm-define (accelerate-get-type* t)
-  (and-with s (accelerate-get-type t)
-    (cond ((== s "reverse") "normal")
+  (with s (accelerate-get-type t)
+    (cond ((or (not (string? s)) (== s "reverse")) "normal")
           ((string-starts? s "reverse-") (string-drop s 8))
           (else s))))
 
@@ -179,6 +194,9 @@
 ;; Start and end editing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(tm-define (user-anim-context? t)
+  (tree-in? t '(anim-static anim-dynamic anim-edit)))
+
 (define (checkout-animation t len)
   (cond ((tm-func? t 'gr-screen 1)
          (with (r p) (checkout-animation (tm-ref t 0) len)
@@ -195,7 +213,119 @@
   (:argument len "Duration")
   (with sel (selection-tree)
     (clipboard-cut "primary")
-    (make-animate sel len)))
+    (make-animate sel len)
+    (set-bottom-bar "animate" #t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Global duration and step length
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (anim-duration t)
+  (cond ((tree-in? t '(anim-static anim-dynamic))
+         (tree-ref t 1))
+        ((tree-in? t '(anim-edit))
+         (tree-ref t 2))
+        (else #f)))
+
+(tm-define (anim-set-duration t d)
+  (and-with x (anim-portion t)
+    (cond ((tree-in? t '(anim-static anim-dynamic))
+           (tree-set! t 1 d))
+          ((tree-in? t '(anim-edit))
+           (tree-set! t 2 d)))
+    (anim-set-portion t x)
+    (anim-play t)))
+
+(tm-define (anim-set-duration* d)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (when d (anim-set-duration t d))))
+
+(tm-define (anim-step t)
+  (cond ((tree-in? t '(anim-static anim-dynamic))
+         (tree-ref t 2))
+        ((tree-in? t '(anim-edit))
+         (tree-ref t 3))
+        (else #f)))
+
+(tm-define (anim-set-step t d)
+  (cond ((tree-in? t '(anim-static anim-dynamic))
+         (tree-set! t 2 d))
+        ((tree-in? t '(anim-edit))
+         (tree-set! t 3 d)))
+  (anim-play t))
+
+(tm-define (anim-set-step* d)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (when d (anim-set-step t d))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Current animation frame
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (anim-now t)
+  (cond ((tree-in? t '(anim-static anim-dynamic))
+         (tree-ref t 3))
+        ((tree-in? t '(anim-edit))
+         (tree-ref t 4))
+        (else #f)))
+
+(define (cursor-path-in t)
+  (let* ((p (cursor-path))
+         (r (tree->path t)))
+    (and (list-starts? p r)
+         (sublist p (length r) (length p)))))
+
+(define (label-list t p)
+  (cond ((or (not p) (not (tree? t)) (null? p)) #f)
+        ((tree-atomic? t) (and (null? (cdr p)) (list (tree->string t))))
+        ((null? (cdr p)) (list (tree-label t)))
+        (else (and-with l (label-list (tree-ref t (car p)) (cdr p))
+                (cons (tree-label t) l)))))
+
+(tm-define (anim-set-now t now)
+  (cond ((tree-in? t '(anim-static anim-dynamic))
+         (tree-set! t 3 now))
+        ((tree-in? t '(anim-edit))
+         (let* ((p (cursor-path-in (tree-ref t 1)))
+                (l (label-list (tree-ref t 1) p)))
+           (with r (animate-commit t)
+             (tree-set! t 0 (tree-ref r 0))
+             (tree-set! t 4 now))
+           (with r (animate-checkout `(anim-static ,(tree-ref t 0)
+                                                   ,@(cddr (tm-children t))))
+             (tree-set! t 0 (tree-ref r 0))
+             (tree-set! t 1 (tree-ref r 1))
+             (with l* (label-list (tree-ref t 1) p)
+               (if (and l (== l* l))
+                   (apply tree-go-to (cons* t 1 p))
+                   (tree-go-to t 1 :start))))))))
+
+(tm-define (anim-set-now* x)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (when x (anim-set-now t x))))
+
+(define (get-ms t)
+  (cond ((and (tree? t) (tree-atomic? t)) (get-ms (tree->string t)))
+        ((not (string? t)) #f)
+        ((string-ends? t "sec") (get-ms (string-drop-right t 2)))
+        ((string-ends? t "ms") (string->number (string-drop-right t 2)))
+        (else (and-with d (string->number (string-drop-right t 1))
+                (* 1000 d)))))
+
+(tm-define (anim-portion t)
+  (let* ((n (get-ms (anim-now t)))
+         (d (get-ms (anim-duration t))))
+    (and n d (/ (* 1.0 n) (* 1.0 d)))))
+
+(tm-define (anim-set-portion t x)
+  (and-with d (get-ms (anim-duration t))
+    (when (number? x)
+      (with n (inexact->exact (floor (+ (* x d) 0.5)))
+        (anim-set-now t (string-append (number->string (* 0.001 n)) "s"))))))
+
+(tm-define (anim-set-portion* x)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (when x (anim-set-portion t x))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start and end editing
@@ -206,21 +336,21 @@
     (tree-assign-node! t (tree-label r))
     (tree-set! t 0 (tree-ref r 0))
     (tree-insert! t 1 (list (tree-ref r 1)))
-    (tree-go-to t 1 :start)))
+    (tree-go-to t 1 :start)
+    (set-bottom-bar "animate" #t)))
+
+(tm-define (anim-checkout*)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (anim-checkout t)))
 
 (tm-define (anim-commit t)
   (with r (animate-commit t)
     (tree-set! t 0 (tree-ref r 0))
     (tree-remove! t 1 1)
     (tree-assign-node! t (tree-label r))
-    (tree-go-to t :end)))
+    (tree-go-to t :end)
+    (anim-play t)))
 
-(tm-define (anim-set-now t now)
-  (with r (animate-commit t)
-    (tree-set! t 0 (tree-ref r 0))
-    (tree-set! t 4 now))
-  (with r (animate-checkout `(anim-static ,(tree-ref t 0)
-                                          ,@(cddr (tm-children t))))
-    (tree-set! t 0 (tree-ref r 0))
-    (tree-set! t 1 (tree-ref r 1))
-    (tree-go-to t 1 :start)))
+(tm-define (anim-commit*)
+  (and-with t (tree-innermost user-anim-context? #t)
+    (anim-commit t)))
