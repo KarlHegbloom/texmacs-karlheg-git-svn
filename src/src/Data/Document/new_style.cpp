@@ -15,6 +15,12 @@
 #include "convert.hpp"
 #include "../../Typeset/env.hpp"
 
+// This has the advantage that when a style.ts is in a deeply nested
+// directory structure, the file name of the cache file won't be too
+// long for the filesystem to handle. It has the disadvantage that it
+// is no longer possible to look at the cache file name and know what
+// is cached there.
+//
 #define CACHE_FILE_NAME_USE_MD5SUM 1
 
 #ifdef CACHE_FILE_NAME_USE_MD5SUM
@@ -98,8 +104,10 @@ cache_file_name_sub (tree t, MD5Generator &md5) {
 static string
 cache_file_name (tree t) {
     MD5Generator md5;
+    string s;
     cache_file_name_sub (t, md5);
-    return string (md5.ToString().c_str());
+    s << "__" << string (md5.ToString().c_str());
+    return s * "__";
 }
 #else
 static string
