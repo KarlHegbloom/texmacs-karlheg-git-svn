@@ -143,6 +143,7 @@
     (dv prop res)))
 
 (tm-define (create-graphical-props mode ps0)
+  ;;(display* "create-graphical-props " mode ", " ps0 "\n")
   (let ((tab (make-ahash-table))
         (l (graphics-all-attributes)))
     (set! l (list-difference l '("gid" "anim-id")))
@@ -242,6 +243,7 @@
 (define (create-graphical-contour* o edge no) ;; Point mode
   (define (curp lp)
     (if draw-nonsticky-curp lp '()))
+  ;;(display* "Contour for " o "\n")
   (cond ((== (car o) 'point)
          (cons o '()))
         ((graphical-text-at-context? o)
@@ -258,6 +260,18 @@
 	        (mag (get-graphical-prop 'basic "magnify")))
            (create-graphical-embedding-box
             o ha va "center" "center" "1par" "min" "0fn" mag)))
+	((in? (car o) '(anim-edit))
+	 (create-graphical-contour* (caddr o) 0 #f))
+	((in? (car o) '(anim-static anim-dynamic))
+	 (create-graphical-contour* (cadr o) 0 #f))
+	((== (car o) 'morph)
+	 (let* ((a (cdr o))
+		(b (map (lambda (x) (if (tm-func? x 'tuple 2) (caddr x) x)) a))
+		(c (map (lambda (x) (create-graphical-contour* x 0 #f)) b))
+		(d (map (lambda (x) `(concat ,@x)) c)))
+	   d))
+	((== (car o) 'with)
+	 (create-graphical-contour* (cAr o) 0 #f))
         ((integer? no)
          (let* ((l (list-tail (cdr o) no))
                 (ll (length l)))
@@ -333,6 +347,7 @@
     (add-selections-colors op col fcol))
   (define res '())
   (define curscol #f)
+  ;;(display* "create-graphical-contours " l ", " ptr ", " pts "\n")
   (for (o l)
     (if (tree? o)
         (with path (reverse (tree-ip o))
@@ -341,6 +356,14 @@
   (if (and (== pts 'points) ptr)
       (begin
         (set! l (cons (path->tree ptr) l))))
+  (set! l (append-map (lambda (x)
+                        (if (and (tm-in? x '(anim-static anim-dynamic))
+                                 (tm-is? (tm-ref x 0) 'morph))
+                            (with c (tm-children (tm-ref x 0))
+                              (map (lambda (y)
+                                     (if (tm-func? y 'tuple 2)
+                                         (tm-ref y 1) y)) c))
+                            (list x))) l))
   (for (o l)
     (if (not (and (tree? o) (< (cAr (tree-ip o)) 0)))
         (let* ((props #f)
@@ -354,7 +377,9 @@
                                                         'default path)
                                                     (if (== pts 'object)
                                                         #f "square")))
-                (if (== path ptr)
+                (if (or (== path ptr)
+                        (and (list? path) (list? ptr)
+                             (list-starts? path ptr)))
                     (begin
                       (set! on-aobj #t)
                       (set! curscol default-color-go-points)))
@@ -511,7 +536,7 @@
                   (graphical-fetch-props 
                    (if (== (car current-obj) 'with)
                        current-obj `(with ,current-obj)))
-                  (set! current-obj (stree-radical current-obj))))
+                  (set! current-obj (stree-radical* current-obj #f))))
             (create-graphical-object
              current-obj
              mode

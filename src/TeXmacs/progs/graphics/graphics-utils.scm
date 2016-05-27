@@ -496,10 +496,16 @@
 (tm-define (graphics-path-property-1 p var)
   (graphics-path-property-bis-1 p var "default"))
 
+;;(tm-define (graphics-object-root-path p)
+;;  (let* ((q (tm-upwards-path p '(with) '()))
+;;	   (path (if (and q (== (+ (length q) 1) (length p))) q p)))
+;;    path))
+
 (tm-define (graphics-object-root-path p)
-  (let* ((q (tm-upwards-path p '(with) '()))
-	 (path (if (and q (== (+ (length q) 1) (length p))) q p)))
-    path))
+  (with t (path->tree p)
+    (cond ((tree-in? t :up '(with anim-edit))
+           (graphics-object-root-path (cDr p)))
+          (else p))))
 
 (tm-define (graphics-remove p . parms)
   (when p
@@ -587,14 +593,22 @@
          (stree-radical (tm-ref t 1)))
         (else t)))
 
-(tm-define (graphics-re-enhance obj compl)
+(tm-define (stree-radical* t anim?)
+  (cond ((and (tm-is? t 'with) (not anim?))
+         (stree-radical* (tm-ref t :last) anim?))
+        ((tm-is? t 'anim-edit)
+         (stree-radical* (tm-ref t 1) #t))
+        (else t)))
+
+(tm-define (graphics-re-enhance obj compl anim?)
   (cond ((tm-is? compl 'anim-edit)
          `(anim-edit ,(tm-ref compl 0)
-                     ,(graphics-re-enhance obj (tm-ref compl 1))
+                     ,(graphics-re-enhance obj (tm-ref compl 1) #t)
                      ,@(cddr (tm-children compl))))
-        ((and (tm-is? compl 'with) (tm-is? (tm-ref compl :last) 'anim-edit))
+        ((and (tm-is? compl 'with)
+	      (or anim? (tm-is? (tm-ref compl :last) 'anim-edit)))
          `(with ,@(cDr (tm-children compl))
-            ,(graphics-re-enhance obj (tm-ref compl :last))))
+	      ,(graphics-re-enhance obj (tm-ref compl :last) anim?)))
         (else obj)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
