@@ -1,7 +1,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; MODULE      : link-navigate.scm
+;; MODULE      : link-extract.scm
 ;; DESCRIPTION : navigation routines for links
 ;; COPYRIGHT   : (C) 2006  Joris van der Hoeven
 ;;
