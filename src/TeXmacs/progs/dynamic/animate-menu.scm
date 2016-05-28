@@ -210,11 +210,11 @@
 
 (tm-menu (focus-toggle-menu t)
   (:require (tree-is? t 'anim-edit))
-  ("Play animation" (anim-commit*)))
+  ("Play animation" (current-anim-commit)))
   
 (tm-menu (focus-toggle-menu t)
   (:require (tree-in? t '(anim-static anim-dynamic)))
-  ("Edit animation" (anim-checkout*)))
+  ("Edit animation" (current-anim-checkout)))
 
 (tm-menu (focus-toggle-menu t)
   (:require (tree-func? t 'gr-screen 1)
@@ -227,12 +227,12 @@
 (tm-menu (focus-toggle-icons t)
   (:require (tree-is? t 'anim-edit))
   ((balloon (icon "tm_search_next.xpm") "Play animation")
-   (anim-commit*)))
+   (current-anim-commit)))
   
 (tm-menu (focus-toggle-icons t)
   (:require (tree-in? t '(anim-static anim-dynamic)))
   ((balloon (icon "tm_show_hidden.xpm") "Edit animation")
-   (anim-checkout*)))
+   (current-anim-checkout)))
 
 (tm-menu (focus-toggle-icons t)
   (:require (tree-func? t 'gr-screen 1)
@@ -265,7 +265,7 @@
         (let* ((x (exact->inexact (* e i)))
                (now? (< (abs (- x c)) h))
                (sym (if now? "*" (if (in? x a) "+" "-"))))
-          ((eval sym) (anim-set-portion* x))))
+          ((eval sym) (current-anim-set-portion x))))
       (text "]"))))
 
 (tm-menu (anim-input-field name t i setter)
@@ -276,13 +276,13 @@
       //)))
 
 (tm-menu (anim-duration-field name t i)
-  (dynamic (anim-input-field name t i anim-set-duration*)))
+  (dynamic (anim-input-field name t i current-anim-set-duration)))
 
 (tm-menu (anim-step-field name t i)
-  (dynamic (anim-input-field name t i anim-set-step*)))
+  (dynamic (anim-input-field name t i current-anim-set-step)))
 
 (tm-menu (anim-now-field name t i)
-  (dynamic (anim-input-field name t i anim-set-now*)))
+  (dynamic (anim-input-field name t i current-anim-set-now)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Animation toolbar
@@ -298,28 +298,43 @@
         (text "No animation"))
       (assuming (tree-in? t '(anim-static anim-dynamic))
         ((balloon (icon "tm_search_next.xpm") "Play animation")
-         (anim-play*))
+         (current-anim-play))
         ((balloon (icon "tm_show_hidden.xpm") "Edit animation")
-         (anim-checkout*)
+         (current-anim-checkout)
          (notify-change 256))
         ((balloon (icon "tm_focus_delete.xpm") "Remove animation")
-         (anim-remove*))
+         (current-anim-remove))
         // // //
         (dynamic (anim-duration-field "Duration" t 1))
         (dynamic (anim-step-field "Step" t 2)))
       (assuming (tree-in? t '(anim-edit))
         ((balloon (icon "tm_search_next.xpm") "Play animation")
-         (anim-commit*)
+         (current-anim-commit)
          (notify-change 256))
         (assuming (anim-can-remove-frame? t)
           ((balloon (icon "tm_remove.xpm") "Remove this frame")
-           (anim-remove-frame*)))
+           (anim-current-remove-frame)))
         ((balloon (icon "tm_focus_delete.xpm") "Remove animation")
-         (anim-remove*))
+         (current-anim-remove))
         // // //
         (dynamic (anim-time-bar t))
         //
-        (dynamic (anim-now-field "Now" t 4)))
+        (dynamic (anim-now-field "Now" t 4))
+        // // //
+        (assuming (current-anim-can-copy?)
+          ((balloon (icon "tm_copy_before.xpm") "Copy to all frames before")
+           (current-anim-copy-before))
+          ((balloon (icon "tm_copy_both.xpm") "Copy to all other frames")
+           (current-anim-copy-all))
+          ((balloon (icon "tm_copy_after.xpm") "Copy to all frames after")
+           (current-anim-copy-after))
+          // // //
+          ((balloon (icon "tm_delete_before.xpm")
+                    "Remove from previous frames")
+           (current-anim-delete-before))
+          ((balloon (icon "tm_delete_after.xpm")
+                    "Remove from subsequent frames")
+           (current-anim-delete-after))))
       >>> >>> >>>
       ((balloon (icon "tm_close_tool.xpm") "Close animation tool")
        (set-bottom-bar "animate" #f)))))
