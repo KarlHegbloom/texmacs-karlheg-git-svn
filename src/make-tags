@@ -1,3 +1,18 @@
 #!/bin/zsh
-etags --regex=@etags-regexps TeXmacs/**/*.scm src/**/*.hpp src/**/*.cpp plugins/**/*.scm plugins/**/*.cpp plugins/**/*.h plugins/**/*.c
-ebrowse src/**/*.hpp src/**/*.cpp
+etags --regex=@etags-regexps \
+      TeXmacs/**/*.scm \
+      src/**/*.hpp \
+      src/**/*.cpp \
+      plugins/**/*.scm \
+      plugins/**/*.cpp \
+      plugins/**/*.h \
+      plugins/**/*.c \
+      /usr/share/guile/1.8/**/*.scm \
+      /usr/share/guile/1.8/**/*.ss \
+      /usr/include/libguile.h \
+      /usr/include/libguile/**/*.h \
+      ~/.TeXmacs/progs/**/*.scm \
+      $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+
+ebrowse src/**/*.hpp \
+        src/**/*.cpp

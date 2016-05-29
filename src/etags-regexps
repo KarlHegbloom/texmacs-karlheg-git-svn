@@ -1,9 +1,31 @@
+{scheme}/(define +((?\([^ )]+\)/\1/
 {scheme}/(define-public +((?\([^ )]+\)/\1/
+{scheme}/(define-macro +((?\([^ )]+\)/\1/
 {scheme}/(define-public-macro ((?\([^ )]+\)/\1/
+{scheme}/(define-module +(\([^ )]+ *\([^ )]\)*\)/\1/
+{scheme}/(texmacs-module +(\([^ )]+ *\([^ )]\)*\)/\1/
+{scheme}/(provide-public +((?\([^ )]+\)/\1/
+{scheme}/(define-group +((?\([^ )]+\)/\1/
 {scheme}/(tm-define +((?\([^ )]+\)/\1/
 {scheme}/(tm-define-macro +((?\([^ )]+\)/\1/
-{scheme}/(tm-widget +((?\([^ )]+\)/\1/
+{scheme}/(lazy-body-macro +((?\([^ )]+\)/\1/
+{scheme}/(tm-property +((?\([^ )]+\)/\1/
+{scheme}/(request-handler +((?\([^ )]+\)/\1/
 {scheme}/(tm-menu +((?\([^ )]+\)/\1/
-{scheme}/(define +((?\([^ )]+\)/\1/
-{scheme}/(texmacs-module +(\([^ )]+ *\([^ )]\)*\)/\1/
+{scheme}/(define-menu +((?\([^ )]+\)/\1/
+{scheme}/(tm-widget +((?\([^ )]+\)/\1/
+{scheme}/(define-widget +((?\([^ )]+\)/\1/
+{scheme}/(tm-generate +((?\([^ )]+\)/\1/
+{scheme}/(tm-build +((?\([^ )]+\)/\1/
+{scheme}/(tm-build-macro +((?\([^ )]+\)/\1/
+{scheme}/(tm-build-widget +((?\([^ )]+\)/\1/
+{scheme}/(menu-bind +((?\([^ )]+\)/\1/
+{scheme}/(define-table +((?\([^ )]+\)/\1/
+{scheme}/(extend-table +((?\([^ )]+\)/\1/
+{scheme}/(smart-table +((?\([^ )]+\)/\1/
+{scheme}/(tm-service +((?\([^ )]+\)/\1/
+{scheme}/(tm-call-back +((?\([^ )]+\)/\1/
+{scheme}/(define-format +((?\([^ )]+\)/\1/
+{scheme}/(define-language +((?\([^ )]+\)/\1/
+{scheme}/(define-graphics +((?\([^ )]+\)/\1/
 {c++}/ *tmscm_install_procedure +("\([^"]+\)"/\1/
