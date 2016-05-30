@@ -136,11 +136,27 @@ operator <= (list<T> l1, list<T> l2) {
 * computations with list<T> structures
 ******************************************************************************/
 
+// Perhaps exploit g++ tail-call elimination
+template<class T> int
+Nrec (list<T> l, int n) {
+  if (is_nil (l)) return n;
+  else return Nrec (l->next, n + 1);
+}
+
+template<class T> int
+N (list<T> l) {
+  if (is_nil (l)) return 0;
+  else if (is_nil (l->next)) return 1;
+  else return Nrec (l->next, 1);
+}
+
+#if 0
 template<class T> int
 N (list<T> l) {
   if (is_nil (l)) return 0;
   else return N (l->next) + 1;
 }
+#endif
 
 template<class T> list<T>
 copy (list<T> l) {
