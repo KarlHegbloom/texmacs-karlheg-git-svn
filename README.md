@@ -34,7 +34,13 @@ You will need to have git-svn installed for the version number thing to work rig
 
 *They are development snapshot builds.* I use these binaries myself
 and they tend to be reasonably usable. If one is especially broken I
-will take care to remove it.
+will take care to remove it. The binaries are not stripped, and the
+`texmacs` wrapper script supports a `--gdb` switch:
+
+    texmacs --gdb [args]
+    
+... will land you at a gdb prompt. Type `run` there to start TeXmacs
+under `gdb`.
 
 
 Karl M. Hegbloom <karl.hegbloom@gmail.com>
