@@ -152,6 +152,8 @@
   "Multiply NUMBER by seven."
   (* 7 number))
 
+;;; Todo: Use define-derived-mode instead. See scheme.el.
+
 (defun texmacs-style ()
   (set-fill-column 79)
   (setq comment-column 40)
@@ -173,7 +175,10 @@
        '(converter) "\\|")
       "\\)\\>[ 	]*\\((?\\)\\(\\sw+ \\sw+\\)\\>")
      '(3 font-lock-function-name-face))
-    '("\\<\\(\\sw+%\\)\\>" . font-lock-type-face)))
+    '("\\<\\(\\sw+%\\)\\>" . font-lock-type-face)
+    ;; It wouldn't be Scheme w/o named-let.
+    '("(let\\s-+\\(\\sw+\\)"
+      (1 font-lock-function-name-face))))
   (dolist (s quaternary-indent)
     (put s 'scheme-indent-function 4))
   (dolist (s ternary-indent)
@@ -183,7 +188,19 @@
   (dolist (s unary-indent)
     (put s 'scheme-indent-function 1))
   (dolist (s nullary-indent)
-    (put s 'scheme-indent-function 0)))
+    (put s 'scheme-indent-function 0))
+  (put 'let 'scheme-indent-function 'scheme-let-indent))
+
+
+
+;; (defvar scheme-imenu-generic-expression
+;;       '((nil
+;; 	 "^(define\\(\\|-\\(generic\\(\\|-procedure\\)\\|method\\)\\)*\\s-+(?\\(\\sw+\\)" 4)
+;; 	("Types"
+;; 	 "^(define-class\\s-+(?\\(\\sw+\\)" 1)
+;; 	("Macros"
+;; 	 "^(\\(defmacro\\|define-macro\\|define-syntax\\)\\s-+(?\\(\\sw+\\)" 2))
+;;   "Imenu generic expression for Scheme mode.  See `imenu-generic-expression'.")
 
 (defvar tm-all-glued-symbols nil)
 
