@@ -93,8 +93,12 @@ AC_DEFUN([LC_POP_FLAG_LIBS],[_LC_POP_FLAG([$1],[$2],[ ])])
 # wrapping AC_?_IFELSE for erro smg
 AC_DEFUN([LC_X_IFELSE],[
   AC_MSG_CHECKING([$2] linking)
-  AC_$1_IFELSE([$3], [ AC_MSG_RESULT(yes) $4
-  ],[ AC_MSG_RESULT(no) $5
+  AC_$1_IFELSE([$3], [ 
+    AC_MSG_RESULT(yes) 
+    $4
+  ],[ 
+    AC_MSG_RESULT(no) 
+    $5
   ])])
 AC_DEFUN([LC_RUN_IFELSE],[LC_X_IFELSE([RUN],[$1],[$2],[$3],[$4])])
 AC_DEFUN([LC_LINK_IFELSE],[LC_X_IFELSE([LINK],[$1],[$2],[$3],[$4])])
