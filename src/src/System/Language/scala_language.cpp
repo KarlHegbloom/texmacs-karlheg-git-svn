@@ -1,8 +1,9 @@
 
 /******************************************************************************
-* MODULE     : python_language.cpp
-* DESCRIPTION: the python language
+* MODULE     : scala_language.cpp
+* DESCRIPTION: the scala language
 * COPYRIGHT  : (C) 2014  François Poulain
+*              (C) 2016  Darcy Shen
 *******************************************************************************
 * This software falls under the GNU general public license and comes WITHOUT
 * ANY WARRANTY WHATSOEVER. See the file $TEXMACS_PATH/LICENSE for more details.
@@ -14,17 +15,48 @@
 #include "impl_language.hpp"
 #include "scheme.hpp"
 
+extern tree the_et;
+
+static int
+line_number (tree t) {
+  path p= obtain_ip (t);
+  if (is_nil (p) || last_item (p) < 0) return -1;
+  tree pt= subtree (the_et, reverse (p->next));
+  if (!is_func (pt, DOCUMENT)) return -1;
+  return p->item;
+}
+
+static int
+number_of_lines (tree t) {
+  path p= obtain_ip (t);
+  if (is_nil (p) || last_item (p) < 0) return -1;
+  tree pt= subtree (the_et, reverse (p->next));
+  if (!is_func (pt, DOCUMENT)) return -1;
+  return N(pt);
+}
+
+static tree
+line_inc (tree t, int i) {
+  if (i == 0) return t;
+  path p= obtain_ip (t);
+  if (is_nil (p) || last_item (p) < 0) return tree (ERROR);
+  tree pt= subtree (the_et, reverse (p->next));
+  if (!is_func (pt, DOCUMENT)) return tree (ERROR);
+  if ((p->item + i < 0) || (p->item + i >= N(pt))) return tree (ERROR);
+  return pt[p->item + i];
+}
+
 static void parse_escaped_char (string s, int& pos);
 static void parse_number (string s, int& pos);
 static void parse_various_number (string s, int& pos);
 static void parse_alpha (string s, int& pos);
 static inline bool belongs_to_identifier (char c);
 
-python_language_rep::python_language_rep (string name):
+scala_language_rep::scala_language_rep (string name):
   language_rep (name), colored ("") {}
 
 text_property
-python_language_rep::advance (tree t, int& pos) {
+scala_language_rep::advance (tree t, int& pos) {
   string s= t->label;
   if (pos==N(s))
     return &tp_normal_rep;
@@ -38,9 +70,7 @@ python_language_rep::advance (tree t, int& pos) {
     return &tp_normal_rep;
   }
   if (pos+2 < N(s) && s[pos] == '0' &&
-       (s[pos+1] == 'x' || s[pos+1] == 'X' ||
-        s[pos+1] == 'o' || s[pos+1] == 'O' ||
-        s[pos+1] == 'b' || s[pos+1] == 'B')) {
+       (s[pos+1] == 'x' || s[pos+1] == 'X' )) {
     parse_various_number (s, pos);
     return &tp_normal_rep;
   }
@@ -58,7 +88,7 @@ python_language_rep::advance (tree t, int& pos) {
 }
 
 array<int>
-python_language_rep::get_hyphens (string s) {
+scala_language_rep::get_hyphens (string s) {
   int i;
   array<int> penalty (N(s)+1);
   penalty[0]= HYPH_INVALID;
@@ -71,7 +101,7 @@ python_language_rep::get_hyphens (string s) {
 }
 
 void
-python_language_rep::hyphenate (
+scala_language_rep::hyphenate (
   string s, int after, string& left, string& right)
 {
   left = s (0, after);
@@ -79,7 +109,7 @@ python_language_rep::hyphenate (
 }
 
 static void
-python_color_setup_operator_openclose (hashmap<string, string> & t) {
+scala_color_setup_operator_openclose (hashmap<string, string> & t) {
   string c= "operator_openclose";
   t ("{")= c;
   t ("[")= c;
@@ -90,186 +120,110 @@ python_color_setup_operator_openclose (hashmap<string, string> & t) {
 }
 
 static void
-python_color_setup_constants (hashmap<string, string> & t) {
+scala_color_setup_constants (hashmap<string, string> & t) {
   string c= "constant";
-  t ("Ellipsis")= c;
-  t ("False")= c;
-  t ("None")= c;
-  t ("NotImplemented")= c;
-  t ("True")= c;
-  t ("__debug__")= c;
-  t ("__import__")= c;
-  t ("abs")= c;
-  t ("all")= c;
-  t ("any")= c;
-  t ("apply")= c;
-  t ("ascii")= c;
-  t ("basestring")= c;
-  t ("bin")= c;
-  t ("bool")= c;
-  t ("buffer")= c;
-  t ("bytearray")= c;
-  t ("bytes")= c;
-  t ("callable")= c;
-  t ("chr")= c;
-  t ("classmethod")= c;
-  t ("cmp")= c;
-  t ("coerce")= c;
-  t ("compile")= c;
-  t ("complex")= c;
-  t ("delattr")= c;
-  t ("dict")= c;
-  t ("dir")= c;
-  t ("divmod")= c;
-  t ("enumerate")= c;
-  t ("eval")= c;
-  t ("execfile")= c;
-  t ("file")= c;
-  t ("filter")= c;
-  t ("float")= c;
-  t ("format")= c;
-  t ("frozenset")= c;
-  t ("getattr")= c;
-  t ("globals")= c;
-  t ("hasattr")= c;
-  t ("hash")= c;
-  t ("help")= c;
-  t ("hex")= c;
-  t ("id")= c;
-  t ("input")= c;
-  t ("int")= c;
-  t ("intern")= c;
-  t ("isinstance")= c;
-  t ("issubclass")= c;
-  t ("iter")= c;
-  t ("len")= c;
-  t ("list")= c;
-  t ("locals")= c;
-  t ("long")= c;
+  t ("false")= c;
+  t ("true")= c;
+  t ("null")= c;
+  
+  // type
+  t ("Byte")= c;
+  t ("Short")= c;
+  t ("Int")= c;
+  t ("Long")= c;
+  t ("Char")= c;
+  t ("String")= c;
+  t ("Float")= c;
+  t ("Double")= c;
+  t ("Boolean")= c;
+  
+  // collection
+  t ("Array")= c;
+  t ("List")= c;
+  t ("Map")= c;
+  t ("Set")= c;
+  t ("Function")= c;
+  t ("Class")= c;
+  
+  // functional operator
+  t ("aggregate")= c;
+  t ("collect")= c;
   t ("map")= c;
-  t ("max")= c;
-  t ("memoryview")= c;
-  t ("min")= c;
-  t ("next")= c;
-  t ("nonlocal")= c;
-  t ("object")= c;
-  t ("oct")= c;
-  t ("open")= c;
-  t ("ord")= c;
-  t ("pow")= c;
-  t ("property")= c;
-  t ("range")= c;
-  t ("raw_input")= c;
+  t ("filter")= c;
+  t ("filterNot")= c;
+  t ("foreach")= c;
+  t ("forall")= c;
+  t ("fold")= c;
+  t ("foldLeft")= c;
+  t ("foldRight")= c;
   t ("reduce")= c;
-  t ("reload")= c;
-  t ("repr")= c;
-  t ("reversed")= c;
-  t ("round")= c;
-  t ("set")= c;
-  t ("setattr")= c;
-  t ("slice")= c;
-  t ("sorted")= c;
-  t ("staticmethod")= c;
-  t ("str")= c;
-  t ("sum")= c;
-  t ("super")= c;
-  t ("tuple")= c;
-  t ("type")= c;
-  t ("unichr")= c;
-  t ("unicode")= c;
-  t ("vars")= c;
-  t ("xrange")= c;
+  t ("reduceLeft")= c;
+  t ("reduceRight")= c;
+  t ("scan")= c;
+  t ("scanLeft")= c;
+  t ("scanRight")= c;
   t ("zip")= c;
+  t ("unzip")= c;
+  t ("flatMap")= c;
+  t ("grouped")= c;
+  t ("groupBy")= c;
 }
 
 static void
-python_color_setup_constant_exceptions (hashmap<string, string> & t) {
+scala_color_setup_constant_exceptions (hashmap<string, string> & t) {
   string c= "constant";
-  t ("BaseException")= c;
+  t ("IllegalArgumentException")= c;
+  t ("NullPointerException")= c;
   t ("Exception")= c;
-  t ("ArithmeticError")= c;
-  t ("EnvironmentError")= c;
-  t ("LookupError")= c;
-  t ("StandardError")= c;
-  t ("AssertionError")= c;
-  t ("AttributeError")= c;
-  t ("BufferError")= c;
-  t ("EOFError")= c;
-  t ("FloatingPointError")= c;
-  t ("GeneratorExit")= c;
-  t ("IOError")= c;
-  t ("ImportError")= c;
-  t ("IndentationError")= c;
-  t ("IndexError")= c;
-  t ("KeyError")= c;
-  t ("KeyboardInterrupt")= c;
-  t ("MemoryError")= c;
-  t ("NameError")= c;
-  t ("NotImplementedError")= c;
-  t ("OSError")= c;
-  t ("OverflowError")= c;
-  t ("ReferenceError")= c;
-  t ("RuntimeError")= c;
-  t ("StopIteration")= c;
-  t ("SyntaxError")= c;
-  t ("SystemError")= c;
-  t ("SystemExit")= c;
-  t ("TabError")= c;
-  t ("TypeError")= c;
-  t ("UnboundLocalError")= c;
-  t ("UnicodeError")= c;
-  t ("UnicodeDecodeError")= c;
-  t ("UnicodeEncodeError")= c;
-  t ("UnicodeTranslateError")= c;
-  t ("ValueError")= c;
-  t ("VMSError")= c;
-  t ("WindowsError")= c;
-  t ("ZeroDivisionError")= c;
-  t ("BytesWarning")= c;
-  t ("DeprecationWarning")= c;
-  t ("FutureWarning")= c;
-  t ("ImportWarning")= c;
-  t ("PendingDeprecationWarning")= c;
-  t ("RuntimeWarning")= c;
-  t ("SyntaxWarning")= c;
-  t ("UnicodeWarning")= c;
-  t ("UserWarning")= c;
-  t ("Warning")= c;
+  t ("RuntimeException")= c;
 }
 
 static void
-python_color_setup_declare_class (hashmap<string, string> & t) {
+scala_color_setup_declare_class (hashmap<string, string> & t) {
   string c= "declare_type";
   t ("class")= c;
+  t ("object")= c;
+  t ("trait")= c;
 }
 
 static void
-python_color_setup_declare_function (hashmap<string, string> & t) {
+scala_color_setup_declare_function (hashmap<string, string> & t) {
   string c= "declare_function";
   t ("def")= c;
-  t ("lambda")= c;
 }
 
 static void
-python_color_setup_keywords (hashmap<string, string> & t) {
+scala_color_setup_keywords (hashmap<string, string> & t) {
   string c= "keyword";
-  t ("as")= c;
-  t ("del")= c;
-  t ("finally")= c;
-  t ("from")= c;
-  t ("global")= c;
+  t ("abstract")= c;
+  t ("case")= c;
+  t ("catch")= c;
+  t ("extends")= c;
+  t ("implicit")= c;
   t ("import")= c;
-  t ("in")= c;
-  t ("is")= c;
+  t ("lazy")= c;
+  t ("match")= c;
+  t ("new")= c;
+  t ("override")= c;
+  t ("package")= c;
+  t ("private")= c;
+  t ("protected")= c;
+  t ("requires")= c;
+  t ("sealed")= c;
+  t ("super")= c;
+  t ("this")= c;
+  t ("throw")= c;
+  t ("type")= c;
+  t ("val") = c;
+  t ("var") = c;
   t ("with")= c;
 }
 
 static void
-python_color_setup_keywords_conditional (hashmap<string, string> & t) {
+scala_color_setup_keywords_conditional (hashmap<string, string> & t) {
   string c= "keyword_conditional";
   t ("break")= c;
-  t ("continue")= c;
-  t ("elif")= c;
+  t ("do")= c;
   t ("else")= c;
   t ("for")= c;
   t ("if")= c;
@@ -277,42 +231,37 @@ python_color_setup_keywords_conditional (hashmap<string, string> & t) {
 }
 
 static void
-python_color_setup_keywords_control (hashmap<string, string> & t) {
+scala_color_setup_keywords_control (hashmap<string, string> & t) {
   string c= "keyword_control";
-  t ("assert")= c;
-  t ("except")= c;
-  t ("exec")= c;
-  t ("pass")= c;
-  t ("print")= c;
-  t ("raise")= c;
+  t ("final")= c;
+  t ("finally")= c;
   t ("return")= c;
   t ("try")= c;
   t ("yield")= c;
 }
 
 static void
-python_color_setup_operator (hashmap<string, string>& t) {
+scala_color_setup_operator (hashmap<string, string>& t) {
   string c= "operator";
-  t ("and")= c;
-  t ("not")= c;
-  t ("or")= c;
+  t ("&&")= c;
+  t ("||")= c;
+  t ("!")= c;
 
   t ("+")= c;
   t ("-")= c;
   t ("/")= c;
   t ("*")= c;
-  t ("**")= c;
-  t ("//")= c;
   t ("%")= c;
+  
   t ("|")= c;
   t ("&")= c;
   t ("^")= c;
+  t ("<gtr><gtr><gtr>")= c;
+  
   t ("<less><less>")= c;
   t ("<gtr><gtr>")= c;
-
   t ("==")= c;
   t ("!=")= c;
-  t ("<less><gtr>")= c;
   t ("<less>")= c;
   t ("<gtr>")= c;
   t ("<less>=")= c;
@@ -324,32 +273,38 @@ python_color_setup_operator (hashmap<string, string>& t) {
   t ("-=")= c;
   t ("/=")= c;
   t ("*=")= c;
-  t ("**=")= c;
-  t ("//=")= c;
   t ("%=")= c;
   t ("|=")= c;
   t ("&=")= c;
   t ("^=")= c;
-  t ("<less><less>=")= c;
   t ("<gtr><gtr>=")= c;
-
-  t ("~")= c;
+  t ("<less><less>=")= c;
 }
 
 static void
-python_color_setup_operator_special (hashmap<string, string> & t) {
+scala_color_setup_operator_special (hashmap<string, string> & t) {
   string c= "operator_special";
   t (":")= c;
+  t ("=<gtr>")= c;
+  t ("::")= c;
+  t (":::")= c;
+  t ("++")= c;
+  t ("+:")= c;
+  t (":+")= c;
+  t ("++:")= c;
+  t ("/:")= c;
+  t (":\\")= c;
+  t ("<less>-")= c;
 }
 
 static void
-python_color_setup_operator_decoration (hashmap<string, string> & t) {
+scala_color_setup_operator_decoration (hashmap<string, string> & t) {
   string c= "operator_decoration";
   t ("@")= c;
 }
 
 static void
-python_color_setup_operator_field (hashmap<string, string> & t) {
+scala_color_setup_operator_field (hashmap<string, string> & t) {
   t (".")= "operator_field";
 }
 
@@ -398,19 +353,12 @@ parse_escaped_char (string s, int& pos) {
   if (s[i] != '\\')
     return;
   i++;
-  if (test (s, i, "newline"))
-    pos+= 7;
-  else if (s[i] == '\\' || s[i] == '\'' || s[i] == '\"' ||
-           s[i] == 'a'  || s[i] == 'b'  || s[i] == 'f'  ||
-           s[i] == 'n'  || s[i] == 'r'  || s[i] == 't'  ||
-           s[i] == 'N'  || s[i] == 'v')
+  if (s[i] == '\\' || s[i] == '\'' || s[i] == '\"' ||
+           s[i] == 'b'  || s[i] == 'f'  ||
+           s[i] == 'n'  || s[i] == 'r'  || s[i] == 't')
     pos+= 1;
-  else if (s[i] == 'o'  || s[i] == 'x')
-    pos+= 3;
   else if (s[i] == 'u')
     pos+= 5;
-  else if (s[i] == 'U')
-    pos+= 9;
   return;
 }
 
@@ -419,11 +367,7 @@ parse_string (string s, int& pos, bool force) {
   int n= N(s);
   static string delim;
   if (pos >= n) return false;
-  if (test (s, pos, "\"\"\"") || test (s, pos, "\'\'\'")) {
-    delim= s(pos, pos+3);
-    pos+= N(delim);
-  }
-  else if (s[pos] == '\"' || s[pos] == '\'') {
+  if (s[pos] == '\"' || s[pos] == '\'') {
     delim= s(pos, pos+1);
     pos+= N(delim);
   }
@@ -440,7 +384,101 @@ parse_string (string s, int& pos, bool force) {
     pos+= N(delim);
   return false;
 }
- 
+
+static void
+parse_comment_multi_lines (string s, int& pos) {
+  if (pos+1 < N(s) && s[pos] == '/' && s[pos+1] == '*')
+    pos += 2;
+}
+
+static void
+parse_end_comment (string s, int& pos) {
+  if (pos+1 < N(s) && s[pos] == '*' && s[pos+1] == '/')
+    pos += 2;
+}
+
+static bool
+begin_comment (string s, int i) {
+  bool comment= false;
+  int opos, pos= 0;
+  do {
+    do {
+      opos= pos;
+      parse_string (s, pos, false);
+      if (opos < pos) break;
+      parse_comment_multi_lines (s, pos);
+      if (opos < pos) {
+        comment = true;
+        break;
+      }
+      pos++;
+    } while (false);
+  } while (pos <= i);
+  return comment;
+}
+
+static bool
+end_comment (string s, int i) {
+  int opos, pos= 0;
+  do {
+    do {
+      opos= pos;
+      parse_string (s, pos, false);
+      if (opos < pos) break;
+      parse_end_comment (s, pos);
+      if (opos < pos && pos>i) return true;
+      pos++;
+    } while (false);
+  } while (pos < N(s));
+  return false;
+}
+
+static int
+after_begin_comment (int i, tree t) {
+  tree   t2= t;
+  string s2= t->label;
+  int  line= line_number (t2);
+  do {
+    if (begin_comment (s2, i)) return line;
+    t2= line_inc (t2, -1);
+    --line;
+      // line_inc returns tree(ERROR) upon error
+    if (!is_atomic (t2)) return -1; // FIXME
+    s2= t2->label;
+    i = N(s2) - 1;
+  } while (line > -1);
+  return -1;
+}
+
+static int
+before_end_comment (int i, tree t) {
+  int   end= number_of_lines (t);
+  tree   t2= t;
+  string s2= t2->label;
+  int  line= line_number (t2);
+  do {
+    if (end_comment (s2, i)) return line;
+    t2= line_inc (t2, 1);
+    ++line;
+      // line_inc returns tree(ERROR) upon error
+    if (!is_atomic (t2)) return -1; // FIXME
+    s2= t2->label;
+    i = 0;
+  } while (line <= end);
+  return -1;
+}
+
+static bool
+in_comment (int pos, tree t) {
+  int beg= after_begin_comment (pos, t);
+  if (beg >= 0) {
+    int cur= line_number (t);
+    int end= before_end_comment (pos, line_inc (t, beg - cur));
+    return end >= beg && cur <= end;
+  }
+  return false;
+}
+
 static string
 parse_keywords (hashmap<string,string>& t, string s, int& pos) {
   int i= pos;
@@ -490,9 +528,7 @@ parse_operators (hashmap<string,string>& t, string s, int& pos) {
 static void
 parse_various_number (string s, int& pos) {
   if (!(pos+2 < N(s) && s[pos] == '0' &&
-       (s[pos+1] == 'x' || s[pos+1] == 'X' ||
-        s[pos+1] == 'o' || s[pos+1] == 'O' ||
-        s[pos+1] == 'b' || s[pos+1] == 'B')))
+       (s[pos+1] == 'x' || s[pos+1] == 'X')))
     return;
   pos+= 2;
   while (pos<N(s) && is_hex_number (s[pos])) pos++;
@@ -502,10 +538,7 @@ parse_various_number (string s, int& pos) {
 static void
 parse_number (string s, int& pos) {
   int i= pos;
-  if (pos>=N(s)) return;
-  if (!is_number(s[i]) &&
-      !(s[i] == '.' && pos+1 < N(s) && is_number(s[pos+1])))
-    return;
+  if (pos>=N(s) || !is_number(s[i])) return;
   i++;
   while (i<N(s) && (is_number (s[i]) || s[i] == '.'))
     i++;
@@ -514,52 +547,43 @@ parse_number (string s, int& pos) {
     i++;
     if (i<N(s) && s[i] == '-') i++;
     while (i<N(s) && (is_number (s[i]) || s[i] == '.')) i++;
-    if (i<N(s) && (s[i] == 'j')) i++;
   }
   else if (i<N(s) && (s[i] == 'l' || s[i] == 'L')) i++;
-  else if (i<N(s) && (s[i] == 'j')) i++;
+  else if (i<N(s) && (s[i] == 'f' || s[i] == 'F')) i++;
+  else if (i<N(s) && (s[i] == 'd' || s[i] == 'D')) i++;
   pos= i;
 }
 
 static void
 parse_comment_single_line (string s, int& pos) {
-  if (pos>=N(s)) return;
-  if (s[pos]!='#') return;
+  if (pos+1>=N(s)) return;
+  if (s[pos]!='/' || s[pos+1]!='/') return;
   pos=N(s);
 }
 
 string
-python_language_rep::get_color (tree t, int start, int end) {
+scala_language_rep::get_color (tree t, int start, int end) {
   static bool setup_done= false;
   if (!setup_done) {
-    /*
-     * NOTE: it seems there is no way to take into account multiline
-     * dependencies. Then such weird syntax like
-     *
-     * str= """some string beginning ...
-     * some string end"""
-     *
-     * will not be correctly typeset.
-     *
-     */
-
-    python_color_setup_constants (colored);
-    python_color_setup_constant_exceptions (colored);
-    python_color_setup_declare_class (colored);
-    python_color_setup_declare_function (colored);
-    python_color_setup_keywords (colored);
-    python_color_setup_keywords_conditional (colored);
-    python_color_setup_keywords_control (colored);
-    python_color_setup_operator (colored);
-    python_color_setup_operator_special (colored);
-    python_color_setup_operator_decoration (colored);
-    python_color_setup_operator_openclose (colored);
-    python_color_setup_operator_field (colored);
+    scala_color_setup_constants (colored);
+    scala_color_setup_constant_exceptions (colored);
+    scala_color_setup_declare_class (colored);
+    scala_color_setup_declare_function (colored);
+    scala_color_setup_keywords (colored);
+    scala_color_setup_keywords_conditional (colored);
+    scala_color_setup_keywords_control (colored);
+    scala_color_setup_operator (colored);
+    scala_color_setup_operator_special (colored);
+    scala_color_setup_operator_decoration (colored);
+    scala_color_setup_operator_openclose (colored);
+    scala_color_setup_operator_field (colored);
     setup_done= true;
   }
 
   static string none= "";
   if (start >= end) return none;
+  if (in_comment (start, t))
+    return decode_color ("scala", encode_color ("comment"));
   string s= t->label;
   int pos= 0;
   int opos=0;
@@ -633,5 +657,5 @@ python_language_rep::get_color (tree t, int start, int end) {
   }
   while (pos <= start);
   if (type == none) return none;
-  return decode_color ("python", encode_color (type));
+  return decode_color ("scala", encode_color (type));
 }
