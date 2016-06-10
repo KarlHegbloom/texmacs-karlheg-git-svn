@@ -12,3 +12,4 @@ src/BROWSE
 src/TAGS
 src/cscope.out.in
 src/cscope.out.po
+autom4te.cache
