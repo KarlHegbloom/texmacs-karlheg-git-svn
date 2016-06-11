@@ -13,3 +13,5 @@ src/TAGS
 src/cscope.out.in
 src/cscope.out.po
 autom4te.cache
+src/.kdev4/
+src/src.kdev4
