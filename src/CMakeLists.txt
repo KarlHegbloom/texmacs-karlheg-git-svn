@@ -327,10 +327,10 @@ CONFIGURE_FILE(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.hpp.cmake ${TEXMACS
 ### Set the executable target name and other stuff
 ### --------------------------------------------------------------------
 
-SET(TeXmacs_binary_name "texmacs_${TEXMACS_GUI}")
+SET(TeXmacs_binary_name "texmacs.bin")
 
 # If we are build a "Debug" version then put that on the built Application
-SET (EXE_DEBUG_EXTENSION "_debug")
+# SET (EXE_DEBUG_EXTENSION "_debug")
 
 ### --------------------------------------------------------------------
 ### Compile sources
@@ -361,4 +361,8 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### --------------------------------------------------------------------
 ### Installation
 ### --------------------------------------------------------------------
-
+install(DIRECTORY TeXmacs DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+install(FILES misc/scripts/texmacs DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+install(FILES misc/scripts/tm_gs misc/scripts/fig2ps DESTINATION ${CMAKE_INSTALL_PREFIX}/share/TeXmacs/bin
+  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
