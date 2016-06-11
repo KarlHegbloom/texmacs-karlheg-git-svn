@@ -11,7 +11,7 @@ AC_DEFUN(LC_X_HEADERS,[
 # path building : the next two levels 
   lstx=$lstx/{{.,[[Xx]]11*,share,Xamples}/include,include/[[Xx]]11*}
   if [[[ $no_x != "yes" ]]] 
-  then [[[ -z $x_includes ]]] && x_includes="$(dirname $x_libraries)/include"
+  then echo $x_libraries; [[[ -z $x_includes ]]] && x_includes="$(dirname $x_libraries)/include"
     lstx="$x_includes $lstx"
   fi
   no_x=yes
