@@ -19,7 +19,7 @@ RelWithDebInfo MinSizeRel."
      FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-INCLUDE(CMakeDetermineSystem)
+#INCLUDE(CMakeDetermineSystem)
 
 
 ### --------------------------------------------------------------------
@@ -29,9 +29,9 @@ INCLUDE(CMakeDetermineSystem)
 PROJECT(TEXMACS CXX C) # check for C/C++ compiler
 
 SET(PACKAGE TeXmacs)
-SET(DEVEL_VERSION "1.0.7")
+SET(DEVEL_VERSION "1.99.4")
 SET(DEVEL_RELEASE "1")
-SET(STABLE_VERSION "1.0.7")
+SET(STABLE_VERSION "1.99.4")
 SET(STABLE_RELEASE "1")
 
 #INCLUDE_DIRECTORIES(${TEXMACS_SOURCE_DIR}/cmake/)
@@ -177,9 +177,11 @@ ENDIF(${DISABLE_FASTALLOC})
 
 FIND_PACKAGE(Guile REQUIRED)
 FIND_PACKAGE(Iconv)
-FIND_PACKAGE(FreeType2)
-FIND_PACKAGE(Cairo)
-FIND_PACKAGE(Imlib2)
+FIND_PACKAGE(Freetype)
+find_package(ZLIB)
+find_package(JPEG)
+#FIND_PACKAGE(Cairo)
+#FIND_PACKAGE(Imlib2)
 #FIND_PACKAGE(Axel)
 
 
@@ -225,7 +227,7 @@ CHECK_C_SOURCE_COMPILES(
   #include <libguile.h>
   typedef SCM (*FN)(...);
   static SCM identity (SCM x) { return x; }
-  void declare () { gh_new_procedure ("identity", (FN) identity, 1, 0, 0); }
+  void declare () { gh_new_procedure (\"identity\", (FN) identity, 1, 0, 0); }
   int main() { return 0; }
 " _guile_dots_test)
 
@@ -246,12 +248,12 @@ ENDIF(_guile_dots_test)
 SET(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
 
 IF(NOT TEXMACS_GUI)
-  SET(TEXMACS_GUI "X11" CACHE STRING "TeXmacs Gui (Qt, X11, Aqua)")
+  SET(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, X11, Aqua)")
 ENDIF(NOT TEXMACS_GUI)
 
 IF(TEXMACS_GUI STREQUAL "Qt")
 
-  FIND_PACKAGE(Qt4)
+  FIND_PACKAGE(Qt4 4.8.7 COMPONENTS QtCore QtGui REQUIRED)
  
   IF(QT4_FOUND)
     IF(WIN32)
@@ -259,8 +261,8 @@ IF(TEXMACS_GUI STREQUAL "Qt")
     ENDIF(WIN32)
 
     INCLUDE(${QT_USE_FILE})
+    add_definitions("-DQTTEXMACS")
     SET(NO_FAST_ALLOC 1)
-    SET(QTTEXMACS 1)
     SET(CONFIG_GUI "QT")
     SET(CONFIG_QT "Qt")
     MESSAGE(STATUS "Enabling experimental  Qt port")
@@ -325,10 +327,10 @@ CONFIGURE_FILE(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.hpp.cmake ${TEXMACS
 ### Set the executable target name and other stuff
 ### --------------------------------------------------------------------
 
-SET(TeXmacs_binary_name "texmacs_${TEXMACS_GUI}")
+SET(TeXmacs_binary_name "texmacs.bin")
 
 # If we are build a "Debug" version then put that on the built Application
-SET (EXE_DEBUG_EXTENSION "_debug")
+# SET (EXE_DEBUG_EXTENSION "_debug")
 
 ### --------------------------------------------------------------------
 ### Compile sources
@@ -359,4 +361,8 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### --------------------------------------------------------------------
 ### Installation
 ### --------------------------------------------------------------------
-
+install(DIRECTORY TeXmacs DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+install(FILES misc/scripts/texmacs DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+install(FILES misc/scripts/tm_gs misc/scripts/fig2ps DESTINATION ${CMAKE_INSTALL_PREFIX}/share/TeXmacs/bin
+  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
