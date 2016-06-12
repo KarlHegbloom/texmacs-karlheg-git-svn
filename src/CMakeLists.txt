@@ -371,6 +371,9 @@ set(datadir ${datarootdir})
 set(tmdata ${datarootdir}/TeXmacs)
 set(tmbin ${exec_prefix}/lib/texmacs/TeXmacs)
 configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs @ONLY)
+configure_file(misc/scripts/fig2ps.in ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps @ONLY)
+
+configure_file(misc/man/texmacs.1.in ${TEXMACS_SOURCE_DIR}/misc/man/texmacs.1 @ONLY)
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
@@ -411,9 +414,13 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### Installation
 ### --------------------------------------------------------------------
 ### bin/
-install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs DESTINATION bin
-  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
-install(FILES misc/scripts/tm_gs misc/scripts/fig2ps DESTINATION share/TeXmacs/bin
+install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs
+              ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps
+              misc/scripts/tm_gs 
+        DESTINATION bin
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                    GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+install(FILES  DESTINATION share/TeXmacs/bin
   PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
 ### include/
 install(DIRECTORY TeXmacs/include DESTINATION ${CMAKE_INSTALL_PREFIX})
