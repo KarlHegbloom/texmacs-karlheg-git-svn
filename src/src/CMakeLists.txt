@@ -49,7 +49,7 @@ SET(TeXmacs_Include_Dirs
     ./Typeset/Concat
     ./Typeset/Page
     ${TEXMACS_SOURCE_DIR}/TeXmacs/include 
-    #${TEXMACS_BINARY_DIR}/src/System/ 
+    ${TEXMACS_BINARY_DIR}/src/System/ 
 )
 
 

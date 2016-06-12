@@ -37,32 +37,40 @@ SET(STABLE_RELEASE "1")
 #INCLUDE_DIRECTORIES(${TEXMACS_SOURCE_DIR}/cmake/)
 #MESSAGE( ${TEXMACS_SOURCE_DIR}/cmake )
 
-SET(CMAKE_MODULE_PATH ${TEXMACS_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${TEXMACS_SOURCE_DIR}/cmake)
 
 ### --------------------------------------------------------------------
 ### Include standard modules
 ### --------------------------------------------------------------------
 
-INCLUDE(CheckFunctionExists)
-INCLUDE(CheckLibraryExists)
-INCLUDE(CheckIncludeFile)
-INCLUDE(CheckTypeSize)
-INCLUDE(FindPkgConfig)
-INCLUDE(CheckCSourceCompiles)
+include(CheckFunctionExists)
+include(CheckLibraryExists)
+include(CheckIncludeFile)
+include(CheckTypeSize)
+include(FindPkgConfig)
+include(CheckCSourceCompiles)
+include(FindX11)
 
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
 ### --------------------------------------------------------------------
-
-CHECK_TYPE_SIZE(FILE HAVE_SIZE)
+CHECK_TYPE_SIZE(FILE HAVE_FILE)
 CHECK_TYPE_SIZE(intptr_t HAVE_INTPTR_T)
 CHECK_TYPE_SIZE(time_t HAVE_TIME_T)
+CHECK_INCLUDE_FILE(inttypes.h HAVE_INTTYPES_H)
+CHECK_INCLUDE_FILE(memory.h HAVE_MEMORY_H)
+CHECK_INCLUDE_FILE(stdlib.h HAVE_STDLIB_H)
+CHECK_INCLUDE_FILE(strings.h HAVE_STRINGS_H)
+CHECK_INCLUDE_FILE(string.h HAVE_STRING_H)
+CHECK_INCLUDE_FILE(sys/stat.h HAVE_SYS_STAT_H)
+CHECK_INCLUDE_FILE(unistd.h HAVE_UNISTD_H)
+CHECK_INCLUDE_FILE(X11/Xlib.h HAVE_X11_XLIB_H)
+CHECK_INCLUDE_FILE(X11/Xutil.h HAVE_X11_XUTIL_H)
 CHECK_INCLUDE_FILE(pty.h HAVE_PTY_H)
 CHECK_INCLUDE_FILE(util.h HAVE_UTIL_H)
 CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
-INCLUDE(FindX11)
 
 ### --------------------------------------------------------------------
 ### Check for dl library
@@ -153,16 +161,24 @@ IF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
   SET(CONFIG_BFLAGS "-Wl,-stack,8388608")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
 
-## TODO FINISH
+### --------------------------------------------------------------------
+### Package Data
+### --------------------------------------------------------------------
 
+set(PACKAGE_BUGREPORT 1)
+set(PACKAGE_NAME 1)
+set(PACKAGE_STRING 1)
+set(PACKAGE_TARNAME 1)
+set(PACKAGE_URL 1)
+set(PACKAGE_VERSION 1)
 
 ### --------------------------------------------------------------------
 ### Memory allocation options
 ### --------------------------------------------------------------------
 
-IF(${DISABLE_FASTALLOC})
-  SET(NO_FAST_ALLOC 1)
-ENDIF(${DISABLE_FASTALLOC})
+#if(${DISABLE_FASTALLOC})
+#  set(NO_FAST_ALLOC 1)
+#endif(${DISABLE_FASTALLOC})
 
 
 ### --------------------------------------------------------------------
@@ -175,9 +191,11 @@ ENDIF(${DISABLE_FASTALLOC})
 ###  Test for Libraries
 ### --------------------------------------------------------------------
 
-FIND_PACKAGE(Guile REQUIRED)
-FIND_PACKAGE(Iconv)
-FIND_PACKAGE(Freetype)
+find_package(Guile REQUIRED)
+find_package(Iconv)
+find_package(Freetype)
+set(LINKED_FREETYPE 1)
+set(USE_FREETYPE 1)
 find_package(ZLIB)
 find_package(JPEG)
 #FIND_PACKAGE(Cairo)
@@ -319,9 +337,40 @@ ENDIF(TEXMACS_GUI STREQUAL "Qt")
 ### --------------------------------------------------------------------
 ### Generate configure headers
 ### --------------------------------------------------------------------
+set(DEBUG_ASSERT 1)
+set(USE_GS 1)
+set(GS_EXE /usr/bin/gs)
+set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:)
+set(GS_LIB ../share/ghostscript/9.06/lib:)
+set(GUILE_C 1)
+set(GUILE_NUM 1)
+set(PDF_RENDERER 1)
+set(QTPIPES 1)
+set(SIZEOF_VOID_P 8)
+set(STDC_HEADERS 1)
+set(USE_STACK_TRACE 1)
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
-CONFIGURE_FILE(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
-CONFIGURE_FILE(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.hpp.cmake ${TEXMACS_BINARY_DIR}/src/System/tm_configure.hpp)
+set(CONFIG_STD_SETENV "#define STD_SETENV")
+set(tm_orig ${TEXMACS_SOURCE_DIR})
+set(CONFIG_HOST_OS "linux-gnu") # TODO: should not be hard-coded
+set(CONFIG_HOST_VENDOR "pc") # TODO: should not be hard-coded
+set(CONFIG_HOST_CPU ${CMAKE_SYSTEM_PROCESSOR})
+set(CONFIG_USER $ENV{USER})
+string(TIMESTAMP CONFIG_DATE)
+set(tm_devel TeXmacs-${DEVEL_VERSION})
+set(tm_stable TeXmacs-${STABLE_VERSION})
+set(tm_devel_release ${tm_devel}-${DEVEL_RELEASE})
+set(tm_stable_release ${tm_stable}-${STABLE_RELEASE})
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.in ${TEXMACS_BINARY_DIR}/src/System/tm_configure.hpp)
+
+set(prefix ${CMAKE_INSTALL_PREFIX})
+set(exec_prefix ${prefix})
+set(datarootdir ${prefix}/share)
+set(datadir ${datarootdir})
+set(tmdata ${datarootdir}/TeXmacs)
+set(tmbin ${exec_prefix}/lib/texmacs/TeXmacs)
+configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs @ONLY)
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
@@ -362,7 +411,7 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### Installation
 ### --------------------------------------------------------------------
 ### bin/
-install(FILES misc/scripts/texmacs DESTINATION bin
+install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs DESTINATION bin
   PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 install(FILES misc/scripts/tm_gs misc/scripts/fig2ps DESTINATION share/TeXmacs/bin
   PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
