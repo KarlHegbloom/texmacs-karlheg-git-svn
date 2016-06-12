@@ -49,7 +49,7 @@ SET(TeXmacs_Include_Dirs
     ./Typeset/Concat
     ./Typeset/Page
     ${TEXMACS_SOURCE_DIR}/TeXmacs/include 
-    #${TEXMACS_BINARY_DIR}/src/System/ 
+    ${TEXMACS_BINARY_DIR}/src/System/ 
 )
 
 
@@ -754,4 +754,4 @@ SET_TARGET_PROPERTIES(${TeXmacs_binary_name}
     RUNTIME_OUTPUT_DIRECTORY ${TEXMACS_BINARY_DIR}
 )
 
-install(TARGETS ${TeXmacs_binary_name} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS ${TeXmacs_binary_name} DESTINATION lib/texmacs/TeXmacs/bin)
