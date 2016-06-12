@@ -10,7 +10,7 @@
 ### Basic settings (project independent)
 ### --------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.5)
 
 IF(NOT CMAKE_BUILD_TYPE)
  SET(CMAKE_BUILD_TYPE Debug CACHE STRING
@@ -361,8 +361,46 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### --------------------------------------------------------------------
 ### Installation
 ### --------------------------------------------------------------------
-install(DIRECTORY TeXmacs DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-install(FILES misc/scripts/texmacs DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+### bin/
+install(FILES misc/scripts/texmacs DESTINATION bin
   PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
-install(FILES misc/scripts/tm_gs misc/scripts/fig2ps DESTINATION ${CMAKE_INSTALL_PREFIX}/share/TeXmacs/bin
+install(FILES misc/scripts/tm_gs misc/scripts/fig2ps DESTINATION share/TeXmacs/bin
   PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
+### include/
+install(DIRECTORY TeXmacs/include DESTINATION ${CMAKE_INSTALL_PREFIX})
+### lib/
+file(GLOB PLUGIN_DIRS plugins/*)
+foreach(PLUGIN ${PLUGIN_DIRS})
+  if (EXISTS ${PLUGIN}/bin/)
+    install(DIRECTORY ${PLUGIN}/bin/ DESTINATION lib/texmacs/TeXmacs/bin
+      PATTERN "*"
+      PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+  endif(EXISTS ${PLUGIN}/bin/)
+endforeach(PLUGIN)
+### share/
+install(DIRECTORY TeXmacs DESTINATION share
+  PATTERN "include" EXCLUDE)
+install(DIRECTORY plugins DESTINATION share/TeXmacs
+  PATTERN "bin" EXCLUDE)
+install(FILES TeXmacs/misc/mime/texmacs.applications DESTINATION share/application_registry)
+install(FILES TeXmacs/misc/mime/texmacs.desktop DESTINATION share/applications)
+install(FILES TeXmacs/misc/images/TeXmacs.svg DESTINATION share/icons/gnome/scalable/apps)
+install(FILES TeXmacs/misc/images/text-texmacs.svg DESTINATION share/icons/gnome/scalable/mimetypes)
+install(FILES TeXmacs/misc/mime/texmacs.xml DESTINATION share/mime/packages)
+install(FILES TeXmacs/misc/pixmaps/TeXmacs.xpm DESTINATION share/pixmaps)
+### share/man
+set(TOOLS "texmacs" "fig2ps")
+set(MAN_SECTION "1")
+foreach(TOOL ${TOOLS})
+  set(TOOL_MANFILE ${CMAKE_CURRENT_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION})
+  set(TOOL_MANFILE_GZ ${CMAKE_CURRENT_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz)
+  add_custom_command(
+    OUTPUT ${TOOL_MANFILE_GZ}
+    COMMAND gzip -c ${TOOL_MANFILE} > ${TOOL_MANFILE_GZ}
+    MAIN_DEPENDENCY ${TOOL_MANFILE}
+    COMMENT "Building ${TOOL} man page"
+    VERBATIM
+  )
+  add_custom_target(${TOOL}.${MAN_SECTION} ALL DEPENDS ${TOOL_MANFILE_GZ})
+  install(FILES ${TOOL_MANFILE_GZ} DESTINATION share/man/man${MAN_SECTION})
+endforeach(TOOL)
