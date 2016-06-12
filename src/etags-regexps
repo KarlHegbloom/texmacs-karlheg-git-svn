@@ -28,4 +28,5 @@
 {scheme}/(define-format +((?\([^ )]+\)/\1/
 {scheme}/(define-language +((?\([^ )]+\)/\1/
 {scheme}/(define-graphics +((?\([^ )]+\)/\1/
+{scheme}/(tmfs-[^ ]+-handler +((?\([^ )]+\)/\1/
 {c++}/ *tmscm_install_procedure +("\([^"]+\)"/\1/
