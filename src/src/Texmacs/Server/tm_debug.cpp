@@ -10,6 +10,7 @@
 * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ******************************************************************************/
 
+#include "tm_configure.hpp"
 #include "tm_server.hpp"
 #include "file.hpp"
 #include "tm_link.hpp"
