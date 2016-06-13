@@ -17,6 +17,8 @@ src/src/CMakeFiles/
 src/src/Makefile
 src/src/Plugins/Qt/moc_*.cxx
 src/src/Plugins/Qt/moc_*.cxx_parameters
+src/src/Plugins/Qt/moc_*.cpp
+src/src/Plugins/Qt/moc_*.cpp_parameters
 src/src/cmake_install.cmake
 src/cmake_install.cmake
 src/fig2ps.1.gz
@@ -24,3 +26,8 @@ src/texmacs.1.gz
 src/misc/script
 src/texmacs.bin
 texmacs*deb
+src/.ninja_deps
+src/.ninja_log
+src/rules.ninja
+src/build.ninja
+src/CMakeSystemInformation.txt

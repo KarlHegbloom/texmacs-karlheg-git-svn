@@ -1,12 +1,12 @@
 # - Locate the GNU Guile library
 # Once done, this will define
 #
-#  Guile_FOUND - system has Freetype
-#  Guile_INCLUDE_DIRS - the Freetype include directories
-#  Guile_LIBRARIES - link these to use Freetype
+#  Guile_FOUND - system has Guile
+#  Guile_INCLUDE_DIRS - the Guile include directories
+#  Guile_LIBRARIES - link these to use Guile
 #  Guile_VERSION_STRING - version of Guile
 
-FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config )
+FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config)
 
 # if guile-config has been found
 IF(GUILECONFIG_EXECUTABLE)
@@ -14,7 +14,8 @@ IF(GUILECONFIG_EXECUTABLE)
   EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE} link 
     OUTPUT_VARIABLE _guileconfigDevNull RESULT_VARIABLE _return_VALUE  )
 
-  # and if the package of interest also exists for guile-config, then get the information
+  # and if the package of interest also exists for guile-config, then
+  # get the information
   IF(NOT _return_VALUE)
 
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  link 
@@ -32,8 +33,7 @@ IF(GUILECONFIG_EXECUTABLE)
     
   
     
-    ## parsing  
-            
+    ## parsing
     STRING(REGEX MATCHALL "[-][L]([^ ;])+" _guile_libdirs_with_prefix "${_guileconfig_link}" )
     STRING(REGEX MATCHALL "[-][l]([^ ;])+" _guile_libraries_with_prefix "${_guileconfig_link}" )
     STRING(REGEX MATCHALL "[-][I]([^ ;])+" _guile_includes_with_prefix "${_guileconfig_compile}" )
@@ -45,7 +45,7 @@ IF(GUILECONFIG_EXECUTABLE)
     STRING(REPLACE "-I" " " _guile_includes "${_guile_includes_with_prefix}" )
 #    SEPARATE_ARGUMENTS(_guile_libdirs)
     
-    MESSAGE(STATUS ${_guile_libraries_with_prefix})
+    # MESSAGE(STATUS ${_guile_libraries_with_prefix})
     SET(_guile_libraries "")
 
     FOREACH(i ${_guile_lib_list})

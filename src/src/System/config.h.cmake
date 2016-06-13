@@ -18,6 +18,10 @@
 /* gs lib */
 #cmakedefine GS_LIB "@GS_LIB@"
 
+
+/* Guile version */
+#cmakedefine CONFIG_GUILE_SERIAL @CONFIG_GUILE_SERIAL@
+
 /* Guile version */
 #cmakedefine GUILE_A 1
 
@@ -30,7 +34,6 @@
 /* Guile version */
 #cmakedefine GUILE_D 1
 
-#cmakedefine GUILE_NUM 0
 
 /* Define to 1 if the system has the type `FILE'. */
 #cmakedefine HAVE_FILE 1
@@ -129,7 +132,11 @@
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine STDC_HEADERS 1
 
-#cmakedefine TM_DYNAMIC_LINKING 1
+#cmakedefine HAVE_LT_DLLOADER_H 1
+#cmakedefine HAVE_LT_MODULE_OPEN 1
+
+#cmakedefine HAVE_DLFCN_H 1
+#cmakedefine TM_DYNAMIC_LINKING @TM_DYNAMIC_LINKING@
 
 /* Use axel library */
 #cmakedefine USE_AXEL 1

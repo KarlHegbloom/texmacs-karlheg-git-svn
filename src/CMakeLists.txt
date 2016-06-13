@@ -1,5 +1,7 @@
 # CMake file for TeXmacs
-# created by Massimiliano Gubinelli 
+# Initialy created by Massimiliano Gubinelli
+# Modifications by Darcy Shen
+# Modifications by Karl M. Hegbloom <karl.hegbloom@gmail.com>
 
 # The name of our project is "TEXMACS". CMakeLists files in this project can 
 # refer to the root source directory of the project as ${TEXMACS_SOURCE_DIR} and 
@@ -19,8 +21,6 @@ RelWithDebInfo MinSizeRel."
      FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
-#INCLUDE(CMakeDetermineSystem)
-
 
 ### --------------------------------------------------------------------
 ### Project name 
@@ -34,10 +34,7 @@ SET(DEVEL_RELEASE "1")
 SET(STABLE_VERSION "1.99.4")
 SET(STABLE_RELEASE "1")
 
-#INCLUDE_DIRECTORIES(${TEXMACS_SOURCE_DIR}/cmake/)
-#MESSAGE( ${TEXMACS_SOURCE_DIR}/cmake )
-
-set(CMAKE_MODULE_PATH ${TEXMACS_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
 
 ### --------------------------------------------------------------------
 ### Include standard modules
@@ -49,8 +46,47 @@ include(CheckIncludeFile)
 include(CheckTypeSize)
 include(FindPkgConfig)
 include(CheckCSourceCompiles)
-include(FindX11)
 
+
+# Ok, I'm learning. See the find_package(Guile REQUIRED) below.
+# include(FindGuile)
+
+# ? include(FindDoxygen)
+# ? include(FindSubversion)
+# ? include(FindGit)
+# ? include(FindUnixCommands)
+# ? include(FindCygwin)
+# ? include(ECMMarkNonGuiExecutable OPTIONAL)
+### include(FindX11)
+# ? include(FindX11_XCB)
+# ? include(FindXCB)
+# ? include(FindQt4)
+# ? include(FindKDE4)
+# ? include(ECMQueryQmake) # QT5
+# ? include(FindThreads) # Someday...
+###include(FindFreetype)
+###include(FindCairo)
+# ? include(FindImageMagick)
+# ? include(FindJPEG)
+# ? include(FindPNG)
+# ? include(FindTIFF)
+# ? include(FindLATEX)
+# ? include(FindASPELL)
+# ? include(FindGnuplot)
+# ? include(FindMatlab)
+# ? include(FindPythonInterp)
+# ? include(FindPythonLibs)
+# ? include(FindBackTrace)
+# ? include(FindWget)
+# ? include(FindCURL)
+# ? include(FindGnuTLS)
+# ? include(FindOpenSSL)
+# ? include(FindCups)
+
+# ? include(TestBigEndian)
+include(GNUInstallDirs)
+# ? include(GetPrerequisites)
+# ? include(InstallRequiredSystemLibraries)
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
@@ -74,35 +110,44 @@ CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
 ### --------------------------------------------------------------------
 ### Check for dl library
+###
+### Checks for dlopen in standard or dl library
+### we are looking in sequence for dlopen or dld_link or shl_load in
+### standard libs or libdl or libdld
+###
+### Shouldn't we just use libtool and libltdl ?  It's what Guile uses.
 ### --------------------------------------------------------------------
 
-CHECK_FUNCTION_EXISTS(dlopen HAVE_DLOPEN)
+# future CHECK_INCLUDE_FILE(libltdl/lt_dlloader.h HAVE_LT_DLLOADER_H)
+# future CHECK_LIBRARY_EXISTS(ltdl lt_module_open HAVE_LT_MODULE_OPEN)
 
-IF (NOT ${HAVE_DLOPEN})
-  CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_DLOPEN)
-  IF (${HAVE_DLOPEN})
-    SET(CONFIG_BDL "-ldl")
-  ENDIF (${HAVE_DLOPEN})
-ENDIF (NOT ${HAVE_DLOPEN})
+
+CHECK_INCLUDE_FILE(dlfcn.h HAVE_DLFCN_H)
+
+CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_DLOPEN)
+IF (${HAVE_DLOPEN})
+  SET(CONFIG_BDL "-ldl")
+  # See: src/System/Link/dyn_link.cpp:39
+  SET(TM_DYNAMIC_LINKING dlopen)
+ENDIF (${HAVE_DLOPEN})
 
 IF (NOT ${HAVE_DLOPEN})
   CHECK_LIBRARY_EXISTS(dld dld_link "" HAVE_DLOPEN)
   IF (${HAVE_DLOPEN})
-    SET(CONFIG_BDL "-ldl")
+    SET(CONFIG_BDL "-ldld")
+    # See: src/System/Link/dyn_link.cpp:39
+    SET(TM_DYNAMIC_LINKING dld_link)
   ENDIF (${HAVE_DLOPEN})
 ENDIF (NOT ${HAVE_DLOPEN})
 
 IF (NOT ${HAVE_DLOPEN})
   CHECK_FUNCTION_EXISTS(shl_load HAVE_DLOPEN)
   IF (${HAVE_DLOPEN})
-    SET(CONFIG_BDL "-ldl")
+    SET(CONFIG_BDL "-ldl") # I think this is wrong link arg?
+    SET(TM_DYNAMIC_LINKING shl_load)
   ENDIF (${HAVE_DLOPEN})
 ENDIF (NOT ${HAVE_DLOPEN})
 
-
-IF (${HAVE_DLOPEN})
-  SET(DYNAMIC_LINKING 1) # dynamic linking works
-ENDIF (${HAVE_DLOPEN})
 
 ### --------------------------------------------------------------------
 ### Handle different systems case by case
@@ -191,56 +236,71 @@ set(PACKAGE_VERSION 1)
 ###  Test for Libraries
 ### --------------------------------------------------------------------
 
-find_package(Guile REQUIRED)
+# ? find_package(Cygwin)
+
 find_package(Iconv)
+
 find_package(Freetype)
-set(LINKED_FREETYPE 1)
-set(USE_FREETYPE 1)
+if (${FREETYPE_FOUND})
+  set(LINKED_FREETYPE 1)
+  set(USE_FREETYPE 1)
+endif (${FREETYPE_FOUND})
+
 find_package(ZLIB)
 find_package(JPEG)
-#FIND_PACKAGE(Cairo)
-#FIND_PACKAGE(Imlib2)
-#FIND_PACKAGE(Axel)
+find_package(Cairo)
+find_package(Imlib2)
 
-
-
+### find_package(Axel) # What is/was Axel?
 
 
 ### --------------------------------------------------------------------
-###  Some Guile related adjustements
+###  Guile
 ### --------------------------------------------------------------------
+###
+find_package(Guile REQUIRED)
 
-IF(Guile_VERSION_STRING VERSION_LESS 1.6)
-  SET(CONFIG_GUILE_SERIAL "A")
-ELSEIF(Guile_VERSION_STRING VERSION_LESS 1.8)
-  SET(CONFIG_GUILE_SERIAL "B")
-ELSE(Guile_VERSION_STRING VERSION_LESS 1.8)
-  SET(CONFIG_GUILE_SERIAL "C")
-ENDIF(Guile_VERSION_STRING VERSION_LESS 1.6)
+if(Guile_VERSION_STRING VERSION_LESS 1.6)
+  set(CONFIG_GUILE_SERIAL "A")
+  set(GUILE_A 1)
+elseif(Guile_VERSION_STRING VERSION_LESS 1.8)
+  set(CONFIG_GUILE_SERIAL "B")
+  set(GUILE_B 1)
+elseif(Guile_VERSION_STRING VERSION_LESS 2.0)
+  set(CONFIG_GUILE_SERIAL "C")
+  set(GUILE_C 1)
+else(Guile_VERSION_STRING VERSION_LESS 2.0)
+  set(CONFIG_GUILE_SERIAL "D")
+  set(GUILE_D 1)
+endif(Guile_VERSION_STRING VERSION_LESS 1.6)
 
 
-SET(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
-SET(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
-SET(CMAKE_REQUIRED_LIBRARIES ${Guile_LIBRARIES})
+set(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
+set(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Guile_LIBRARIES})
 
-MESSAGE(STATUS "Checking the size_t of guile strings")
 
-CHECK_C_SOURCE_COMPILES(  "#include <guile/gh.h>
+# For old versions of Guile.
+message(STATUS "Checking guile string size type.")
+
+check_c_source_compiles(  "#include <guile/gh.h>
   #include <libguile.h>
   void print_string (SCM s) {
     int len_r;
     char* r= gh_scm2newstr (s, &len_r); } int main() { return 0; }
 " _guile_str_size_test)
 
-IF(_guile_str_size_test)
-  SET(guile_str_size_t int)
-ELSE(_guile_str_size_test)
-  SET(guile_str_size_t size_t)
-ENDIF(_guile_str_size_test)
+if(_guile_str_size_test)
+  set(guile_str_size_t int)
+else(_guile_str_size_test)
+  set(guile_str_size_t size_t)
+endif(_guile_str_size_test)
 
-MESSAGE(STATUS "Checking whether ... arguments behave correctly")
 
-CHECK_C_SOURCE_COMPILES(  
+# For old versions of Guile.
+message(STATUS "Checking whether ... arguments behave correctly.")
+
+check_c_source_compiles(  
 " #include <guile/gh.h>
   #include <libguile.h>
   typedef SCM (*FN)(...);
@@ -249,76 +309,94 @@ CHECK_C_SOURCE_COMPILES(
   int main() { return 0; }
 " _guile_dots_test)
 
-IF(_guile_dots_test)
-  SET(DOTS_OK 1)
-ELSE(_guile_dots_test)
-  SET(DOTS_OK)
-ENDIF(_guile_dots_test)
+if(_guile_dots_test)
+  set(DOTS_OK 1)
+else(_guile_dots_test)
+  set(DOTS_OK)
+endif(_guile_dots_test)
 
-#MESSAGE(STATUS "Checking if statically linking with guile works")
-##TODO
 
 
 ### --------------------------------------------------------------------
 ### GUI selection
 ### --------------------------------------------------------------------
 
-SET(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
+set(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
 
-IF(NOT TEXMACS_GUI)
-  SET(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, X11, Aqua)")
-ENDIF(NOT TEXMACS_GUI)
+if(NOT TEXMACS_GUI)
+  set(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, Qt5, X11, Aqua)")
+endif(NOT TEXMACS_GUI)
 
-IF(TEXMACS_GUI STREQUAL "Qt")
 
-  FIND_PACKAGE(Qt4 4.8.7 COMPONENTS QtCore QtGui REQUIRED)
+if(TEXMACS_GUI STREQUAL "Qt5")
+
+  find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
  
-  IF(QT4_FOUND)
-    IF(WIN32)
-     SET(GUI_TYPE WIN32)
-    ENDIF(WIN32)
+  if(Qt5_FOUND)
+    if(WIN32)
+     set(GUI_TYPE WIN32)
+    endif(WIN32)
 
-    INCLUDE(${QT_USE_FILE})
+    #include(${QT_USE_FILE})
     add_definitions("-DQTTEXMACS")
-    SET(NO_FAST_ALLOC 1)
-    SET(CONFIG_GUI "QT")
-    SET(CONFIG_QT "Qt")
-    MESSAGE(STATUS "Enabling experimental  Qt port")
-  ELSE(QT4_FOUND)
-    MESSAGE(ERROR "Qt is required to compile the Qt port")
-  ENDIF(QT4_FOUND)
+    set(NO_FAST_ALLOC 1)
+    set(CONFIG_GUI "QT")
+    set(CONFIG_QT "Qt")
+    message(STATUS "Enabling experimental  Qt5 port")
+  else(Qt5_FOUND)
+    message(ERROR "Qt5 is required to compile the Qt5 port")
+  endif(Qt5_FOUND)
+
+elseif(TEXMACS_GUI STREQUAL "Qt")
+
+  find_package(Qt4 4.8.7 COMPONENTS QtCore QtGui REQUIRED)
+ 
+  if(QT4_FOUND)
+    if(WIN32)
+     set(GUI_TYPE WIN32)
+    endif(WIN32)
+
+    include(${QT_USE_FILE})
+    add_definitions("-DQTTEXMACS")
+    set(NO_FAST_ALLOC 1)
+    set(CONFIG_GUI "QT")
+    set(CONFIG_QT "Qt")
+    message(STATUS "Enabling experimental  Qt4 port")
+  else(QT4_FOUND)
+    message(ERROR "Qt4 is required to compile the Qt4 port")
+  endif(QT4_FOUND)
   
-ELSEIF(TEXMACS_GUI STREQUAL "Aqua")
+elseif(TEXMACS_GUI STREQUAL "Aqua")
 
-  IF (APPLE)
-    SET(GUI_TYPE MACOSX_BUNDLE)
+  if (APPLE)
+    set(GUI_TYPE MACOSX_BUNDLE)
 
-    SET(NO_FAST_ALLOC 1)
-    SET(AQUATEXMACS 1)
-    SET(COCOA_CFLAGS "")
-    SET(COCOA_LDFLAGS "-framework COCOA")
-    SET(CONFIG_GUI "COCOA")
-    SET(CONFIG_COCOA "Cocoa")
+    set(NO_FAST_ALLOC 1)
+    set(AQUATEXMACS 1)
+    set(COCOA_CFLAGS "")
+    set(COCOA_LDFLAGS "-framework COCOA")
+    set(CONFIG_GUI "COCOA")
+    set(CONFIG_COCOA "Cocoa")
 
-    MESSAGE(STATUS "Enabling experimental Cocoa port")
+    message(STATUS "Enabling experimental Cocoa port")
 
-  ELSE (APPLE)
+  else (APPLE)
   
-    MESSAGE( ERROR "Aqua GUI is not supported on this system")
+    message( ERROR "Aqua GUI is not supported on this system")
     
-  ENDIF (APPLE)
+  endif (APPLE)
 
-ELSE(TEXMACS_GUI STREQUAL "Qt")
+else(TEXMACS_GUI STREQUAL "Qt")
 
-  FIND_PACKAGE(X11)
+  find_package(X11)
 
-  SET(CONFIG_X11 "X11 Widkit Ghostscript")
-  SET(CONFIG_GUI "X11")
+  set(CONFIG_X11 "X11 Widkit Ghostscript")
+  set(CONFIG_GUI "X11")
   
 
-  MESSAGE(STATUS "Enabling standard X11 interface")
+  message(STATUS "Enabling standard X11 interface")
 
-ENDIF(TEXMACS_GUI STREQUAL "Qt")
+endif(TEXMACS_GUI STREQUAL "Qt5")
 
 ### --------------------------------------------------------------------
 ### Debugging options
@@ -342,8 +420,7 @@ set(USE_GS 1)
 set(GS_EXE /usr/bin/gs)
 set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:)
 set(GS_LIB ../share/ghostscript/9.06/lib:)
-set(GUILE_C 1)
-set(GUILE_NUM 1)
+#set(GUILE_C 1)
 set(PDF_RENDERER 1)
 set(QTPIPES 1)
 set(SIZEOF_VOID_P 8)
@@ -460,3 +537,6 @@ foreach(TOOL ${TOOLS})
   add_custom_target(${TOOL}.${MAN_SECTION} ALL DEPENDS ${TOOL_MANFILE_GZ})
   install(FILES ${TOOL_MANFILE_GZ} DESTINATION share/man/man${MAN_SECTION})
 endforeach(TOOL)
+
+SET(RESULT_FILE CMakeSystemInformation.txt)
+include(SystemInformation)

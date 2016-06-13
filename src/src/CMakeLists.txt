@@ -684,7 +684,9 @@ SET(TeXmacs_Cocoa_SRCS
 
 SET(TeXmacs_All_SRCS ${TeXmacs_Base_SRCS} ${TeXmacs_Std_Plugins_SRCS})
 
-SET(TeXmacs_Libraries ${Guile_LIBRARIES} ${FREETYPE_LIBRARIES} ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES} -lpthread)
+SET(TeXmacs_Libraries -lpthread ${Guile_LIBRARIES} ${FREETYPE_LIBRARIES}
+  ${Cairo_LIBRARIES} ${IMLIB2_LIBRARIES} ${JPEG_LIBRARIES}
+  ${ZLIB_LIBRARIES} ${CONFIG_BDL})
 
 SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} 
   ${Guile_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${Cairo_INCLUDE_DIRS}
@@ -697,7 +699,21 @@ SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs}
 ### --------------------------------------------------------------------
 
 
-IF(TEXMACS_GUI STREQUAL "Qt")
+if(TEXMACS_GUI STREQUAL "Qt5")
+
+  add_definitions(${Qt5Core_DEFINITIONS} ${Qt5Gui_DEFINITIONS} ${Qt5Widgets_DEFINITIONS} ${Qt5PrintSupport_DEFINITIONS})
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_definitions(-DQT_NO_DEBUG)
+  endif(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+  # After this call, TeXmacs_Qt_Moc_SRCS = moc_QTMWidget.cpp ...
+  QT5_WRAP_CPP(TeXmacs_Qt_Moc_SRCS ${TeXmacs_Qt_Moc_HDRS})
+
+  set(TeXmacs_All_SRCS ${TeXmacs_All_SRCS} ${TeXmacs_Qt_SRCS} ${TeXmacs_Qt_Moc_SRCS})
+  set(TeXmacs_Libraries ${TeXmacs_Libraries}  ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+  set(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+
+elseif(TEXMACS_GUI STREQUAL "Qt")
 
   ADD_DEFINITIONS(${QT_DEFINITIONS})
   IF(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -723,13 +739,16 @@ ELSEIF(TEXMACS_GUI STREQUAL "Aqua")
   MARK_AS_ADVANCED(COCOA_LIBRARY)
   MARK_AS_ADVANCED(COCOA_INCLUDE_DIR)
 
-ELSE(TEXMACS_GUI STREQUAL "Qt")
+ELSE(TEXMACS_GUI STREQUAL "Qt5")
 
   SET(TeXmacs_All_SRCS ${TeXmacs_All_SRCS} ${TeXmacs_Widkit_SRCS} ${TeXmacs_X11_SRCS})
   SET(TeXmacs_Libraries ${TeXmacs_Libraries} ${X11_LIBRARIES})
 
-ENDIF(TEXMACS_GUI STREQUAL "Qt")
+ENDIF(TEXMACS_GUI STREQUAL "Qt5")
 
+
+list(REMOVE_DUPLICATES TeXmacs_Libraries)
+list(REMOVE_DUPLICATES TeXmacs_Include_Dirs)
 
 
 ### --------------------------------------------------------------------
