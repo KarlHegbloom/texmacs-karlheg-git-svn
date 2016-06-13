@@ -240,7 +240,7 @@ set(PACKAGE_VERSION 1)
 
 find_package(Iconv)
 
-find_package(Freetype)
+find_package(Freetype REQUIRED)
 if (${FREETYPE_FOUND})
   set(LINKED_FREETYPE 1)
   set(USE_FREETYPE 1)
