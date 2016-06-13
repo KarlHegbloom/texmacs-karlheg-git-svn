@@ -28,6 +28,7 @@ fi
 
 DISTRIBUTOR_ID=`lsb_release -a 2>/dev/null |grep "Distributor ID"`
 if [ ! "${DISTRIBUTOR_ID#*Ubuntu}" = "$DISTRIBUTOR_ID" ] ; then
+  unset QT_QPA_PLATFORMTHEME
   export QT_X11_NO_NATIVE_MENUBAR=1
 fi
 
