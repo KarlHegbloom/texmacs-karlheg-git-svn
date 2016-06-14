@@ -224,7 +224,7 @@ init_user_dirs () {
 
 static void
 init_guile () {
-  url guile_path= "$TEXMACS_PATH/prog:$GUILE_LOAD_PATH";
+  url guile_path= "$TEXMACS_PATH/progs:$GUILE_LOAD_PATH";
   if (!exists (guile_path * "init-texmacs.scm")) {
     boot_error << "\n";
     boot_error << "Installation problem: please send a bug report.\n";
