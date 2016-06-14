@@ -1,13 +1,15 @@
-
 /******************************************************************************
-* MODULE     : guile_tm.cpp
-* DESCRIPTION: Interface to Guile
-* COPYRIGHT  : (C) 1999-2011  Joris van der Hoeven and Massimiliano Gubinelli
-*******************************************************************************
-* This software falls under the GNU general public license version 3 or later.
-* It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
-* in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
-******************************************************************************/
+ * MODULE     : guile_tm.cpp
+ * DESCRIPTION: Interface to Guile
+ * COPYRIGHT  : (C) 1999-2011  Joris van der Hoeven and Massimiliano Gubinelli
+ *******************************************************************************
+ * This software falls under the GNU general public license version 3 or later.
+ * It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+ * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+ ******************************************************************************/
+
+#include <libguile.h>
+#include "tm_configure.hpp"
 
 #ifdef __MINGW32__
   //FIXME: if this include is not here we have compilation problems on mingw32
@@ -56,8 +58,6 @@ start_scheme (int argc, char** argv, void (*call_back) (int, char**)) {
 #endif
 }
 
-
-
 /******************************************************************************
  * Catching errors (with thanks to Dale P. Smith)
  ******************************************************************************/
@@ -72,6 +72,14 @@ TeXmacs_lazy_catcher (void *data, SCM tag, SCM throw_args) {
 }
 
 SCM
+TeXmacs_with_throw_catcher (void *data, SCM tag, SCM throw_args) {
+  SCM eport= scm_current_error_port();
+  scm_handle_by_message_noexit (data, tag, throw_args);
+  scm_force_output (eport);
+  return SCM_BOOL_F;
+}
+
+SCM
 TeXmacs_catcher (void *data, SCM tag, SCM args) {
   (void) data;
   return scm_cons (tag, args);
@@ -83,27 +91,70 @@ TeXmacs_catcher (void *data, SCM tag, SCM args) {
 
 static SCM
 TeXmacs_lazy_eval_file (char *file) {
-  return scm_internal_lazy_catch (SCM_BOOL_T,
-                                  (scm_t_catch_body) scm_c_primitive_load, file,
-                                  (scm_t_catch_handler) TeXmacs_lazy_catcher, file);
+#if defined(GUILE_A) || defined(GUILE_B)
+  // deprecated since 1.8 onwards
+  return scm_internal_lazy_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) scm_c_primitive_load, file,
+    (scm_t_catch_handler) TeXmacs_lazy_catcher, file);
+#else
+  return scm_c_with_throw_handler(
+    SCM_BOOL_T,
+    (scm_t_catch_body) scm_c_primitive_load, file,
+    (scm_t_catch_handler) TeXmacs_with_throw_catcher, file, 0);
+#endif
+}
+
+static SCM
+TeXmacs_lazy_eval_file_in_load_path (char *file) {
+  SCM f = scm_from_locale_string(file);
+#if defined(GUILE_A) || defined(GUILE_B)
+  // deprecated since 1.8 onwards
+  return scm_internal_lazy_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) scm_primitive_load_path, f,
+    (scm_t_catch_handler) TeXmacs_lazy_catcher, file);
+#else
+  return scm_c_with_throw_handler(
+    SCM_BOOL_T,
+    (scm_t_catch_body) scm_primitive_load_path, f,
+    (scm_t_catch_handler) TeXmacs_with_throw_catcher, file, 0);
+#endif
 }
 
 static SCM
 TeXmacs_eval_file (char *file) {
-  return scm_internal_catch (SCM_BOOL_T,
-                             (scm_t_catch_body) TeXmacs_lazy_eval_file, file,
-                             (scm_t_catch_handler) TeXmacs_catcher, file);
+  return scm_internal_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) TeXmacs_lazy_eval_file, file,
+    (scm_t_catch_handler) TeXmacs_catcher, file);
+}
+
+static SCM
+TeXmacs_eval_file_in_load_path (char *file) {
+  return scm_internal_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) TeXmacs_lazy_eval_file_in_load_path, file,
+    (scm_t_catch_handler) TeXmacs_catcher, file);
 }
 
 SCM
 eval_scheme_file (string file) {
-    //static int cumul= 0;
-    //timer tm;
-  if (DEBUG_STD) debug_std << "Evaluating " << file << "...\n";
+  //static int cumul= 0;
+  //timer tm;
+  if (DEBUG_STD) debug_std << "TeXmacs] Evaluating " << file << "...\n";
   c_string _file (file);
   SCM result= TeXmacs_eval_file (_file);
-    //int extra= tm->watch (); cumul += extra;
-    //cout << extra << "\t" << cumul << "\t" << file << "\n";
+  //int extra= tm->watch (); cumul += extra;
+  //cout << extra << "\t" << cumul << "\t" << file << "\n";
+  return result;
+}
+
+SCM
+eval_scheme_file_in_load_path (string file) {
+  if (DEBUG_STD) debug_std << "TeXmacs] Evaluating in load-path " << file << "...\n";
+  c_string _file (file);
+  SCM result = TeXmacs_eval_file_in_load_path (_file);
   return result;
 }
 
@@ -113,16 +164,26 @@ eval_scheme_file (string file) {
 
 static SCM
 TeXmacs_lazy_eval_string (char *s) {
-  return scm_internal_lazy_catch (SCM_BOOL_T,
-                                  (scm_t_catch_body) scm_c_eval_string, s,
-                                  (scm_t_catch_handler) TeXmacs_lazy_catcher, s);
+#if defined(GUILE_A) || defined(GUILE_B)
+  // deprecated since 1.8 onwards
+  return scm_internal_lazy_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) scm_c_eval_string, s,
+    (scm_t_catch_handler) TeXmacs_lazy_catcher, s);
+#else
+  return scm_c_with_throw_handler(
+    SCM_BOOL_T,
+    (scm_t_catch_body) scm_c_eval_string, s,
+    (scm_t_catch_handler) TeXmacs_with_throw_catcher, s, 0);
+#endif
 }
 
 static SCM
 TeXmacs_eval_string (char *s) {
-  return scm_internal_catch (SCM_BOOL_T,
-                             (scm_t_catch_body) TeXmacs_lazy_eval_string, s,
-                             (scm_t_catch_handler) TeXmacs_catcher, s);
+  return scm_internal_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) TeXmacs_lazy_eval_string, s,
+    (scm_t_catch_handler) TeXmacs_catcher, s);
 }
 
 SCM
@@ -160,16 +221,26 @@ TeXmacs_call (arg_list* args) {
 
 static SCM
 TeXmacs_lazy_call_scm (arg_list* args) {
-  return scm_internal_lazy_catch (SCM_BOOL_T,
-                                  (scm_t_catch_body) TeXmacs_call, (void*) args,
-                                  (scm_t_catch_handler) TeXmacs_lazy_catcher, (void*) args);
+#if defined(GUILE_A) || defined(GUILE_B)
+  // deprecated since 1.8 onwards
+  return scm_internal_lazy_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) TeXmacs_call, (void*) args,
+    (scm_t_catch_handler) TeXmacs_lazy_catcher, (void*) args);
+#else
+  return scm_c_with_throw_handler(
+    SCM_BOOL_T,
+    (scm_t_catch_body) TeXmacs_call, (void*) args,
+    (scm_t_catch_handler) TeXmacs_with_throw_catcher, (void*) args, 0);
+#endif
 }
 
 static SCM
 TeXmacs_call_scm (arg_list *args) {
-  return scm_internal_catch (SCM_BOOL_T,
-                             (scm_t_catch_body) TeXmacs_lazy_call_scm, (void*) args,
-                             (scm_t_catch_handler) TeXmacs_catcher, (void*) args);
+  return scm_internal_catch (
+    SCM_BOOL_T,
+    (scm_t_catch_body) TeXmacs_lazy_call_scm, (void*) args,
+    (scm_t_catch_handler) TeXmacs_catcher, (void*) args);
 }
 
 SCM
@@ -415,31 +486,26 @@ print_blackbox (SCM blackbox_smob, SCM port, scm_print_state *pstate) {
   (void) pstate;
   string s = "<blackbox>";
   int type_ = type_box (tmscm_to_blackbox(blackbox_smob)) ;
-  if (type_ == type_helper<tree>::id) {
-    tree t= tmscm_to_tree (blackbox_smob);
+  if (type_ == type_helper<tree>::id)
+  {
+    tree   t= tmscm_to_tree (blackbox_smob);
     s= "<tree " * tree_to_texmacs (t) * ">";
-  }
-  else if (type_ == type_helper<observer>::id) {
+  } else if (type_ == type_helper<observer>::id)
+  {
     s= "<observer>";
-  }
-  else if (type_ == type_helper<widget>::id) {
+  } else if (type_ == type_helper<widget>::id)
+  {
     s= "<widget>";
-  }
-  else if (type_ == type_helper<promise<widget> >::id) {
+  } else if (type_ == type_helper<promise<widget> >::id)
+  {
     s= "<promise-widget>";
-  }
-  else if (type_ == type_helper<command>::id) {
+  } else if (type_ == type_helper<command>::id)
+  {
     s= "<command>";
-  }
-  else if (type_ == type_helper<url>::id) {
-    url u= tmscm_to_url (blackbox_smob);
+  } else if (type_ == type_helper<url>::id)
+  {
+    url    u= tmscm_to_url (blackbox_smob);
     s= "<url " * as_string (u) * ">";
-  }
-  else if (type_ == type_helper<modification>::id) {
-    s= "<modification>";
-  }
-  else if (type_ == type_helper<patch>::id) {
-    s= "<patch>";
   }
   
   scm_display (string_to_tmscm (s), port);
@@ -484,33 +550,39 @@ initialize_smobs () {
 
 tmscm object_stack;
 
+static void
+initialize_core_module(void *unused) {
+  scm_c_define("texmacs-version", scm_from_locale_string(TEXMACS_VERSION));
+  scm_c_export("texmacs-version", NULL);
+  eval_scheme_file_in_load_path("texmacs-core");
+}
+
 void
 initialize_scheme () {
   const char* init_prg =
-  "(read-set! keywords 'prefix)\n"
-  "(read-enable 'positions)\n"
-  "(debug-enable 'debug)\n"
-  ";(debug-enable 'backtrace)\n"
-  "\n"
-  "(define (display-to-string obj)\n"
-  "  (call-with-output-string\n"
-  "    (lambda (port) (display obj port))))\n"
-  "(define (object->string obj)\n"
-  "  (call-with-output-string\n"
-  "    (lambda (port) (write obj port))))\n"
-  "\n"
-  "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
-  "(define object-stack '(()))";
-  
-  scm_c_eval_string (init_prg);
-  initialize_smobs ();
-  initialize_glue ();
-  object_stack= scm_lookup_string ("object-stack");
-  
+    "(read-set! keywords 'prefix)\n"
+    "(read-enable 'positions)\n"
+    "(debug-enable 'debug)\n"
+    ";(debug-enable 'backtrace)\n"
+    "\n"
+    "(define (display-to-string obj)\n"
+    "  (call-with-output-string\n"
+    "    (lambda (port) (display obj port))))\n"
+    "(define (object->string obj)\n"
+    "  (call-with-output-string\n"
+    "    (lambda (port) (write obj port))))\n"
+    "\n";
+    // "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
+    //"(define object-stack '(()))"
+    
+    scm_c_eval_string (init_prg);
+    initialize_smobs ();
+    scm_c_define_module("texmacs-glue", initialize_glue, NULL);
+    scm_c_define_module("texmacs-core", initialize_core_module, NULL);
+    scm_c_use_module("texmacs-core");
+    object_stack= scm_lookup_string ("object-stack");
+    
     // uncomment to have a guile repl available at startup	
     //	gh_repl(guile_argc, guile_argv);
     //scm_shell (guile_argc, guile_argv);
-  
-  
 }
-
