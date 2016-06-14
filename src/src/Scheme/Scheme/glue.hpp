@@ -21,7 +21,7 @@
 
 #include "object.hpp"
 
-void initialize_glue ();
+void initialize_glue (void *unused);
 
 bool tmscm_is_tree (tmscm obj);
 bool tmscm_is_list_string (tmscm obj);
