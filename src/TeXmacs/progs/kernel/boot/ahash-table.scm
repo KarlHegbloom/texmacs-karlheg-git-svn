@@ -11,67 +11,88 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel boot ahash-table))
+;; (texmacs-module (kernel boot ahash-table))
+(define-module (kernel boot ahash-table)
+  :use-module (texmacs-core))
+
+(use-modules (kernel boot abbrevs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Adaptive hash tables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-public make-ahash-table #f)
+(define-public ahash-ref #f)
+(define-public ahash-get-handle #f)
+(define-public ahash-size #f)
+(define-public ahash-set! #f)
+(define-public ahash-remove! #f)
+(define-public ahash-fold #f)
+(define-public ahash-table->list #f)
 (if (vector? (make-hash-table 1))
     (begin ;; old style
-      (define-public (make-ahash-table)
-	(cons (make-hash-table 1) 0))
+      (set! make-ahash-table
+            (lambda ()
+              (cons (make-hash-table 1) 0)))
 
-      (define-public (ahash-ref h key)
-	(hash-ref (car h) key))
+      (set! ahash-ref
+            (lambda (h key)
+              (hash-ref (car h) key)))
 
-      (define-public (ahash-get-handle h key)
-	(hash-get-handle (car h) key))
+      (set! ahash-get-handle
+            (lambda (h key)
+              (hash-get-handle (car h) key)))
 
-      (define-public (ahash-size h)
-	(cdr h))
+      (set! ahash-size (lambda (h) (cdr h)))
 
-      (define-public (ahash-slots! h new-size)
-	(let ((new-h (make-hash-table new-size)))
-	  (hash-fold (lambda (key value dummy) (hash-set! new-h key value))
-		     #f (car h))
-	  (set-car! h new-h)))
+      (set! ahash-slots!
+            (lambda (h new-size)
+              (let ((new-h (make-hash-table new-size)))
+                (hash-fold (lambda (key value dummy) (hash-set! new-h key value))
+                           #f (car h))
+                (set-car! h new-h))))
 
-      (define-public (ahash-set! h key value)
-	(if (hash-get-handle (car h) key)
-	    (hash-set! (car h) key value)
-	    (begin
-	      (if (>= (cdr h) (vector-length (car h)))
-		  (ahash-slots! h (+ (* 2 (vector-length (car h))) 1)))
-	      (set-cdr! h (+ (cdr h) 1))
-	      (hash-set! (car h) key value))))
+      (set! ahash-set!
+            (lambda (h key value)
+              (if (hash-get-handle (car h) key)
+                  (hash-set! (car h) key value)
+                  (begin
+                    (if (>= (cdr h) (vector-length (car h)))
+                        (ahash-slots! h (+ (* 2 (vector-length (car h))) 1)))
+                    (set-cdr! h (+ (cdr h) 1))
+                    (hash-set! (car h) key value)))))
 
-      (define-public (ahash-remove! h key)
-	(let ((removed (hash-remove! (car h) key)))
-	  (if removed
-	      (begin
-		(set-cdr! h (- (cdr h) 1))
-		(if (< (+ (* 4 (cdr h)) 1) (vector-length (car h)))
-		    (ahash-slots! h (quotient (vector-length (car h)) 2)))))
-	  removed))
+      (set! ahash-remove!
+            (lambda (h key)
+              (let ((removed (hash-remove! (car h) key)))
+                (if removed
+                    (begin
+                      (set-cdr! h (- (cdr h) 1))
+                      (if (< (+ (* 4 (cdr h)) 1) (vector-length (car h)))
+                          (ahash-slots! h (quotient (vector-length (car h)) 2)))))
+                removed)))
 
-      (define-public (ahash-fold folder init h)
-	(hash-fold folder init (car h)))
+      (set! ahash-fold
+            (lambda (folder init h)
+              (hash-fold folder init (car h))))
 
-      (define-public (ahash-table->list h)
-	(hash-fold acons '() (car h))))
+      (set! ahash-table->list
+            (lambda (h)
+              (hash-fold acons '() (car h)))))
 
     (begin ;; new style
-      (define-public make-ahash-table make-hash-table)
-      (define-public ahash-ref hash-ref)
-      (define-public ahash-get-handle hash-get-handle)
-      (define-public (ahash-size h)
-	(hash-fold (lambda (key value seed) (+ 1 seed)) 0 h))
-      (define-public ahash-set! hash-set!)
-      (define-public ahash-remove! hash-remove!)
-      (define-public ahash-fold hash-fold)
-      (define-public (ahash-table->list h)
-	(hash-fold acons '() h))))
+      (set! make-ahash-table make-hash-table)
+      (set! ahash-ref hash-ref)
+      (set! ahash-get-handle hash-get-handle)
+      (set! ahash-size
+            (lambda (h)
+              (hash-fold (lambda (key value seed) (+ 1 seed)) 0 h)))
+      (set! ahash-set! hash-set!)
+      (set! ahash-remove! hash-remove!)
+      (set! ahash-fold hash-fold)
+      (set! ahash-table->list
+            (lambda (h)
+              (hash-fold acons '() h)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Extra routines on adaptive hash tables
