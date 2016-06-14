@@ -13,7 +13,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel boot srfi))
+(define-module (kernel boot srfi)
+  :use-module (texmacs-core))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SECTION : and-let* special form
@@ -33,7 +34,10 @@
 ;; but it does not provide as good an error reporting.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-public-macro (and-let* claws . body)
+(cond-expand
+ (guile-2 (use-modules (srfi srfi-2)))
+ (else
+  (define-public-macro (and-let* claws . body)
   (let* ((new-vars '())
 	 (result (cons 'and '()))
 	 (growth-point result))
@@ -70,7 +74,7 @@
 	(if (null? (cdr body))
 	    (andjoin! (car body))
 	    (andjoin! `(begin ,@body))))
-    result))
+    result))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SECTION : receive special form (SRFI-8)
