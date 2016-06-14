@@ -1,11 +1,22 @@
-# CMake file for TeXmacs
+###############################################################################
+# MODULE     : CMake file for TeXmacs
+# COPYRIGHT  : (C) 2016  Joris van der Hoeven
+###############################################################################
+# This software falls under the GNU general public license version 3 or later.
+# It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+# in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+###############################################################################
+#
 # Initialy created by Massimiliano Gubinelli
-# Modifications by Darcy Shen
-# Modifications by Karl M. Hegbloom <karl.hegbloom@gmail.com>
+#
+#  Modifications by Darcy Shen
+#
+#  Modifications by Karl M. Hegbloom <karl.hegbloom@gmail.com>
+#
 
-# The name of our project is "TEXMACS". CMakeLists files in this project can 
-# refer to the root source directory of the project as ${TEXMACS_SOURCE_DIR} and 
-# to the root binary directory of the project as ${TEXMACS_BINARY_DIR}. 
+# The name of our project is "TEXMACS". CMakeLists files in this project can
+# refer to the root source directory of the project as ${TEXMACS_SOURCE_DIR}
+# and to the root binary directory of the project as ${TEXMACS_BINARY_DIR}.
 
 
 ### --------------------------------------------------------------------
@@ -14,12 +25,12 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-IF(NOT CMAKE_BUILD_TYPE)
- SET(CMAKE_BUILD_TYPE Debug CACHE STRING
-     "Choose the type of build, options are: None Debug Release
-RelWithDebInfo MinSizeRel."
+if(NOT CMAKE_BUILD_TYPE)
+ set(CMAKE_BUILD_TYPE Debug CACHE STRING
+   "Choose the type of build, options are:
+None Debug Release RelWithDebInfo MinSizeRel."
      FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 
 ### --------------------------------------------------------------------
@@ -34,46 +45,49 @@ set(DEVEL_RELEASE "1")
 set(STABLE_VERSION "1.99.4")
 set(STABLE_RELEASE "1")
 
-# Todo: This needs to come from environment or as an option.
-set(PKG_MAINTAINER "Karl M. Hegbloom <karl.hegbloom@gmail.com>")
+message(STATUS "Getting revision control metadata for PKGREV")
 
-message(STATUS "CMAKE_CURRENT_SOURCE_DIR is: ${CMAKE_CURRENT_SOURCE_DIR}")
+set(PKG_MAINTAINER "Karl M. Hegbloom <karl.hegbloom@gmail.com>"
+  CACHE STRING "Fullname <email@host.name> for debian/Changelog, etc.")
+
+
+message(STATUS "  TEXMACS_SOURCE_DIR is: ${TEXMACS_SOURCE_DIR}")
 
 
 ### Set GITDIR. Not set if not there.
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
-    NOT IS_SYMLINK "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
-    NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.git")
-  file(READ "${CMAKE_CURRENT_SOURCE_DIR}/.git" GITDIR)
+if(EXISTS "${TEXMACS_SOURCE_DIR}/.git" AND
+    NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/.git" AND
+    NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.git")
+  file(READ "${TEXMACS_SOURCE_DIR}/.git" GITDIR)
   string(STRIP "${GITDIR}" GITDIR)
 
-elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../.git" AND
-    NOT IS_SYMLINK "${CMAKE_CURRENT_SOURCE_DIR}/../.git" AND
-    NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../.git")
-  file(READ "${CMAKE_CURRENT_SOURCE_DIR}/.git" GITDIR)
+elseif(EXISTS "${TEXMACS_SOURCE_DIR}/../.git" AND
+    NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/../.git" AND
+    NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/../.git")
+  file(READ "${TEXMACS_SOURCE_DIR}/.git" GITDIR)
   string(STRIP "${GITDIR}" GITDIR)
 
-elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
-  set(GITDIR "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+elseif(EXISTS "${TEXMACS_SOURCE_DIR}/.git")
+  set(GITDIR "${TEXMACS_SOURCE_DIR}/.git")
 
-elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../.git")
-  set(GITDIR "${CMAKE_CURRENT_SOURCE_DIR}/../.git")
+elseif(EXISTS "${TEXMACS_SOURCE_DIR}/../.git")
+  set(GITDIR "${TEXMACS_SOURCE_DIR}/../.git")
 
-endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
-  NOT IS_SYMLINK "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
-  NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+endif(EXISTS "${TEXMACS_SOURCE_DIR}/.git" AND
+  NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/.git" AND
+  NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.git")
 
 
 if(NOT "${GITDIR}" STREQUAL "")
-  message(STATUS "GITDIR is: ${GITDIR}")
+  message(STATUS "  GITDIR is: ${GITDIR}")
 endif(NOT "${GITDIR}" STREQUAL "")
 
 
 ### Can svn work via an indirect repo directory like git can?
-if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
+if(IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.svn")
   message(STATUS "This is a svn checkout.")
   execute_process(COMMAND svnversion -n .
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
     OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 elseif(NOT "${GITDIR}" STREQUAL "" AND IS_DIRECTORY "${GITDIR}/svn")
@@ -85,27 +99,27 @@ elseif(NOT "${GITDIR}" STREQUAL "" AND IS_DIRECTORY "${GITDIR}/svn")
   ## Requires sed.
   execute_process(COMMAND git rev-list --max-count=100 --pretty=medium HEAD@{0}
     COMMAND sed -rne "/git-svn-id:/ {s,.*://.*@([^ ]+).*,\\1,p ;/./ q 0}"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
     OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
+endif(IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.svn")
 
 if("${SVNREV}" STREQUAL "" OR
     "${SVNREV}" STREQUAL "exported" OR
     "${SVNREV}" STREQUAL "Unversioned directory")
   ## The above failed, or this is an exported source distribution.
-  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV")
-    message(STATUS "Setting SVNREV from ${CMAKE_CURRENT_SOURCE_DIR}/SVNREV")
+  if(EXISTS "${TEXMACS_SOURCE_DIR}/SVNREV")
+    message(STATUS "Setting SVNREV from ${TEXMACS_SOURCE_DIR}/SVNREV")
     set(SVNREV "")
-    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV" SVNREV)
+    file(READ "${TEXMACS_SOURCE_DIR}/SVNREV" SVNREV)
     string(STRIP "${SVNREV}" SVNREV)
-  endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV")
+  endif(EXISTS "${TEXMACS_SOURCE_DIR}/SVNREV")
 endif("${SVNREV}" STREQUAL "" OR
   "${SVNREV}" STREQUAL "exported" OR
   "${SVNREV}" STREQUAL "Unversioned directory")
 
 if(NOT "${SVNREV}" STREQUAL "")
-  file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV" "${SVNREV}")
-  message(STATUS "SVNREV is: ${SVNREV}")
+  file(WRITE "${TEXMACS_SOURCE_DIR}/SVNREV" "${SVNREV}")
+  message(STATUS "  SVNREV is: ${SVNREV}")
   set(PKGREV -svn-${SVNREV})
 endif(NOT "${SVNREV}" STREQUAL "")
 
@@ -113,15 +127,15 @@ if(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
   message(STATUS "Getting git commit count and head treeish for PKGREV")
   ## We use the commit count to get monotonically increasing version numbers.
   execute_process(COMMAND git log --oneline COMMAND wc -l
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
     OUTPUT_VARIABLE GITCOMMITCOUNT ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND git log -n 1 --oneline COMMAND cut -f1 -d\ #
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
     OUTPUT_VARIABLE GITSHA ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
   string(APPEND PKGREV "-git-${GITCOMMITCOUNT}-${GITSHA}")
 endif(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
 
-message(STATUS "PKGREV is: ${PKGREV}")
+message(STATUS "  PKGREV is: ${PKGREV}")
 
 # The string(TIMESTAMP command lacks formatting directives required to form
 # a Debian Changelog signature line.
@@ -133,7 +147,8 @@ if("${PKG_DATE}" STREQUAL "")
 endif("${PKG_DATE}" STREQUAL "")
 
 
-message(STATUS " -- ${PKG_MAINTAINER}  ${PKG_DATE}")
+
+message(STATUS "--  ${PKG_MAINTAINER}  ${PKG_DATE}")
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
@@ -148,32 +163,35 @@ include(CheckIncludeFile)
 include(CheckTypeSize)
 include(FindPkgConfig)
 include(CheckCSourceCompiles)
-
-
-
-include(GNUInstallDirs)
-# ? include(GetPrerequisites)
-# ? include(InstallRequiredSystemLibraries)
+include(CMakeDependentOption)
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
 ### --------------------------------------------------------------------
-CHECK_TYPE_SIZE(FILE HAVE_FILE)
-CHECK_TYPE_SIZE(intptr_t HAVE_INTPTR_T)
-CHECK_TYPE_SIZE(time_t HAVE_TIME_T)
-CHECK_INCLUDE_FILE(inttypes.h HAVE_INTTYPES_H)
-CHECK_INCLUDE_FILE(memory.h HAVE_MEMORY_H)
-CHECK_INCLUDE_FILE(stdlib.h HAVE_STDLIB_H)
-CHECK_INCLUDE_FILE(strings.h HAVE_STRINGS_H)
-CHECK_INCLUDE_FILE(string.h HAVE_STRING_H)
-CHECK_INCLUDE_FILE(sys/stat.h HAVE_SYS_STAT_H)
-CHECK_INCLUDE_FILE(unistd.h HAVE_UNISTD_H)
-CHECK_INCLUDE_FILE(X11/Xlib.h HAVE_X11_XLIB_H)
-CHECK_INCLUDE_FILE(X11/Xutil.h HAVE_X11_XUTIL_H)
-CHECK_INCLUDE_FILE(pty.h HAVE_PTY_H)
-CHECK_INCLUDE_FILE(util.h HAVE_UTIL_H)
-CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
+check_type_size(FILE     HAVE_FILE)
+check_type_size(intptr_t HAVE_INTPTR_T)
+check_type_size(time_t   HAVE_TIME_T)
+
+check_include_file(inttypes.h  HAVE_INTTYPES_H)
+check_include_file(memory.h    HAVE_MEMORY_H)
+check_include_file(stdlib.h    HAVE_STDLIB_H)
+check_include_file(strings.h   HAVE_STRINGS_H)
+check_include_file(string.h    HAVE_STRING_H)
+check_include_file(sys/stat.h  HAVE_SYS_STAT_H)
+check_include_file(unistd.h    HAVE_UNISTD_H)
+check_include_file(X11/Xlib.h  HAVE_X11_XLIB_H)
+check_include_file(X11/Xutil.h HAVE_X11_XUTIL_H)
+check_include_file(pty.h       HAVE_PTY_H)
+check_include_file(util.h      HAVE_UTIL_H)
+
+check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
+
+check_function_exists(setenv       HAVE_SETENV)
+#check_function_exists(putenv       HAVE_PUTENV)
+if(${HAVE_SETENV})
+  set(CONFIG_STD_SETENV "#define STD_SETENV")
+endif(${HAVE_SETENV})
 
 ### --------------------------------------------------------------------
 ### Check for dl library
@@ -226,7 +244,7 @@ SET(CONFIG_OS "GNU_LINUX")
 SET(CONFIG_OS_SUFFIX "gnu-linux")
 SET(CONFIG_CXXFLAGS "")
 SET(CONFIG_CXXTEMPLATE "")
-SET(CONFIG_STD_SETENV "#define STD_SETENV")
+#SET(CONFIG_STD_SETENV "#define STD_SETENV")
 SET(CONFIG_SO "so")
 SET(CONFIG_LIB_PATH "LD_LIBRARY_PATH")
 SET(CONFIG_CHMOD "chmod -f")
@@ -313,11 +331,19 @@ set(PACKAGE_VERSION 1)
 
 find_package(Iconv)
 
+### cmake_dependent_option(USE_FOO "Use Foo" ON
+###   "USE_BAR;NOT USE_ZOT" OFF)
+
+option(LINKED_FREETYPE 1)
+
 find_package(Freetype)
 if (${FREETYPE_FOUND})
-  set(LINKED_FREETYPE 1)
   set(USE_FREETYPE 1)
 endif (${FREETYPE_FOUND})
+
+cmake_dependent_option(LINKED_FREETYPE "Link Freetype at build time." ON
+  "USE_FREETYPE;NOT HAVE_DLOPEN" ON)
+
 
 find_package(ZLIB)
 find_package(JPEG)
@@ -396,9 +422,26 @@ endif(_guile_dots_test)
 
 set(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
 
+
 if(NOT TEXMACS_GUI)
-  set(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, Qt5, X11, Aqua)")
+  set(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, Qt5, Qt4, X11, Aqua)")
 endif(NOT TEXMACS_GUI)
+
+
+if(TEXMACS_GUI STREQUAL "Qt")
+  find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport)
+  if(Qt5_FOUND)
+    set(TEXMACS_GUI "Qt5")
+  else(Qt5_FOUND)
+    find_package(Qt4 4.8.7 COMPONENTS QtCore QtGui)
+    if(QT4_FOUND)
+      set(TEXMACS_GUI "Qt4")
+    else(QT4_FOUND)
+      message(ERROR "Neither Qt5 nor Qt4 found.")
+      set(TEXMACS_GUI "X11")
+    endif(QT4_FOUND)
+  endif(Qt5_FOUND)
+endif(TEXMACS_GUI STREQUAL "Qt")
 
 
 if(TEXMACS_GUI STREQUAL "Qt5")
@@ -416,9 +459,9 @@ if(TEXMACS_GUI STREQUAL "Qt5")
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
     set(QTPIPES 1)
-    message(STATUS "Enabling experimental  Qt5 port")
+    message(STATUS "Enabling Qt5 GUI")
   else(Qt5_FOUND)
-    message(ERROR "Qt5 is required to compile the Qt5 port")
+    message(ERROR "Qt5 is required to compile the Qt5 GUI")
   endif(Qt5_FOUND)
 
 
@@ -437,9 +480,9 @@ elseif(TEXMACS_GUI STREQUAL "Qt")
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
     set(QTPIPES 1)
-    message(STATUS "Enabling experimental  Qt4 port")
+    message(STATUS "Enabling Qt4 GUI")
   else(QT4_FOUND)
-    message(ERROR "Qt4 is required to compile the Qt4 port")
+    message(ERROR "Qt4 is required to compile the Qt4 GUI")
   endif(QT4_FOUND)
   
 
@@ -455,7 +498,7 @@ elseif(TEXMACS_GUI STREQUAL "Aqua")
     set(CONFIG_GUI "COCOA")
     set(CONFIG_COCOA "Cocoa")
 
-    message(STATUS "Enabling experimental Cocoa port")
+    message(STATUS "Enabling Cocoa GUI")
 
   else (APPLE)
   
@@ -471,7 +514,7 @@ else(TEXMACS_GUI STREQUAL "Qt")
   set(CONFIG_X11 "X11 Widkit Ghostscript")
   set(CONFIG_GUI "X11")
   
-  message(STATUS "Enabling standard X11 interface")
+  message(STATUS "Enabling X11 GUI interface")
 
 endif(TEXMACS_GUI STREQUAL "Qt5")
 
@@ -500,7 +543,7 @@ set(DEBUG_ASSERT 1)
 # which is right, since build-configuration time isn't really when to
 # look for it anyway.
 #find_program(GS_EXE gs gswin32c PATHS ENV PATH)
-#message(STATUS "GS_EXE is ${GS_EXE}")
+#message(STATUS "  GS_EXE is ${GS_EXE}")
 
 set(USE_GS 1)
 # These next two are unused by any C++ or Scheme code:
@@ -514,7 +557,9 @@ set(USE_STACK_TRACE 1)
 
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
+# see: src/System/Misc/sys_utils.cpp:set_env()
 set(CONFIG_STD_SETENV "#define STD_SETENV")
+
 set(tm_orig ${TEXMACS_SOURCE_DIR})
 set(CONFIG_HOST_OS "linux-gnu") # TODO: should not be hard-coded
 set(CONFIG_HOST_VENDOR "pc") # TODO: should not be hard-coded
@@ -584,7 +629,12 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### --------------------------------------------------------------------
 ### Installation
 ### --------------------------------------------------------------------
+
+include(GNUInstallDirs)
+
 ### bin/
+
+
 install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs
               ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps
               misc/scripts/tm_gs 
@@ -619,18 +669,25 @@ install(FILES TeXmacs/misc/pixmaps/TeXmacs.xpm DESTINATION share/pixmaps)
 set(TOOLS "texmacs" "fig2ps")
 set(MAN_SECTION "1")
 foreach(TOOL ${TOOLS})
-  set(TOOL_MANFILE ${CMAKE_CURRENT_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION})
-  set(TOOL_MANFILE_GZ ${CMAKE_CURRENT_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz)
+  set(TOOL_MANFILE "${TEXMACS_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION}")
+  set(TOOL_MANFILE_GZ "${TEXMACS_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz")
   add_custom_command(
-    OUTPUT ${TOOL_MANFILE_GZ}
-    COMMAND gzip -c ${TOOL_MANFILE} > ${TOOL_MANFILE_GZ}
-    MAIN_DEPENDENCY ${TOOL_MANFILE}
+    OUTPUT "${TOOL_MANFILE_GZ}"
+    COMMAND gzip -c "${TOOL_MANFILE}" > "${TOOL_MANFILE_GZ}"
+    MAIN_DEPENDENCY "${TOOL_MANFILE}"
     COMMENT "Building ${TOOL} man page"
     VERBATIM
   )
-  add_custom_target(${TOOL}.${MAN_SECTION} ALL DEPENDS ${TOOL_MANFILE_GZ})
-  install(FILES ${TOOL_MANFILE_GZ} DESTINATION share/man/man${MAN_SECTION})
+  add_custom_target("${TOOL}.${MAN_SECTION}" ALL DEPENDS "${TOOL_MANFILE_GZ}")
+  install(FILES "${TOOL_MANFILE_GZ}" DESTINATION "share/man/man${MAN_SECTION}")
 endforeach(TOOL)
 
-SET(RESULT_FILE CMakeSystemInformation.txt)
-include(SystemInformation)
+
+### Last so everything is defined when it happens.
+option(SAVE_SYSTEM_INFORMATION
+  "Save cmake System Information to CMakeSystemInformation.txt"
+  ON)
+if(${SAVE_SYSTEM_INFORMATION})
+  set(RESULT_FILE CMakeSystemInformation.txt)
+  include(SystemInformation)
+endif(${SAVE_SYSTEM_INFORMATION})

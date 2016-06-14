@@ -1,4 +1,4 @@
-texmacs (2:@DEVEL_VERSION@-@DEVEL_RELEASE@@SVNREV@) unstable; urgency=low
+texmacs (2:@DEVEL_VERSION@-@DEVEL_RELEASE@@PKGREV@) unstable; urgency=low
 
   * TeXmacs Debian Package
 
