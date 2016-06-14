@@ -141,7 +141,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: recode for other guile versions
-;; (define-public import-from use-modules)
+(define-public import-from use-modules)
 
 ;; (if (guile-a?)
 ;;     (begin
