@@ -7,6 +7,12 @@
 # I have multipe guile versions installed and so must do this
 # prior to building right now to get a working build.
 #
+
+if ! echo $PATH | grep -q ccache; then
+    PATH=/usr/lib/ccache:$PATH
+    export PATH
+fi
+
 export GUILE_CFLAGS="`pkg-config --static --cflags guile-1.8`"
 export GUILE_LDFLAGS="`pkg-config --static --libs guile-1.8`"
 export GUILE_DATA_PATH="`pkg-config --variable=datadir guile-1.8`"
