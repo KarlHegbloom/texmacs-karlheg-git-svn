@@ -142,7 +142,7 @@ SCM
 eval_scheme_file (string file) {
   //static int cumul= 0;
   //timer tm;
-  if (DEBUG_STD) debug_std << "TeXmacs] Evaluating " << file << "...\n";
+  if (DEBUG_STD) debug_std << "Evaluating " << file << "...\n";
   c_string _file (file);
   SCM result= TeXmacs_eval_file (_file);
   //int extra= tm->watch (); cumul += extra;
@@ -152,7 +152,7 @@ eval_scheme_file (string file) {
 
 SCM
 eval_scheme_file_in_load_path (string file) {
-  if (DEBUG_STD) debug_std << "TeXmacs] Evaluating in load-path " << file << "...\n";
+  if (DEBUG_STD) debug_std << "Evaluating in load-path " << file << "...\n";
   c_string _file (file);
   SCM result = TeXmacs_eval_file_in_load_path (_file);
   return result;
@@ -571,15 +571,15 @@ initialize_scheme () {
     "(define (object->string obj)\n"
     "  (call-with-output-string\n"
     "    (lambda (port) (write obj port))))\n"
-    "\n";
+    "(define object-stack '(()))\n";
     // "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
-    //"(define object-stack '(()))"
+    //""
     
     scm_c_eval_string (init_prg);
     initialize_smobs ();
     scm_c_define_module("texmacs-glue", initialize_glue, NULL);
     scm_c_define_module("texmacs-core", initialize_core_module, NULL);
-    scm_c_use_module("texmacs-core");
+    scm_c_use_module("texmacs-glue");
     object_stack= scm_lookup_string ("object-stack");
     
     // uncomment to have a guile repl available at startup	
