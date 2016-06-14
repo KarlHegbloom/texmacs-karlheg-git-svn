@@ -5,9 +5,10 @@
 GUILE_AUTO_COMPILE=fresh
 export GUILE_AUTO_COMPILE
 
-# update documentation of glue 
+# update documentation of glue
 ./build-auto-doc
 
+# This depends on "update-alternatives" having the correct version set!
 if test $# = 2; then
   guile -l build-glue.scm -l $1 -c "(quit)" 2>/dev/null | cat > $2
 else
