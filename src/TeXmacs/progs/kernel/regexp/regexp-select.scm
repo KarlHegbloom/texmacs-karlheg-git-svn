@@ -266,6 +266,7 @@
     ;; (display* "sols= " sols "\n")
     (map cadr sols)))
 
+;; TODO: sadhen: we should find a common way to handle conditional defininition
 ;; (if (os-mingw?) ;; mingw guile does not define select
 ;;     (with-module texmacs-user
 ;;       (define-public (select . args) (apply tm-select args)))
