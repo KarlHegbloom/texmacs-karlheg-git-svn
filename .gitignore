@@ -31,3 +31,5 @@ src/.ninja_log
 src/rules.ninja
 src/build.ninja
 src/CMakeSystemInformation.txt
+src/obj-*/
+src/AllMacros.txt
