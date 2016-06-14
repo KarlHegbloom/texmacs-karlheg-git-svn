@@ -18,6 +18,8 @@
       (else
        (debug-set! stack 1000000)))
 
+(display "TeXmacs] starting\n")
+
 (define boot-start (texmacs-time))
 (define remote-client-list (list))
 
@@ -29,7 +31,7 @@
 
 (define (%new-read-hook sym) (noop)) ; for autocompletion
 
-(define-public macro-keywords '(define-macro define-public-macro 
+(define-public macro-keywords '(define-macro define-public-macro
                                 tm-define-macro))
 (define-public def-keywords
   `(define-public provide-public
@@ -92,22 +94,23 @@
 (if (os-mingw?)
     (load "kernel/boot/boot.scm")
     (load (url-concretize "$TEXMACS_PATH/progs/kernel/boot/boot.scm")))
-(inherit-modules (kernel boot compat) (kernel boot abbrevs)
+(display "before use modules\n")
+(use-modules (kernel boot compat) (kernel boot abbrevs)
                  (kernel boot debug) (kernel boot srfi)
                  (kernel boot ahash-table) (kernel boot prologue))
-(inherit-modules (kernel library base) (kernel library list)
+(use-modules (kernel library base) (kernel library list)
                  (kernel library tree) (kernel library content)
                  (kernel library patch))
-(inherit-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
-(inherit-modules (kernel logic logic-rules) (kernel logic logic-query)
+(use-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
+(use-modules (kernel logic logic-rules) (kernel logic logic-query)
                  (kernel logic logic-data))
-(inherit-modules (kernel texmacs tm-define)
+(use-modules (kernel texmacs tm-define)
                  (kernel texmacs tm-preferences) (kernel texmacs tm-modes)
                  (kernel texmacs tm-plugins) (kernel texmacs tm-secure)
                  (kernel texmacs tm-convert) (kernel texmacs tm-dialogue)
                  (kernel texmacs tm-language) (kernel texmacs tm-file-system)
                  (kernel texmacs tm-states))
-(inherit-modules (kernel gui gui-markup)
+(use-modules (kernel gui gui-markup)
                  (kernel gui menu-define) (kernel gui menu-widget)
                  (kernel gui kbd-define) (kernel gui kbd-handlers)
                  (kernel gui menu-test)
