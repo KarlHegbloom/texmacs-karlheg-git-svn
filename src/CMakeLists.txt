@@ -26,13 +26,115 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 ### Project name 
 ### --------------------------------------------------------------------
 
-PROJECT(TEXMACS CXX C) # check for C/C++ compiler
+project(TEXMACS CXX C) # check for C/C++ compiler
 
-SET(PACKAGE TeXmacs)
-SET(DEVEL_VERSION "1.99.4")
-SET(DEVEL_RELEASE "1")
-SET(STABLE_VERSION "1.99.4")
-SET(STABLE_RELEASE "1")
+set(PACKAGE TeXmacs)
+set(DEVEL_VERSION "1.99.4")
+set(DEVEL_RELEASE "1")
+set(STABLE_VERSION "1.99.4")
+set(STABLE_RELEASE "1")
+
+# Todo: This needs to come from environment or as an option.
+set(PKG_MAINTAINER "Karl M. Hegbloom <karl.hegbloom@gmail.com>")
+
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR is: ${CMAKE_CURRENT_SOURCE_DIR}")
+
+
+### Set GITDIR. Not set if not there.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
+    NOT IS_SYMLINK "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
+    NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+  file(READ "${CMAKE_CURRENT_SOURCE_DIR}/.git" GITDIR)
+  string(STRIP "${GITDIR}" GITDIR)
+
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../.git" AND
+    NOT IS_SYMLINK "${CMAKE_CURRENT_SOURCE_DIR}/../.git" AND
+    NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../.git")
+  file(READ "${CMAKE_CURRENT_SOURCE_DIR}/.git" GITDIR)
+  string(STRIP "${GITDIR}" GITDIR)
+
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+  set(GITDIR "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../.git")
+  set(GITDIR "${CMAKE_CURRENT_SOURCE_DIR}/../.git")
+
+endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
+  NOT IS_SYMLINK "${CMAKE_CURRENT_SOURCE_DIR}/.git" AND
+  NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+
+
+if(NOT "${GITDIR}" STREQUAL "")
+  message(STATUS "GITDIR is: ${GITDIR}")
+endif(NOT "${GITDIR}" STREQUAL "")
+
+
+### Can svn work via an indirect repo directory like git can?
+if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
+  message(STATUS "This is a svn checkout.")
+  execute_process(COMMAND svnversion -n .
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+elseif(NOT "${GITDIR}" STREQUAL "" AND IS_DIRECTORY "${GITDIR}/svn")
+  message(STATUS "This is a git svn clone.")
+  ## Do not use `git svn info` for this because it provides incorrect results.
+  ## Instead, parse the `git rev-list` for the information that git svn writes
+  ## into the commit log during `git svn rebase` on the svn-trunk branch,
+  ## which is then merged into the present branch.
+  ## Requires sed.
+  execute_process(COMMAND git rev-list --max-count=100 --pretty=medium HEAD@{0}
+    COMMAND sed -rne "/git-svn-id:/ {s,.*://.*@([^ ]+).*,\\1,p ;/./ q 0}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
+
+if("${SVNREV}" STREQUAL "" OR
+    "${SVNREV}" STREQUAL "exported" OR
+    "${SVNREV}" STREQUAL "Unversioned directory")
+  ## The above failed, or this is an exported source distribution.
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV")
+    message(STATUS "Setting SVNREV from ${CMAKE_CURRENT_SOURCE_DIR}/SVNREV")
+    set(SVNREV "")
+    file(READ "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV" SVNREV)
+    string(STRIP "${SVNREV}" SVNREV)
+  endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV")
+endif("${SVNREV}" STREQUAL "" OR
+  "${SVNREV}" STREQUAL "exported" OR
+  "${SVNREV}" STREQUAL "Unversioned directory")
+
+if(NOT "${SVNREV}" STREQUAL "")
+  file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/SVNREV" "${SVNREV}")
+  message(STATUS "SVNREV is: ${SVNREV}")
+  set(PKGREV -svn-${SVNREV})
+endif(NOT "${SVNREV}" STREQUAL "")
+
+if(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
+  message(STATUS "Getting git commit count and head treeish for PKGREV")
+  ## We use the commit count to get monotonically increasing version numbers.
+  execute_process(COMMAND git log --oneline COMMAND wc -l
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT_VARIABLE GITCOMMITCOUNT ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND git log -n 1 --oneline COMMAND cut -f1 -d\ #
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT_VARIABLE GITSHA ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  string(APPEND PKGREV "-git-${GITCOMMITCOUNT}-${GITSHA}")
+endif(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
+
+message(STATUS "PKGREV is: ${PKGREV}")
+
+# The string(TIMESTAMP command lacks formatting directives required to form
+# a Debian Changelog signature line.
+
+execute_process(COMMAND date "+%a, %d %b %Y %H:%M:%S %z"
+  OUTPUT_VARIABLE PKG_DATE ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+if("${PKG_DATE}" STREQUAL "")
+  set(PKG_DATE "Tue, 14 Jun 2016 21:21:21 -0600")
+endif("${PKG_DATE}" STREQUAL "")
+
+
+message(STATUS " -- ${PKG_MAINTAINER}  ${PKG_DATE}")
+
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
 
@@ -48,42 +150,7 @@ include(FindPkgConfig)
 include(CheckCSourceCompiles)
 
 
-# Ok, I'm learning. See the find_package(Guile REQUIRED) below.
-# include(FindGuile)
 
-# ? include(FindDoxygen)
-# ? include(FindSubversion)
-# ? include(FindGit)
-# ? include(FindUnixCommands)
-# ? include(FindCygwin)
-# ? include(ECMMarkNonGuiExecutable OPTIONAL)
-### include(FindX11)
-# ? include(FindX11_XCB)
-# ? include(FindXCB)
-# ? include(FindQt4)
-# ? include(FindKDE4)
-# ? include(ECMQueryQmake) # QT5
-# ? include(FindThreads) # Someday...
-###include(FindFreetype)
-###include(FindCairo)
-# ? include(FindImageMagick)
-# ? include(FindJPEG)
-# ? include(FindPNG)
-# ? include(FindTIFF)
-# ? include(FindLATEX)
-# ? include(FindASPELL)
-# ? include(FindGnuplot)
-# ? include(FindMatlab)
-# ? include(FindPythonInterp)
-# ? include(FindPythonLibs)
-# ? include(FindBackTrace)
-# ? include(FindWget)
-# ? include(FindCURL)
-# ? include(FindGnuTLS)
-# ? include(FindOpenSSL)
-# ? include(FindCups)
-
-# ? include(TestBigEndian)
 include(GNUInstallDirs)
 # ? include(GetPrerequisites)
 # ? include(InstallRequiredSystemLibraries)
@@ -152,7 +219,9 @@ ENDIF (NOT ${HAVE_DLOPEN})
 ### --------------------------------------------------------------------
 ### Handle different systems case by case
 ### --------------------------------------------------------------------
-
+###
+### I think that there are already cmake variables for these things.
+###
 SET(CONFIG_OS "GNU_LINUX")
 SET(CONFIG_OS_SUFFIX "gnu-linux")
 SET(CONFIG_CXXFLAGS "")
@@ -171,29 +240,31 @@ SET(CONFIG_WORD_LENGTH_INC "3")
 SET(CONFIG_WORD_MASK "0xfffffffc")
 SET(CONFIG_MAX_FAST "260 // WORD_LENGTH more than power of 2")
 
-CHECK_TYPE_SIZE("void*" SIZE_OF_VOIDP)
+check_type_size("void*" SIZE_OF_VOIDP)
+# set(SIZEOF_VOID_P ${SIZE_OF_VOIDP}) # Unused
 
-MESSAGE(STATUS "Check if we are on a 64-bits computer")
-IF (${SIZE_OF_VOIDP} EQUAL 8)
-  SET(CONFIG_WORD_LENGTH "8")
-  SET(CONFIG_WORD_LENGTH_INC "7")
-  SET(CONFIG_WORD_MASK "0xfffffffffffffff8")
-  SET(CONFIG_MAX_FAST "264 // WORD_LENGTH more than power of 2")
-ENDIF (${SIZE_OF_VOIDP} EQUAL 8)
+message(STATUS "Check if we are on a 64-bits computer")
+if (${SIZE_OF_VOIDP} EQUAL 8)
+  # Sets WORD_LENGTH etc., used by ./src/System/Misc/fast_alloc.[hc]pp
+  set(CONFIG_WORD_LENGTH "8")
+  set(CONFIG_WORD_LENGTH_INC "7")
+  set(CONFIG_WORD_MASK "0xfffffffffffffff8")
+  set(CONFIG_MAX_FAST "264 // WORD_LENGTH more than power of 2")
+endif (${SIZE_OF_VOIDP} EQUAL 8)
 
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  MESSAGE(STATUS "final adjustments for an Intel or AMD GNU/Linux host")
+  MESSAGE(STATUS "Final adjustments for an Intel or AMD GNU/Linux host")
   SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-  MESSAGE(STATUS "final adjustments for an Intel or AMD GNU/BSD host")
+  MESSAGE(STATUS "Final adjustments for an Intel or AMD GNU/BSD host")
   SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
-  MESSAGE(STATUS "final adjustments for an Intel or AMS Solaris host")
+  MESSAGE(STATUS "Final adjustments for an Intel or AMS Solaris host")
   SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
   SET(CONFIG_CXXOPTIMIZE "-O3")
   SET(CONFIG_BPATH "-Wl,-R,")
@@ -201,7 +272,7 @@ IF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
-  MESSAGE(STATUS "final adjustments for cygwin host")
+  MESSAGE(STATUS "Final adjustments for cygwin host")
   SET(CONFIG_OS "CYGWIN")
   SET(CONFIG_BFLAGS "-Wl,-stack,8388608")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
@@ -209,6 +280,8 @@ ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
 ### --------------------------------------------------------------------
 ### Package Data
 ### --------------------------------------------------------------------
+###
+### ? Shouldn't these be strings?
 
 set(PACKAGE_BUGREPORT 1)
 set(PACKAGE_NAME 1)
@@ -342,10 +415,12 @@ if(TEXMACS_GUI STREQUAL "Qt5")
     set(NO_FAST_ALLOC 1)
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
+    set(QTPIPES 1)
     message(STATUS "Enabling experimental  Qt5 port")
   else(Qt5_FOUND)
     message(ERROR "Qt5 is required to compile the Qt5 port")
   endif(Qt5_FOUND)
+
 
 elseif(TEXMACS_GUI STREQUAL "Qt")
 
@@ -361,11 +436,13 @@ elseif(TEXMACS_GUI STREQUAL "Qt")
     set(NO_FAST_ALLOC 1)
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
+    set(QTPIPES 1)
     message(STATUS "Enabling experimental  Qt4 port")
   else(QT4_FOUND)
     message(ERROR "Qt4 is required to compile the Qt4 port")
   endif(QT4_FOUND)
   
+
 elseif(TEXMACS_GUI STREQUAL "Aqua")
 
   if (APPLE)
@@ -386,6 +463,7 @@ elseif(TEXMACS_GUI STREQUAL "Aqua")
     
   endif (APPLE)
 
+
 else(TEXMACS_GUI STREQUAL "Qt")
 
   find_package(X11)
@@ -393,10 +471,11 @@ else(TEXMACS_GUI STREQUAL "Qt")
   set(CONFIG_X11 "X11 Widkit Ghostscript")
   set(CONFIG_GUI "X11")
   
-
   message(STATUS "Enabling standard X11 interface")
 
 endif(TEXMACS_GUI STREQUAL "Qt5")
+
+
 
 ### --------------------------------------------------------------------
 ### Debugging options
@@ -416,16 +495,23 @@ endif(TEXMACS_GUI STREQUAL "Qt5")
 ### Generate configure headers
 ### --------------------------------------------------------------------
 set(DEBUG_ASSERT 1)
+
+# GS_EXE is not really used by the C++ code, which looks in the PATH
+# which is right, since build-configuration time isn't really when to
+# look for it anyway.
+#find_program(GS_EXE gs gswin32c PATHS ENV PATH)
+#message(STATUS "GS_EXE is ${GS_EXE}")
+
 set(USE_GS 1)
-set(GS_EXE /usr/bin/gs)
-set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:)
-set(GS_LIB ../share/ghostscript/9.06/lib:)
-#set(GUILE_C 1)
+# These next two are unused by any C++ or Scheme code:
+# set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:) # Unused
+# set(GS_LIB ../share/ghostscript/9.06/lib:) # Unused
+
 set(PDF_RENDERER 1)
-set(QTPIPES 1)
-set(SIZEOF_VOID_P 8)
+
 set(STDC_HEADERS 1)
 set(USE_STACK_TRACE 1)
+
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
 set(CONFIG_STD_SETENV "#define STD_SETENV")
@@ -451,6 +537,14 @@ configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs
 configure_file(misc/scripts/fig2ps.in ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps @ONLY)
 
 configure_file(misc/man/texmacs.1.in ${TEXMACS_SOURCE_DIR}/misc/man/texmacs.1 @ONLY)
+
+file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/control)
+configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/control.in
+  ${TEXMACS_SOURCE_DIR}/packages/debian/control @ONLY)
+file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/changelog)
+configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/changelog.in
+  ${TEXMACS_SOURCE_DIR}/packages/debian/changelog @ONLY)
+
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff

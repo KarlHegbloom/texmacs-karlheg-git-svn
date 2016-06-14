@@ -9,14 +9,18 @@
 /* Enable experimental style rewriting code */
 #cmakedefine EXPERIMENTAL 1
 
+
+/* Whether to use gs or not */
+#cmakedefine USE_GS 1
+
 /* gs path relative to TEXMACS_PATH */
-#cmakedefine GS_EXE "@GS_EXE@"
+#cmakedefine XXXGS_EXE "@GS_EXE@"
 
 /* gs fonts */
-#cmakedefine GS_FONTS "@GS_FONTS@"
+#cmakedefine XXXGS_FONTS "@GS_FONTS@"
 
 /* gs lib */
-#cmakedefine GS_LIB "@GS_LIB@"
+#cmakedefine XXXGS_LIB "@GS_LIB@"
 
 
 /* Guile version */
