@@ -403,7 +403,7 @@ mark_blackbox (SCM blackbox_smob) {
   return SCM_BOOL_F;
 }
 
-static scm_sizet
+static SCM_SIZET
 free_blackbox (SCM blackbox_smob) {
   blackbox *ptr = (blackbox *) SCM_CDR (blackbox_smob);
   tm_delete (ptr);
@@ -510,7 +510,4 @@ initialize_scheme () {
     // uncomment to have a guile repl available at startup	
     //	gh_repl(guile_argc, guile_argv);
     //scm_shell (guile_argc, guile_argv);
-  
-  
 }
-
