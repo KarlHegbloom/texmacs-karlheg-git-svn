@@ -10,8 +10,7 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(display "TeXmacs] starting\n")
+(use-modules (texmacs-core))
 (define boot-start (texmacs-time))
 (define remote-client-list (list))
 
