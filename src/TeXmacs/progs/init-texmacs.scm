@@ -20,6 +20,8 @@
 
 (display "TeXmacs] starting\n")
 
+(use-modules (texmacs-core))
+
 (define boot-start (texmacs-time))
 (define remote-client-list (list))
 
