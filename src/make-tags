@@ -1,18 +1,45 @@
 #!/bin/zsh
-etags --regex=@etags-regexps \
-      TeXmacs/**/*.scm \
-      src/**/*.hpp \
-      src/**/*.cpp \
-      plugins/**/*.scm \
-      plugins/**/*.cpp \
-      plugins/**/*.h \
-      plugins/**/*.c \
-      /usr/share/guile/1.8/**/*.scm \
-      /usr/share/guile/1.8/**/*.ss \
-      /usr/include/libguile.h \
-      /usr/include/libguile/**/*.h \
-      ~/.TeXmacs/progs/**/*.scm \
-      $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+
+
+if [ -f /usr/include/libguile.h ]; then
+    etags --regex=@etags-regexps \
+          TeXmacs/**/*.scm \
+          src/**/*.hpp \
+          src/**/*.cpp \
+          plugins/**/*.scm \
+          plugins/**/*.cpp \
+          plugins/**/*.h \
+          plugins/**/*.c \
+          /usr/share/guile/1.8/**/*.scm \
+          /usr/share/guile/1.8/**/*.ss \
+          /usr/include/libguile.h \
+          /usr/include/libguile/**/*.h \
+          ~/.TeXmacs/progs/**/*.scm \
+          $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+else
+    if dpkg --status guile-2.0-dev >/dev/null 2>&1; then
+        ver=2.0
+    else
+        ver=2.2
+    fi
+    etags --regex=@etags-regexps \
+          TeXmacs/**/*.scm \
+          src/**/*.hpp \
+          src/**/*.cpp \
+          plugins/**/*.scm \
+          plugins/**/*.cpp \
+          plugins/**/*.h \
+          plugins/**/*.c \
+          /usr/share/guile/${ver}/**/*.scm \
+          /usr/share/guile/${ver}/**/*.ss \
+          /usr/share/guile/site/**/*.scm \
+          /usr/include/guile/${ver}/libguile.h \
+          /usr/include/guile/${ver}/libguile/**/*.h \
+          ~/.TeXmacs/progs/**/*.scm \
+          $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+fi
+
 
 ebrowse src/**/*.hpp \
         src/**/*.cpp
+
