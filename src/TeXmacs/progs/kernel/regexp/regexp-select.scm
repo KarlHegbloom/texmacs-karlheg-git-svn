@@ -16,7 +16,9 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel regexp regexp-select))
+(define-module (kernel regexp regexp-select)
+  :use-module (texmacs-core))
+(use-modules (kernel boot ahash-table))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Intersections of matches
@@ -264,16 +266,20 @@
     ;; (display* "sols= " sols "\n")
     (map cadr sols)))
 
-(if (os-mingw?) ;; mingw guile does not define select
-    (with-module texmacs-user
-      (define-public (select . args) (apply tm-select args)))
-    (with-module texmacs-user
-      (begin (define-public guile-select select)
+;; TODO: sadhen: we should find a common way to handle conditional defininition
+;; (if (os-mingw?) ;; mingw guile does not define select
+;;     (with-module texmacs-user
+;;       (define-public (select . args) (apply tm-select args)))
+;;     )
+(with-module texmacs-user
+      (begin (define-public guile-select (if (os-mingw?) #f select))
 	     (define-public (select . args)
-	       (import-from (kernel regexp regexp-select))
-	       (if (= (length args) 2)
-		   (apply tm-select args)
-		   (apply guile-select args))))))
+	       (use-modules (kernel regexp regexp-select))
+               (if (os-mingw?)
+                   (apply tm-select args)
+                   (if (= (length args) 2)
+                       (apply tm-select args)
+                       (apply guile-select args))))))
 
 (define-public (tm-ref t . l)
   (and (tm? t)

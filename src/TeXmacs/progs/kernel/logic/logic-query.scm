@@ -11,8 +11,11 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel logic logic-query)
-  (:use (kernel logic logic-bind) (kernel logic logic-unify) (kernel logic logic-rules)))
+(define-module (kernel logic logic-query)
+  :use-module (texmacs-core))
+(use-modules (kernel logic logic-bind)
+             (kernel logic logic-unify)
+             (kernel logic logic-rules))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructing closures

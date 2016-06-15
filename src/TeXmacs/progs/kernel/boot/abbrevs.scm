@@ -11,7 +11,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel boot abbrevs))
+(define-module (kernel boot abbrevs)
+  :use-module (texmacs-core))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Common notations
@@ -67,13 +68,11 @@
 (define-public (number->keyword x)
   (symbol->keyword (string->symbol (string-append "%" (number->string x)))))
 
-(if (guile-c?)
-    (define-public (save-object file value)
+(define-public (save-object file value)
+  (if (guile-c?)
       (pretty-print value (open-file (url-materialize file "") OPEN_WRITE))
-      (flush-all-ports))
-    (define-public (save-object file value)
-      (write value (open-file (url-materialize file "") OPEN_WRITE))
-      (flush-all-ports)))
+      (write value (open-file (url-materialize file "") OPEN_WRITE)))
+  (flush-all-ports))
 
 (define-public (load-object file)
   (let ((r (read (open-file (url-materialize file "r") OPEN_READ))))

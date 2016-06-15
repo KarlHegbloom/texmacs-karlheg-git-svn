@@ -405,6 +405,7 @@ find_package(Iconv)
 
 option(LINKED_FREETYPE 1)
 
+# find_package(Freetype REQUIRED)
 find_package(Freetype)
 if (${FREETYPE_FOUND})
   set(USE_FREETYPE 1)

@@ -11,7 +11,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel boot compat))
+(define-module (kernel boot compat)
+  :use-module (texmacs-core))
 
 (define cout-port
   (make-soft-port
@@ -46,6 +47,9 @@
   (noop))
 
 ;;; certain Guile versions do not define 'filter'
-(if (not (defined? 'filter))
-    (define-public (filter pred? l)
-      (apply append (map (lambda (x) (if (pred? x) (list x) (list))) l))))
+(cond-expand
+ (guile-2 (noop))
+ (else
+   (if (not (defined? 'filter))
+       (define-public (filter pred? l)
+         (apply append (map (lambda (x) (if (pred? x) (list x) (list))) l))))))
