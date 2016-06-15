@@ -11,7 +11,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-define))
+(define-module (kernel texmacs tm-define)
+  :use-module (texmacs-core))
+(use-modules (kernel boot abbrevs)
+             (kernel boot ahash-table)
+             (kernel boot srfi)
+             (kernel boot debug)
+             (kernel library base)
+             (kernel library list))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Contextual overloading
@@ -152,13 +159,15 @@
 (define (property-rewrite l)
   `(property-set! ,@l (list ,@cur-conds)))
 
-(define ((define-property which) opt decl)
-  (set! cur-props (cons `(',(ca*adr decl) ,which ',opt) cur-props))
-  decl)
+(define (define-property which)
+  (lambda (opt decl)
+    (set! cur-props (cons `(',(ca*adr decl) ,which ',opt) cur-props))
+    decl))
 
-(define ((define-property* which) opt decl)
-  (set! cur-props (cons `(',(ca*adr decl) ,which (list ,@opt)) cur-props))
-  decl)
+(define (define-property* which)
+  (lambda (opt decl)
+    (set! cur-props (cons `(',(ca*adr decl) ,which (list ,@opt)) cur-props))
+    decl))
 
 (define (compute-arguments decl)
   (cond ((pair? (cadr decl)) (cdadr decl))
