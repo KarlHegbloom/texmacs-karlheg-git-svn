@@ -429,6 +429,7 @@ find_package(Imlib2)
 ###
 find_package(Guile REQUIRED)
 
+set(SCM_SIZET scm_sizet)
 if(Guile_VERSION_STRING VERSION_LESS 1.6)
   set(CONFIG_GUILE_SERIAL "A")
   set(GUILE_A 1)
@@ -438,11 +439,15 @@ elseif(Guile_VERSION_STRING VERSION_LESS 1.8)
 elseif(Guile_VERSION_STRING VERSION_LESS 2.0)
   set(CONFIG_GUILE_SERIAL "C")
   set(GUILE_C 1)
-else(Guile_VERSION_STRING VERSION_LESS 2.0)
+elseif(Guile_VERSION_STRING VERSION_LESS 3.0)
   set(CONFIG_GUILE_SERIAL "D")
   set(GUILE_D 1)
+  set(SCM_SIZET size_t)
+else(Guile_VERSION_STRING VERSION_LESS 1.6)
+  message(ERROR "Not Guile serial A,B,C or D???")
 endif(Guile_VERSION_STRING VERSION_LESS 1.6)
 
+string(APPEND PKGREV "-guile-" ${Guile_VERSION_STRING})
 
 set(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
 set(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
@@ -625,6 +630,7 @@ set(PDF_RENDERER 1)
 set(STDC_HEADERS 1)
 set(USE_STACK_TRACE 1)
 
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_SOURCE_DIR}/src/System/config.h)
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
 # see: src/System/Misc/sys_utils.cpp:set_env()

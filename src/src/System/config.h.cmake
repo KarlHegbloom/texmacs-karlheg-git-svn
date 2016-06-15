@@ -37,6 +37,7 @@
 
 /* Guile version */
 #cmakedefine GUILE_D 1
+#cmakedefine SCM_SIZET @SCM_SIZET@
 
 
 /* Define to 1 if the system has the type `FILE'. */
