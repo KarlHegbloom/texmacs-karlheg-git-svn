@@ -9,11 +9,28 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE := 1
 
+BUILD_DIR := obj-$(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+CMAKE_OPTS :=					\
+  -DCMAKE_INSTALL_PREFIX=/usr			\
+  -DCMAKE_VERBOSE_MAKEFILE=ON			\
+  -DCMAKE_INSTALL_SYSCONFDIR=/etc		\
+  -DCMAKE_INSTALL_LOCALSTATEDIR=/var		\
+  -DTEXMACS_GUI=Qt5				\
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo
+
 %:
-	dh --parallel $@ 
+	dh --parallel --buildsystem=cmake $@
+
+
+override_dh_update_autotools_config:
+	:
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-debug='-O2 -ggdb' #--enable-guile2
+	(mkdir ${BUILD_DIR}; \
+	cd ${BUILD_DIR};     \
+	cmake ${CMAKE_OPTS} ..)
+
 
 override_dh_strip:
 	:

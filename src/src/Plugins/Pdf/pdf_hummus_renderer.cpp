@@ -94,6 +94,7 @@ class pdf_hummus_renderer_rep : public renderer_rep {
   //hashmap<string,ObjectIDType> image_resources;
   hashmap<string,pdf_raw_image> pdf_glyphs;
   hashmap<tree,pdf_image> image_pool;
+  array<url> temp_images;
   
   hashmap<int,ObjectIDType> alpha_id;
   hashmap<int,ObjectIDType> page_id;
@@ -358,6 +359,11 @@ pdf_hummus_renderer_rep::~pdf_hummus_renderer_rep () {
   if (status != PDFHummus::eSuccess) {
     convert_error << "Failed in end PDF\n";
   }
+
+  // remove temporary pictures
+  for (int i=0; i<N(temp_images); i++)
+    if (!is_none (temp_images[i]))
+      remove (temp_images[i]);
 }
 
 bool
@@ -509,8 +515,7 @@ pdf_hummus_renderer_rep::set_clipping (SI x1, SI y1, SI x2, SI y2, bool restore)
   outer_round (x1, y1, x2, y2);
   if (restore) {
     // debug_convert << "restore clipping\n";
-    contentContext->Q();
-    if (clip_level > 0) clip_level--;
+    if (clip_level > 0) { contentContext->Q(); clip_level--; }
     cfn= "";
   }
   else {
@@ -571,13 +576,13 @@ pdf_hummus_renderer_rep::select_fill_color (color c) {;
   b= ((b*1000)/255);
   a= ((a*1000)/255);
   rgb c1 = rgb(r,g,b);
-  if (fill_rgb != c1) {
+  //if (fill_rgb != c1) {
     double dr= ((double) r) / 1000.0;
     double dg= ((double) g) / 1000.0;
     double db= ((double) b) / 1000.0;
     contentContext->rg(dr, dg, db); // non-stroking color
     fill_rgb = c1;
-  }
+  //}
   select_alpha(a);
 }
 
@@ -621,7 +626,11 @@ pdf_hummus_renderer_rep::set_pencil (pencil pen2) {
   lw= pen->get_width ();
   select_line_width (lw);
   //}
-
+  if (pen->get_cap () == cap_round)
+    contentContext->J(1); // round cap
+  else
+    contentContext->J(2); // square cap
+  contentContext->j(1); // round join
 }
 
 void
@@ -1176,11 +1185,19 @@ pdf_hummus_renderer_rep::lines (array<SI> x, array<SI> y) {
   end_text ();
   int i, n= N(x);
   if ((N(y) != n) || (n<1)) return;
+  contentContext->q();
+  if (pen->get_cap () == cap_round ||
+      (x[N(x)-1] == x[0] && y[N(y)-1] == y[0]))
+    contentContext->J(1); // round cap
+  else
+    contentContext->J(2); // square cap
+  contentContext->j(1); // round join
   contentContext->m(to_x (x[0]), to_y (y[0]));
   for (i=1; i<n; i++) {
     contentContext->l(to_x (x[i]), to_y (y[i]));
   }
   contentContext->S();
+  contentContext->Q();
 }
 
 void
@@ -1951,7 +1968,8 @@ pdf_hummus_renderer_rep::draw_picture (picture p, SI x, SI y, int alpha) {
   url temp= url_temp (".eps");
   save_string(temp, eps);
   image (temp, w * pixel, h * pixel, x, y,  255);
-  remove(temp);
+  //image (temp, w * 5 * PIXEL, h * 5 * PIXEL, x, y,  255);
+  temp_images << temp;
 }
 
 void
@@ -2271,38 +2289,38 @@ pdf_hummus_renderer_rep::flush_metadata () {
 void
 pdf_hummus_renderer_rep::fetch (SI x1, SI y1, SI x2, SI y2, renderer ren, SI x, SI y) {
   // debug_convert << "fetch\n";
-  /* (void) x1; (void) y1; (void) x2; (void) y2;
-     (void) ren; (void) x; (void) y;*/
+  (void) x1; (void) y1; (void) x2; (void) y2;
+  (void) ren; (void) x; (void) y;
 }
 
 void
 pdf_hummus_renderer_rep::new_shadow (renderer& ren) {
   // debug_convert << "new_shadow\n";
-  // (void) ren;
+  (void) ren;
 }
 
 void
 pdf_hummus_renderer_rep::delete_shadow (renderer& ren) {
   // debug_convert << "delete_shadow\n";
-  // (void) ren;
+  (void) ren;
 }
 
 void
 pdf_hummus_renderer_rep::get_shadow (renderer ren, SI x1, SI y1, SI x2, SI y2) {
   // debug_convert << "get_shadow\n";
-  // (void) ren; (void) x1; (void) y1; (void) x2; (void) y2;
+  (void) ren; (void) x1; (void) y1; (void) x2; (void) y2;
 }
 
 void
 pdf_hummus_renderer_rep::put_shadow (renderer ren, SI x1, SI y1, SI x2, SI y2) {
   // debug_convert << "put_shadow\n";
-  // (void) ren; (void) x1; (void) y1; (void) x2; (void) y2;
+  (void) ren; (void) x1; (void) y1; (void) x2; (void) y2;
 }
 
 void
 pdf_hummus_renderer_rep::apply_shadow (SI x1, SI y1, SI x2, SI y2) {
   // debug_convert << "apply_shadow\n";
-  // (void) x1; (void) y1; (void) x2; (void) y2;
+   (void) x1; (void) y1; (void) x2; (void) y2;
 }
 
 renderer
