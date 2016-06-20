@@ -562,8 +562,8 @@ initialize_scheme () {
   const char* init_prg =
     "(read-set! keywords 'prefix)\n"
     "(read-enable 'positions)\n"
-    "(debug-enable 'debug)\n"
-    ";(debug-enable 'backtrace)\n"
+    ";;;(debug-enable 'debug)\n"
+    ";;;(debug-enable 'backtrace)\n"
     "\n"
     "(define (display-to-string obj)\n"
     "  (call-with-output-string\n"
@@ -571,9 +571,14 @@ initialize_scheme () {
     "(define (object->string obj)\n"
     "  (call-with-output-string\n"
     "    (lambda (port) (write obj port))))\n"
-    "(define object-stack '(()))\n";
+    "(define object-stack '(()))";
     // "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
     //""
+
+  const char* repl_prg =
+    "(cond-expand\n"
+    "  (guile-2\n"
+    "    ((@ (system repl server) run-server))))";
     
     scm_c_eval_string (init_prg);
     initialize_smobs ();
@@ -581,6 +586,8 @@ initialize_scheme () {
     scm_c_define_module("texmacs-core", initialize_core_module, NULL);
     scm_c_use_module("texmacs-glue");
     object_stack= scm_lookup_string ("object-stack");
+
+    scm_c_eval_string (repl_prg);
     
     // uncomment to have a guile repl available at startup	
     //	gh_repl(guile_argc, guile_argv);
