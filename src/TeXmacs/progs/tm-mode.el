@@ -19,7 +19,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq nullary-keywords
-  '(begin cond else
+  '(begin cond cond-expand else
     values define-preferences menu-dynamic conserve-focus
     case-lambda kbd-map kbd-wildcards kbd-commands kbd-symbols
     define-grammar define-regexp-grammar
@@ -69,6 +69,7 @@
 
 (setq unary-definitions
   '(define define-public define-macro define-public-macro
+    defmacro defmacro-public     
     texmacs-module provide-public define-group
     tm-define tm-define-macro lazy-body-macro tm-property request-handler
     tm-menu define-menu tm-widget define-widget tm-generate
