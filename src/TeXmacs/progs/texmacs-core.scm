@@ -1,7 +1,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; MODULE      : texmacs-core.scm
+;; MODULE      : texmacs-core.scm (was kernel/boot/boot.scm)
 ;; DESCRIPTION : some global variables, public macros, on-entry, on-exit and
 ;;               initialization of the TeXmacs module system
 ;; COPYRIGHT   : (C) 1999  Joris van der Hoeven
@@ -58,10 +58,11 @@
 ;;        (use-modules ,@which-list)
 ;;        (re-export ,@l))))
 ;; (export inherit-modules)
+
 (defmacro-public inherit-modules which-list
   (define (module-exports which)
     (let* ((m (resolve-module which))
-	   (m-public (module-ref m '%module-public-interface)))
+	   (m-public (module-public-interface m)))
       (module-map (lambda (sym var) sym) m-public)))
   (let ((l (apply append (map module-exports which-list))))
     `(begin
@@ -72,11 +73,46 @@
 
 (inherit-modules (texmacs-glue))
 
-(define-public (guile-a?) (equal? (scheme-dialect) "guile-a"))
-(define-public (guile-b?) (equal? (scheme-dialect) "guile-b"))
-(define-public (guile-c?) (equal? (scheme-dialect) "guile-c"))
-(define (guile-b-c?) (or (guile-b?) (guile-c?)))
-(if (guile-c?) (use-modules (ice-9 rdelim) (ice-9 pretty-print)))
+;;; cond-expand already has guile, guile-2, and guile-2.2 available to it.
+;;; This gives it also our classification, guile-d.
+(cond-expand
+ (guile-2
+  (eval-when (compile)
+    (cond-expand-provide (resolve-module '(guile)) (list (string->symbol
+                                                          (scheme-dialect))))
+    (define-public (guile-a?) (equal? (scheme-dialect) "guile-a"));; 1.0--1.5
+    (define-public (guile-b?) (equal? (scheme-dialect) "guile-b"));; 1.6,1.7
+    (define-public (guile-c?) (equal? (scheme-dialect) "guile-c"));; 1.8,1.9
+    (define-public (guile-d?) (equal? (scheme-dialect) "guile-d"));; 2.0,2.2
+    (define (guile-b-c?) (or (guile-b?) (guile-c?)))))
+ (guile
+  (cond-expand-provide (resolve-module '(guile)) (list (string->symbol
+                                                        (scheme-dialect))))
+  (define-public (guile-a?) (equal? (scheme-dialect) "guile-a"));; 1.0--1.5
+  (define-public (guile-b?) (equal? (scheme-dialect) "guile-b"));; 1.6,1.7
+  (define-public (guile-c?) (equal? (scheme-dialect) "guile-c"));; 1.8,1.9
+  (define-public (guile-d?) (equal? (scheme-dialect) "guile-d"));; 2.0,2.2
+  (define (guile-b-c?) (or (guile-b?) (guile-c?)))))
+
+;; Debugging: learned that cond-expand-provide must happen in the guile module.
+(cond-expand
+  (guile-a
+   (display "guile-a\n"))
+  (guile-b
+   (display "guile-b\n"))
+  ((or guile-c guile-d)
+   (display "guile-c or guile-d\n")
+   (use-modules (ice-9 rdelim)
+                (ice-9 pretty-print)))
+  (guile-c
+   (display "guile-c\n"))
+  (guile-d
+   (display "guile-d\n"))
+  (else
+   (display "guile\n")
+   (display (scheme-dialect)) (newline)))
+
+
 (define-public texmacs-user (resolve-module '(guile-user)))
 (define-public temp-module (current-module))
 (define-public temp-value #f)
@@ -84,45 +120,54 @@
 ;; (defmacro-public define-public-macro (head . body)
 ;;   `(begin
 ;;      (defmacro-public ,(car head) ,(cdr head) ,@body)))
+
 (cond-expand
  (guile-2 ; guile-2 doesn't allow `define' in expression context
   (define-syntax-rule (define-public-macro (name . args) body ...)
     (begin
       (define-macro (name . args) body ...)
-      (export name))))
- (else
-   (if (guile-a?)
-       (begin
-         (define-macro (define-public-macro head . body)
-           `(define-public ,(car head)
-              ;; FIXME: why can't we use procedure->macro
-              ;; for a non-memoizing variant?
-              (procedure->memoizing-macro
-               (lambda (cmd env)
-                 (apply (lambda ,(cdr head) ,@body) (cdr cmd)))))))
-       (define-macro (define-public-macro head . body)
-         `(begin
-            (define-macro ,(car head)
-              (lambda ,(cdr head) ,@body))
-            (export ,(car head)))))))
-(export define-public-macro)
+      (export name)))
 
-;; (define-public-macro (provide-public head . body)
-;;   (if (or (and (symbol? head) (not (defined? head)))
-;; 	  (and (pair? head) (symbol? (car head)) (not (defined? (car head)))))
-;;       `(define-public ,head ,@body)
-;;       '(noop)))
-(define-syntax provide-public
-  (syntax-rules ()
-    ((_ (name . args) . body)
-     (define-public name
-       (if (defined? 'name)
-           name
-           (lambda args . body))))
-    ((_ sym val)
-     (define-public sym
-       (if (defined? 'sym) sym val)))))
-(export provide-public)
+  (export define-public-macro)
+
+  (define-syntax provide-public
+    (syntax-rules ()
+      ((_ (name . args) . body)
+       (define-public name
+         (if (defined? 'name)
+             name
+             (lambda args . body))))
+      ((_ sym val)
+       (define-public sym
+         (if (defined? 'sym) sym val)))))
+  
+  (export provide-public))
+
+ ;; (guile-a ;; did it have cond-expand? Who cares. Say bye-bye to it. It's obsolete.
+ ;;  (define-macro (define-public-macro head . body)
+ ;;    `(define-public ,(car head)
+ ;;       ;; FIXME: why can't we use procedure->macro
+ ;;       ;; for a non-memoizing variant?
+ ;;       (procedure->memoizing-macro
+ ;;        (lambda (cmd env)
+ ;;          (apply (lambda ,(cdr head) ,@body) (cdr cmd)))))))
+
+ (guile
+  (define-macro (define-public-macro head . body)
+    `(begin
+       (define-macro ,(car head)
+         (lambda ,(cdr head) ,@body))
+       (export ,(car head))))
+  
+  (export define-public-macro)
+  
+  (define-public-macro (provide-public head . body)
+    (if (or (and (symbol? head) (not (defined? head)))
+            (and (pair? head) (symbol? (car head)) (not (defined? (car head)))))
+        `(define-public ,head ,@body)
+        '(noop)))))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; On-entry and on-exit macros
@@ -194,9 +239,14 @@
 ;; Module switching
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; I wonder if temp-module ought to be a fluid? We need to think about
+;;; threads. Perhaps all it requires is a let binding here, rather than a
+;;; global temp-module variable?
 (define-public-macro (with-module module . body)
-  `(begin
-     (set! temp-module (current-module))
-     (set-current-module ,module)
-     ,@body
-     (set-current-module temp-module)))
+  `(save-module-excursion
+    (lambda ()
+      (set! temp-module (current-module))
+      (set-current-module ,module)
+      ,@body
+      (set-current-module temp-module))))
+
