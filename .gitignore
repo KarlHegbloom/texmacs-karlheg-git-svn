@@ -24,3 +24,5 @@ src/texmacs.1.gz
 src/misc/script
 src/texmacs.bin
 texmacs*deb
+src/CMakeSystemInformation.txt
+src/src/Plugins/Qt/moc_*.cpp_parameters
