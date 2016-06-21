@@ -7,12 +7,12 @@ etags --regex=@etags-regexps \
       plugins/**/*.cpp \
       plugins/**/*.h \
       plugins/**/*.c \
-      /usr/share/guile/1.8/**/*.scm \
-      /usr/share/guile/1.8/**/*.ss \
-      /usr/include/libguile.h \
-      /usr/include/libguile/**/*.h \
-      ~/.TeXmacs/progs/**/*.scm \
-      $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+      ~/src/Guile/guile-1.8/**/*.scm \
+      ~/src/Guile/guile-1.8/**/*.ss \
+      ~/src/Guile/guile-1.8/libguile.h \
+      ~/src/Guile/guile-1.8/**/*.h \
+      ~/src/Guile/guile-1.8/**/*.c \
+      ~/.TeXmacs/progs/**/*.scm
 
 ebrowse src/**/*.hpp \
         src/**/*.cpp
