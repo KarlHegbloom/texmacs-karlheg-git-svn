@@ -10,12 +10,13 @@ if [ -f /usr/include/libguile.h ]; then
           plugins/**/*.cpp \
           plugins/**/*.h \
           plugins/**/*.c \
-          /usr/share/guile/1.8/**/*.scm \
-          /usr/share/guile/1.8/**/*.ss \
-          /usr/include/libguile.h \
-          /usr/include/libguile/**/*.h \
-          ~/.TeXmacs/progs/**/*.scm \
-          $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+          ~/src/Guile/guile-1.8/**/*.scm \
+          ~/src/Guile/guile-1.8/**/*.ss \
+          ~/src/Guile/guile-1.8/libguile.h \
+          ~/src/Guile/guile-1.8/**/*.h \
+          ~/src/Guile/guile-1.8/**/*.c \
+          ~/.TeXmacs/progs/**/*.scm
+    $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
 else
     if dpkg --status guile-2.0-dev >/dev/null 2>&1; then
         ver=2.0
@@ -38,7 +39,6 @@ else
           ~/.TeXmacs/progs/**/*.scm \
           $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
 fi
-
 
 ebrowse src/**/*.hpp \
         src/**/*.cpp
