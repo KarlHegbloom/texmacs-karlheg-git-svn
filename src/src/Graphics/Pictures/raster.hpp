@@ -116,6 +116,17 @@ trim_border (raster<C> r, int b) {
   return trim_border (r, b, b, b, b);
 }
 
+template<typename C> raster<C>
+extend_border (raster<C> r, int lb, int bb, int rb, int tb) {
+  return change_extents (r, r->w + lb + rb, r->h + bb + tb,
+                         r->ox + lb, r->oy + bb);
+}
+
+template<typename C> raster<C>
+extend_border (raster<C> r, int b) {
+  return extend_border (r, b, b, b, b);
+}
+
 /******************************************************************************
 * Mappers
 ******************************************************************************/
@@ -213,6 +224,9 @@ operator * (const S& sc, const raster<C>& r) {
 template<typename C, typename S> inline raster<C>
 operator / (const raster<C>& r, const S& sc) {
   return map_scalar<div_op> (r, sc); }
+template<typename C, typename S> inline raster<C>
+apply_alpha (const raster<C>& r1, const raster<S>& r2) {
+  return map<apply_alpha_op> (r1, r2); }
 
 template<typename C> inline raster<C>
 hypot (const raster<C>& r1, const raster<C>& r2) {
@@ -983,5 +997,107 @@ raster<true_color>
 turbulence (raster<true_color> ras, long seed,
             double wavelen_x, double wavelen_y,
             int nNumOctaves, bool bFractalSum);
+
+/******************************************************************************
+* Degrading
+******************************************************************************/
+
+template<typename C> raster<C>
+degrade (raster<C> r, double wlx, double wly, double th, double sh) {
+  th= min (max (th, 1.0e-6), 1.0 - 1.0e-6);
+  double delta= 1.0 / (1.0 + max (10.0 * sh, 0.0));
+  double a1= max (th - delta, 0.0);
+  double a2= min (th + delta, 1.0);
+  raster<double> a= turbulence (r->w, r->h, r->ox, r->oy, 12321,
+                                wlx, wly, 3, true);
+  int n= r->w * r->h;
+  for (int i=0; i<n; i++) {
+    double v= a->a[i];
+    if (v <= a1) a->a[i]= 1.0;
+    else if (v >= a2) a->a[i]= 0.0;
+    else a->a[i]= (a2 - v) / (a2 - a1);
+  }
+  return apply_alpha (r, a);
+}
+
+/******************************************************************************
+* Translations
+******************************************************************************/
+
+template<typename C> raster<C>
+translate (raster<C> r, raster<double> rdx, raster<double> rdy,
+           double rx, double ry) {
+  ASSERT (rdx->w == r->w && rdx->h == r->h, "incompatible dx dimensions");
+  ASSERT (rdy->w == r->w && rdy->h == r->h, "incompatible dy dimensions");
+  int w= r->w, h= r->h;
+  raster<C> ret (w, h, r->ox, r->oy);
+  for (int y=0; y<h; y++)
+    for (int x=0; x<w; x++) {
+      double dx= rx * (rdx->a[y*w+x] - 0.5);
+      double dy= ry * (rdy->a[y*w+x] - 0.5);
+      double idx= floor (dx);
+      double idy= floor (dy);
+      double fdx= dx - idx;
+      double fdy= dy - idy;
+      int xx= x + (int) idx;
+      int yy= y + (int) idy;
+      C v00, v01, v10, v11;
+      if (xx >= 0 && xx+1 < w && yy >= 0 && yy+1 < h) {
+        v00= r->a[yy*w+xx];
+        v10= r->a[yy*w+xx+1];
+        v01= r->a[yy*w+xx+w];
+        v11= r->a[yy*w+xx+w+1];
+      }
+      else {
+        if (xx >= 0 && xx < w && yy >= 0 && yy < h) v00= r->a[yy*w+xx];
+        else clear (v00);
+        if (xx >= -1 && xx+1 < w && yy >= 0 && yy < h) v10= r->a[yy*w+xx+1];
+        else clear (v10);
+        if (xx >= 0 && xx < w && yy >= -1 && yy+1 < h) v10= r->a[yy*w+xx+w];
+        else clear (v01);
+        if (xx >= -1 && xx+1<w && yy >= -1 && yy+1<h) v10= r->a[yy*w+xx+w+1];
+        else clear (v11);
+      }
+      C v0= mix (v00, 1.0-fdx, v01, fdx);
+      C v1= mix (v10, 1.0-fdx, v11, fdx);
+      C v = mix (v0, 1.0-fdy, v1, fdy);
+      ret->a[y*w+x]= v;
+      /*
+      int xx= x + (int) floor (dx + 0.5);
+      int yy= y + (int) floor (dy + 0.5);
+      // FIXME: we might wish to interpolate using the fractional parts
+      if (xx >= 0 && xx < w && yy >= 0 && yy < h)
+        ret->a[y*w+x]= r->a[yy*w+xx];
+      else
+        clear (ret->a[y*w+x]);
+      */
+    }
+  return ret;
+}
+
+template<typename C> raster<C>
+distort (raster<C> r, double wlx, double wly, double rx, double ry) {
+  int Rx= (int) ceil (fabs (rx));
+  int Ry= (int) ceil (fabs (ry));
+  r= extend_border (r, Rx, Ry, Rx, Ry);
+  raster<double> rdx= turbulence (r->w, r->h, r->ox, r->oy, 12345,
+                                  wlx, wly, 3, true);
+  raster<double> rdy= turbulence (r->w, r->h, r->ox, r->oy, 54321,
+                                  wlx, wly, 3, true);
+  return translate (r, rdx, rdy, rx, ry);
+}
+
+template<typename C> raster<C>
+gnaw (raster<C> r, double wlx, double wly, double rx, double ry) {
+  int Rx= (int) ceil (fabs (rx));
+  int Ry= (int) ceil (fabs (ry));
+  r= extend_border (r, Rx, Ry, Rx, Ry);
+  raster<double> rdx= turbulence (r->w, r->h, r->ox, r->oy, 12345,
+                                  wlx, wly, 3, true);
+  raster<double> rdy= turbulence (r->w, r->h, r->ox, r->oy, 54321,
+                                  wlx, wly, 3, true);
+  raster<C> ret= translate (r, rdx, rdy, rx, ry);
+  return apply_alpha (ret, get_alpha (r));
+}
 
 #endif // defined RASTER_H
