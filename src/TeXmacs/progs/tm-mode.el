@@ -154,6 +154,11 @@
 
 ;;; Todo: Use define-derived-mode instead. See scheme.el.
 
+;; (defvar texmacs-font-lock-keywords
+;;   (eval-when-compile
+;;     (list
+;;      (list
+
 (defun texmacs-style ()
   (set-fill-column 79)
   (setq comment-column 40)
@@ -201,35 +206,3 @@
 ;; 	("Macros"
 ;; 	 "^(\\(defmacro\\|define-macro\\|define-syntax\\)\\s-+(?\\(\\sw+\\)" 2))
 ;;   "Imenu generic expression for Scheme mode.  See `imenu-generic-expression'.")
-
-(defvar tm-all-glued-symbols nil)
-
-(defvar glue-symbols nil) ;; avoid elisp error symbol not defined
-(defun texmacs-module (ign)) ;; do nothing
-(defun prog (ign)) ;; do nothing
-(defun all-glued-symbols ()) ;; do nothing
-(defun tm-define (ign str-ls)
-  (setq tm-all-glued-symbols str-ls))
-(load-file "./prog/glue-symbols.scm")
-(fmakunbound 'texmacs-module)
-(fmakunbound 'prog)
-(fmakunbound 'all-glued-symbols)
-(fmakunbound 'tm-define)
-
-
-(defun tm-cscope-find-glued (fn)
-  (interactive (list (completing-read
-                      "TeXmacs glued scheme name: "
-                      tm-all-glued-symbols nil t)))
-  (let ((tmg-fn (concat "tmg_"
-                        (replace-regexp-in-string
-                         "-" "_"
-                         (replace-regexp-in-string
-                          "!$" "S"
-                          (replace-regexp-in-string
-                           "\\?$" "P"
-                           (replace-regexp-in-string
-                            "\\*$" "_dot"
-                            (replace-regexp-in-string
-                             "->" "_2" fn))))))))
-    (cscope-find-global-definition tmg-fn)))
