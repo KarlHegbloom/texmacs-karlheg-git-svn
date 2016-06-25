@@ -539,7 +539,7 @@ if(TEXMACS_GUI STREQUAL "Qt5")
   endif(Qt5_FOUND)
 
 
-elseif(TEXMACS_GUI STREQUAL "Qt")
+elseif(TEXMACS_GUI STREQUAL "Qt4")
 
   find_package(Qt4 4.8.7 COMPONENTS QtCore QtGui REQUIRED)
  
