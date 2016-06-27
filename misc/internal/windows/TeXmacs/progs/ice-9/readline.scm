@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; readline.scm --- support functions for command-line editing
 ;;;;
 ;;;; 	Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.

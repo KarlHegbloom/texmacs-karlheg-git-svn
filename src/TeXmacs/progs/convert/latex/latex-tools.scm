@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -333,9 +334,9 @@
         (set! option (string-append "[" option "]"))
         (set! body (cadr body))))
     (set! body (serialize-latex (latex-expand-def body #f)))
-    (set! body (string-replace body "\n\n" "*/!!/*"))
-    (set! body (string-replace body "\n" " "))
-    (set! body (string-replace body "*/!!/*" "\n\n"))
+    (set! body (string-replace-tm body "\n\n" "*/!!/*"))
+    (set! body (string-replace-tm body "\n" " "))
+    (set! body (string-replace-tm body "*/!!/*" "\n\n"))
     (set! arity (if (= arity 0) ""
                   (string-append "[" (number->string arity) "]")))
     (string-append "\\newcommand{\\" (symbol->string name) "}"
@@ -349,13 +350,13 @@
         (set! option (string-append "[" option "]"))
         (set! body (cadr body))))
     (set! body (serialize-latex (latex-expand-def body #f)))
-    (set! body (string-replace body "\n\n" "*/!!/*"))
-    (set! body (string-replace body "\n  " " "))
-    (set! body (string-replace body "\n" " "))
-    (set! body (string-replace body "   #-#-# " "}{"))
-    (set! body (string-replace body "#-#-# " "}{"))
-    (set! body (string-replace body "#-#-#" "}{"))
-    (set! body (string-replace body "*/!!/*" "\n\n"))
+    (set! body (string-replace-tm body "\n\n" "*/!!/*"))
+    (set! body (string-replace-tm body "\n  " " "))
+    (set! body (string-replace-tm body "\n" " "))
+    (set! body (string-replace-tm body "   #-#-# " "}{"))
+    (set! body (string-replace-tm body "#-#-# " "}{"))
+    (set! body (string-replace-tm body "#-#-#" "}{"))
+    (set! body (string-replace-tm body "*/!!/*" "\n\n"))
     (set! arity (if (= arity 0) ""
                   (string-append "[" (number->string arity) "]")))
     (string-append "\\newenvironment{" (tex-env-name name) "}"

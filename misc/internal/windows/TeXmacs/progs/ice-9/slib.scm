@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; slib.scm --- definitions needed to get SLIB to work with Guile
 ;;;;
 ;;;;  	Copyright (C) 1997, 1998, 2000 Free Software Foundation, Inc.

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("a modifier" "")
 ("a series" "")
 ("abbreviation" "省略表現")

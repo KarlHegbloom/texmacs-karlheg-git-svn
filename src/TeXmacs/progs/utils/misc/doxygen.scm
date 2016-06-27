@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -56,9 +57,9 @@
 
 (define (html->ascii s)
   ; Do a couple of string substitutions
-  (let* ((x (string-replace s "&amp;" "&"))
-	 (x (string-replace x "&lt;"  "<"))
-	 (x (string-replace x "&gt;"  ">")))
+  (let* ((x (string-replace-tm s "&amp;" "&"))
+	 (x (string-replace-tm x "&lt;"  "<"))
+	 (x (string-replace-tm x "&gt;"  ">")))
     x))
 
 (define (relative-path s)

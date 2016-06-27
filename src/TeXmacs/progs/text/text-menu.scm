@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -835,7 +836,7 @@
   (:require (in? l (algorithm-tag-list)))
   (with r (algorithm-root l)
     (with s (upcase-first (tree-name (tree r)))
-      (string-replace s "-" " "))))
+      (string-replace-tm s "-" " "))))
 
 (tm-menu (focus-toggle-menu t)
   (:require (algorithm-context? t))

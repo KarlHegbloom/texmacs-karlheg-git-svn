@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; Mathematical, Greek and Symbolic characters for HTML
 
 ;; Character entity set. Typical invocation:

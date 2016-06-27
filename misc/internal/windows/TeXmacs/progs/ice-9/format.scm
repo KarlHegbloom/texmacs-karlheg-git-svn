@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; "format.scm" Common LISP text output formatter for SLIB
 ;;; Written 1992-1994 by Dirk Lutzebaeck (lutzeb@cs.tu-berlin.de)
 ;;; Assimilated into Guile May 1999

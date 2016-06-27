@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -30,12 +31,12 @@
 	(else (noop))))
 
 (define (escape-xml-string s)
-  (set! s (string-replace s "&"  "&amp;"))
-  (set! s (string-replace s "\"" "&quot;"))
-  (set! s (string-replace s "'"  "&apos;"))
-  (set! s (string-replace s "<"  "&lt;"))
-  (set! s (string-replace s ">"  "&gt;"))
-  (set! s (string-replace s "\xe2\x80\x98"  "`"))
+  (set! s (string-replace-tm s "&"  "&amp;"))
+  (set! s (string-replace-tm s "\"" "&quot;"))
+  (set! s (string-replace-tm s "'"  "&apos;"))
+  (set! s (string-replace-tm s "<"  "&lt;"))
+  (set! s (string-replace-tm s ">"  "&gt;"))
+  (set! s (string-replace-tm s "\xe2\x80\x98"  "`"))
   s)
 
 (define (output-string s)

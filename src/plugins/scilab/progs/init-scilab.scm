@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -38,11 +39,11 @@
   (:secure #t)
   (let* ((t (tree->stree t))
          (s (if (string? t) t ""))
-         (s (string-replace s "\\\\\\\\" "\\"))
-         (s (string-replace s "<gtr>" ">"))
-         (s (string-replace s "<less>" "<"))
+         (s (string-replace-tm s "\\\\\\\\" "\\"))
+         (s (string-replace-tm s "<gtr>" ">"))
+         (s (string-replace-tm s "<less>" "<"))
          (s (convert s "verbatim-snippet" "stm-snippet"))
-         (s (string-replace s "\\\\" "\\")))
+         (s (string-replace-tm s "\\\\" "\\")))
     (stree->tree (string->object s))))
 
 (when (supports-scilab?)

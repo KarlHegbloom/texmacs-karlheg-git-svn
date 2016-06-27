@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -24,10 +25,10 @@
          (i (min m h a))
          (base (substring s 0 i))
          (qry (substring s (min m i) m)))
-    (if (< i m) (string-append base (string-replace qry ":" "%3A")) s)))
+    (if (< i m) (string-append base (string-replace-tm qry ":" "%3A")) s)))
 
 (define (unescape-link-args s)
-  (string-replace s "%3A" ":"))
+  (string-replace-tm s "%3A" ":"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Navigation mode

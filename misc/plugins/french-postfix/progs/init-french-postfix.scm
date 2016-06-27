@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; arch-tag: 2f3ac941-db83-41db-beb2-92476e483697
 
 (define (french-postfix-initialize)

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; r4rs.scm --- definitions needed for libguile to be R4RS compliant
 ;;;; Jim Blandy <jimb@cyclic.com> --- October 1996
 

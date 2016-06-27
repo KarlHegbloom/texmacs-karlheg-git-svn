@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -21,7 +22,7 @@
 (define svn-sep "------------------------------------------------------------------------\n")
 
 (define (dos->unix s)
-  (string-replace s "\r\n" "\n"))
+  (string-replace-tm s "\r\n" "\n"))
 
 (define (remove-empty-strings l)
   (cond ((null? l) l)
@@ -103,7 +104,7 @@
 (tm-define (version-commit name msg)
   (:require (== (version-tool name) "svn"))
   (let* ((name-s (url->string name))
-         (msg-s (string-replace msg "\"" "\\\""))
+         (msg-s (string-replace-tm msg "\"" "\\\""))
          (cmd (string-append "svn commit -m \"" msg-s "\" " name-s))
          (ret (eval-system cmd))
          (l (remove-empty-strings (string-decompose ret "\n"))))

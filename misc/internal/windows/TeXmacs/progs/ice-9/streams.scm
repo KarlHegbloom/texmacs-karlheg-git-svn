@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; streams.scm --- general lazy streams
 ;;;; -*- Scheme -*-
 

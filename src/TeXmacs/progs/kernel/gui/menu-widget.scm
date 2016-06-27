@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -121,15 +122,15 @@
 (define (kbd-find-shortcut what menu-flag?)
   (with r (kbd-find-inv-binding what)
     (when (string-contains? r "accent:")
-      (set! r (string-replace r "accent:deadhat" "^"))
-      (set! r (string-replace r "accent:tilde" "~"))
-      (set! r (string-replace r "accent:acute" "'"))
-      (set! r (string-replace r "accent:grave" "`"))
-      (set! r (string-replace r "accent:umlaut" "\""))
-      (set! r (string-replace r "accent:abovedot" "."))
-      (set! r (string-replace r "accent:breve" "U"))
-      (set! r (string-replace r "accent:invbreve" "A"))
-      (set! r (string-replace r "accent:check" "C")))
+      (set! r (string-replace-tm r "accent:deadhat" "^"))
+      (set! r (string-replace-tm r "accent:tilde" "~"))
+      (set! r (string-replace-tm r "accent:acute" "'"))
+      (set! r (string-replace-tm r "accent:grave" "`"))
+      (set! r (string-replace-tm r "accent:umlaut" "\""))
+      (set! r (string-replace-tm r "accent:abovedot" "."))
+      (set! r (string-replace-tm r "accent:breve" "U"))
+      (set! r (string-replace-tm r "accent:invbreve" "A"))
+      (set! r (string-replace-tm r "accent:check" "C")))
     ;;(when (!= r "")
     ;;  (display* what " -> " r " -> " (kbd-system r menu-flag?) "\n"))
     (kbd-system r menu-flag?)))
@@ -153,7 +154,7 @@
         (else #f)))
 
 (define (recursive-replace t w b)
-  (cond ((string? t) (string-replace t w b))
+  (cond ((string? t) (string-replace-tm t w b))
         ((list? t) (map (cut recursive-replace <> w b) t))
         (else t)))
 

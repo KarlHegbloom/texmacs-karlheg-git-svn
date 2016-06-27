@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; popen emulation, for non-stdio based ports.
 
 (define-module (ice-9 popen))

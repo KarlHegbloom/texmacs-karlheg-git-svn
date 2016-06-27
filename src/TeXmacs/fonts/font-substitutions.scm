@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ((FandolSong sansserif) (FandolHei))
 ((FandolSong typewriter) (FandolFang))
 ((FandolSong italic) (FandolKai))

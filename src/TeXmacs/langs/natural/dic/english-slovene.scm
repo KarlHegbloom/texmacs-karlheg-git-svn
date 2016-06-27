@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("abbreviation" "okraj²ava")
 ("about menu" "o programu")
 ("about" "o programu")

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -20,7 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (tm-define (tex-env-name s)
-  (if (string? s) (string-replace s "-" "") s))
+  (if (string? s) (string-replace-tm s "-" "") s))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interface for unicode output
@@ -51,7 +52,7 @@
     t))
 
 (define (drop-blank s)
-  (string-replace s " " ""))
+  (string-replace-tm s " " ""))
 
 (define (latex-stree-contains? t u)
   (cond ((== t u) #t)

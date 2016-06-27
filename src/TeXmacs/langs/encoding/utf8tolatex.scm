@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; Conversions between Unicode and LaTeX ascii code
 
 ;; (C) 2012 Francois Poulain

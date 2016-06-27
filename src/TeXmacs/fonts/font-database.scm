@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ((Al\ Bayan Bold) ((AlBayanBold.ttf 0 81852) (AlBayan.ttc 2 178720) (AlBayanBold.ttf 0 82200)))
 ((Al\ Bayan Plain) ((AlBayan.ttf 0 82080) (AlBayan.ttc 0 178720) (AlBayan.ttf 0 82432)))
 ((Al\ Bayan\ PUA Bold) ((AlBayan.ttc 3 178720)))

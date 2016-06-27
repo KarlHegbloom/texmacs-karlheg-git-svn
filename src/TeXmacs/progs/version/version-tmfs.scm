@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -136,7 +137,7 @@
 (tm-define (update-buffer name)
   (let* ((old-stamp (url-last-modified name))
          (ret1 (version-update name))
-         (ret2 (string-replace ret1 "\n" "; "))
+         (ret2 (string-replace-tm ret1 "\n" "; "))
          (new-stamp (url-last-modified name)))
     ;;(display* "ret2= " ret2 "\n")
     (when (> new-stamp old-stamp)
@@ -145,12 +146,12 @@
 
 (tm-define (register-buffer name)
   (let* ((ret1 (version-register name))
-         (ret2 (string-replace ret1 "\n" "; ")))
+         (ret2 (string-replace-tm ret1 "\n" "; ")))
     (set-message ret2 "Register file")))
 
 (tm-define (commit-buffer-message name message)
   (let* ((ret1 (version-commit name message))
-         (ret2 (string-replace ret1 "\n" "; "))
+         (ret2 (string-replace-tm ret1 "\n" "; "))
          (ret3 (if (!= ret2 "") ret2
                    "The current version has already been committed")))
     (set-message ret3 "Commit file")))

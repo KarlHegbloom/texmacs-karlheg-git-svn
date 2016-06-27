@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; arch-tag: e6bf1096-dc3b-4fc2-94f5-7f36917aa048
 
 (define (french-punctuation-initialize)

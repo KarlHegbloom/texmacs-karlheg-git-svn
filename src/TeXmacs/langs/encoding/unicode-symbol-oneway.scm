@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; One-way conversion of some Unicode characters to TeXmacs symbols.
 
 ;; (C) 2003  David Allouche

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : tmvernac.scm
@@ -32,9 +33,9 @@
 (define (vernac-escape-string x)
   (if (!= mode "coqdoc")
     x
-    (string-replace
-      (string-replace
-        (string-replace x "$" "$$") "%" "%%") "#" "##")))
+    (string-replace-tm
+      (string-replace-tm
+        (string-replace-tm x "$" "$$") "%" "%%") "#" "##")))
 
 (define (tmvernac-string x)
   (cork->sourcecode (vernac-escape-string x)))

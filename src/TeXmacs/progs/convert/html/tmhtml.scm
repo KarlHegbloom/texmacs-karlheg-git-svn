@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -109,9 +110,9 @@
 
 (define (make-ligatures s)
   ;; Make texmacs ligatures in Cork encoding
-  (string-replace
-   (string-replace
-    (string-replace s "--" cork-endash) "``" cork-ldquo) "''" cork-rdquo))
+  (string-replace-tm
+   (string-replace-tm
+    (string-replace-tm s "--" cork-endash) "``" cork-ldquo) "''" cork-rdquo))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Entire documents
