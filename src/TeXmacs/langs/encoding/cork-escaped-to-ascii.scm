@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; Escaping one-byte-per-character strings internally used by
 ;; texmacs (cork encoding) to ascii-only strings suitable to be
 ;; incorporated in xml.

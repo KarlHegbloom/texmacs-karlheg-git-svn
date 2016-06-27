@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;Needs sat.ts
 ;Env and tags to which this plug is applied need to be redefined in sat.ts
 

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; q.scm --- Queues
 ;;;;
 ;;;; 	Copyright (C) 1995 Free Software Foundation, Inc.

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; Unicode characters which are imported specially in TeXmacs
 
 ;; (C) 2002-2003  David Allouche

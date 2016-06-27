@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; Russian alphabet
 ("#C0" "#410")
 ("#C1" "#411")

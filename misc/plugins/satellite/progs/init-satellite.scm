@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 (lazy-menu (satellite-menu) satellite-menu)
 

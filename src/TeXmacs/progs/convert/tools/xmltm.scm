@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -161,7 +162,7 @@
 
 (define (cork-grave->backquote s)
   (if (string-index s cork-grave-char)
-      (string-replace s cork-grave cork-backquote)
+      (string-replace-tm s cork-grave cork-backquote)
       s))
 
 ;; Decoding URL strings

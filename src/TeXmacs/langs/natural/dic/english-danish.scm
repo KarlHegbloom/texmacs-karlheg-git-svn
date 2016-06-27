@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("a modifier" "a kombitast")
 ("GNU" "GNU")
 ("h modifier" "h kombitast")

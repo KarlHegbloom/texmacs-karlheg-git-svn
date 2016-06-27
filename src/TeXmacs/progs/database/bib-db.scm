@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -248,7 +249,7 @@
 
 (define (db-bib-pages t)
   (if (not (tm-atomic? t)) t
-      (let* ((t* (string-replace t "" "-"))
+      (let* ((t* (string-replace-tm t "" "-"))
              (l (string-decompose t* "-"))
              (fl (list-filter l (lambda (s) (!= s "")))))
         (if (<= (length l) 1) `(bib-pages ,t) `(bib-pages ,@fl)))))

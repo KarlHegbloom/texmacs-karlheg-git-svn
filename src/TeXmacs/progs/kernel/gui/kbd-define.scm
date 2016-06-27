@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -174,10 +175,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (kbd-append prefix s1)
-  (let* ((s2 (string-replace s1 " " ""))
-	 (s3 (string-replace s2 "<" "<."))
-	 (s4 (string-replace s3 ">" "<gtr>"))
-	 (s5 (string-replace s4 "<." "<less>")))
+  (let* ((s2 (string-replace-tm s1 " " ""))
+	 (s3 (string-replace-tm s2 "<" "<."))
+	 (s4 (string-replace-tm s3 ">" "<gtr>"))
+	 (s5 (string-replace-tm s4 "<." "<less>")))
     (string-append prefix s5)))
 
 (define (kbd-sub-binding conds s prev-end end)

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -83,8 +84,8 @@
 
 (define (scm-error* type caller message . opt)
   (if old-format?
-      (begin (set! message (string-replace message "~S" "%S"))
-	     (set! message (string-replace message "~A" "%s"))))
+      (begin (set! message (string-replace-tm message "~S" "%S"))
+	     (set! message (string-replace-tm message "~A" "%s"))))
   (apply scm-error type caller message opt))
 
 (define-public (texmacs-error where message . args)

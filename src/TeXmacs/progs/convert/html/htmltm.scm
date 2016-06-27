@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -578,7 +579,7 @@
         (else st)))
 
 (define (replace-string-in-stree st from to)
-  (cond ((string? st) (string-replace st from to))
+  (cond ((string? st) (string-replace-tm st from to))
         ((list? st) (map (lambda (x) (replace-string-in-stree x from to)) st))
         (else st)))
 

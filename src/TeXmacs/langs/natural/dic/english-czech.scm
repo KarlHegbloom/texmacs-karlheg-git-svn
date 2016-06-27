@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("A modifier" "Modifikátor A")
 ("GNU" "GNU")
 ("H modifier" "Modifikátor H")

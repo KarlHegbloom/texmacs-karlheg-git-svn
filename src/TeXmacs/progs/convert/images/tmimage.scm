@@ -1,3 +1,5 @@
+;;; coding: utf-8
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : tmimage.scm
@@ -291,7 +293,7 @@
 	;; revert to preference dpi
 	;; step 2 generate output according to desired output format
 
-	  (cond 
+	  (cond
 	    ((== suffix "pdf") (system-copy temp0 myurl))
 	    ((== suffix "svg")
 	       ;; assume target is inkscape

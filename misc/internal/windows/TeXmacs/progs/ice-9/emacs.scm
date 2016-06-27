@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; 	Copyright (C) 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
 ;;;; 
 ;;;; This program is free software; you can redistribute it and/or modify

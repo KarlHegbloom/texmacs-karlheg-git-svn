@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; Guile Debugger
 
 ;;; Copyright (C) 1999 Free Software Foundation, Inc.

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -30,7 +31,7 @@
   (if (symbol-unnumbered? l)
       (focus-tag-name (symbol-drop-right l 1))
       (with r (upcase-first (tree-name (tree l)))
-        (string-replace r "-" " "))))
+        (string-replace-tm r "-" " "))))
 
 (tm-menu (focus-variant-menu t)
   (for (v (focus-variants-of t))
@@ -61,7 +62,7 @@
     (cond ((!= s "") s)
           ((and (> i 0) (string-variable-name? t (- i 1)))
            (with r (tree->string (tree-ref t (- i 1)))
-             (string-replace r "-" " ")))
+             (string-replace-tm r "-" " ")))
           ((> (length (hidden-children t)) 1) "")
           ((== (tree-child-type t i) "regular") "")
           (else (tree-child-type t i)))))
@@ -71,7 +72,7 @@
     (cond ((!= s "") s)
           ((and (> i 0) (string-variable-name? t (- i 1)))
            (with r (tree->string (tree-ref t (- i 1)))
-             (string-replace r "-" " ")))
+             (string-replace-tm r "-" " ")))
           ((> (length (hidden-children t)) 1) "")
           ((== (tree-child-type t i) "regular") "")
           (else (tree-child-type t i)))))

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; ls.scm --- functions for browsing modules
 ;;;;
 ;;;; 	Copyright (C) 1995, 1996, 1997, 1999 Free Software Foundation, Inc.

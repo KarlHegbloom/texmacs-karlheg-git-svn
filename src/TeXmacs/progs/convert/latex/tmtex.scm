@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -432,7 +433,7 @@
                 (us (string-convert qs "Cork" "UTF-8"))
                 (cv (string-convert us "UTF-8" "LaTeX")))
            (list '!widechar (string->symbol cv))))
-        (else (let* ((s2 (string-replace s "-" ""))
+        (else (let* ((s2 (string-replace-tm s "-" ""))
                      (ss (list (string->symbol s2))))
                 (cond ((not (logic-in? (car ss) latex-symbol%))
                        (display* "TeXmacs] non converted symbol: " s "\n")
@@ -828,11 +829,11 @@
 (tm-define (tmtex-decode-length len)
   ;; FIXME: should be completed
   (with s (force-string len)
-    (cond ((string-ends? s "fn")   (string-replace s "fn"   "em"))
-	  ((string-ends? s "spc")  (string-replace s "spc"  "em"))
-	  ((string-ends? s "sep")  (string-replace s "sep"  "ex"))
-	  ((string-ends? s "par")  (string-replace s "par"  "\\columnwidth"))
-	  ((string-ends? s "pag")  (string-replace s "pag"  "\\textheight"))
+    (cond ((string-ends? s "fn")   (string-replace-tm s "fn"   "em"))
+	  ((string-ends? s "spc")  (string-replace-tm s "spc"  "em"))
+	  ((string-ends? s "sep")  (string-replace-tm s "sep"  "ex"))
+	  ((string-ends? s "par")  (string-replace-tm s "par"  "\\columnwidth"))
+	  ((string-ends? s "pag")  (string-replace-tm s "pag"  "\\textheight"))
 	  (else s))))
 
 (define (tmtex-hrule l) (list 'tmhrule))
@@ -1936,17 +1937,17 @@
 
 (define (unescape-angles l)
   (cond ((string? l)
-         (string-replace (string-replace l "<less>" "<") "<gtr>" ">"))
+         (string-replace-tm (string-replace-tm l "<less>" "<") "<gtr>" ">"))
         ((symbol? l) l)
         (else (map unescape-angles l))))
 
 (define (escape-braces l)
-  (cond ((string? l) (string-replace (string-replace l "{" "\\{") "}" "\\}"))
+  (cond ((string? l) (string-replace-tm (string-replace-tm l "{" "\\{") "}" "\\}"))
         ((symbol? l) l)
         (else (map escape-braces l))))
 
 (define (escape-backslashes l)
-  (cond ((string? l) (string-replace l "\\" "\\textbackslash "))
+  (cond ((string? l) (string-replace-tm l "\\" "\\textbackslash "))
         ((symbol? l) l)
         (else (map escape-backslashes l))))
 
@@ -2062,7 +2063,7 @@
   (list (list '!begin "tmindent") (tmtex (car l))))
 
 (define (tmtex-script-inout s l)
-  (let ((name  (string->symbol (string-append "tm" (string-replace s "-" ""))))
+  (let ((name  (string->symbol (string-append "tm" (string-replace-tm s "-" ""))))
         (lang  (car l))
         (lang* (session-name (car l)))
         (in    (tmtex (caddr l)))
@@ -2070,7 +2071,7 @@
     `(,name ,lang ,lang* ,in ,out)))
 
 (define (tmtex-converter s l)
-  (let ((name  (string->symbol (string-append "tm" (string-replace s "-" ""))))
+  (let ((name  (string->symbol (string-append "tm" (string-replace-tm s "-" ""))))
         (lang  (car l))
         (lang* (format-get-name (car l)))
         (in    (tmtex (cadr l)))
@@ -2078,7 +2079,7 @@
     `(,name ,lang ,lang* ,in ,out)))
 
 (define (tmtex-list-env s l)
-  (let* ((r (string-replace s "-" ""))
+  (let* ((r (string-replace-tm s "-" ""))
 	 (t (cond ((== r "enumerateRoman") "enumerateromancap")
 		  ((== r "enumerateAlpha") "enumeratealphacap")
 		  (else r))))
@@ -2299,11 +2300,11 @@
   ("ornament-shape"    ("roundcorner" ,tmtex-ornament-shape)))
 
 (define (tmtex-tm s l)
-  (with tag (string->symbol (string-append "tm" (string-replace s "-" "")))
+  (with tag (string->symbol (string-append "tm" (string-replace-tm s "-" "")))
   `(,tag ,@(map tmtex l))))
 
 (define (tmtex-input-math s l)
-  (let ((tag (string->symbol (string-append "tm" (string-replace s "-" ""))))
+  (let ((tag (string->symbol (string-append "tm" (string-replace-tm s "-" ""))))
         (a1  (tmtex (car l)))
         (a2  (with r (begin
                        (tmtex-env-set "mode" "math")
@@ -2312,7 +2313,7 @@
   (list tag a1 a2)))
 
 (define (tmtex-fold-io-math s l)
-  (let ((tag (string->symbol (string-append "tm" (string-replace s "-" ""))))
+  (let ((tag (string->symbol (string-append "tm" (string-replace-tm s "-" ""))))
         (a1  (tmtex (car l)))
         (a2  (with r (begin
                        (tmtex-env-set "mode" "math")
@@ -2322,7 +2323,7 @@
   (list tag a1 a2 a3)))
 
 (define (tmtex-session s l)
-  (let* ((tag (string->symbol (string-append "tm" (string-replace s "-" ""))))
+  (let* ((tag (string->symbol (string-append "tm" (string-replace-tm s "-" ""))))
          (arg (tmtex (car l)))
          (lan (tmtex (cadr l)))
          (lst (tmtex (caddr l))))
@@ -2331,7 +2332,7 @@
     `(!document (,tag ,arg ,lan ,lst))))
 
 (define (escape-backslashes-in-url l)
-  (cond ((string? l) (string-replace l "\\" "\\\\"))
+  (cond ((string? l) (string-replace-tm l "\\" "\\\\"))
         ((symbol? l) l)
         (else (map escape-backslashes-in-url l))))
 

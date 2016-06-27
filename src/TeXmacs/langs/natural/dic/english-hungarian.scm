@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("a modifier" "a módosítóbillenty¶")
 ("a series" "")
 ("abbreviation" "rövidítés")

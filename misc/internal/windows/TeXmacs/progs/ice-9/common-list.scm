@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; common-list.scm --- COMMON LISP list functions for Scheme
 ;;;;
 ;;;; 	Copyright (C) 1995, 1996, 1997 Free Software Foundation, Inc.

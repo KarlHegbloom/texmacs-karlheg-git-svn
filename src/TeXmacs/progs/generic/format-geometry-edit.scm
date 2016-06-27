@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -97,7 +98,7 @@
   (cond ((tm-atomic? t) (tm->string t))
 	((tm-is? t 'plus)
 	 (with s (string-recompose (map tm->rich-length (tm-children t)) "+")
-	   (string-replace s "+-" "-")))
+	   (string-replace-tm s "+-" "-")))
 	((tm-func? t 'minus 1)
 	 (with s (string-append "-" (tm->rich-length (tm-ref t 0)))
 	   (if (string-starts? s "--")
@@ -109,7 +110,7 @@
 	(else "")))
 
 (tm-define (rich-length->tm s)
-  (with r (string-replace s "-" "+-")
+  (with r (string-replace-tm s "-" "+-")
     (with l (string-decompose r "+")
       (when (and (nnull? l) (== (car l) ""))
         (set! l (cdr l)))

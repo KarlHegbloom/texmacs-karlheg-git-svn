@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; runq.scm --- the runq data structure
 ;;;;
 ;;;; 	Copyright (C) 1996 Free Software Foundation, Inc.
