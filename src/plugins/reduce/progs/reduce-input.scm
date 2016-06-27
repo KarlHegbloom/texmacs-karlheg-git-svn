@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -71,7 +72,7 @@
                 (cond
                     ((and sub sup)
                         (begin (display ",")
-                            (plugin-input (string-replace (texmacs->code (tm->tree sub)) "=" ","))
+                            (plugin-input (string-replace-tm (texmacs->code (tm->tree sub)) "=" ","))
                             (display ",") (plugin-input sup)))
                     (sub (begin (display ",") (plugin-input sub))))))
         ((== op "prod")
@@ -79,7 +80,7 @@
                 (cond
                     ((and sub sup)
                         (begin (display ",")
-                            (plugin-input (string-replace (texmacs->code (tm->tree sub)) "=" ","))
+                            (plugin-input (string-replace-tm (texmacs->code (tm->tree sub)) "=" ","))
                             (display ",") (plugin-input sup)))
                     (sub (begin (display ",") (plugin-input sub))))))
         (else (display op) (display "(") (plugin-input body)))

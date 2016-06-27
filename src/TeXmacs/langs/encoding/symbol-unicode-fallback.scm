@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;; Fall-back conversion of some TeXmacs symbols to Unicode.
 
 ;; (C) 2003  David Allouche

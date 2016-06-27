@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -49,7 +50,7 @@
 	((tree-is? (tm-car t) 'the-glossary) "Glossary")
 	((or (special-section-tag? (tm-car t))
 	     (automatic-section-tag? (tm-car t)))
-	 (upcase-first (string-replace (symbol->string (tm-car t)) "-" " ")))
+	 (upcase-first (string-replace-tm (symbol->string (tm-car t)) "-" " ")))
 	((tree-is? t 'concat)
 	 (tm/section-get-title-string-sub (tree-children t)))
         ((and (tm-func? t 'shared 3)

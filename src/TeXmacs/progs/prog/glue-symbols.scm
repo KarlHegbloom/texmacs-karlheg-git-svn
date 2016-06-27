@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -350,7 +351,7 @@
 "string-search-forwards"
 "string-search-backwards"
 "string-overlapping"
-"string-replace"
+"string-replace-tm"
 "string-alpha?"
 "string-locase-alpha?"
 "upcase-first"

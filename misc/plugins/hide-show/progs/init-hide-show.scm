@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; arch-tag: 2b7b32af-fade-4d57-a1d0-836dbec5d0cd
 ;;

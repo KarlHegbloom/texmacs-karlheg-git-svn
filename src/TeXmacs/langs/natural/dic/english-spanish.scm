@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ; Copyright David Moriano García (2001), Álvaro Tejero Cantero
 ; (alvaro@antalia.com, 2001,2002,2003).
 ("a modifier" "modificador A")

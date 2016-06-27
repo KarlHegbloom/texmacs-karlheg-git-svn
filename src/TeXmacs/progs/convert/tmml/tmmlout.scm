@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -54,7 +55,7 @@
 (define (tmmlout-attr x)
   ;(display-err* "[tmmlout-attr] " x "\n")
   (output-text " " (symbol->string (car x)) "=")
-  (output-verbatim "\"" (string-replace (cadr x) "\"" "\\\"") "\""))
+  (output-verbatim "\"" (string-replace-tm (cadr x) "\"" "\\\"") "\""))
 
 (define (tmmlout-stacked-args l)
   (if (nnull? l)

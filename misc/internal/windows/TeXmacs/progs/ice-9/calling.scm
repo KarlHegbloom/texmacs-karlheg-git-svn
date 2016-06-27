@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; calling.scm --- Calling Conventions
 ;;;;
 ;;;; 	Copyright (C) 1995, 1996, 1997 Free Software Foundation, Inc.

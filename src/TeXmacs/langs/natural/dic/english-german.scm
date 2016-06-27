@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("GNU" "GNU")
 ("LaTeX" "LaTeX")
 ("Remove fields" "entferne Felder")

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("a modifier" "")
 ("abbreviation" "")
 ("about menu" "")

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE      : regexp-select.scm
@@ -272,14 +273,19 @@
 ;;       (define-public (select . args) (apply tm-select args)))
 ;;     )
 (with-module texmacs-user
-      (begin (define-public guile-select (if (os-mingw?) #f select))
-	     (define-public (select . args)
-	       (use-modules (kernel regexp regexp-select))
-               (if (os-mingw?)
-                   (apply tm-select args)
-                   (if (= (length args) 2)
-                       (apply tm-select args)
-                       (apply guile-select args))))))
+  (cond-expand
+    (os-mingw
+     (define-public guile-select #f)
+     (define-public (select . args)
+       (use-modules (kernel regexp regexp-select))
+       (apply tm-select args)))
+    (else
+      (define-public guile-select select)
+      (define-public (select . args)
+        (use-modules (kernel regexp regexp-select))
+        (if (= (length args) 2)
+            (apply tm-select args)
+            (apply guile-select args))))))
 
 (define-public (tm-ref t . l)
   (and (tm? t)

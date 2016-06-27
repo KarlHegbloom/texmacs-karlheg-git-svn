@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -28,12 +29,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (unescape-xml-string s)
-  (set! s (string-replace s "&quot;" "\""))
-  (set! s (string-replace s "&apos;" "'"))
-  (set! s (string-replace s "&lt;"   "<"))
-  (set! s (string-replace s "&gt;"   ">"))
-  (set! s (string-replace s "&amp;"  "&"))
-  (set! s (string-replace s "`"      "\xe2\x80\x98"))
+  (set! s (string-replace-tm s "&quot;" "\""))
+  (set! s (string-replace-tm s "&apos;" "'"))
+  (set! s (string-replace-tm s "&lt;"   "<"))
+  (set! s (string-replace-tm s "&gt;"   ">"))
+  (set! s (string-replace-tm s "&amp;"  "&"))
+  (set! s (string-replace-tm s "`"      "\xe2\x80\x98"))
   s)
 
 (define (import-string s)
@@ -62,7 +63,7 @@
   (cond
     ((== (length c) 0) '(""))
     ((and (== (length c) 1) (string? (first c)))
-     `(,(import-string (string-replace  (first c) "\n" ""))))
+     `(,(import-string (string-replace-tm  (first c) "\n" ""))))
     (else (coqml-error "bad string: " c))))
 
 (define (coqml-int env a c)

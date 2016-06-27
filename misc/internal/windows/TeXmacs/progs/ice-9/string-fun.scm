@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; string-fun.scm --- string manipulation functions
 ;;;;
 ;;;; 	Copyright (C) 1995, 1996, 1997, 1999 Free Software Foundation, Inc.

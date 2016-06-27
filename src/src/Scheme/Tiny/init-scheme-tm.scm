@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ; initialization for littlescheme
 ; specific to texmacs
 

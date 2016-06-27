@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -11,38 +12,39 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(display "Loading: texmacs-core.scm...\n")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; temporary debug code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (define-public (debug-print-module module)
-;;   (newline)
-;;   (%print-module module (current-output-port))
-;;   (newline))
+(define-public (debug-print-module module)
+  (newline)
+  (%print-module module (current-output-port))
+  (newline))
 
-;; (define-public (debug-print-module-bindings module)
-;;   (let ((iface (resolve-interface '(guile))))
-;;     (debug-print-module module)
-;;     (unless (equal? iface module)
-;;       (module-map (lambda (sym var)
-;;                     (when (symbol? sym)
-;;                       (display (symbol->string sym))
-;;                       (newline)))
-;;                   module)
-;;       (newline))))
+(define-public (debug-print-module-bindings module)
+  (let ((iface (resolve-interface '(guile))))
+    (debug-print-module module)
+    (unless (equal? iface module)
+      (module-map (lambda (sym var)
+                    (when (symbol? sym)
+                      (display (symbol->string sym))
+                      (newline)))
+                  module)
+      (newline))))
 
-;; (define-public (debug-print-all-bindings)
-;;   (let* ((m (current-module))
-;;          (m-public (module-public-interface m))
-;;          (m-uses (module-uses m)))
-;;     (display "===> CURRENT MODULE:\n")
-;;     (debug-print-module-bindings m)
-;;     (display "===> PUBLIC INTERFACE:\n")
-;;     (debug-print-module-bindings m-public)
-;;     (display "===> USES INTERFACES:\n")
-;;     (map (lambda (mod)
-;;            (debug-print-module-bindings mod))
-;;          m-uses)))
+(define-public (debug-print-all-bindings)
+  (let* ((m (current-module))
+         (m-public (module-public-interface m))
+         (m-uses (module-uses m)))
+    (display "===> CURRENT MODULE:\n")
+    (debug-print-module-bindings m)
+    (display "===> PUBLIC INTERFACE:\n")
+    (debug-print-module-bindings m-public)
+    (display "===> USES INTERFACES:\n")
+    (map (lambda (mod)
+           (debug-print-module-bindings mod))
+         m-uses)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Provide functions if not defined and public macros
@@ -84,7 +86,11 @@
     (define-public (guile-b?) (equal? (scheme-dialect) "guile-b"));; 1.6,1.7
     (define-public (guile-c?) (equal? (scheme-dialect) "guile-c"));; 1.8,1.9
     (define-public (guile-d?) (equal? (scheme-dialect) "guile-d"));; 2.0,2.2
-    (define (guile-b-c?) (or (guile-b?) (guile-c?)))))
+    (define (guile-b-c?) (or (guile-b?) (guile-c?)))
+    (if (os-mingw?) (cond-expand-provide (resolve-module '(guile))
+                                         (list
+                                          (string->symbol "os-mingw"))))
+    ))
  (guile
   (cond-expand-provide (resolve-module '(guile)) (list (string->symbol
                                                         (scheme-dialect))))
@@ -97,21 +103,21 @@
 ;; Debugging: learned that cond-expand-provide must happen in the guile module.
 (cond-expand
   (guile-a
-   (display "guile-a\n"))
+   (display "cond-expand: guile-a\n"))
   (guile-b
-   (display "guile-b\n"))
+   (display "cond-expand: guile-b\n"))
   ((or guile-c guile-d)
-   (display "guile-c or guile-d\n")
+   (display "cond-expand: guile-c or guile-d\n")
    (use-modules (ice-9 rdelim)
                 (ice-9 pretty-print)))
   (guile-c
-   (display "guile-c\n"))
+   (display "cond-expand: guile-c\n"))
   (guile-d
-   (display "guile-d\n"))
+   (display "cond-expand: guile-d\n"))
   (else
-   (display "guile\n")
-   (display (scheme-dialect)) (newline)))
+   (display "cond-expand: guile\n")))
 
+(display "scheme-dialect: ") (display (scheme-dialect)) (newline)
 
 (define-public texmacs-user (resolve-module '(guile-user)))
 (define-public temp-module (current-module))
@@ -250,3 +256,4 @@
       ,@body
       (set-current-module temp-module))))
 
+(display "texmacs-core.scm loaded.\n")

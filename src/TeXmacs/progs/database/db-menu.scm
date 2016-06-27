@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -34,7 +35,7 @@
   (db-get-query-preference (current-buffer) "exact-order" "Name"))
 
 (define (db-toolbar-order order)
-  (with order* (string-replace (locase-all order) " " "")
+  (with order* (string-replace-tm (locase-all order) " " "")
     (db-set-query-preference (current-buffer) "exact-order" order)
     (db-set-query-preference (current-buffer) "order" order*)
     (revert-buffer)))

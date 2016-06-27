@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("abbreviation" "абревiатура")
 ("about menu" "меню про")
 ("about" "про")

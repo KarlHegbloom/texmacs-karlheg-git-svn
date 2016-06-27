@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 
 ("Bibtex command" "commande Bibtex")

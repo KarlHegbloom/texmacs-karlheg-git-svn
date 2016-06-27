@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ((Al\ Bayan Bold) (slant=0))
 ((Al\ Bayan Plain) (slant=0))
 ((Al\ Bayan\ PUA Bold) (slant=0))

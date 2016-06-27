@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ("A modifier" "A-vaihtonäppäin")
 ("GNU" "GNU")
 ("H modifier" "H-vaihtonäppäin")

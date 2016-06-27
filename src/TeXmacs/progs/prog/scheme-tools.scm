@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -79,9 +80,9 @@
 ; This is surely already done elsewhere...
 (define (string-load-clean file)
   (let* ((str (string-load file))
-         (str1 (string-replace str "<" "&lt;"))
-         (str2 (string-replace str1 ">" "<gtr>")))
-    (string-replace str2 "&lt;" "<less>")))
+         (str1 (string-replace-tm str "<" "&lt;"))
+         (str2 (string-replace-tm str1 ">" "<gtr>")))
+    (string-replace-tm str2 "&lt;" "<less>")))
 
 (tm-define (import-sessions file)
   (let* ((str (string-load-clean file))
@@ -118,14 +119,14 @@
 (tm-define (scheme-inbuffer-help word)
   (:synopsis "Opens a help buffer for the scheme symbol @word")
   (load-buffer (string-append "tmfs://apidoc/type=symbol&what="
-                              (string-replace word ":" "%3A")))); HACK
+                              (string-replace-tm word ":" "%3A")))); HACK
 
 (define (url-for-symbol s props)
   (with (file line column) props
     (if (and file line column)
         (let ((lno (number->string line))
               (cno (number->string column))
-              (ss (string-replace s ":" "%3A"))) ; HACK! see link-navigate.scm
+              (ss (string-replace-tm s ":" "%3A"))) ; HACK! see link-navigate.scm
           (string-append file "?line=" lno "&column=" cno "&select=" ss))
         (url-none))))
 

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -125,7 +126,7 @@
 
 (tm-define (tmdoc-search-scheme f)
   (let* ((fun (string->tmstring f))
-         (fun* (string-replace (string-replace fun "<" "\\<") ">" "\\>")))
+         (fun* (string-replace-tm (string-replace-tm fun "<" "\\<") ">" "\\>")))
     (tmdoc-search (string-append "<scm|(" fun*)
                   (cut url-search-scheme-function <> fun)
 		  (string-append "<scm|" fun* ">")

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -15,7 +16,7 @@
   (with u (pre-serialize lan t)
     (with s (texmacs->code u)
       (string-append (escape-verbatim 
-		      (string-replace s "\n" ";;")) "\n"))))
+		      (string-replace-tm s "\n" ";;")) "\n"))))
 
 (plugin-configure r
   (:require (url-exists-in-path? "R"))

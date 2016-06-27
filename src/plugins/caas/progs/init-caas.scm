@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,7 +15,7 @@
 (define (caas-serialize lan t)
   (with u (pre-serialize lan t)
     (with v (texmacs->code u)
-      (with w (string-replace v "\n" "/{CR}/")
+      (with w (string-replace-tm v "\n" "/{CR}/")
 	(string-append (escape-verbatim w) "\n")))))
 
 (plugin-configure caas

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -56,7 +57,7 @@
                (lambda (x) (and (string? x)
                                 (string-ends? x "-snippet")
                                 (not (string-contains? x "texmacs")))) l1))
-         (l3 (map (cut string-replace <> "-snippet" "") l2))
+         (l3 (map (cut string-replace-tm <> "-snippet" "") l2))
          (l4 (sort l3 (lambda (x y) (string<? (format-get-name x)
                                               (format-get-name y))))))
     l4))

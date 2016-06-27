@@ -575,10 +575,10 @@ initialize_scheme () {
     // "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
     //""
 
-  const char* repl_prg =
-    "(cond-expand\n"
-    "  (guile-2\n"
-    "    ((@ (system repl server) run-server))))";
+  // const char* repl_prg =
+  //   "(cond-expand\n"
+  //   "  (guile-2\n"
+  //   "    ((@ (system repl server) run-server))))";
     
     scm_c_eval_string (init_prg);
     initialize_smobs ();
@@ -587,7 +587,7 @@ initialize_scheme () {
     scm_c_use_module("texmacs-glue");
     object_stack= scm_lookup_string ("object-stack");
 
-    scm_c_eval_string (repl_prg);
+    // scm_c_eval_string (repl_prg); // I think this blocks startup of the GUI
     
     // uncomment to have a guile repl available at startup	
     //	gh_repl(guile_argc, guile_argv);

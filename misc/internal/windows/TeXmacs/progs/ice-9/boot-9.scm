@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;; installed-scm-file
 
 ;;;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.

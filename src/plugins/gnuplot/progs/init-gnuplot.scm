@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,7 +15,7 @@
 (define (gnuplot-serialize lan t)
   (with u (pre-serialize lan t)
     (with s (texmacs->code u)
-      (string-append (escape-verbatim (string-replace s "\n" "~")) "\n"))))
+      (string-append (escape-verbatim (string-replace-tm s "\n" "~")) "\n"))))
 
 (plugin-configure gnuplot
   (:require (url-exists-in-path? "gnuplot"))

@@ -1,3 +1,4 @@
+;;; coding: utf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -22,9 +23,9 @@
     (string-length s)))
 
 (define (compress-spaces s)
-  (let* ((s1 (string-replace s "\n" " "))
-         (s2 (string-replace s1 "\t" " "))
-         (s3 (string-replace s2 "  " " "))
+  (let* ((s1 (string-replace-tm s "\n" " "))
+         (s2 (string-replace-tm s1 "\t" " "))
+         (s3 (string-replace-tm s2 "  " " "))
          (s4 (if (string-starts? s3 " ") (string-drop s3 1) s3))
          (s5 (if (string-ends? s4 " ") (string-drop-right s4 1) s4)))
     (if (== s5 s) s (compress-spaces s5))))

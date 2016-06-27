@@ -1,3 +1,4 @@
+;;; coding: utf-8
 ;;;; and-let*.scm --- and-let* syntactic form (draft SRFI-2) for Guile
 ;;;; written by Michael Livshin <mike@olan.com>
 ;;;;
