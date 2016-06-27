@@ -1,6 +1,6 @@
 # -*- GDB-Script -*-
 
-set environment TEXMACS_PATH /home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/TeXmacs
+set environment TEXMACS_PATH /home/karlheg/src/TeXmacs/texmacs-git-svn/src/TeXmacs
 # Force compilation every time to help catch errors at that stage.
 set environment GUILE_AUTO_COMPILE fresh
 # Default
