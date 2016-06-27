@@ -207,7 +207,7 @@ qt_chooser_widget_rep::perform_dialog () {
   c_string tmp (directory * "/" * file);
   QString path = QString::fromLocal8Bit (tmp);
   
-#if (defined(Q_WS_MAC) )// || defined(Q_WS_WIN)) //at least windows Xp and 7 lack image preview, switch to custom dialog
+#if 1 //#if (defined(Q_WS_MAC) )// || defined(Q_WS_WIN)) //at least windows Xp and 7 lack image preview, switch to custom dialog
   QFileDialog* dialog = new QFileDialog (NULL, caption, path);
 #else
   QTMFileDialog*  dialog;
@@ -265,7 +265,7 @@ qt_chooser_widget_rep::perform_dialog () {
       // here we need the filename encoded cork-universal because it is exposed in the document, in the <image> tag
       file = "(system->url " * scm_quote (localname) * ")";
       if (type == "image") {
-#if !defined(Q_WS_MAC) // && !defined(Q_WS_WIN)   //at least windows Xp and 7 lack image preview, switch to custom dialog
+#if 0 //#if !defined(Q_WS_MAC) // && !defined(Q_WS_WIN)   //at least windows Xp and 7 lack image preview, switch to custom dialog
         file = "(list " * file * imgdialog->getParamsAsString () * ")"; //set image size from preview
 #else //MacOs only now
         QPixmap pic (fileNames.first()); // Qt can't eps & pdf in windows.
