@@ -145,7 +145,7 @@ pager_rep::pages_format (pagelet pg) {
       pencil pen= env->pen->set_width (env->fn->wline);
       bs << line_box (decorate(), 0, 0, fnote_bl, 0, pen);
       bx << 0;
-      by << (fnote_y + env->fn->sep);
+      by << (fnote_y + (2 * env->fn->sep));
     }
     // cout << UNINDENT << "Formatted pagelet " << (N(pages)+1) << LF << LF;
     return scatter_box (ip, bs, bx, by);
