@@ -12,6 +12,12 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Called from guile_tm.cpp:
+;;; scm_c_define_module("texmacs-core", initialize_core_module, NULL);
+;;; initialize_core_module() has:
+;;;   eval_scheme_file_in_load_path("texmacs-core");
+
 (display "Loading: texmacs-core.scm...\n")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -61,44 +67,76 @@
 ;;        (re-export ,@l))))
 ;; (export inherit-modules)
 
-(defmacro-public inherit-modules which-list
-  (define (module-exports which)
-    (let* ((m (resolve-module which))
-	   (m-public (module-public-interface m)))
-      (module-map (lambda (sym var) sym) m-public)))
-  (let ((l (apply append (map module-exports which-list))))
-    `(begin
-       (use-modules ,@which-list)
-       (re-export ,@l))))
+;; (defmacro-public inherit-modules which-list
+;;   (define (module-exports which)
+;;     (let* ((m (resolve-module which))
+;; 	   (m-public (module-public-interface m)))
+;;       (module-map (lambda (sym var) sym) m-public)))
+;;   (let ((l (apply append (map module-exports which-list))))
+;;     `(begin
+;;        (use-modules ,@which-list)
+;;        (re-export ,@l))))
 
 ;(define-public object-stack '(()))
 
-(inherit-modules (texmacs-glue))
+;;(inherit-modules (texmacs-glue))
+
+(use-modules (texmacs-glue))
 
 ;;; cond-expand already has guile, guile-2, and guile-2.2 available to it.
-;;; This gives it also our classification, guile-d.
+;;; This gives it also our classification, guile-d, etc.
 (cond-expand
  (guile-2
   (eval-when (compile)
-    (cond-expand-provide (resolve-module '(guile)) (list (string->symbol
-                                                          (scheme-dialect))))
+    (cond-expand-provide (resolve-module '(guile)) (list (string->symbol (scheme-dialect))))
     (define-public (guile-a?) (equal? (scheme-dialect) "guile-a"));; 1.0--1.5
     (define-public (guile-b?) (equal? (scheme-dialect) "guile-b"));; 1.6,1.7
     (define-public (guile-c?) (equal? (scheme-dialect) "guile-c"));; 1.8,1.9
     (define-public (guile-d?) (equal? (scheme-dialect) "guile-d"));; 2.0,2.2
     (define (guile-b-c?) (or (guile-b?) (guile-c?)))
-    (if (os-mingw?) (cond-expand-provide (resolve-module '(guile))
-                                         (list
-                                          (string->symbol "os-mingw"))))
+    (cond-expand-provide (resolve-module '(guile)) (list (string->symbol "guile-b-c")))
+    ;;
+    ;; These must only be things that don't change dynamically at run-time,
+    ;; as for installing a program or loading a dynamic module, or whatever.
+    ;; They should only be things that properly affect expansions that become
+    ;; part of the sexps that are actually compiled by Guile into .go objects,
+    ;; which will happen when the package is built, as those will be shipped
+    ;; with TeXmacs deb or rpm or whatever packages, pre-built.
+    ;;
+    ;; Remember to keep that in mind, vs run-time conditionals.
+    ;;
+    ;; e.g., if the qt-gui became a shared object loadable option, perhaps
+    ;; distributable as a separate, optional, deb package, then it would not as
+    ;; often, throughout the code, be appropriate to use the qt-gui in
+    ;; cond-expand. But as long as it's only an option that's either compiled
+    ;; in or not, it does make sense for it to be a cond-expand feature symbol.
+    ;;
+    (cond-expand-provide (resolve-module '(guile))
+                         (list (string->symbol
+                                (cond
+                                  ((os-win32?) "os-win32")
+                                  ((os-mingw?) "os-mingw")
+                                  ((os-macos?) "os-macos")
+                                  ((qt-gui?)   "qt-gui")
+                                  ((x-gui?     "x-gui"))))))
     ))
- (guile
-  (cond-expand-provide (resolve-module '(guile)) (list (string->symbol
-                                                        (scheme-dialect))))
-  (define-public (guile-a?) (equal? (scheme-dialect) "guile-a"));; 1.0--1.5
-  (define-public (guile-b?) (equal? (scheme-dialect) "guile-b"));; 1.6,1.7
-  (define-public (guile-c?) (equal? (scheme-dialect) "guile-c"));; 1.8,1.9
-  (define-public (guile-d?) (equal? (scheme-dialect) "guile-d"));; 2.0,2.2
-  (define (guile-b-c?) (or (guile-b?) (guile-c?)))))
+ (guile ;; exact duplicate minus comments and eval-when wrapper. Q: Is that necessary?
+    (cond-expand-provide (resolve-module '(guile)) (list (string->symbol (scheme-dialect))))
+    (define-public (guile-a?) (equal? (scheme-dialect) "guile-a"));; 1.0--1.5
+    (define-public (guile-b?) (equal? (scheme-dialect) "guile-b"));; 1.6,1.7
+    (define-public (guile-c?) (equal? (scheme-dialect) "guile-c"));; 1.8,1.9
+    (define-public (guile-d?) (equal? (scheme-dialect) "guile-d"));; 2.0,2.2
+    (define (guile-b-c?) (or (guile-b?) (guile-c?)))
+    (cond-expand-provide (resolve-module '(guile)) (list (string->symbol "guile-b-c")))
+    (cond-expand-provide (resolve-module '(guile))
+                         (list (string->symbol
+                                (cond
+                                  ((os-win32?) "os-win32")
+                                  ((os-mingw?) "os-mingw")
+                                  ((os-macos?) "os-macos")
+                                  ((qt-gui?)   "qt-gui")
+                                  ((x-gui?     "x-gui"))))))))
+
 
 ;; Debugging: learned that cond-expand-provide must happen in the guile module.
 (cond-expand
@@ -248,12 +286,18 @@
 ;;; I wonder if temp-module ought to be a fluid? We need to think about
 ;;; threads. Perhaps all it requires is a let binding here, rather than a
 ;;; global temp-module variable?
+;; (define-public-macro (with-module module . body)
+;;   `(save-module-excursion
+;;     (lambda ()
+;;       (set! temp-module (current-module))
+;;       (set-current-module ,module)
+;;       ,@body
+;;       (set-current-module temp-module))))
+
 (define-public-macro (with-module module . body)
   `(save-module-excursion
     (lambda ()
-      (set! temp-module (current-module))
       (set-current-module ,module)
-      ,@body
-      (set-current-module temp-module))))
+      ,@body)))
 
 (display "texmacs-core.scm loaded.\n")

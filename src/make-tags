@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+setopt CSH_NULL_GLOB
 
 if [ -f /usr/include/libguile.h ]; then
     etags --regex=@etags-regexps \
@@ -15,8 +16,9 @@ if [ -f /usr/include/libguile.h ]; then
           ~/src/Guile/guile-1.8/libguile.h \
           ~/src/Guile/guile-1.8/**/*.h \
           ~/src/Guile/guile-1.8/**/*.c \
-          ~/.TeXmacs/progs/**/*.scm
-    $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+          ~/.TeXmacs/progs/**/*.scm \
+          ~/.TeXmacs/plugins/**/progs/* \
+          ~/.TeXmacs/plugins/**/src/*
 else
     if dpkg --status guile-2.0-dev >/dev/null 2>&1; then
         ver=2.0
@@ -27,8 +29,10 @@ else
           TeXmacs/**/*.scm \
           src/**/*.hpp \
           src/**/*.cpp \
+          obj-*/**/*.hpp \
+          obj-*/**/*.cpp \
           plugins/**/*.scm \
-          plugins/**/*.cpp \
+          Plugins/**/*.cpp \
           plugins/**/*.h \
           plugins/**/*.c \
           /usr/share/guile/${ver}/**/*.scm \
@@ -37,7 +41,8 @@ else
           /usr/include/guile/${ver}/libguile.h \
           /usr/include/guile/${ver}/libguile/**/*.h \
           ~/.TeXmacs/progs/**/*.scm \
-          $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+          ~/.TeXmacs/plugins/**/progs/* \
+          ~/.TeXmacs/plugins/**/src/*
 fi
 
 ebrowse src/**/*.hpp \

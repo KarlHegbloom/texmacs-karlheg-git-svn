@@ -69,7 +69,7 @@
 
 (setq unary-definitions
   '(define define-public define-macro define-public-macro
-    defmacro defmacro-public     
+    defmacro defmacro-public use-modules
     texmacs-module provide-public define-group
     tm-define tm-define-macro lazy-body-macro tm-property request-handler
     tm-menu define-menu tm-widget define-widget tm-generate
@@ -119,7 +119,7 @@
 (setq other-keywords
   '(for if inherit former
     define-secure-symbols map-in-order link promise
-    plugin-input-converters use-modules export import-from inherit-modules
+    plugin-input-converters export import-from inherit-modules
     lazy-menu lazy-keyboard lazy-define lazy-define-macro lazy-initialize
     lazy-format lazy-language lazy-input-converter lazy-tmfs-handler
     $if))
@@ -207,3 +207,5 @@
 ;; 	("Macros"
 ;; 	 "^(\\(defmacro\\|define-macro\\|define-syntax\\)\\s-+(?\\(\\sw+\\)" 2))
 ;;   "Imenu generic expression for Scheme mode.  See `imenu-generic-expression'.")
+
+(provide 'tm-mode)

@@ -15,19 +15,21 @@
 (define-module (kernel boot compat)
   :use-module (texmacs-core))
 
-(define cout-port
-  (make-soft-port
-   (vector (lambda (c) (win32-display (char->string c)))
-	   (lambda (s) (win32-display s))
-	   (lambda () (noop))
-	   (lambda () #\?)
-	   (lambda () (noop)))
-   "w"))
+(cond-expand
+ (os-win32
+  (define cout-port
+    (make-soft-port
+     (vector (lambda (c) (win32-display (char->string c)))
+             (lambda (s) (win32-display s))
+             (lambda () (noop))
+             (lambda () #\?)
+             (lambda () (noop)))
+     "w"))
 
-(if (os-win32?)
-    (begin
-      (set-current-output-port cout-port)
-      (set-current-error-port cout-port)))
+  (set-current-output-port cout-port)
+  (set-current-error-port cout-port))
+ (else
+   ))
 
 ;;; make eval from guile>=1.6.0 backwards compatible
 (catch 'wrong-number-of-args
