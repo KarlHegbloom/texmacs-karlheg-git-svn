@@ -101,6 +101,5 @@ else
         $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
 fi
 
-ebrowse src/**/*.hpp \
-        src/**/*.cpp
-
+# ebrowse src/**/*.hpp \
+#         src/**/*.cpp

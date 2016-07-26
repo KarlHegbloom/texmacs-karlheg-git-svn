@@ -552,7 +552,7 @@ tmscm object_stack;
 
 static void
 initialize_core_module(void *unused) {
-  scm_c_define("texmacs-version", scm_from_locale_string(TEXMACS_VERSION));
+  scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
   scm_c_export("texmacs-version", NULL);
   eval_scheme_file_in_load_path("texmacs-core");
 }
@@ -575,21 +575,21 @@ initialize_scheme () {
     // "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
     //""
 
-  // const char* repl_prg =
-  //   "(cond-expand\n"
-  //   "  (guile-2\n"
-  //   "    ((@ (system repl server) run-server))))";
+  // spawn-server for a separate thread so it won't block GUI startup.
+  // Connect to it with:
+  //  rlwrap nc localhost 37146
+  //
+  const char* repl_prg =
+    "(cond-expand\n"
+    "  (guile-2\n"
+    "    ((@ (system repl server) spawn-server))))\n";
     
-    scm_c_eval_string (init_prg);
-    initialize_smobs ();
-    scm_c_define_module("texmacs-glue", initialize_glue, NULL);
-    scm_c_define_module("texmacs-core", initialize_core_module, NULL);
-    scm_c_use_module("texmacs-glue");
-    object_stack= scm_lookup_string ("object-stack");
+  scm_c_eval_string (init_prg);
+  initialize_smobs ();
+  scm_c_define_module("texmacs-glue", initialize_glue, NULL);
+  scm_c_define_module("texmacs-core", initialize_core_module, NULL);
+  scm_c_use_module("texmacs-glue");
+  object_stack= scm_lookup_string ("object-stack");
 
-    // scm_c_eval_string (repl_prg); // I think this blocks startup of the GUI
-    
-    // uncomment to have a guile repl available at startup	
-    //	gh_repl(guile_argc, guile_argv);
-    //scm_shell (guile_argc, guile_argv);
+  scm_c_eval_string (repl_prg);
 }
