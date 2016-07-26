@@ -7,9 +7,12 @@ case "$1" in
         sudo apt-get install guile-2.0-dev
     ;;
     2.2)
+        PACKAGE=$(ls -v ~/src/Guile/guile-2.2-dev_*_amd64.deb | tail -n 1)
         sudo dpkg -r guile-1.8-dev guile-2.0-dev
-        sudo dpkg -i ../../../Guile/guile-2.2-dev_2.1.3-git-1_amd64.deb
+        sudo dpkg -i "${PACKAGE}"
     ;;
 esac
 
-echo Run: sudo -k  by hand if done with root access.
+echo
+echo Run: sudo -k  by hand if you are finished with root access.
+echo
