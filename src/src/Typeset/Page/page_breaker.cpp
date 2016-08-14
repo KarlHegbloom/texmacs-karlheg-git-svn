@@ -12,6 +12,7 @@
 #include "Line/lazy_vstream.hpp"
 #include "vpenalty.hpp"
 #include "skeleton.hpp"
+#include "boot.hpp"
 
 #include "merge_sort.hpp"
 void sort (pagelet& pg);
@@ -1226,7 +1227,7 @@ page_breaker_rep::fast_break_page (int i1, int& first_end) {
     SI top_cor= flow_cor[0][i1]->max;
     SI bot_cor= flow_cor[0][i2-1]->min;
     spc += space (top_cor + flow_cor[0][i2-1]->def + bot_cor);
-
+    
     int bpen= access (l, flow[0][i2-1])->penalty;
     if (i2 >= n) bpen= 0;
     if (bpen < HYPH_INVALID) {
@@ -1242,7 +1243,7 @@ page_breaker_rep::fast_break_page (int i1, int& first_end) {
 	    ((double) max (spc->def, 1))/((double) max (height->def, 1));
 	  if (factor < 0.0 ) factor= 0.0;
 	  if (factor > 0.99) factor= 0.99;
-	  pen= vpenalty ((int) ((1.0 - factor) * TOO_SHORT_PENALTY));
+	  pen += vpenalty ((int) ((1.0 - factor) * TOO_SHORT_PENALTY));
 	}
       }
       else if (spc->min > height->def) {
@@ -1252,7 +1253,7 @@ page_breaker_rep::fast_break_page (int i1, int& first_end) {
 	    ((double) max (spc->def, 1))/((double) max (height->def, 1));
 	  if (factor < 1.0  ) factor= 1.0;
 	  if (factor > 100.0) factor= 100.0;
-	  pen= vpenalty ((int) (factor * TOO_LONG_PENALTY));
+	  pen += vpenalty ((int) (factor * TOO_LONG_PENALTY));
 	}
       }
       if (pen < best_pens[i2]) {
@@ -1497,16 +1498,25 @@ page_breaker_rep::make_skeleton () {
 * The exported page breaking routine
 ******************************************************************************/
 
+skeleton new_break_pages (array<page_item> l, space ph, int qual,
+                          space fn_sep, space fnote_sep, space float_sep,
+                          font fn, int first_page);
+
 skeleton
 break_pages (array<page_item> l, space ph, int qual,
 	     space fn_sep, space fnote_sep, space float_sep,
              font fn, int first_page)
 {
-  page_breaker_rep* H=
-    tm_new<page_breaker_rep> (l, ph, qual, fn_sep, fnote_sep, float_sep,
-                              fn, first_page);
-  // cout << HRULE << LF;
-  skeleton sk= H->make_skeleton ();
-  tm_delete (H);
-  return sk;
+  if (get_user_preference ("new style page breaking") == "on")
+    return new_break_pages (l, ph, qual, fn_sep, fnote_sep, float_sep,
+                            fn, first_page);
+  else {
+    page_breaker_rep* H=
+      tm_new<page_breaker_rep> (l, ph, qual, fn_sep, fnote_sep, float_sep,
+                                fn, first_page);
+    // cout << HRULE << LF;
+    skeleton sk= H->make_skeleton ();
+    tm_delete (H);
+    return sk;
+  }
 }

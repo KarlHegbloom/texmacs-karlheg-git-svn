@@ -64,6 +64,9 @@
 (define (notify-fast-environments var val)
   (set-fast-environments (== val "on")))
 
+(define (notify-new-page-breaking var val)
+  (noop))
+
 (define-preferences
   ("profile" "beginner" (lambda args (noop)))
   ("look and feel" "default" notify-look-and-feel)
@@ -101,7 +104,8 @@
   ("versioning tool" "off" notify-tool)
   ("experimental alpha" "on" notify-tool)
   ("new style fonts" "on" notify-new-fonts)
-  ("bitmap effects" "on" notify-tool))
+  ("bitmap effects" "on" notify-tool)
+  ("new style page breaking" "off" notify-new-page-breaking))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Properties of some built-in routines

@@ -193,6 +193,14 @@ init_std_drd () {
   init (VAR_NO_PAGE_BREAK, "no-page-break*",
 	fixed (0) -> name ("no page break before"));
   init (NO_PAGE_BREAK, "no-page-break", fixed (0) -> name ("no page break"));
+  init (VAR_NO_BREAK_HERE, "no-break-here*",
+        fixed (0) -> name ("no page break before line"));
+  init (NO_BREAK_HERE, "no-break-here",
+        fixed (0) -> name ("no page break after line"));
+  init (NO_BREAK_START, "no-break-start",
+        fixed (0) -> name ("start no page breaks"));
+  init (NO_BREAK_END, "no-break-end",
+        fixed (0) -> name ("end no page breaks"));
   init (VAR_NEW_PAGE, "new-page*", fixed (0) -> name ("new page before"));
   init (NEW_PAGE, "new-page", fixed (0) -> name ("new page"));
   init (VAR_NEW_DPAGE, "new-dpage*",
@@ -566,6 +574,10 @@ init_std_drd () {
 	regular (0) -> name (0, "flag text") ->
 	color_type (1) -> name (1, "color") ->
 	argument (2) -> name (2, "source"));
+  init (HYPHENATE_AS, "hyphenate-as",
+	options (1, 1, BIFORM) ->
+	string_type (0) -> name (0, "hyphenation") ->
+	accessible (1) -> regular (1) -> name (1, "content"));
 
   init (ANIM_STATIC, "anim-static",
 	fixed (1, 3, BIFORM) -> returns_animation () ->
@@ -1017,6 +1029,7 @@ init_std_drd () {
   init_var (PAGE_SHOW_HF, TYPE_BOOLEAN);
   init_var (PAGE_FNOTE_SEP, TYPE_LENGTH);
   init_var (PAGE_FNOTE_BARLEN, TYPE_LENGTH);
+  init_var (PAGE_FNOTE_BARSEP, TYPE_LENGTH);
   init_var (PAGE_FLOAT_SEP, TYPE_LENGTH);
   init_var (PAGE_MNOTE_SEP, TYPE_LENGTH);
   init_var (PAGE_MNOTE_WIDTH, TYPE_LENGTH);

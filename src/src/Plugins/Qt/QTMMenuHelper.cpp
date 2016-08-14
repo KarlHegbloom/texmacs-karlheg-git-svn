@@ -149,13 +149,6 @@ QTMTileAction::QTMTileAction (array<widget>& arr, int _cols, QObject* parent)
   };
 }
 
-/*!
- FIXME: QTMTileAction::createWidget is called twice:
- the first time when the action is added to the menu,
- the second when from the menu it is transferred to the toolbar.
- This is weird since the first widget does not ever use
- the widget so it results in a waste of time.
- */
 QWidget*
 QTMTileAction::createWidget (QWidget* parent)
 {
@@ -201,12 +194,6 @@ QTMMinibarAction::QTMMinibarAction (array<widget>& arr, QObject* parent)
   };
 }
 
-/*!
- FIXME: QTMMinibarAction::createWidget is called twice:
- the first time when the action is added to the menu, the second when from the
- menu it is transferred to the toolbar. This is weird since the first widget
- does not ever use the widget so it results in a waste of time.
- */
 QWidget*
 QTMMinibarAction::createWidget (QWidget* parent) {
   static QImage* pxm = xpm_image ("tm_add.xpm"); // See qt_tm_widget.cpp 
@@ -345,29 +332,25 @@ QTMLazyMenu::attachTo (QAction* a) {
 }
 
 void
-QTMLazyMenu::transferActions (QWidget* from) {
+QTMLazyMenu::transferActions (QList<QAction*>* from) {
   if (from == NULL) return;
   QList<QAction*> list = actions();
   while (!list.isEmpty()) {
     QAction* a = list.takeFirst();
     removeAction (a);
-    // For some reason, using deleteLater() leaks all the QActions
-    //a->deleteLater();
-    delete a;
   }
-  list = from->actions();
+  list = *from;
   while (!list.isEmpty()) {
     QAction* a = list.takeFirst();
     addAction (a);
-    a->setParent (this);
   }
 }
 
 void
 QTMLazyMenu::force () {
 BEGIN_SLOT
-  QMenu* m = concrete (promise_widget())->get_qmenu();
-  transferActions (m);
+  QList<QAction*>* list = concrete (promise_widget())->get_qactionlist();
+  transferActions (list);
 END_SLOT
 }
 
@@ -383,43 +366,22 @@ END_SLOT
  * QTMInputTextWidgetHelper
  ******************************************************************************/
 
-QTMInputTextWidgetHelper::QTMInputTextWidgetHelper (qt_widget _wid,
-                                                    QTMLineEdit* le)
-: QObject (le), p_wid (_wid), done (false) {
+QTMInputTextWidgetHelper::QTMInputTextWidgetHelper (qt_widget _wid)
+: QObject (), p_wid (_wid) {
+  QTMLineEdit* le = qobject_cast<QTMLineEdit*>(wid()->qwid);
+  setParent(le);
   ASSERT (le != NULL, "QTMInputTextWidgetHelper: expecting valid QTMLineEdit");
   QObject::connect (le, SIGNAL (returnPressed ()), this, SLOT (commit ()));
   QObject::connect (le, SIGNAL (focusOut (Qt::FocusReason)),
                     this, SLOT (leave (Qt::FocusReason)));
 }
 
-void
-QTMInputTextWidgetHelper::apply () {
-BEGIN_SLOT
-  if (done) return;
-  done = true;
-  the_gui->process_command (wid()->cmd, wid()->ok
-                            ? list_object (object (wid()->input))
-                            : list_object (object (false)));
-END_SLOT
-}
-
 /*! Executed when the enter key is pressed. */
 void
 QTMInputTextWidgetHelper::commit () {
 BEGIN_SLOT
-  QTMLineEdit* le = qobject_cast <QTMLineEdit*> (sender());
-  if (!le) return;
-
-  done         = false;
-  wid()->ok    = true;
-  wid()->input = from_qstring (le->text());
-
-    // HACK: restore focus to the main editor widget
-  widget_rep* win = qt_window_widget_rep::widget_from_qwidget (le);
-  if (win && concrete (win)->type == qt_widget_rep::texmacs_widget)
-    concrete (get_canvas (win))->qwid->setFocus();
-
-  if (win) apply();    // This is 0 inside a dialog => no command
+  if (sender() != wid()->qwid) return;
+  wid()->commit(true);
 END_SLOT
 }
 
@@ -427,22 +389,9 @@ END_SLOT
 void
 QTMInputTextWidgetHelper::leave (Qt::FocusReason reason) {
 BEGIN_SLOT
-  QTMLineEdit* le = qobject_cast <QTMLineEdit*> (sender());
-  if (!le) return;
-
-    // Don't autocommit if the user pressed the escape key
-    // (see QTMLineEdit::focusOut()).
-  if (reason != Qt::OtherFocusReason &&
-      get_preference ("gui:line-input:autocommit") == "#t") {
-    done         = false;
-    wid()->ok    = true;
-    wid()->input = from_qstring (le->text());
-  } else {
-    le->setText (to_qstring (wid()->input));
-  }
-
-  widget_rep* win = qt_window_widget_rep::widget_from_qwidget (le);
-  if (win) apply();    // This is 0 inside a dialog => no command
+  if (sender() != wid()->qwid) return;
+  wid()->commit((reason != Qt::OtherFocusReason &&
+                 get_preference ("gui:line-input:autocommit") == "#t"));
 END_SLOT
 }
 

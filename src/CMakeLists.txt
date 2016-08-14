@@ -40,10 +40,23 @@ endif(NOT CMAKE_BUILD_TYPE)
 project(TEXMACS CXX C) # check for C/C++ compiler
 
 set(PACKAGE TeXmacs)
-set(DEVEL_VERSION "1.99.4")
-set(DEVEL_RELEASE "1")
-set(STABLE_VERSION "1.99.4")
-set(STABLE_RELEASE "1")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
+
+find_package(Guile REQUIRED)
+
+if(Guile_VERSION_STRING VERSION_LESS 2.0)
+  set(DEVEL_VERSION "1.99.9")
+  set(DEVEL_RELEASE "1")
+  set(STABLE_VERSION "1.99.9")
+  set(STABLE_RELEASE "1")
+else(Guile_VERSION_STRING VERSION_LESS 2.0)
+  set(DEVEL_VERSION "2.0.0")
+  set(DEVEL_RELEASE "2")
+  set(STABLE_VERSION "2.0.0")
+  set(STABLE_RELEASE "2")
+endif(Guile_VERSION_STRING VERSION_LESS 2.0)
+
 
 message(STATUS "Getting revision control metadata for PKGREV")
 
@@ -150,8 +163,6 @@ endif("${PKG_DATE}" STREQUAL "")
 
 message(STATUS "--  ${PKG_MAINTAINER}  ${PKG_DATE}")
 
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
 
 ### --------------------------------------------------------------------
 ### Include standard modules
@@ -427,7 +438,6 @@ find_package(Imlib2)
 ###  Guile
 ### --------------------------------------------------------------------
 ###
-find_package(Guile REQUIRED)
 
 set(SCM_SIZET scm_sizet)
 if(Guile_VERSION_STRING VERSION_LESS 1.6)

@@ -19,6 +19,7 @@
 #include "dictionary.hpp"
 #include "editor.hpp"
 #include "new_view.hpp"      // get_current_editor()
+#include "image_files.hpp"
 #include "QTMFileDialog.hpp"
 
 #include <QString>
@@ -207,7 +208,7 @@ qt_chooser_widget_rep::perform_dialog () {
   c_string tmp (directory * "/" * file);
   QString path = QString::fromLocal8Bit (tmp);
   
-#if (defined(Q_WS_MAC) )// || defined(Q_WS_WIN)) //at least windows Xp and 7 lack image preview, switch to custom dialog
+#if 1 //#if (defined(Q_WS_MAC) )// || defined(Q_WS_WIN)) //at least windows Xp and 7 lack image preview, switch to custom dialog
   QFileDialog* dialog = new QFileDialog (NULL, caption, path);
 #else
   QTMFileDialog*  dialog;
@@ -261,24 +262,42 @@ qt_chooser_widget_rep::perform_dialog () {
   if (dialog->exec ()) {
     fileNames = dialog->selectedFiles();
     if (fileNames.count() > 0) {
-      string localname = utf8_to_cork (from_qstring_utf8 (fileNames.first()));
+      string imname    = from_qstring_utf8 (fileNames.first());
+      string localname = utf8_to_cork (imname);
       // here we need the filename encoded cork-universal because it is exposed in the document, in the <image> tag
       file = "(system->url " * scm_quote (localname) * ")";
       if (type == "image") {
-#if !defined(Q_WS_MAC) // && !defined(Q_WS_WIN)   //at least windows Xp and 7 lack image preview, switch to custom dialog
+#if 0 //#if !defined(Q_WS_MAC) // && !defined(Q_WS_WIN)   //at least windows Xp and 7 lack image preview, switch to custom dialog
         file = "(list " * file * imgdialog->getParamsAsString () * ")"; //set image size from preview
 #else //MacOs only now
         QPixmap pic (fileNames.first()); // Qt can't eps & pdf in windows.
         string params;
         // HACK: which value should we choose here?
         //On other platforms we call image_size (u,  w,  h) which returns size in pt units.
-        int ww = (get_current_editor()->get_page_width (false) / PIXEL) / 3;
-        int  w = min (ww, pic.width());
-        int  h = ((double) pic.height() / (double) pic.width()) * (double) w;   // no risk of division by zero here on invalid file?
-        params << "\"" << from_qstring (QString ("%1px").arg (w)) << "\" "
-               << "\"" << from_qstring (QString ("%1px").arg (h)) << "\" "
-               << "\"" << "" << "\" "  // xps ??
-               << "\"" << "" << "\"";   // yps ??
+        int ww = get_current_editor()->get_page_width (false) / PIXEL;
+        int  w = pic.width ();
+        int  h = pic.height ();
+        string unit= "px";
+        if (w == 0) {
+          image_size (url_system (imname), w, h);
+          unit= "pt";
+        }
+        if (w >= ww) {
+          h= (int) ((((double) h) / ((double) w)) * ((double) ww));
+          w= ww;
+        }
+        if (w > 0) {
+          params << "\"" << as_string (w) << unit << "\" "
+                 << "\"" << as_string (h) << unit << "\" "
+                 << "\"" << "" << "\" "  // xps ??
+                 << "\"" << "" << "\"";   // yps ??
+        }
+        else {
+          params << "\"" << as_string (ww) << "px\" "
+                 << "\"" << "" << "\" "
+                 << "\"" << "" << "\" "  // xps ??
+                 << "\"" << "" << "\"";   // yps ??
+        }
         file = "(list " * file * params * ")"; 
 #endif
       }

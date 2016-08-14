@@ -155,14 +155,8 @@ qt_widget_rep::as_qlayoutitem () {
 }
 
 
-/*! Returns the QMenu associated if any.
- 
- This method must not give ownership of the menu to the caller, thus
- allowing menu caching at the TeXmacs level. See the implementations in
- qt_ui_element_rep and qt_menu_rep.
- */
-QMenu*
-qt_widget_rep::get_qmenu () {
+QList<QAction*>*
+qt_widget_rep::get_qactionlist() {
   return NULL;
 }
 
@@ -229,7 +223,7 @@ qt_widget_rep::plain_window_widget (string name, command quit) {
  */
 widget
 qt_widget_rep::make_popup_widget () {
-  return tm_new<qt_popup_widget_rep> (this, command());
+  return tm_new<qt_popup_widget_rep> ((widget_rep*)this, command());
 }
 
 /*! Interface for the creation of popups.

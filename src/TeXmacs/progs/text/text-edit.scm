@@ -354,6 +354,18 @@
   (list "1" "2" "3" "4"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Hyphenation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (hyphenate-selection-as hyph)
+  (:interactive #t)
+  (:argument hyph "Hyphenate as")
+  (:proposals hyph (list (tm->string (selection-tree))))
+  (with ins `(hyphenate-as ,hyph ,(selection-tree))
+    (clipboard-cut "null")
+    (insert ins)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting formulas
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -663,3 +675,55 @@
         (list "ornament-border" "Border width")
         (list "ornament-hpadding" "Horizontal padding")
         (list "ornament-vpadding" "Vertical padding")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Floating objects and environments
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define (float-context? t)
+  (cond ((tree-is? t 'float) #t)
+        ((tree-in? t '(big-figure big-figure*
+                       big-table big-table*
+                       algorithm algorithm*
+                       document concat))
+         (and (tree-up t) (float-context? (tree-up t))))
+        (else #f)))
+
+(tm-define (floatable-context? t)
+  (and (tree-in? t '(big-figure big-figure*
+                     big-table big-table*
+                     algorithm algorithm*))
+       (not (float-context? t))
+       (tree-is? t :up 'document)))
+
+(tm-define (turn-floating t)
+  (when (floatable-context? t)
+    (with f `(float "float" "thb" ,t)
+      (tree-set! t f)
+      (tree-go-to t :start)
+      (remove-text #f))))
+
+(tm-define (cursor-at-anchor?)
+  (with t (cursor-tree)
+    (tree-in? t '(float footnote))))
+
+(tm-define (go-to-anchor)
+  (cond ((inside? 'float)
+         (with-innermost t 'float
+           (tree-go-to t :end)))
+        ((inside? 'footnote)
+         (with-innermost t 'footnote
+           (tree-go-to t :end)))))
+
+(tm-define (go-to-float)
+  (with t (cursor-tree)
+    (cond ((tree-is? t 'float)
+           (tree-go-to t 2 :start))
+          ((tree-is? t 'footnote)
+           (tree-go-to t 0 :start)))))
+
+(tm-define (cursor-toggle-anchor)
+  (:check-mark "v" cursor-at-anchor?)
+  (if (cursor-at-anchor?)
+      (go-to-float)
+      (go-to-anchor)))

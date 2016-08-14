@@ -55,6 +55,8 @@
   (-> "Whitespace" (link space-menu))
   (-> "Indentation" (link indentation-menu))
   (-> "Break" (link break-menu))
+  (when (and (selection-active-small?) (tm-atomic? (selection-tree)))
+    ("Hyphenate as" (interactive hyphenate-selection-as)))
   ---
   (-> "Color"
       (if (== (get-preference "experimental alpha") "on")
@@ -244,31 +246,36 @@
 (tm-define (marginal-note-context? t)
   (tree-is? t 'marginal-note))
 
-(tm-menu (focus-position-float-menu t)
+(tm-menu (focus-float-menu t)
   (:require (marginal-note-context? t))
   ---
   (link position-marginal-note-menu)
   ---)
 
-(menu-bind position-float-menu
+(menu-bind float-menu
   ("Top" (toggle-insertion-positioning "t"))
   ("Here" (toggle-insertion-positioning "h"))
   ("Bottom" (toggle-insertion-positioning "b"))
   ("Other pages" (toggle-insertion-positioning-not "f")))
 
-(tm-define (float-context? t)
-  (cond ((tree-is? t 'float) #t)
-        ((tree-in? t '(big-figure big-figure*
-                       big-table big-table*
-                       algorithm algorithm*
-                       document concat))
-         (and (tree-up t) (float-context? (tree-up t))))
-        (else #f)))
-
-(tm-menu (focus-position-float-menu t)
+(tm-menu (focus-float-menu t)
   (:require (float-context? t))
-  (-> "Allowed positions"
-      (link position-float-menu)))
+  (-> "Allowed positions" (link float-menu))
+  (if (cursor-at-anchor?)
+      ("Go to float" (go-to-float)))
+  (if (not (cursor-at-anchor?))
+      ("Go to anchor" (go-to-anchor))))
+
+(tm-menu (focus-float-menu t)
+  (:require (floatable-context? t))
+  ("Make floating" (turn-floating t)))
+
+(tm-menu (focus-float-menu t)
+  (:require (tree-is? t 'footnote))
+  (if (cursor-at-anchor?)
+      ("Go to footnote" (go-to-float)))
+  (if (not (cursor-at-anchor?))
+      ("Go to anchor" (go-to-anchor))))
 
 (menu-bind position-balloon-menu
   (group "Horizontal alignment")
@@ -285,7 +292,7 @@
   ("Inner top" (set-balloon-valign "top"))
   ("Outer top" (set-balloon-valign "Top")))
 
-(tm-menu (focus-position-float-menu t)
+(tm-menu (focus-float-menu t)
   (:require (balloon-context? t))
   ---
   (link position-balloon-menu)
@@ -870,19 +877,34 @@
 ;; Focus menus for floating objects
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(tm-menu (focus-position-float-icons t)
+(tm-menu (focus-float-icons t)
   (:require (marginal-note-context? t))
   (=> (balloon (icon "tm_position_float.xpm")
                "Position of marginal note")
       (link position-marginal-note-menu)))
 
-(tm-menu (focus-position-float-icons t)
+(tm-menu (focus-float-icons t)
   (:require (float-context? t))
   (=> (balloon (icon "tm_position_float.xpm")
                "Allowed positions of floating object")
-      (link position-float-menu)))
+      (link float-menu))
+  ((balloon (icon "tm_anchor.xpm")
+            "Go to anchor or float")
+   (cursor-toggle-anchor)))
 
-(tm-menu (focus-position-float-icons t)
+(tm-menu (focus-float-icons t)
+  (:require (floatable-context? t))
+  ((balloon (icon "tm_position_float.xpm")
+            "Let the environment float")
+   (turn-floating t)))
+
+(tm-menu (focus-float-icons t)
+  (:require (tree-is? t 'footnote))
+  ((balloon (icon "tm_anchor.xpm")
+            "Go to anchor or footnote")
+   (cursor-toggle-anchor)))
+
+(tm-menu (focus-float-icons t)
   (:require (balloon-context? t))
   (=> (balloon (icon "tm_position_float.xpm")
                "Alignment of balloon")

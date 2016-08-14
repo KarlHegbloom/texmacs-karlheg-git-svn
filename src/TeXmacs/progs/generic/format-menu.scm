@@ -101,12 +101,13 @@
 
 (menu-bind linear-transform-menu
   ("Rotate" (make-with-like `(rotate "45" "")))
-  ("Dilate" (make-with-like `(delate "1.2" "0.9" "")))
+  ("Dilate" (make-with-like `(dilate "1.2" "0.9" "")))
   ("Skew" (make-with-like `(skew "0.333" "")))
   ("Linear 2D" (make-with-like `(linear-2d "1.2" "0.2" "0.2" "1.2" ""))))
 
 (menu-bind format-special-menu
   ("Group" (make-rigid))
+  ("Indivisible" (make 'indivisible))
   ("Phantom" (make 'phantom))
   ("Superpose" (make 'superpose))
   ("Repeat object" (make 'repeat))
@@ -310,13 +311,13 @@
   ("New page" (make 'new-page*))
   ("New double page" (make 'new-dpage*))
   ("Page break" (make 'page-break*))
-  ("No page break" (make 'no-page-break*))
+  ("No page break" (make 'no-break-here*))
   ---
   (group "Page break after")
   ("New page" (make-new-page))
   ("New double page" (make-new-dpage))
   ("Page break" (make-page-break))
-  ("No page break" (make 'no-page-break)))
+  ("No page break" (make 'no-break-here)))
 
 (menu-bind page-menu
   (-> "Header" (link page-header-menu))

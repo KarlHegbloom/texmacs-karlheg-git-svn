@@ -20,9 +20,6 @@ page_item access (array<page_item> l, path p);
 skeleton break_pages (array<page_item> l, space ph, int qual,
 		      space fn_sep, space fnote_sep, space float_sep,
                       font fn, int first_page);
-skeleton new_break_pages (array<page_item> l, space ph, int qual,
-                          space fn_sep, space fnote_sep, space float_sep,
-                          font fn, int first_page);
 box page_box (path ip, box b, tree page, int page_nr, brush bgc,
               SI width, SI height, SI left, SI top,
 	      SI bot, box header, box footer, SI head_sep, SI foot_sep);
@@ -148,7 +145,7 @@ pager_rep::pages_format (pagelet pg) {
       pencil pen= env->pen->set_width (env->fn->wline);
       bs << line_box (decorate(), 0, 0, fnote_bl, 0, pen);
       bx << 0;
-      by << (fnote_y + env->fn->sep);
+      by << (fnote_y + stretch_space (fnote_bs, 0.5));
     }
     // cout << UNINDENT << "Formatted pagelet " << (N(pages)+1) << LF << LF;
     return scatter_box (ip, bs, bx, by);

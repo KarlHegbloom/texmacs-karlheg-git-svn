@@ -462,7 +462,7 @@
   (define Letter-symbol
     (:type symbol)
 
-    "<mathe>" "<mathi>" "<mathpi>"
+    "<mathe>" "<mathi>" "<mathlambda>" "<mathpi>"
     "<matheuler>" "<mathcatalan>" "<mathGamma>"
     "<aleph>" "<beth>" "<gimel>" "<daleth>"
     "<hbar>" "<hslash>" "<imath>" "<jmath>"

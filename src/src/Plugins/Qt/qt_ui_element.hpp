@@ -53,7 +53,8 @@ class qt_ui_element_rep: public qt_widget_rep {
     // deletion of all the nested widgets within.
   blackbox                  load;
   QPointer<QAction> cachedAction;
-
+  QList<QAction*>* cachedActionList;
+    
 public:  
   qt_ui_element_rep (types _type, blackbox _load);
   virtual ~qt_ui_element_rep(); 
@@ -62,9 +63,9 @@ public:
   
   virtual QAction*         as_qaction ();
   virtual QWidget*         as_qwidget ();
-  virtual QLayoutItem* as_qlayoutitem ();
-  virtual QMenu*            get_qmenu ();
-  
+  virtual QLayoutItem*     as_qlayoutitem ();
+  virtual QList<QAction*>* get_qactionlist();
+
   operator tree ();
 
   template<class X1> static qt_widget create (types _type, X1 x1) {
@@ -128,7 +129,6 @@ public:
     add_child (tmwid);
   }
   QWidget* as_qwidget () { return concrete(tmwid)->as_qwidget(); }
-  QLayoutItem* as_qlayoutitem () { return new QWidgetItem (as_qwidget()); }
   void send (slot s, blackbox val) {
     switch (s) {
       case SLOT_DESTROY:
@@ -136,9 +136,9 @@ public:
         quit = command();
         break;
       default:
-        qt_widget_rep::send (s, val);
         return;
     }
+    qt_widget_rep::send (s, val);
     if (DEBUG_QT_WIDGETS)
       cout << "qt_wrapped_widget_rep: sent " << slot_name (s)
            << "\t\tto widget\t" << type_as_string() << LF;

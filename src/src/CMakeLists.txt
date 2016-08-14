@@ -344,7 +344,9 @@ SET(TeXmacs_Base_SRCS
     ./Typeset/Line/lazy_typeset.cpp
     ./Typeset/Line/lazy_vstream.cpp
     ./Typeset/Line/line_breaker.cpp
+    ./Typeset/Page/columns_breaker.cpp
     ./Typeset/Page/make_pages.cpp
+    ./Typeset/Page/new_breaker.cpp
     ./Typeset/Page/page_breaker.cpp
     ./Typeset/Page/pager.cpp
     ./Typeset/Page/skeleton.cpp

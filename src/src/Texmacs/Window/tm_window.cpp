@@ -70,6 +70,9 @@ static bool
 resize_accept (int old_w, int old_h, int w, int h) {
   if (old_w == w && old_h == h) return false;
 #ifdef QTTEXMACS
+  if (old_w == w && old_h == h + 41) return false;
+  if (old_w == w && old_h == h + 24) return false;
+  if (old_w == w && old_h == h + 22) return false;
   if (old_w == w && old_h == h + 16) return false;
   if (old_w == w && old_h == h - 40) return false;
 #endif
@@ -117,6 +120,7 @@ get_preferred_size (string name, SI& ww, SI& hh) {
     int h= as_int (get_user_preference ("height " * name));
     ww= w * PIXEL;
     hh= h * PIXEL;
+    //cout << "Size " << name << ": " << w << ", " << h << "\n";
   }
 }
 
@@ -318,11 +322,7 @@ tm_window_rep::refresh () {
 * Menus
 ******************************************************************************/
 
-#ifdef QTTEXMACS
-bool menu_caching= false;
-#else
 bool menu_caching= true;
-#endif
 
 bool
 tm_window_rep::get_menu_widget (int which, string menu, widget& w) {
