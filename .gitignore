@@ -33,3 +33,5 @@ src/src/cmake_install.cmake
 src/texmacs.1.gz
 src/texmacs.bin
 texmacs*deb
+src/Doxyfile
+src/doxygen

@@ -675,6 +675,8 @@ file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/changelog)
 configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/changelog.in
   ${TEXMACS_SOURCE_DIR}/packages/debian/changelog @ONLY)
 
+configure_file(${TEXMACS_SOURCE_DIR}/misc/doxygen/Doxyfile.in
+  ${TEXMACS_SOURCE_DIR}/Doxyfile)
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
