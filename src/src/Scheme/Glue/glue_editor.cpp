@@ -11,6 +11,7 @@
 *
 ******************************************************************************/
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_root()
 tmscm
 tmg_root_tree () {
   // TMSCM_DEFER_INTS;
@@ -20,6 +21,7 @@ tmg_root_tree () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_buffer_path()
 tmscm
 tmg_buffer_path () {
   // TMSCM_DEFER_INTS;
@@ -29,6 +31,7 @@ tmg_buffer_path () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_buffer()
 tmscm
 tmg_buffer_tree () {
   // TMSCM_DEFER_INTS;
@@ -38,6 +41,7 @@ tmg_buffer_tree () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_line()
 tmscm
 tmg_paragraph_tree () {
   // TMSCM_DEFER_INTS;
@@ -47,6 +51,7 @@ tmg_paragraph_tree () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_path()
 tmscm
 tmg_cursor_path () {
   // TMSCM_DEFER_INTS;
@@ -56,6 +61,7 @@ tmg_cursor_path () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_shifted_path()
 tmscm
 tmg_cursor_path_dot () {
   // TMSCM_DEFER_INTS;
@@ -65,6 +71,7 @@ tmg_cursor_path_dot () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get()
 tmscm
 tmg_selection_tree () {
   // TMSCM_DEFER_INTS;
@@ -74,6 +81,7 @@ tmg_selection_tree () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::the_subtree()
 tmscm
 tmg_path_2tree (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path->tree");
@@ -87,6 +95,7 @@ tmg_path_2tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::correct()
 tmscm
 tmg_path_correct_old (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-correct-old");
@@ -100,6 +109,7 @@ tmg_path_correct_old (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::insert_with()
 tmscm
 tmg_path_insert_with (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-insert-with");
@@ -117,6 +127,7 @@ tmg_path_insert_with (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_with()
 tmscm
 tmg_path_remove_with (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-remove-with");
@@ -132,6 +143,7 @@ tmg_path_remove_with (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::position_new()
 tmscm
 tmg_position_new_path (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "position-new-path");
@@ -145,6 +157,7 @@ tmg_position_new_path (tmscm arg1) {
   return observer_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::position_delete()
 tmscm
 tmg_position_delete (tmscm arg1) {
   TMSCM_ASSERT_OBSERVER (arg1, TMSCM_ARG1, "position-delete");
@@ -158,6 +171,7 @@ tmg_position_delete (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::position_set()
 tmscm
 tmg_position_set (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_OBSERVER (arg1, TMSCM_ARG1, "position-set");
@@ -173,6 +187,7 @@ tmg_position_set (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::position_get()
 tmscm
 tmg_position_get (tmscm arg1) {
   TMSCM_ASSERT_OBSERVER (arg1, TMSCM_ARG1, "position-get");
@@ -186,6 +201,7 @@ tmg_position_get (tmscm arg1) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::inside()
 tmscm
 tmg_insideP (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "inside?");
@@ -199,6 +215,7 @@ tmg_insideP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::insert_tree()
 tmscm
 tmg_cpp_insert (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "cpp-insert");
@@ -212,6 +229,7 @@ tmg_cpp_insert (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::var_insert_tree()
 tmscm
 tmg_cpp_insert_go_to (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "cpp-insert-go-to");
@@ -227,6 +245,7 @@ tmg_cpp_insert_go_to (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::insert_tree()
 tmscm
 tmg_insert_raw_go_to (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "insert-raw-go-to");
@@ -242,6 +261,7 @@ tmg_insert_raw_go_to (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::insert_return()
 tmscm
 tmg_insert_raw_return () {
   // TMSCM_DEFER_INTS;
@@ -251,6 +271,7 @@ tmg_insert_raw_return () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_text()
 tmscm
 tmg_remove_text (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "remove-text");
@@ -264,6 +285,7 @@ tmg_remove_text (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_structure()
 tmscm
 tmg_remove_structure (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "remove-structure");
@@ -277,6 +299,7 @@ tmg_remove_structure (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_structure_upwards()
 tmscm
 tmg_remove_structure_upwards () {
   // TMSCM_DEFER_INTS;
@@ -286,6 +309,7 @@ tmg_remove_structure_upwards () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_compound()
 tmscm
 tmg_cpp_make (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "cpp-make");
@@ -299,6 +323,7 @@ tmg_cpp_make (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_compound()
 tmscm
 tmg_cpp_make_arity (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "cpp-make-arity");
@@ -314,6 +339,7 @@ tmg_cpp_make_arity (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::activate()
 tmscm
 tmg_activate () {
   // TMSCM_DEFER_INTS;
@@ -323,6 +349,7 @@ tmg_activate () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::insert_argument()
 tmscm
 tmg_insert_argument (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "insert-argument");
@@ -336,6 +363,7 @@ tmg_insert_argument (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_argument()
 tmscm
 tmg_remove_argument (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "remove-argument");
@@ -349,6 +377,7 @@ tmg_remove_argument (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::insert_argument()
 tmscm
 tmg_insert_argument_at (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "insert-argument-at");
@@ -364,6 +393,7 @@ tmg_insert_argument_at (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_argument()
 tmscm
 tmg_remove_argument_at (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "remove-argument-at");
@@ -379,6 +409,7 @@ tmg_remove_argument_at (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_with()
 tmscm
 tmg_cpp_make_with (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-make-with");
@@ -394,6 +425,7 @@ tmg_cpp_make_with (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_mod_active()
 tmscm
 tmg_make_mod_active (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "make-mod-active");
@@ -407,6 +439,7 @@ tmg_make_mod_active (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_style_with()
 tmscm
 tmg_make_style_with (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-style-with");
@@ -422,6 +455,7 @@ tmg_make_style_with (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_hybrid()
 tmscm
 tmg_cpp_make_hybrid () {
   // TMSCM_DEFER_INTS;
@@ -431,6 +465,7 @@ tmg_cpp_make_hybrid () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::activate_latex()
 tmscm
 tmg_activate_latex () {
   // TMSCM_DEFER_INTS;
@@ -440,6 +475,7 @@ tmg_activate_latex () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::activate_hybrid()
 tmscm
 tmg_activate_hybrid (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "activate-hybrid");
@@ -453,6 +489,7 @@ tmg_activate_hybrid (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::activate_symbol()
 tmscm
 tmg_activate_symbol () {
   // TMSCM_DEFER_INTS;
@@ -462,6 +499,7 @@ tmg_activate_symbol () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_return_before()
 tmscm
 tmg_make_return_before () {
   // TMSCM_DEFER_INTS;
@@ -471,6 +509,7 @@ tmg_make_return_before () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_return_after()
 tmscm
 tmg_make_return_after () {
   // TMSCM_DEFER_INTS;
@@ -480,6 +519,7 @@ tmg_make_return_after () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::temp_proof_fix()
 tmscm
 tmg_temp_proof_fix () {
   // TMSCM_DEFER_INTS;
@@ -489,6 +529,7 @@ tmg_temp_proof_fix () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_full_env()
 tmscm
 tmg_get_full_env () {
   // TMSCM_DEFER_INTS;
@@ -498,6 +539,7 @@ tmg_get_full_env () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_init_all()
 tmscm
 tmg_get_all_inits () {
   // TMSCM_DEFER_INTS;
@@ -507,6 +549,7 @@ tmg_get_all_inits () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::init_default()
 tmscm
 tmg_init_default_one (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "init-default-one");
@@ -520,6 +563,7 @@ tmg_init_default_one (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::init_env()
 tmscm
 tmg_init_env (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "init-env");
@@ -535,6 +579,7 @@ tmg_init_env (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::init_env()
 tmscm
 tmg_init_env_tree (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "init-env-tree");
@@ -550,6 +595,7 @@ tmg_init_env_tree (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::init_style()
 tmscm
 tmg_init_style (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "init-style");
@@ -563,6 +609,7 @@ tmg_init_style (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_style()
 tmscm
 tmg_get_style_tree () {
   // TMSCM_DEFER_INTS;
@@ -572,6 +619,7 @@ tmg_get_style_tree () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::change_style()
 tmscm
 tmg_set_style_tree (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "set-style-tree");
@@ -585,6 +633,7 @@ tmg_set_style_tree (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_env_string()
 tmscm
 tmg_get_env (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-env");
@@ -598,6 +647,7 @@ tmg_get_env (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_env_value()
 tmscm
 tmg_get_env_tree (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-env-tree");
@@ -611,6 +661,7 @@ tmg_get_env_tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_env_value()
 tmscm
 tmg_get_env_tree_at (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-env-tree-at");
@@ -626,6 +677,7 @@ tmg_get_env_tree_at (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_init_string()
 tmscm
 tmg_get_init (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-init");
@@ -639,6 +691,7 @@ tmg_get_init (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_init_value()
 tmscm
 tmg_get_init_tree (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-init-tree");
@@ -652,6 +705,7 @@ tmg_get_init_tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::defined_at_cursor()
 tmscm
 tmg_context_hasP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "context-has?");
@@ -665,6 +719,7 @@ tmg_context_hasP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::defined_at_init()
 tmscm
 tmg_style_hasP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "style-has?");
@@ -678,6 +733,7 @@ tmg_style_hasP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::defined_in_init()
 tmscm
 tmg_init_hasP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "init-has?");
@@ -691,6 +747,7 @@ tmg_init_hasP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_page_count()
 tmscm
 tmg_get_page_count () {
   // TMSCM_DEFER_INTS;
@@ -700,6 +757,7 @@ tmg_get_page_count () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_page_width()
 tmscm
 tmg_get_page_width (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "get-page-width");
@@ -713,6 +771,7 @@ tmg_get_page_width (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_pages_width()
 tmscm
 tmg_get_pages_width (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "get-pages-width");
@@ -726,6 +785,7 @@ tmg_get_pages_width (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_page_height()
 tmscm
 tmg_get_page_height (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "get-page-height");
@@ -739,6 +799,7 @@ tmg_get_page_height (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_total_width()
 tmscm
 tmg_get_total_width (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "get-total-width");
@@ -752,6 +813,7 @@ tmg_get_total_width (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_total_height()
 tmscm
 tmg_get_total_height (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "get-total-height");
@@ -765,6 +827,7 @@ tmg_get_total_height (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_att()
 tmscm
 tmg_get_attachment (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-attachment");
@@ -778,6 +841,7 @@ tmg_get_attachment (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_att()
 tmscm
 tmg_set_attachment (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-attachment");
@@ -793,6 +857,7 @@ tmg_set_attachment (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::reset_att()
 tmscm
 tmg_reset_attachment (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "reset-attachment");
@@ -806,6 +871,7 @@ tmg_reset_attachment (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::list_atts()
 tmscm
 tmg_list_attachments () {
   // TMSCM_DEFER_INTS;
@@ -815,6 +881,7 @@ tmg_list_attachments () {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_htab()
 tmscm
 tmg_make_htab (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-htab");
@@ -828,6 +895,7 @@ tmg_make_htab (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_space()
 tmscm
 tmg_make_space (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-space");
@@ -841,6 +909,7 @@ tmg_make_space (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_space()
 tmscm
 tmg_make_var_space (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-var-space");
@@ -858,6 +927,7 @@ tmg_make_var_space (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_hspace()
 tmscm
 tmg_make_hspace (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-hspace");
@@ -871,6 +941,7 @@ tmg_make_hspace (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_hspace()
 tmscm
 tmg_make_var_hspace (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-var-hspace");
@@ -888,6 +959,7 @@ tmg_make_var_hspace (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_vspace_before()
 tmscm
 tmg_make_vspace_before (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-vspace-before");
@@ -901,6 +973,7 @@ tmg_make_vspace_before (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_vspace_before()
 tmscm
 tmg_make_var_vspace_before (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-var-vspace-before");
@@ -918,6 +991,7 @@ tmg_make_var_vspace_before (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_vspace_after()
 tmscm
 tmg_make_vspace_after (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-vspace-after");
@@ -931,6 +1005,7 @@ tmg_make_vspace_after (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_vspace_after()
 tmscm
 tmg_make_var_vspace_after (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-var-vspace-after");
@@ -948,6 +1023,7 @@ tmg_make_var_vspace_after (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_image()
 tmscm
 tmg_make_image (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5, tmscm arg6) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-image");
@@ -971,6 +1047,7 @@ tmg_make_image (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5, tmsc
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::as_length()
 tmscm
 tmg_length_decode (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "length-decode");
@@ -984,6 +1061,7 @@ tmg_length_decode (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::add_lengths()
 tmscm
 tmg_length_add (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "length-add");
@@ -999,6 +1077,7 @@ tmg_length_add (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::multiply_length()
 tmscm
 tmg_length_mult (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "length-mult");
@@ -1014,6 +1093,7 @@ tmg_length_mult (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::is_length()
 tmscm
 tmg_lengthP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "length?");
@@ -1027,6 +1107,7 @@ tmg_lengthP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::divide_lengths()
 tmscm
 tmg_length_divide (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "length-divide");
@@ -1042,6 +1123,7 @@ tmg_length_divide (tmscm arg1, tmscm arg2) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_rigid()
 tmscm
 tmg_cpp_make_rigid () {
   // TMSCM_DEFER_INTS;
@@ -1051,6 +1133,7 @@ tmg_cpp_make_rigid () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_lprime()
 tmscm
 tmg_cpp_make_lprime (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-make-lprime");
@@ -1064,6 +1147,7 @@ tmg_cpp_make_lprime (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_rprime()
 tmscm
 tmg_cpp_make_rprime (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-make-rprime");
@@ -1077,6 +1161,7 @@ tmg_cpp_make_rprime (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_below()
 tmscm
 tmg_cpp_make_below () {
   // TMSCM_DEFER_INTS;
@@ -1086,6 +1171,7 @@ tmg_cpp_make_below () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_above()
 tmscm
 tmg_cpp_make_above () {
   // TMSCM_DEFER_INTS;
@@ -1095,6 +1181,7 @@ tmg_cpp_make_above () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_script()
 tmscm
 tmg_cpp_make_script (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "cpp-make-script");
@@ -1110,6 +1197,7 @@ tmg_cpp_make_script (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_fraction()
 tmscm
 tmg_cpp_make_fraction () {
   // TMSCM_DEFER_INTS;
@@ -1119,6 +1207,7 @@ tmg_cpp_make_fraction () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_sqrt()
 tmscm
 tmg_cpp_make_sqrt () {
   // TMSCM_DEFER_INTS;
@@ -1128,6 +1217,7 @@ tmg_cpp_make_sqrt () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_wide()
 tmscm
 tmg_cpp_make_wide (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-make-wide");
@@ -1141,6 +1231,7 @@ tmg_cpp_make_wide (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_wide_under()
 tmscm
 tmg_cpp_make_wide_under (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-make-wide-under");
@@ -1154,6 +1245,7 @@ tmg_cpp_make_wide_under (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_var_sqrt()
 tmscm
 tmg_cpp_make_var_sqrt () {
   // TMSCM_DEFER_INTS;
@@ -1163,6 +1255,7 @@ tmg_cpp_make_var_sqrt () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_neg()
 tmscm
 tmg_cpp_make_neg () {
   // TMSCM_DEFER_INTS;
@@ -1172,6 +1265,7 @@ tmg_cpp_make_neg () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_tree()
 tmscm
 tmg_cpp_make_tree () {
   // TMSCM_DEFER_INTS;
@@ -1181,6 +1275,7 @@ tmg_cpp_make_tree () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::make_subtable()
 tmscm
 tmg_make_subtable () {
   // TMSCM_DEFER_INTS;
@@ -1190,6 +1285,7 @@ tmg_make_subtable () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_deactivate()
 tmscm
 tmg_table_deactivate () {
   // TMSCM_DEFER_INTS;
@@ -1199,6 +1295,7 @@ tmg_table_deactivate () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_extract_format()
 tmscm
 tmg_table_extract_format () {
   // TMSCM_DEFER_INTS;
@@ -1208,6 +1305,7 @@ tmg_table_extract_format () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_insert_row()
 tmscm
 tmg_table_insert_row (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "table-insert-row");
@@ -1221,6 +1319,7 @@ tmg_table_insert_row (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_insert_column()
 tmscm
 tmg_table_insert_column (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "table-insert-column");
@@ -1234,6 +1333,7 @@ tmg_table_insert_column (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_remove_row()
 tmscm
 tmg_table_remove_row (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "table-remove-row");
@@ -1247,6 +1347,7 @@ tmg_table_remove_row (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_remove_column()
 tmscm
 tmg_table_remove_column (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "table-remove-column");
@@ -1260,6 +1361,7 @@ tmg_table_remove_column (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_nr_rows()
 tmscm
 tmg_table_nr_rows () {
   // TMSCM_DEFER_INTS;
@@ -1269,6 +1371,7 @@ tmg_table_nr_rows () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_nr_columns()
 tmscm
 tmg_table_nr_columns () {
   // TMSCM_DEFER_INTS;
@@ -1278,6 +1381,7 @@ tmg_table_nr_columns () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_get_extents()
 tmscm
 tmg_table_get_extents () {
   // TMSCM_DEFER_INTS;
@@ -1287,6 +1391,7 @@ tmg_table_get_extents () {
   return array_int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_set_extents()
 tmscm
 tmg_table_set_extents (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "table-set-extents");
@@ -1302,6 +1407,7 @@ tmg_table_set_extents (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_which_row()
 tmscm
 tmg_table_which_row () {
   // TMSCM_DEFER_INTS;
@@ -1311,6 +1417,7 @@ tmg_table_which_row () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_which_column()
 tmscm
 tmg_table_which_column () {
   // TMSCM_DEFER_INTS;
@@ -1320,6 +1427,7 @@ tmg_table_which_column () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_which_cells()
 tmscm
 tmg_table_which_cells () {
   // TMSCM_DEFER_INTS;
@@ -1329,6 +1437,7 @@ tmg_table_which_cells () {
   return array_int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_search_cell()
 tmscm
 tmg_table_cell_path (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "table-cell-path");
@@ -1344,6 +1453,7 @@ tmg_table_cell_path (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_go_to()
 tmscm
 tmg_table_go_to (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "table-go-to");
@@ -1359,6 +1469,7 @@ tmg_table_go_to (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_set_format()
 tmscm
 tmg_table_set_format (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "table-set-format");
@@ -1374,6 +1485,7 @@ tmg_table_set_format (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_get_format()
 tmscm
 tmg_table_get_format_all () {
   // TMSCM_DEFER_INTS;
@@ -1383,6 +1495,7 @@ tmg_table_get_format_all () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_get_format()
 tmscm
 tmg_table_get_format (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "table-get-format");
@@ -1396,6 +1509,7 @@ tmg_table_get_format (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_del_format()
 tmscm
 tmg_table_del_format (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "table-del-format");
@@ -1409,6 +1523,7 @@ tmg_table_del_format (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_row_decoration()
 tmscm
 tmg_table_row_decoration (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "table-row-decoration");
@@ -1422,6 +1537,7 @@ tmg_table_row_decoration (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_column_decoration()
 tmscm
 tmg_table_column_decoration (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "table-column-decoration");
@@ -1435,6 +1551,7 @@ tmg_table_column_decoration (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_format_center()
 tmscm
 tmg_table_format_center () {
   // TMSCM_DEFER_INTS;
@@ -1444,6 +1561,7 @@ tmg_table_format_center () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_correct_block_content()
 tmscm
 tmg_table_correct_block_content () {
   // TMSCM_DEFER_INTS;
@@ -1453,6 +1571,7 @@ tmg_table_correct_block_content () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_cell_mode()
 tmscm
 tmg_set_cell_mode (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-cell-mode");
@@ -1466,6 +1585,7 @@ tmg_set_cell_mode (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_cell_mode()
 tmscm
 tmg_get_cell_mode () {
   // TMSCM_DEFER_INTS;
@@ -1475,6 +1595,7 @@ tmg_get_cell_mode () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cell_set_format()
 tmscm
 tmg_cell_set_format (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cell-set-format");
@@ -1490,6 +1611,7 @@ tmg_cell_set_format (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cell_get_format()
 tmscm
 tmg_cell_get_format (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cell-get-format");
@@ -1503,6 +1625,7 @@ tmg_cell_get_format (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cell_del_format()
 tmscm
 tmg_cell_del_format (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cell-del-format");
@@ -1516,6 +1639,7 @@ tmg_cell_del_format (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::table_test()
 tmscm
 tmg_table_test () {
   // TMSCM_DEFER_INTS;
@@ -1525,6 +1649,7 @@ tmg_table_test () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::key_press()
 tmscm
 tmg_key_press (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "key-press");
@@ -1538,6 +1663,7 @@ tmg_key_press (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::emulate_keyboard()
 tmscm
 tmg_raw_emulate_keyboard (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "raw-emulate-keyboard");
@@ -1551,6 +1677,7 @@ tmg_raw_emulate_keyboard (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::complete_try()
 tmscm
 tmg_complete_tryP () {
   // TMSCM_DEFER_INTS;
@@ -1560,6 +1687,7 @@ tmg_complete_tryP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_input_mode()
 tmscm
 tmg_get_input_mode () {
   // TMSCM_DEFER_INTS;
@@ -1569,6 +1697,7 @@ tmg_get_input_mode () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::search_keypress()
 tmscm
 tmg_key_press_search (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "key-press-search");
@@ -1582,6 +1711,7 @@ tmg_key_press_search (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::replace_keypress()
 tmscm
 tmg_key_press_replace (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "key-press-replace");
@@ -1595,6 +1725,7 @@ tmg_key_press_replace (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::spell_keypress()
 tmscm
 tmg_key_press_spell (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "key-press-spell");
@@ -1608,6 +1739,7 @@ tmg_key_press_spell (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::complete_keypress()
 tmscm
 tmg_key_press_complete (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "key-press-complete");
@@ -1621,6 +1753,7 @@ tmg_key_press_complete (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::mouse_any()
 tmscm
 tmg_mouse_any (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "mouse-any");
@@ -1642,6 +1775,7 @@ tmg_mouse_any (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_mouse_position()
 tmscm
 tmg_get_mouse_position () {
   // TMSCM_DEFER_INTS;
@@ -1651,6 +1785,7 @@ tmg_get_mouse_position () {
   return array_int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_pointer()
 tmscm
 tmg_set_mouse_pointer (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-mouse-pointer");
@@ -1666,6 +1801,7 @@ tmg_set_mouse_pointer (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_pointer()
 tmscm
 tmg_set_predef_mouse_pointer (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-predef-mouse-pointer");
@@ -1679,6 +1815,7 @@ tmg_set_predef_mouse_pointer (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_to()
 tmscm
 tmg_go_to_path (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "go-to-path");
@@ -1692,6 +1829,7 @@ tmg_go_to_path (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_left()
 tmscm
 tmg_go_left () {
   // TMSCM_DEFER_INTS;
@@ -1701,6 +1839,7 @@ tmg_go_left () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_right()
 tmscm
 tmg_go_right () {
   // TMSCM_DEFER_INTS;
@@ -1710,6 +1849,7 @@ tmg_go_right () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_up()
 tmscm
 tmg_go_up () {
   // TMSCM_DEFER_INTS;
@@ -1719,6 +1859,7 @@ tmg_go_up () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_down()
 tmscm
 tmg_go_down () {
   // TMSCM_DEFER_INTS;
@@ -1728,6 +1869,7 @@ tmg_go_down () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_start()
 tmscm
 tmg_go_start () {
   // TMSCM_DEFER_INTS;
@@ -1737,6 +1879,7 @@ tmg_go_start () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_end()
 tmscm
 tmg_go_end () {
   // TMSCM_DEFER_INTS;
@@ -1746,6 +1889,7 @@ tmg_go_end () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_start_of()
 tmscm
 tmg_go_start_of (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "go-start-of");
@@ -1759,6 +1903,7 @@ tmg_go_start_of (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_end_of()
 tmscm
 tmg_go_end_of (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "go-end-of");
@@ -1772,6 +1917,7 @@ tmg_go_end_of (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_start_with()
 tmscm
 tmg_go_start_with (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "go-start-with");
@@ -1787,6 +1933,7 @@ tmg_go_start_with (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_end_with()
 tmscm
 tmg_go_end_with (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "go-end-with");
@@ -1802,6 +1949,7 @@ tmg_go_end_with (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_start_line()
 tmscm
 tmg_go_start_line () {
   // TMSCM_DEFER_INTS;
@@ -1811,6 +1959,7 @@ tmg_go_start_line () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_end_line()
 tmscm
 tmg_go_end_line () {
   // TMSCM_DEFER_INTS;
@@ -1820,6 +1969,7 @@ tmg_go_end_line () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_page_up()
 tmscm
 tmg_go_page_up () {
   // TMSCM_DEFER_INTS;
@@ -1829,6 +1979,7 @@ tmg_go_page_up () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_page_down()
 tmscm
 tmg_go_page_down () {
   // TMSCM_DEFER_INTS;
@@ -1838,6 +1989,7 @@ tmg_go_page_down () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_start_paragraph()
 tmscm
 tmg_go_start_paragraph () {
   // TMSCM_DEFER_INTS;
@@ -1847,6 +1999,7 @@ tmg_go_start_paragraph () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_end_paragraph()
 tmscm
 tmg_go_end_paragraph () {
   // TMSCM_DEFER_INTS;
@@ -1856,6 +2009,7 @@ tmg_go_end_paragraph () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::go_to_label()
 tmscm
 tmg_go_to_label (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "go-to-label");
@@ -1869,6 +2023,7 @@ tmg_go_to_label (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cursor_is_accessible()
 tmscm
 tmg_cursor_accessibleP () {
   // TMSCM_DEFER_INTS;
@@ -1878,6 +2033,7 @@ tmg_cursor_accessibleP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_cursor_if_hidden()
 tmscm
 tmg_cursor_show_if_hidden () {
   // TMSCM_DEFER_INTS;
@@ -1887,6 +2043,7 @@ tmg_cursor_show_if_hidden () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_all()
 tmscm
 tmg_select_all () {
   // TMSCM_DEFER_INTS;
@@ -1896,6 +2053,7 @@ tmg_select_all () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_line()
 tmscm
 tmg_select_line () {
   // TMSCM_DEFER_INTS;
@@ -1905,6 +2063,7 @@ tmg_select_line () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_from_cursor()
 tmscm
 tmg_select_from_cursor () {
   // TMSCM_DEFER_INTS;
@@ -1914,6 +2073,7 @@ tmg_select_from_cursor () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_from_keyboard()
 tmscm
 tmg_select_from_keyboard (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "select-from-keyboard");
@@ -1927,6 +2087,7 @@ tmg_select_from_keyboard (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_from_shift_keyboard()
 tmscm
 tmg_select_from_shift_keyboard () {
   // TMSCM_DEFER_INTS;
@@ -1936,6 +2097,7 @@ tmg_select_from_shift_keyboard () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_enlarge()
 tmscm
 tmg_select_enlarge () {
   // TMSCM_DEFER_INTS;
@@ -1945,6 +2107,7 @@ tmg_select_enlarge () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::select_enlarge_environmental()
 tmscm
 tmg_select_enlarge_environmental () {
   // TMSCM_DEFER_INTS;
@@ -1954,6 +2117,7 @@ tmg_select_enlarge_environmental () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_active_any()
 tmscm
 tmg_selection_active_anyP () {
   // TMSCM_DEFER_INTS;
@@ -1963,6 +2127,7 @@ tmg_selection_active_anyP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_active_normal()
 tmscm
 tmg_selection_active_normalP () {
   // TMSCM_DEFER_INTS;
@@ -1972,6 +2137,7 @@ tmg_selection_active_normalP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_active_table()
 tmscm
 tmg_selection_active_tableP () {
   // TMSCM_DEFER_INTS;
@@ -1981,6 +2147,7 @@ tmg_selection_active_tableP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_active_small()
 tmscm
 tmg_selection_active_smallP () {
   // TMSCM_DEFER_INTS;
@@ -1990,6 +2157,7 @@ tmg_selection_active_smallP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_active_enlarging()
 tmscm
 tmg_selection_active_enlargingP () {
   // TMSCM_DEFER_INTS;
@@ -1999,6 +2167,7 @@ tmg_selection_active_enlargingP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set_start()
 tmscm
 tmg_selection_set_start () {
   // TMSCM_DEFER_INTS;
@@ -2008,6 +2177,7 @@ tmg_selection_set_start () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set_end()
 tmscm
 tmg_selection_set_end () {
   // TMSCM_DEFER_INTS;
@@ -2017,6 +2187,7 @@ tmg_selection_set_end () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_start()
 tmscm
 tmg_selection_get_start () {
   // TMSCM_DEFER_INTS;
@@ -2026,6 +2197,7 @@ tmg_selection_get_start () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_end()
 tmscm
 tmg_selection_get_end () {
   // TMSCM_DEFER_INTS;
@@ -2035,6 +2207,7 @@ tmg_selection_get_end () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_path()
 tmscm
 tmg_selection_path () {
   // TMSCM_DEFER_INTS;
@@ -2044,6 +2217,7 @@ tmg_selection_path () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set_paths()
 tmscm
 tmg_selection_set (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "selection-set");
@@ -2059,6 +2233,7 @@ tmg_selection_set (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set_range_set()
 tmscm
 tmg_selection_set_range_set (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_PATH (arg1, TMSCM_ARG1, "selection-set-range-set");
@@ -2072,6 +2247,7 @@ tmg_selection_set_range_set (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set()
 tmscm
 tmg_clipboard_set (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "clipboard-set");
@@ -2087,6 +2263,7 @@ tmg_clipboard_set (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get()
 tmscm
 tmg_clipboard_get (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "clipboard-get");
@@ -2100,6 +2277,7 @@ tmg_clipboard_get (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_copy()
 tmscm
 tmg_cpp_clipboard_copy (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-clipboard-copy");
@@ -2113,6 +2291,7 @@ tmg_cpp_clipboard_copy (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_cut()
 tmscm
 tmg_cpp_clipboard_cut (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-clipboard-cut");
@@ -2126,6 +2305,7 @@ tmg_cpp_clipboard_cut (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cut()
 tmscm
 tmg_clipboard_cut_at (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "clipboard-cut-at");
@@ -2139,6 +2319,7 @@ tmg_clipboard_cut_at (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cut()
 tmscm
 tmg_clipboard_cut_between (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "clipboard-cut-between");
@@ -2154,6 +2335,7 @@ tmg_clipboard_cut_between (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_paste()
 tmscm
 tmg_cpp_clipboard_paste (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-clipboard-paste");
@@ -2167,6 +2349,7 @@ tmg_cpp_clipboard_paste (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_move()
 tmscm
 tmg_selection_move () {
   // TMSCM_DEFER_INTS;
@@ -2176,6 +2359,7 @@ tmg_selection_move () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_clear()
 tmscm
 tmg_clipboard_clear (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "clipboard-clear");
@@ -2189,6 +2373,7 @@ tmg_clipboard_clear (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_cancel()
 tmscm
 tmg_selection_cancel () {
   // TMSCM_DEFER_INTS;
@@ -2198,6 +2383,7 @@ tmg_selection_cancel () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set_import()
 tmscm
 tmg_clipboard_set_import (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "clipboard-set-import");
@@ -2211,6 +2397,7 @@ tmg_clipboard_set_import (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_set_export()
 tmscm
 tmg_clipboard_set_export (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "clipboard-set-export");
@@ -2224,6 +2411,7 @@ tmg_clipboard_set_export (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_import()
 tmscm
 tmg_clipboard_get_import () {
   // TMSCM_DEFER_INTS;
@@ -2233,6 +2421,7 @@ tmg_clipboard_get_import () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_export()
 tmscm
 tmg_clipboard_get_export () {
   // TMSCM_DEFER_INTS;
@@ -2242,6 +2431,7 @@ tmg_clipboard_get_export () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::manual_focus_set()
 tmscm
 tmg_set_manual_focus_path (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "set-manual-focus-path");
@@ -2255,6 +2445,7 @@ tmg_set_manual_focus_path (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::manual_focus_get()
 tmscm
 tmg_get_manual_focus_path () {
   // TMSCM_DEFER_INTS;
@@ -2264,6 +2455,7 @@ tmg_get_manual_focus_path () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::focus_get()
 tmscm
 tmg_get_focus_path () {
   // TMSCM_DEFER_INTS;
@@ -2273,6 +2465,7 @@ tmg_get_focus_path () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_alt_selection()
 tmscm
 tmg_set_alt_selection (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-alt-selection");
@@ -2288,6 +2481,7 @@ tmg_set_alt_selection (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_alt_selection()
 tmscm
 tmg_get_alt_selection (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-alt-selection");
@@ -2301,6 +2495,7 @@ tmg_get_alt_selection (tmscm arg1) {
   return array_path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cancel_alt_selection()
 tmscm
 tmg_cancel_alt_selection (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cancel-alt-selection");
@@ -2314,6 +2509,7 @@ tmg_cancel_alt_selection (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cancel_alt_selections()
 tmscm
 tmg_cancel_alt_selections () {
   // TMSCM_DEFER_INTS;
@@ -2323,6 +2519,7 @@ tmg_cancel_alt_selections () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::clear_undo_history()
 tmscm
 tmg_clear_undo_history () {
   // TMSCM_DEFER_INTS;
@@ -2332,6 +2529,7 @@ tmg_clear_undo_history () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::end_editing()
 tmscm
 tmg_commit_changes () {
   // TMSCM_DEFER_INTS;
@@ -2341,6 +2539,7 @@ tmg_commit_changes () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::start_slave()
 tmscm
 tmg_start_slave (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "start-slave");
@@ -2354,6 +2553,7 @@ tmg_start_slave (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::mark_start()
 tmscm
 tmg_mark_start (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "mark-start");
@@ -2367,6 +2567,7 @@ tmg_mark_start (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::mark_end()
 tmscm
 tmg_mark_end (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "mark-end");
@@ -2380,6 +2581,7 @@ tmg_mark_end (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::mark_cancel()
 tmscm
 tmg_mark_cancel (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "mark-cancel");
@@ -2393,6 +2595,7 @@ tmg_mark_cancel (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::remove_undo_mark()
 tmscm
 tmg_remove_undo_mark () {
   // TMSCM_DEFER_INTS;
@@ -2402,6 +2605,7 @@ tmg_remove_undo_mark () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::add_undo_mark()
 tmscm
 tmg_add_undo_mark () {
   // TMSCM_DEFER_INTS;
@@ -2411,6 +2615,7 @@ tmg_add_undo_mark () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::unredoable_undo()
 tmscm
 tmg_unredoable_undo () {
   // TMSCM_DEFER_INTS;
@@ -2420,6 +2625,7 @@ tmg_unredoable_undo () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::undo_possibilities()
 tmscm
 tmg_undo_possibilities () {
   // TMSCM_DEFER_INTS;
@@ -2429,6 +2635,7 @@ tmg_undo_possibilities () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::undo()
 tmscm
 tmg_undo (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "undo");
@@ -2442,6 +2649,7 @@ tmg_undo (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::redo_possibilities()
 tmscm
 tmg_redo_possibilities () {
   // TMSCM_DEFER_INTS;
@@ -2451,6 +2659,7 @@ tmg_redo_possibilities () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::redo()
 tmscm
 tmg_redo (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "redo");
@@ -2464,6 +2673,7 @@ tmg_redo (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_history()
 tmscm
 tmg_show_history () {
   // TMSCM_DEFER_INTS;
@@ -2473,6 +2683,7 @@ tmg_show_history () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::archive_state()
 tmscm
 tmg_archive_state () {
   // TMSCM_DEFER_INTS;
@@ -2482,6 +2693,7 @@ tmg_archive_state () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::start_editing()
 tmscm
 tmg_start_editing () {
   // TMSCM_DEFER_INTS;
@@ -2491,6 +2703,7 @@ tmg_start_editing () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::end_editing()
 tmscm
 tmg_end_editing () {
   // TMSCM_DEFER_INTS;
@@ -2500,6 +2713,7 @@ tmg_end_editing () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::cancel_editing()
 tmscm
 tmg_cancel_editing () {
   // TMSCM_DEFER_INTS;
@@ -2509,6 +2723,7 @@ tmg_cancel_editing () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::inside_graphics()
 tmscm
 tmg_in_graphicsP () {
   // TMSCM_DEFER_INTS;
@@ -2518,6 +2733,7 @@ tmg_in_graphicsP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_x()
 tmscm
 tmg_get_graphical_x () {
   // TMSCM_DEFER_INTS;
@@ -2527,6 +2743,7 @@ tmg_get_graphical_x () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_y()
 tmscm
 tmg_get_graphical_y () {
   // TMSCM_DEFER_INTS;
@@ -2536,6 +2753,7 @@ tmg_get_graphical_y () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_graphical_object()
 tmscm
 tmg_get_graphical_object () {
   // TMSCM_DEFER_INTS;
@@ -2545,6 +2763,7 @@ tmg_get_graphical_object () {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_graphical_object()
 tmscm
 tmg_set_graphical_object (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "set-graphical-object");
@@ -2558,6 +2777,7 @@ tmg_set_graphical_object (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::invalidate_graphical_object()
 tmscm
 tmg_invalidate_graphical_object () {
   // TMSCM_DEFER_INTS;
@@ -2567,6 +2787,7 @@ tmg_invalidate_graphical_object () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::graphical_select()
 tmscm
 tmg_graphical_select (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "graphical-select");
@@ -2582,6 +2803,7 @@ tmg_graphical_select (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::graphical_select()
 tmscm
 tmg_graphical_select_area (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "graphical-select-area");
@@ -2601,6 +2823,7 @@ tmg_graphical_select_area (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::in_normal_mode()
 tmscm
 tmg_in_normal_modeP () {
   // TMSCM_DEFER_INTS;
@@ -2610,6 +2833,7 @@ tmg_in_normal_modeP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::in_search_mode()
 tmscm
 tmg_in_search_modeP () {
   // TMSCM_DEFER_INTS;
@@ -2619,6 +2843,7 @@ tmg_in_search_modeP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::in_replace_mode()
 tmscm
 tmg_in_replace_modeP () {
   // TMSCM_DEFER_INTS;
@@ -2628,6 +2853,7 @@ tmg_in_replace_modeP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::in_spell_mode()
 tmscm
 tmg_in_spell_modeP () {
   // TMSCM_DEFER_INTS;
@@ -2637,6 +2863,7 @@ tmg_in_spell_modeP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::search_start()
 tmscm
 tmg_search_start (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "search-start");
@@ -2650,6 +2877,7 @@ tmg_search_start (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::search_button_next()
 tmscm
 tmg_search_button_next () {
   // TMSCM_DEFER_INTS;
@@ -2659,6 +2887,7 @@ tmg_search_button_next () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::replace_start()
 tmscm
 tmg_replace_start (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "replace-start");
@@ -2676,6 +2905,7 @@ tmg_replace_start (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::spell_start()
 tmscm
 tmg_spell_start () {
   // TMSCM_DEFER_INTS;
@@ -2685,6 +2915,7 @@ tmg_spell_start () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::spell_replace()
 tmscm
 tmg_spell_replace (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "spell-replace");
@@ -2698,6 +2929,7 @@ tmg_spell_replace (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::session_complete_command()
 tmscm
 tmg_session_complete_command (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "session-complete-command");
@@ -2711,6 +2943,7 @@ tmg_session_complete_command (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::custom_complete()
 tmscm
 tmg_custom_complete (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "custom-complete");
@@ -2724,6 +2957,7 @@ tmg_custom_complete (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::keyboard_focus_on()
 tmscm
 tmg_keyboard_focus_on (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "keyboard-focus-on");
@@ -2737,6 +2971,7 @@ tmg_keyboard_focus_on (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::set_property()
 tmscm
 tmg_view_set_property (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "view-set-property");
@@ -2752,6 +2987,7 @@ tmg_view_set_property (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_property()
 tmscm
 tmg_view_get_property (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "view-get-property");
@@ -2765,6 +3001,7 @@ tmg_view_get_property (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_window_width()
 tmscm
 tmg_get_window_width () {
   // TMSCM_DEFER_INTS;
@@ -2774,6 +3011,7 @@ tmg_get_window_width () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_window_height()
 tmscm
 tmg_get_window_height () {
   // TMSCM_DEFER_INTS;
@@ -2783,6 +3021,7 @@ tmg_get_window_height () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::clear_buffer()
 tmscm
 tmg_clear_buffer () {
   // TMSCM_DEFER_INTS;
@@ -2792,6 +3031,7 @@ tmg_clear_buffer () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::tex_buffer()
 tmscm
 tmg_tex_buffer () {
   // TMSCM_DEFER_INTS;
@@ -2801,6 +3041,7 @@ tmg_tex_buffer () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::clear_local_info()
 tmscm
 tmg_clear_local_info () {
   // TMSCM_DEFER_INTS;
@@ -2810,6 +3051,7 @@ tmg_clear_local_info () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::invalidate_all()
 tmscm
 tmg_refresh_window () {
   // TMSCM_DEFER_INTS;
@@ -2819,6 +3061,7 @@ tmg_refresh_window () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::typeset_invalidate()
 tmscm
 tmg_update_path (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "update-path");
@@ -2832,6 +3075,7 @@ tmg_update_path (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::typeset_invalidate_all()
 tmscm
 tmg_update_current_buffer () {
   // TMSCM_DEFER_INTS;
@@ -2841,6 +3085,7 @@ tmg_update_current_buffer () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::typeset_invalidate_players()
 tmscm
 tmg_update_players (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "update-players");
@@ -2856,6 +3101,7 @@ tmg_update_players (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::generate_aux()
 tmscm
 tmg_generate_all_aux () {
   // TMSCM_DEFER_INTS;
@@ -2865,6 +3111,7 @@ tmg_generate_all_aux () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::generate_aux()
 tmscm
 tmg_generate_aux (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "generate-aux");
@@ -2878,6 +3125,7 @@ tmg_generate_aux (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::notify_page_change()
 tmscm
 tmg_notify_page_change () {
   // TMSCM_DEFER_INTS;
@@ -2887,6 +3135,7 @@ tmg_notify_page_change () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::notify_change()
 tmscm
 tmg_notify_change (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "notify-change");
@@ -2900,6 +3149,7 @@ tmg_notify_change (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::get_metadata()
 tmscm
 tmg_get_metadata (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-metadata");
@@ -2913,6 +3163,7 @@ tmg_get_metadata (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::nr_pages()
 tmscm
 tmg_cpp_nr_pages () {
   // TMSCM_DEFER_INTS;
@@ -2922,6 +3173,7 @@ tmg_cpp_nr_pages () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::print_to_file()
 tmscm
 tmg_print_to_file (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "print-to-file");
@@ -2935,6 +3187,7 @@ tmg_print_to_file (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::print_to_file()
 tmscm
 tmg_print_pages_to_file (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "print-pages-to-file");
@@ -2952,6 +3205,7 @@ tmg_print_pages_to_file (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::print_buffer()
 tmscm
 tmg_print () {
   // TMSCM_DEFER_INTS;
@@ -2961,6 +3215,7 @@ tmg_print () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::print_buffer()
 tmscm
 tmg_print_pages (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "print-pages");
@@ -2976,6 +3231,7 @@ tmg_print_pages (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::print_snippet()
 tmscm
 tmg_print_snippet (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "print-snippet");
@@ -2991,6 +3247,7 @@ tmg_print_snippet (tmscm arg1, tmscm arg2) {
   return array_int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::graphics_file_to_clipboard()
 tmscm
 tmg_graphics_file_to_clipboard (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "graphics-file-to-clipboard");
@@ -3004,6 +3261,7 @@ tmg_graphics_file_to_clipboard (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::export_ps()
 tmscm
 tmg_export_postscript (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "export-postscript");
@@ -3017,6 +3275,7 @@ tmg_export_postscript (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::export_ps()
 tmscm
 tmg_export_pages_postscript (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "export-pages-postscript");
@@ -3034,6 +3293,7 @@ tmg_export_pages_postscript (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::footer_eval()
 tmscm
 tmg_footer_eval (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "footer-eval");
@@ -3047,6 +3307,7 @@ tmg_footer_eval (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::texmacs_exec()
 tmscm
 tmg_texmacs_exec (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "texmacs-exec");
@@ -3060,6 +3321,7 @@ tmg_texmacs_exec (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::var_texmacs_exec()
 tmscm
 tmg_texmacs_exec_dot (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "texmacs-exec*");
@@ -3073,6 +3335,7 @@ tmg_texmacs_exec_dot (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::exec_texmacs()
 tmscm
 tmg_texmacs_expand (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "texmacs-expand");
@@ -3086,6 +3349,7 @@ tmg_texmacs_expand (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::exec_verbatim()
 tmscm
 tmg_verbatim_expand (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "verbatim-expand");
@@ -3099,6 +3363,7 @@ tmg_verbatim_expand (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::exec_latex()
 tmscm
 tmg_latex_expand (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "latex-expand");
@@ -3112,6 +3377,7 @@ tmg_latex_expand (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::exec_html()
 tmscm
 tmg_html_expand (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "html-expand");
@@ -3125,6 +3391,7 @@ tmg_html_expand (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::checkout_animation()
 tmscm
 tmg_animate_checkout (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "animate-checkout");
@@ -3138,6 +3405,7 @@ tmg_animate_checkout (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::commit_animation()
 tmscm
 tmg_animate_commit (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "animate-commit");
@@ -3151,6 +3419,7 @@ tmg_animate_commit (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::idle_time()
 tmscm
 tmg_idle_time () {
   // TMSCM_DEFER_INTS;
@@ -3160,6 +3429,7 @@ tmg_idle_time () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::change_time()
 tmscm
 tmg_change_time () {
   // TMSCM_DEFER_INTS;
@@ -3169,6 +3439,7 @@ tmg_change_time () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::before_menu_action()
 tmscm
 tmg_menu_before_action () {
   // TMSCM_DEFER_INTS;
@@ -3178,6 +3449,7 @@ tmg_menu_before_action () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::after_menu_action()
 tmscm
 tmg_menu_after_action () {
   // TMSCM_DEFER_INTS;
@@ -3187,6 +3459,7 @@ tmg_menu_after_action () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_tree()
 tmscm
 tmg_show_tree () {
   // TMSCM_DEFER_INTS;
@@ -3196,6 +3469,7 @@ tmg_show_tree () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_env()
 tmscm
 tmg_show_env () {
   // TMSCM_DEFER_INTS;
@@ -3205,6 +3479,7 @@ tmg_show_env () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_path()
 tmscm
 tmg_show_path () {
   // TMSCM_DEFER_INTS;
@@ -3214,6 +3489,7 @@ tmg_show_path () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_cursor()
 tmscm
 tmg_show_cursor () {
   // TMSCM_DEFER_INTS;
@@ -3223,6 +3499,7 @@ tmg_show_cursor () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_selection()
 tmscm
 tmg_show_selection () {
   // TMSCM_DEFER_INTS;
@@ -3232,6 +3509,7 @@ tmg_show_selection () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::show_meminfo()
 tmscm
 tmg_show_meminfo () {
   // TMSCM_DEFER_INTS;
@@ -3241,6 +3519,7 @@ tmg_show_meminfo () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::edit_special()
 tmscm
 tmg_edit_special () {
   // TMSCM_DEFER_INTS;
@@ -3250,6 +3529,7 @@ tmg_edit_special () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::edit_test()
 tmscm
 tmg_edit_test () {
   // TMSCM_DEFER_INTS;

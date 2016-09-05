@@ -11,6 +11,7 @@
 *
 ******************************************************************************/
 
+//! Scheme glue for ::get_server() -> server_rep::insert_kbd_wildcard()
 tmscm
 tmg_insert_kbd_wildcard (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "insert-kbd-wildcard");
@@ -32,6 +33,7 @@ tmg_insert_kbd_wildcard (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm a
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_variant_keys()
 tmscm
 tmg_set_variant_keys (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-variant-keys");
@@ -47,6 +49,7 @@ tmg_set_variant_keys (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::kbd_pre_rewrite()
 tmscm
 tmg_kbd_pre_rewrite (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "kbd-pre-rewrite");
@@ -60,6 +63,7 @@ tmg_kbd_pre_rewrite (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::kbd_post_rewrite()
 tmscm
 tmg_kbd_post_rewrite (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "kbd-post-rewrite");
@@ -75,6 +79,7 @@ tmg_kbd_post_rewrite (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::kbd_system_rewrite()
 tmscm
 tmg_kbd_system_rewrite (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "kbd-system-rewrite");
@@ -88,6 +93,7 @@ tmg_kbd_system_rewrite (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_font_rules()
 tmscm
 tmg_set_font_rules (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "set-font-rules");
@@ -101,6 +107,7 @@ tmg_set_font_rules (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::get_window_serial()
 tmscm
 tmg_window_get_serial () {
   // TMSCM_DEFER_INTS;
@@ -110,6 +117,7 @@ tmg_window_get_serial () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_window_property()
 tmscm
 tmg_window_set_property (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "window-set-property");
@@ -125,6 +133,7 @@ tmg_window_set_property (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::get_window_property()
 tmscm
 tmg_window_get_property (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "window-get-property");
@@ -138,6 +147,7 @@ tmg_window_get_property (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::show_header()
 tmscm
 tmg_show_header (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "show-header");
@@ -151,6 +161,7 @@ tmg_show_header (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::show_icon_bar()
 tmscm
 tmg_show_icon_bar (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "show-icon-bar");
@@ -166,6 +177,7 @@ tmg_show_icon_bar (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::show_side_tools()
 tmscm
 tmg_show_side_tools (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "show-side-tools");
@@ -181,6 +193,7 @@ tmg_show_side_tools (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::show_bottom_tools()
 tmscm
 tmg_show_bottom_tools (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "show-bottom-tools");
@@ -196,6 +209,7 @@ tmg_show_bottom_tools (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::show_footer()
 tmscm
 tmg_show_footer (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "show-footer");
@@ -209,6 +223,7 @@ tmg_show_footer (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::visible_header()
 tmscm
 tmg_visible_headerP () {
   // TMSCM_DEFER_INTS;
@@ -218,6 +233,7 @@ tmg_visible_headerP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::visible_icon_bar()
 tmscm
 tmg_visible_icon_barP (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "visible-icon-bar?");
@@ -231,6 +247,7 @@ tmg_visible_icon_barP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::visible_side_tools()
 tmscm
 tmg_visible_side_toolsP (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "visible-side-tools?");
@@ -244,6 +261,7 @@ tmg_visible_side_toolsP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::visible_bottom_tools()
 tmscm
 tmg_visible_bottom_toolsP (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "visible-bottom-tools?");
@@ -257,6 +275,7 @@ tmg_visible_bottom_toolsP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::visible_footer()
 tmscm
 tmg_visible_footerP () {
   // TMSCM_DEFER_INTS;
@@ -266,6 +285,7 @@ tmg_visible_footerP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::full_screen_mode()
 tmscm
 tmg_full_screen_mode (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "full-screen-mode");
@@ -281,6 +301,7 @@ tmg_full_screen_mode (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::in_full_screen_mode()
 tmscm
 tmg_full_screenP () {
   // TMSCM_DEFER_INTS;
@@ -290,6 +311,7 @@ tmg_full_screenP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::in_full_screen_edit_mode()
 tmscm
 tmg_full_screen_editP () {
   // TMSCM_DEFER_INTS;
@@ -299,6 +321,7 @@ tmg_full_screen_editP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_window_zoom_factor()
 tmscm
 tmg_set_window_zoom_factor (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "set-window-zoom-factor");
@@ -312,6 +335,7 @@ tmg_set_window_zoom_factor (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::get_window_zoom_factor()
 tmscm
 tmg_get_window_zoom_factor () {
   // TMSCM_DEFER_INTS;
@@ -321,6 +345,7 @@ tmg_get_window_zoom_factor () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::shell()
 tmscm
 tmg_shell (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "shell");
@@ -334,6 +359,7 @@ tmg_shell (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::dialogue_end()
 tmscm
 tmg_dialogue_end () {
   // TMSCM_DEFER_INTS;
@@ -343,6 +369,7 @@ tmg_dialogue_end () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::choose_file()
 tmscm
 tmg_cpp_choose_file (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "cpp-choose-file");
@@ -364,6 +391,7 @@ tmg_cpp_choose_file (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5)
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::interactive()
 tmscm
 tmg_tm_interactive (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "tm-interactive");
@@ -379,6 +407,7 @@ tmg_tm_interactive (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::style_clear_cache()
 tmscm
 tmg_style_clear_cache () {
   // TMSCM_DEFER_INTS;
@@ -388,6 +417,7 @@ tmg_style_clear_cache () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_script_status()
 tmscm
 tmg_set_script_status (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "set-script-status");
@@ -401,6 +431,7 @@ tmg_set_script_status (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_printing_command()
 tmscm
 tmg_set_printing_command (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-printing-command");
@@ -414,6 +445,7 @@ tmg_set_printing_command (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_printer_page_type()
 tmscm
 tmg_set_printer_paper_type (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-printer-paper-type");
@@ -427,6 +459,7 @@ tmg_set_printer_paper_type (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::get_printer_page_type()
 tmscm
 tmg_get_printer_paper_type () {
   // TMSCM_DEFER_INTS;
@@ -436,6 +469,7 @@ tmg_get_printer_paper_type () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_printer_dpi()
 tmscm
 tmg_set_printer_dpi (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-printer-dpi");
@@ -449,6 +483,7 @@ tmg_set_printer_dpi (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_default_zoom_factor()
 tmscm
 tmg_set_default_zoom_factor (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "set-default-zoom-factor");
@@ -462,6 +497,7 @@ tmg_set_default_zoom_factor (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::get_default_zoom_factor()
 tmscm
 tmg_get_default_zoom_factor () {
   // TMSCM_DEFER_INTS;
@@ -471,6 +507,7 @@ tmg_get_default_zoom_factor () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::inclusions_gc()
 tmscm
 tmg_inclusions_gc () {
   // TMSCM_DEFER_INTS;
@@ -480,6 +517,7 @@ tmg_inclusions_gc () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::typeset_update()
 tmscm
 tmg_update_all_path (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "update-all-path");
@@ -493,6 +531,7 @@ tmg_update_all_path (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::typeset_update_all()
 tmscm
 tmg_update_all_buffers () {
   // TMSCM_DEFER_INTS;
@@ -502,6 +541,7 @@ tmg_update_all_buffers () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_message()
 tmscm
 tmg_set_message (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "set-message");
@@ -517,6 +557,7 @@ tmg_set_message (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::set_message()
 tmscm
 tmg_set_message_temp (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "set-message-temp");
@@ -534,6 +575,7 @@ tmg_set_message_temp (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::recall_message()
 tmscm
 tmg_recall_message () {
   // TMSCM_DEFER_INTS;
@@ -543,6 +585,7 @@ tmg_recall_message () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_server() -> server_rep::is_yes()
 tmscm
 tmg_yesP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "yes?");
@@ -556,6 +599,7 @@ tmg_yesP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_server() -> server_rep::quit()
 tmscm
 tmg_quit_TeXmacs () {
   // TMSCM_DEFER_INTS;

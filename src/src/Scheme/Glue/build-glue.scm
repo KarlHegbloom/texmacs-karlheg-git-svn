@@ -93,6 +93,18 @@
 ;; Subroutines for building a glue code subroutine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Build doxygen doc
+(define (build-doxygen-doc name routine ret-type arg-type)
+  (cond
+    ((string-prefix? "get_current_editor()->" routine)
+     (output "\n//! Scheme glue for ::get_current_editor() -> editor_rep::"
+             (substring routine 22 (string-length routine)) "()\n"))
+    ((string-prefix? "get_server()->" routine)
+     (output "\n//! Scheme glue for ::get_server() -> server_rep::"
+             (substring routine 14 (string-length routine)) "()\n"))
+    (else
+      (output "\n//! Scheme glue for ::" routine "()\n"))))
+
 ;; Build header
 
 (define (build-header-args type nr)
@@ -103,7 +115,7 @@
 	(build-header-args (cdr type) (+ nr 1)))))
 
 (define (build-header name type)
-  (output "\ntmscm\n" (translate-name name) " (")
+  (output "tmscm\n" (translate-name name) " (")
   (if (not (null? type))
       (build-header-args type 1))
   (output ") {\n"))
@@ -173,6 +185,7 @@
 	(ret-type (caaddr l))
 	(arg-type (cdaddr l)))
     ;; (output "\n" name ", " routine ", " ret-type ", " arg-type "\n")
+    (build-doxygen-doc name routine ret-type arg-type)
     (build-header name arg-type)
     (build-assert name arg-type)
     (build-get-in arg-type)

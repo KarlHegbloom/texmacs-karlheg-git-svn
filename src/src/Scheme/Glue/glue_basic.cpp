@@ -11,6 +11,7 @@
 *
 ******************************************************************************/
 
+//! Scheme glue for ::texmacs_version()
 tmscm
 tmg_texmacs_version_release (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "texmacs-version-release");
@@ -24,6 +25,7 @@ tmg_texmacs_version_release (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::version_inf()
 tmscm
 tmg_version_beforeP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "version-before?");
@@ -39,6 +41,7 @@ tmg_version_beforeP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_supported()
 tmscm
 tmg_updater_supportedP () {
   // TMSCM_DEFER_INTS;
@@ -48,6 +51,7 @@ tmg_updater_supportedP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_is_running()
 tmscm
 tmg_updater_runningP () {
   // TMSCM_DEFER_INTS;
@@ -57,6 +61,7 @@ tmg_updater_runningP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_check_background()
 tmscm
 tmg_updater_check_background () {
   // TMSCM_DEFER_INTS;
@@ -66,6 +71,7 @@ tmg_updater_check_background () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_check_foreground()
 tmscm
 tmg_updater_check_foreground () {
   // TMSCM_DEFER_INTS;
@@ -75,6 +81,7 @@ tmg_updater_check_foreground () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_last_check()
 tmscm
 tmg_updater_last_check () {
   // TMSCM_DEFER_INTS;
@@ -84,6 +91,7 @@ tmg_updater_last_check () {
   return long_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_set_appcast()
 tmscm
 tmg_updater_set_appcast (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "updater-set-appcast");
@@ -97,6 +105,7 @@ tmg_updater_set_appcast (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_set_interval()
 tmscm
 tmg_updater_set_interval (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "updater-set-interval");
@@ -110,6 +119,7 @@ tmg_updater_set_interval (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::updater_set_automatic()
 tmscm
 tmg_updater_set_automatic (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "updater-set-automatic");
@@ -123,6 +133,7 @@ tmg_updater_set_automatic (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::os_win32()
 tmscm
 tmg_os_win32P () {
   // TMSCM_DEFER_INTS;
@@ -132,6 +143,7 @@ tmg_os_win32P () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::os_mingw()
 tmscm
 tmg_os_mingwP () {
   // TMSCM_DEFER_INTS;
@@ -141,6 +153,7 @@ tmg_os_mingwP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::os_macos()
 tmscm
 tmg_os_macosP () {
   // TMSCM_DEFER_INTS;
@@ -150,6 +163,7 @@ tmg_os_macosP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::gui_is_x()
 tmscm
 tmg_x_guiP () {
   // TMSCM_DEFER_INTS;
@@ -159,6 +173,7 @@ tmg_x_guiP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::gui_is_qt()
 tmscm
 tmg_qt_guiP () {
   // TMSCM_DEFER_INTS;
@@ -168,6 +183,7 @@ tmg_qt_guiP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::default_look_and_feel()
 tmscm
 tmg_default_look_and_feel () {
   // TMSCM_DEFER_INTS;
@@ -177,6 +193,7 @@ tmg_default_look_and_feel () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::default_chinese_font_name()
 tmscm
 tmg_default_chinese_font () {
   // TMSCM_DEFER_INTS;
@@ -186,6 +203,7 @@ tmg_default_chinese_font () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::default_japanese_font_name()
 tmscm
 tmg_default_japanese_font () {
   // TMSCM_DEFER_INTS;
@@ -195,6 +213,7 @@ tmg_default_japanese_font () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::default_korean_font_name()
 tmscm
 tmg_default_korean_font () {
   // TMSCM_DEFER_INTS;
@@ -204,6 +223,7 @@ tmg_default_korean_font () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_output()
 tmscm
 tmg_tm_output (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tm-output");
@@ -217,6 +237,7 @@ tmg_tm_output (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::tm_errput()
 tmscm
 tmg_tm_errput (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tm-errput");
@@ -230,6 +251,7 @@ tmg_tm_errput (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::win32_display()
 tmscm
 tmg_win32_display (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "win32-display");
@@ -243,6 +265,7 @@ tmg_win32_display (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::cpp_error()
 tmscm
 tmg_cpp_error () {
   // TMSCM_DEFER_INTS;
@@ -252,6 +275,7 @@ tmg_cpp_error () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::supports_native_pdf()
 tmscm
 tmg_supports_native_pdfP () {
   // TMSCM_DEFER_INTS;
@@ -261,6 +285,7 @@ tmg_supports_native_pdfP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::supports_ghostscript()
 tmscm
 tmg_supports_ghostscriptP () {
   // TMSCM_DEFER_INTS;
@@ -270,6 +295,7 @@ tmg_supports_ghostscriptP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::in_rescue_mode()
 tmscm
 tmg_rescue_modeP () {
   // TMSCM_DEFER_INTS;
@@ -279,6 +305,7 @@ tmg_rescue_modeP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::scheme_dialect()
 tmscm
 tmg_scheme_dialect () {
   // TMSCM_DEFER_INTS;
@@ -288,6 +315,7 @@ tmg_scheme_dialect () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_texmacs_path()
 tmscm
 tmg_get_texmacs_path () {
   // TMSCM_DEFER_INTS;
@@ -297,6 +325,7 @@ tmg_get_texmacs_path () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_texmacs_home_path()
 tmscm
 tmg_get_texmacs_home_path () {
   // TMSCM_DEFER_INTS;
@@ -306,6 +335,7 @@ tmg_get_texmacs_home_path () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::plugin_list()
 tmscm
 tmg_plugin_list () {
   // TMSCM_DEFER_INTS;
@@ -315,6 +345,7 @@ tmg_plugin_list () {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_fast_environments()
 tmscm
 tmg_set_fast_environments (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "set-fast-environments");
@@ -328,6 +359,7 @@ tmg_set_fast_environments (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::tt_font_exists()
 tmscm
 tmg_font_exists_in_ttP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-exists-in-tt?");
@@ -341,6 +373,7 @@ tmg_font_exists_in_ttP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::eval_system()
 tmscm
 tmg_eval_system (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "eval-system");
@@ -354,6 +387,7 @@ tmg_eval_system (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::var_eval_system()
 tmscm
 tmg_var_eval_system (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "var-eval-system");
@@ -367,6 +401,7 @@ tmg_var_eval_system (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::evaluate_system()
 tmscm
 tmg_evaluate_system (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "evaluate-system");
@@ -386,6 +421,7 @@ tmg_evaluate_system (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_locale_language()
 tmscm
 tmg_get_locale_language () {
   // TMSCM_DEFER_INTS;
@@ -395,6 +431,7 @@ tmg_get_locale_language () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_locale_charset()
 tmscm
 tmg_get_locale_charset () {
   // TMSCM_DEFER_INTS;
@@ -404,6 +441,7 @@ tmg_get_locale_charset () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::locale_to_language()
 tmscm
 tmg_locale_to_language (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "locale-to-language");
@@ -417,6 +455,7 @@ tmg_locale_to_language (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::language_to_locale()
 tmscm
 tmg_language_to_locale (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "language-to-locale");
@@ -430,6 +469,7 @@ tmg_language_to_locale (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::texmacs_time()
 tmscm
 tmg_texmacs_time () {
   // TMSCM_DEFER_INTS;
@@ -439,6 +479,7 @@ tmg_texmacs_time () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::pretty_time()
 tmscm
 tmg_pretty_time (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "pretty-time");
@@ -452,6 +493,7 @@ tmg_pretty_time (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::mem_used()
 tmscm
 tmg_texmacs_memory () {
   // TMSCM_DEFER_INTS;
@@ -461,6 +503,7 @@ tmg_texmacs_memory () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::bench_print()
 tmscm
 tmg_bench_print (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "bench-print");
@@ -474,6 +517,7 @@ tmg_bench_print (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::bench_print()
 tmscm
 tmg_bench_print_all () {
   // TMSCM_DEFER_INTS;
@@ -483,6 +527,7 @@ tmg_bench_print_all () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::system_wait()
 tmscm
 tmg_system_wait (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "system-wait");
@@ -498,6 +543,7 @@ tmg_system_wait (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::set_latex_command()
 tmscm
 tmg_set_latex_command (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-latex-command");
@@ -511,6 +557,7 @@ tmg_set_latex_command (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::set_bibtex_command()
 tmscm
 tmg_set_bibtex_command (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-bibtex-command");
@@ -524,6 +571,7 @@ tmg_set_bibtex_command (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::number_latex_errors()
 tmscm
 tmg_number_latex_errors (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "number-latex-errors");
@@ -537,6 +585,7 @@ tmg_number_latex_errors (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::number_latex_pages()
 tmscm
 tmg_number_latex_pages (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "number-latex-pages");
@@ -550,6 +599,7 @@ tmg_number_latex_pages (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::math_symbol_group()
 tmscm
 tmg_math_symbol_group (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "math-symbol-group");
@@ -563,6 +613,7 @@ tmg_math_symbol_group (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::math_group_members()
 tmscm
 tmg_math_group_members (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "math-group-members");
@@ -576,6 +627,7 @@ tmg_math_group_members (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::math_symbol_type()
 tmscm
 tmg_math_symbol_type (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "math-symbol-type");
@@ -589,6 +641,7 @@ tmg_math_symbol_type (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_command()
 tmscm
 tmg_object_2command (tmscm arg1) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "object->command");
@@ -602,6 +655,7 @@ tmg_object_2command (tmscm arg1) {
   return command_to_tmscm (out);
 }
 
+//! Scheme glue for ::exec_delayed()
 tmscm
 tmg_exec_delayed (tmscm arg1) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "exec-delayed");
@@ -615,6 +669,7 @@ tmg_exec_delayed (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::exec_delayed_pause()
 tmscm
 tmg_exec_delayed_pause (tmscm arg1) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "exec-delayed-pause");
@@ -628,6 +683,7 @@ tmg_exec_delayed_pause (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::protected_call()
 tmscm
 tmg_protected_call (tmscm arg1) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "protected-call");
@@ -641,6 +697,7 @@ tmg_protected_call (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::notify_preferences_booted()
 tmscm
 tmg_notify_preferences_booted () {
   // TMSCM_DEFER_INTS;
@@ -650,6 +707,7 @@ tmg_notify_preferences_booted () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::has_user_preference()
 tmscm
 tmg_cpp_has_preferenceP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-has-preference?");
@@ -663,6 +721,7 @@ tmg_cpp_has_preferenceP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_user_preference()
 tmscm
 tmg_cpp_get_preference (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-get-preference");
@@ -678,6 +737,7 @@ tmg_cpp_get_preference (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_user_preference()
 tmscm
 tmg_cpp_set_preference (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-set-preference");
@@ -693,6 +753,7 @@ tmg_cpp_set_preference (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::reset_user_preference()
 tmscm
 tmg_cpp_reset_preference (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-reset-preference");
@@ -706,6 +767,7 @@ tmg_cpp_reset_preference (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::save_user_preferences()
 tmscm
 tmg_save_preferences () {
   // TMSCM_DEFER_INTS;
@@ -715,6 +777,7 @@ tmg_save_preferences () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::set_input_language()
 tmscm
 tmg_set_input_language (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-input-language");
@@ -728,6 +791,7 @@ tmg_set_input_language (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_input_language()
 tmscm
 tmg_get_input_language () {
   // TMSCM_DEFER_INTS;
@@ -737,6 +801,7 @@ tmg_get_input_language () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::gui_set_output_language()
 tmscm
 tmg_set_output_language (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-output-language");
@@ -750,6 +815,7 @@ tmg_set_output_language (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_output_language()
 tmscm
 tmg_get_output_language () {
   // TMSCM_DEFER_INTS;
@@ -759,6 +825,7 @@ tmg_get_output_language () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::translate()
 tmscm
 tmg_translate (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "translate");
@@ -772,6 +839,7 @@ tmg_translate (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::translate_as_is()
 tmscm
 tmg_string_translate (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-translate");
@@ -785,6 +853,7 @@ tmg_string_translate (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::translate()
 tmscm
 tmg_translate_from_to (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "translate-from-to");
@@ -802,6 +871,7 @@ tmg_translate_from_to (tmscm arg1, tmscm arg2, tmscm arg3) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_translate()
 tmscm
 tmg_tree_translate (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-translate");
@@ -815,6 +885,7 @@ tmg_tree_translate (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_translate()
 tmscm
 tmg_tree_translate_from_to (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-translate-from-to");
@@ -832,6 +903,7 @@ tmg_tree_translate_from_to (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::force_load_dictionary()
 tmscm
 tmg_force_load_translations (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "force-load-translations");
@@ -847,6 +919,7 @@ tmg_force_load_translations (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::named_color()
 tmscm
 tmg_color (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "color");
@@ -860,6 +933,7 @@ tmg_color (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_hex_color()
 tmscm
 tmg_get_hex_color (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-hex-color");
@@ -873,6 +947,7 @@ tmg_get_hex_color (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::named_color_to_xcolormap()
 tmscm
 tmg_named_color_2xcolormap (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "named-color->xcolormap");
@@ -886,6 +961,7 @@ tmg_named_color_2xcolormap (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::new_author()
 tmscm
 tmg_new_author () {
   // TMSCM_DEFER_INTS;
@@ -895,6 +971,7 @@ tmg_new_author () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_author()
 tmscm
 tmg_set_author (tmscm arg1) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "set-author");
@@ -908,6 +985,7 @@ tmg_set_author (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_author()
 tmscm
 tmg_get_author () {
   // TMSCM_DEFER_INTS;
@@ -917,6 +995,7 @@ tmg_get_author () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::debug_set()
 tmscm
 tmg_debug_set (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "debug-set");
@@ -932,6 +1011,7 @@ tmg_debug_set (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::debug_get()
 tmscm
 tmg_debug_get (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "debug-get");
@@ -945,6 +1025,7 @@ tmg_debug_get (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_debug_messages()
 tmscm
 tmg_get_debug_messages (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-debug-messages");
@@ -960,6 +1041,7 @@ tmg_get_debug_messages (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::clear_debug_messages()
 tmscm
 tmg_clear_debug_messages () {
   // TMSCM_DEFER_INTS;
@@ -969,6 +1051,7 @@ tmg_clear_debug_messages () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::cout_buffer()
 tmscm
 tmg_cout_buffer () {
   // TMSCM_DEFER_INTS;
@@ -978,6 +1061,7 @@ tmg_cout_buffer () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::cout_unbuffer()
 tmscm
 tmg_cout_unbuffer () {
   // TMSCM_DEFER_INTS;
@@ -987,6 +1071,7 @@ tmg_cout_unbuffer () {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::new_marker()
 tmscm
 tmg_mark_new () {
   // TMSCM_DEFER_INTS;
@@ -996,6 +1081,7 @@ tmg_mark_new () {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::register_glyph()
 tmscm
 tmg_glyph_register (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "glyph-register");
@@ -1011,6 +1097,7 @@ tmg_glyph_register (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::recognize_glyph()
 tmscm
 tmg_glyph_recognize (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_ARRAY_ARRAY_DOUBLE (arg1, TMSCM_ARG1, "glyph-recognize");
@@ -1024,6 +1111,7 @@ tmg_glyph_recognize (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_new_fonts()
 tmscm
 tmg_set_new_fonts (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "set-new-fonts");
@@ -1037,6 +1125,7 @@ tmg_set_new_fonts (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_new_fonts()
 tmscm
 tmg_new_fontsP () {
   // TMSCM_DEFER_INTS;
@@ -1046,6 +1135,7 @@ tmg_new_fontsP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::eqnumber_to_nonumber()
 tmscm
 tmg_tmtm_eqnumber_2nonumber (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tmtm-eqnumber->nonumber");
@@ -1059,6 +1149,7 @@ tmg_tmtm_eqnumber_2nonumber (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_busy_versioning()
 tmscm
 tmg_busy_versioningP () {
   // TMSCM_DEFER_INTS;
@@ -1068,6 +1159,7 @@ tmg_busy_versioningP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::players_set_elapsed()
 tmscm
 tmg_players_set_elapsed (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "players-set-elapsed");
@@ -1083,6 +1175,7 @@ tmg_players_set_elapsed (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::players_set_speed()
 tmscm
 tmg_players_set_speed (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "players-set-speed");
@@ -1098,6 +1191,7 @@ tmg_players_set_speed (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::tt_font_exists()
 tmscm
 tmg_tt_existsP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tt-exists?");
@@ -1111,6 +1205,7 @@ tmg_tt_existsP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::tt_dump()
 tmscm
 tmg_tt_dump (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tt-dump");
@@ -1124,6 +1219,7 @@ tmg_tt_dump (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::tt_font_name()
 tmscm
 tmg_tt_font_name (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tt-font-name");
@@ -1137,6 +1233,7 @@ tmg_tt_font_name (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tt_analyze()
 tmscm
 tmg_tt_analyze (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tt-analyze");
@@ -1150,6 +1247,7 @@ tmg_tt_analyze (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::font_database_build()
 tmscm
 tmg_font_database_build (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "font-database-build");
@@ -1163,6 +1261,7 @@ tmg_font_database_build (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_build_local()
 tmscm
 tmg_font_database_build_local () {
   // TMSCM_DEFER_INTS;
@@ -1172,6 +1271,7 @@ tmg_font_database_build_local () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_extend_local()
 tmscm
 tmg_font_database_extend_local (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "font-database-extend-local");
@@ -1185,6 +1285,7 @@ tmg_font_database_extend_local (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_build_global()
 tmscm
 tmg_font_database_build_global () {
   // TMSCM_DEFER_INTS;
@@ -1194,6 +1295,7 @@ tmg_font_database_build_global () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_build_characteristics()
 tmscm
 tmg_font_database_build_characteristics (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "font-database-build-characteristics");
@@ -1207,6 +1309,7 @@ tmg_font_database_build_characteristics (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_build_global()
 tmscm
 tmg_font_database_insert_global (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "font-database-insert-global");
@@ -1220,6 +1323,7 @@ tmg_font_database_insert_global (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_save_local_delta()
 tmscm
 tmg_font_database_save_local_delta () {
   // TMSCM_DEFER_INTS;
@@ -1229,6 +1333,7 @@ tmg_font_database_save_local_delta () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_load()
 tmscm
 tmg_font_database_load () {
   // TMSCM_DEFER_INTS;
@@ -1238,6 +1343,7 @@ tmg_font_database_load () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_save()
 tmscm
 tmg_font_database_save () {
   // TMSCM_DEFER_INTS;
@@ -1247,6 +1353,7 @@ tmg_font_database_save () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_filter()
 tmscm
 tmg_font_database_filter () {
   // TMSCM_DEFER_INTS;
@@ -1256,6 +1363,7 @@ tmg_font_database_filter () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::font_database_families()
 tmscm
 tmg_font_database_families () {
   // TMSCM_DEFER_INTS;
@@ -1265,6 +1373,7 @@ tmg_font_database_families () {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::font_database_delta_families()
 tmscm
 tmg_font_database_delta_families () {
   // TMSCM_DEFER_INTS;
@@ -1274,6 +1383,7 @@ tmg_font_database_delta_families () {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::font_database_styles()
 tmscm
 tmg_font_database_styles (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-database-styles");
@@ -1287,6 +1397,7 @@ tmg_font_database_styles (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::font_database_search()
 tmscm
 tmg_font_database_search (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-database-search");
@@ -1302,6 +1413,7 @@ tmg_font_database_search (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::font_database_characteristics()
 tmscm
 tmg_font_database_characteristics (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-database-characteristics");
@@ -1317,6 +1429,7 @@ tmg_font_database_characteristics (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::font_database_substitutions()
 tmscm
 tmg_font_database_substitutions (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-database-substitutions");
@@ -1330,6 +1443,7 @@ tmg_font_database_substitutions (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::family_to_master()
 tmscm
 tmg_font_family_2master (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-family->master");
@@ -1343,6 +1457,7 @@ tmg_font_family_2master (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::master_to_families()
 tmscm
 tmg_font_master_2families (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-master->families");
@@ -1356,6 +1471,7 @@ tmg_font_master_2families (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::master_features()
 tmscm
 tmg_font_master_features (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-master-features");
@@ -1369,6 +1485,7 @@ tmg_font_master_features (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::family_features()
 tmscm
 tmg_font_family_features (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-family-features");
@@ -1382,6 +1499,7 @@ tmg_font_family_features (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::family_strict_features()
 tmscm
 tmg_font_family_strict_features (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-family-strict-features");
@@ -1395,6 +1513,7 @@ tmg_font_family_strict_features (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::style_features()
 tmscm
 tmg_font_style_features (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-style-features");
@@ -1408,6 +1527,7 @@ tmg_font_style_features (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::guessed_features()
 tmscm
 tmg_font_guessed_features (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-guessed-features");
@@ -1423,6 +1543,7 @@ tmg_font_guessed_features (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::guessed_distance()
 tmscm
 tmg_font_guessed_distance (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-guessed-distance");
@@ -1442,6 +1563,7 @@ tmg_font_guessed_distance (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::guessed_distance()
 tmscm
 tmg_font_master_guessed_distance (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-master-guessed-distance");
@@ -1457,6 +1579,7 @@ tmg_font_master_guessed_distance (tmscm arg1, tmscm arg2) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::guessed_features()
 tmscm
 tmg_font_family_guessed_features (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-family-guessed-features");
@@ -1472,6 +1595,7 @@ tmg_font_family_guessed_features (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::characteristic_distance()
 tmscm
 tmg_characteristic_distance (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "characteristic-distance");
@@ -1487,6 +1611,7 @@ tmg_characteristic_distance (tmscm arg1, tmscm arg2) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::trace_distance()
 tmscm
 tmg_trace_distance (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "trace-distance");
@@ -1504,6 +1629,7 @@ tmg_trace_distance (tmscm arg1, tmscm arg2, tmscm arg3) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::logical_font()
 tmscm
 tmg_logical_font_public (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "logical-font-public");
@@ -1519,6 +1645,7 @@ tmg_logical_font_public (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::logical_font_exact()
 tmscm
 tmg_logical_font_exact (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "logical-font-exact");
@@ -1534,6 +1661,7 @@ tmg_logical_font_exact (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::logical_font()
 tmscm
 tmg_logical_font_private (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "logical-font-private");
@@ -1553,6 +1681,7 @@ tmg_logical_font_private (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_family()
 tmscm
 tmg_logical_font_family (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-family");
@@ -1566,6 +1695,7 @@ tmg_logical_font_family (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_variant()
 tmscm
 tmg_logical_font_variant (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-variant");
@@ -1579,6 +1709,7 @@ tmg_logical_font_variant (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_series()
 tmscm
 tmg_logical_font_series (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-series");
@@ -1592,6 +1723,7 @@ tmg_logical_font_series (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_shape()
 tmscm
 tmg_logical_font_shape (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-shape");
@@ -1605,6 +1737,7 @@ tmg_logical_font_shape (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_font()
 tmscm
 tmg_logical_font_search (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-search");
@@ -1618,6 +1751,7 @@ tmg_logical_font_search (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_font_exact()
 tmscm
 tmg_logical_font_search_exact (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-search-exact");
@@ -1631,6 +1765,7 @@ tmg_logical_font_search_exact (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_font_families()
 tmscm
 tmg_search_font_families (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "search-font-families");
@@ -1644,6 +1779,7 @@ tmg_search_font_families (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_font_styles()
 tmscm
 tmg_search_font_styles (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "search-font-styles");
@@ -1659,6 +1795,7 @@ tmg_search_font_styles (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::patch_font()
 tmscm
 tmg_logical_font_patch (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-patch");
@@ -1674,6 +1811,7 @@ tmg_logical_font_patch (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::apply_substitutions()
 tmscm
 tmg_logical_font_substitute (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "logical-font-substitute");
@@ -1687,6 +1825,7 @@ tmg_logical_font_substitute (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::main_family()
 tmscm
 tmg_font_family_main (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "font-family-main");
@@ -1700,6 +1839,7 @@ tmg_font_family_main (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::image_to_psdoc()
 tmscm
 tmg_image_2psdoc (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "image->psdoc");
@@ -1713,6 +1853,7 @@ tmg_image_2psdoc (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_control_times()
 tmscm
 tmg_anim_control_times (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "anim-control-times");
@@ -1726,6 +1867,7 @@ tmg_anim_control_times (tmscm arg1) {
   return array_double_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_to_scheme_tree()
 tmscm
 tmg_tree_2stree (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree->stree");
@@ -1739,6 +1881,7 @@ tmg_tree_2stree (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::scheme_tree_to_tree()
 tmscm
 tmg_stree_2tree (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "stree->tree");
@@ -1752,6 +1895,7 @@ tmg_stree_2tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::coerce_tree_string()
 tmscm
 tmg_tree_2string (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree->string");
@@ -1765,6 +1909,7 @@ tmg_tree_2string (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::coerce_string_tree()
 tmscm
 tmg_string_2tree (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string->tree");
@@ -1778,6 +1923,7 @@ tmg_string_2tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree()
 tmscm
 tmg_tm_2tree (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tm->tree");
@@ -1791,6 +1937,7 @@ tmg_tm_2tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_atomic()
 tmscm
 tmg_tree_atomicP (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-atomic?");
@@ -1804,6 +1951,7 @@ tmg_tree_atomicP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_compound()
 tmscm
 tmg_tree_compoundP (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-compound?");
@@ -1817,6 +1965,7 @@ tmg_tree_compoundP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::L()
 tmscm
 tmg_tree_label (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-label");
@@ -1830,6 +1979,7 @@ tmg_tree_label (tmscm arg1) {
   return tree_label_to_tmscm (out);
 }
 
+//! Scheme glue for ::A()
 tmscm
 tmg_tree_children (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-children");
@@ -1843,6 +1993,7 @@ tmg_tree_children (tmscm arg1) {
   return array_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::N()
 tmscm
 tmg_tree_arity (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-arity");
@@ -1856,6 +2007,7 @@ tmg_tree_arity (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_ref()
 tmscm
 tmg_tree_child_ref (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-child-ref");
@@ -1871,6 +2023,7 @@ tmg_tree_child_ref (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_set()
 tmscm
 tmg_tree_child_setS (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-child-set!");
@@ -1888,6 +2041,7 @@ tmg_tree_child_setS (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_child_insert()
 tmscm
 tmg_tree_child_insert (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-child-insert");
@@ -1905,6 +2059,7 @@ tmg_tree_child_insert (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::obtain_ip()
 tmscm
 tmg_tree_ip (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-ip");
@@ -1918,6 +2073,7 @@ tmg_tree_ip (tmscm arg1) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_active()
 tmscm
 tmg_tree_activeP (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-active?");
@@ -1931,6 +2087,7 @@ tmg_tree_activeP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::strong_equal()
 tmscm
 tmg_tree_eqP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-eq?");
@@ -1946,6 +2103,7 @@ tmg_tree_eqP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::subtree()
 tmscm
 tmg_subtree (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "subtree");
@@ -1961,6 +2119,7 @@ tmg_subtree (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_range()
 tmscm
 tmg_tree_range (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-range");
@@ -1978,6 +2137,7 @@ tmg_tree_range (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::copy()
 tmscm
 tmg_tree_copy (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-copy");
@@ -1991,6 +2151,7 @@ tmg_tree_copy (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_append()
 tmscm
 tmg_tree_append (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-append");
@@ -2006,6 +2167,7 @@ tmg_tree_append (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::right_index()
 tmscm
 tmg_tree_right_index (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-right-index");
@@ -2019,6 +2181,7 @@ tmg_tree_right_index (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_extension()
 tmscm
 tmg_tree_label_extensionP (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tree-label-extension?");
@@ -2032,6 +2195,7 @@ tmg_tree_label_extensionP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_macro()
 tmscm
 tmg_tree_label_macroP (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tree-label-macro?");
@@ -2045,6 +2209,7 @@ tmg_tree_label_macroP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_parameter()
 tmscm
 tmg_tree_label_parameterP (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tree-label-parameter?");
@@ -2058,6 +2223,7 @@ tmg_tree_label_parameterP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_tag_type()
 tmscm
 tmg_tree_label_type (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tree-label-type");
@@ -2071,6 +2237,7 @@ tmg_tree_label_type (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_multi_paragraph()
 tmscm
 tmg_tree_multi_paragraphP (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-multi-paragraph?");
@@ -2084,6 +2251,7 @@ tmg_tree_multi_paragraphP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::simplify_correct()
 tmscm
 tmg_tree_simplify (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-simplify");
@@ -2097,6 +2265,7 @@ tmg_tree_simplify (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::minimal_arity()
 tmscm
 tmg_tree_minimal_arity (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-minimal-arity");
@@ -2110,6 +2279,7 @@ tmg_tree_minimal_arity (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::maximal_arity()
 tmscm
 tmg_tree_maximal_arity (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-maximal-arity");
@@ -2123,6 +2293,7 @@ tmg_tree_maximal_arity (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::correct_arity()
 tmscm
 tmg_tree_possible_arityP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-possible-arity?");
@@ -2138,6 +2309,7 @@ tmg_tree_possible_arityP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::insert_point()
 tmscm
 tmg_tree_insert_point (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-insert_point");
@@ -2153,6 +2325,7 @@ tmg_tree_insert_point (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_dynamic()
 tmscm
 tmg_tree_is_dynamicP (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-is-dynamic?");
@@ -2166,6 +2339,7 @@ tmg_tree_is_dynamicP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_accessible_child()
 tmscm
 tmg_tree_accessible_childP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-accessible-child?");
@@ -2181,6 +2355,7 @@ tmg_tree_accessible_childP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::accessible_children()
 tmscm
 tmg_tree_accessible_children (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-accessible-children");
@@ -2194,6 +2369,7 @@ tmg_tree_accessible_children (tmscm arg1) {
   return array_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::all_accessible()
 tmscm
 tmg_tree_all_accessibleP (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-all-accessible?");
@@ -2207,6 +2383,7 @@ tmg_tree_all_accessibleP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::none_accessible()
 tmscm
 tmg_tree_none_accessibleP (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-none-accessible?");
@@ -2220,6 +2397,7 @@ tmg_tree_none_accessibleP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_name()
 tmscm
 tmg_tree_name (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-name");
@@ -2233,6 +2411,7 @@ tmg_tree_name (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_long_name()
 tmscm
 tmg_tree_long_name (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-long-name");
@@ -2246,6 +2425,7 @@ tmg_tree_long_name (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_child_name()
 tmscm
 tmg_tree_child_name (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-child-name");
@@ -2261,6 +2441,7 @@ tmg_tree_child_name (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_child_long_name()
 tmscm
 tmg_tree_child_long_name (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-child-long-name");
@@ -2276,6 +2457,7 @@ tmg_tree_child_long_name (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_child_type()
 tmscm
 tmg_tree_child_type (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-child-type");
@@ -2291,6 +2473,7 @@ tmg_tree_child_type (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_env_child()
 tmscm
 tmg_tree_child_env (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-child-env");
@@ -2310,6 +2493,7 @@ tmg_tree_child_env (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_env_descendant()
 tmscm
 tmg_tree_descendant_env (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-descendant-env");
@@ -2327,6 +2511,7 @@ tmg_tree_descendant_env (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::load_inclusion()
 tmscm
 tmg_tree_load_inclusion (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tree-load-inclusion");
@@ -2340,6 +2525,7 @@ tmg_tree_load_inclusion (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_as_string()
 tmscm
 tmg_tree_as_string (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-as-string");
@@ -2353,6 +2539,7 @@ tmg_tree_as_string (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_extents()
 tmscm
 tmg_tree_extents (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-extents");
@@ -2366,6 +2553,7 @@ tmg_tree_extents (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_empty()
 tmscm
 tmg_tree_emptyP (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-empty?");
@@ -2379,6 +2567,7 @@ tmg_tree_emptyP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::admits_edit_observer()
 tmscm
 tmg_tree_is_bufferP (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-is-buffer?");
@@ -2392,6 +2581,7 @@ tmg_tree_is_bufferP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_sections()
 tmscm
 tmg_tree_search_sections (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-search-sections");
@@ -2405,6 +2595,7 @@ tmg_tree_search_sections (tmscm arg1) {
   return array_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::search()
 tmscm
 tmg_tree_search_tree (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-search-tree");
@@ -2424,6 +2615,7 @@ tmg_tree_search_tree (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return array_path_to_tmscm (out);
 }
 
+//! Scheme glue for ::minimal_arity()
 tmscm
 tmg_tag_minimal_arity (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tag-minimal-arity");
@@ -2437,6 +2629,7 @@ tmg_tag_minimal_arity (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::maximal_arity()
 tmscm
 tmg_tag_maximal_arity (tmscm arg1) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tag-maximal-arity");
@@ -2450,6 +2643,7 @@ tmg_tag_maximal_arity (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::correct_arity()
 tmscm
 tmg_tag_possible_arityP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE_LABEL (arg1, TMSCM_ARG1, "tag-possible-arity?");
@@ -2465,6 +2659,7 @@ tmg_tag_possible_arityP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_access_mode()
 tmscm
 tmg_set_access_mode (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "set-access-mode");
@@ -2478,6 +2673,7 @@ tmg_set_access_mode (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_access_mode()
 tmscm
 tmg_get_access_mode () {
   // TMSCM_DEFER_INTS;
@@ -2487,6 +2683,7 @@ tmg_get_access_mode () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_assign()
 tmscm
 tmg_tree_assign (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-assign");
@@ -2502,6 +2699,7 @@ tmg_tree_assign (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_insert()
 tmscm
 tmg_tree_var_insert (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-var-insert");
@@ -2519,6 +2717,7 @@ tmg_tree_var_insert (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_remove()
 tmscm
 tmg_tree_remove (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-remove");
@@ -2536,6 +2735,7 @@ tmg_tree_remove (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_split()
 tmscm
 tmg_tree_split (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-split");
@@ -2553,6 +2753,7 @@ tmg_tree_split (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_join()
 tmscm
 tmg_tree_join (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-join");
@@ -2568,6 +2769,7 @@ tmg_tree_join (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_assign_node()
 tmscm
 tmg_tree_assign_node (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-assign-node");
@@ -2583,6 +2785,7 @@ tmg_tree_assign_node (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_insert_node()
 tmscm
 tmg_tree_insert_node (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-insert-node");
@@ -2600,6 +2803,7 @@ tmg_tree_insert_node (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_remove_node()
 tmscm
 tmg_tree_remove_node (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-remove-node");
@@ -2615,6 +2819,7 @@ tmg_tree_remove_node (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::correct_node()
 tmscm
 tmg_cpp_tree_correct_node (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "cpp-tree-correct-node");
@@ -2628,6 +2833,7 @@ tmg_cpp_tree_correct_node (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::correct_downwards()
 tmscm
 tmg_cpp_tree_correct_downwards (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "cpp-tree-correct-downwards");
@@ -2641,6 +2847,7 @@ tmg_cpp_tree_correct_downwards (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::correct_upwards()
 tmscm
 tmg_cpp_tree_correct_upwards (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "cpp-tree-correct-upwards");
@@ -2654,6 +2861,7 @@ tmg_cpp_tree_correct_upwards (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::concat_tokenize()
 tmscm
 tmg_concat_tokenize_math (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "concat-tokenize-math");
@@ -2667,6 +2875,7 @@ tmg_concat_tokenize_math (tmscm arg1) {
   return array_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::concat_decompose()
 tmscm
 tmg_concat_decompose (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "concat-decompose");
@@ -2680,6 +2889,7 @@ tmg_concat_decompose (tmscm arg1) {
   return array_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::concat_recompose()
 tmscm
 tmg_concat_recompose (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_TREE (arg1, TMSCM_ARG1, "concat-recompose");
@@ -2693,6 +2903,7 @@ tmg_concat_recompose (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_with_like()
 tmscm
 tmg_with_likeP (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "with-like?");
@@ -2706,6 +2917,7 @@ tmg_with_likeP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::with_same_type()
 tmscm
 tmg_with_same_typeP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "with-same-type?");
@@ -2721,6 +2933,7 @@ tmg_with_same_typeP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::with_similar_type()
 tmscm
 tmg_with_similar_typeP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "with-similar-type?");
@@ -2736,6 +2949,7 @@ tmg_with_similar_typeP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::with_correct()
 tmscm
 tmg_with_correct (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "with-correct");
@@ -2749,6 +2963,7 @@ tmg_with_correct (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::superfluous_with_correct()
 tmscm
 tmg_with_correct_superfluous (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "with-correct-superfluous");
@@ -2762,6 +2977,7 @@ tmg_with_correct_superfluous (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::superfluous_invisible_correct()
 tmscm
 tmg_invisible_correct_superfluous (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "invisible-correct-superfluous");
@@ -2775,6 +2991,7 @@ tmg_invisible_correct_superfluous (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::missing_invisible_correct()
 tmscm
 tmg_invisible_correct_missing (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "invisible-correct-missing");
@@ -2790,6 +3007,7 @@ tmg_invisible_correct_missing (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::automatic_correct()
 tmscm
 tmg_automatic_correct (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "automatic-correct");
@@ -2805,6 +3023,7 @@ tmg_automatic_correct (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::manual_correct()
 tmscm
 tmg_manual_correct (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "manual-correct");
@@ -2818,6 +3037,7 @@ tmg_manual_correct (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::upgrade_brackets()
 tmscm
 tmg_tree_upgrade_brackets (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-upgrade-brackets");
@@ -2833,6 +3053,7 @@ tmg_tree_upgrade_brackets (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::upgrade_big()
 tmscm
 tmg_tree_upgrade_big (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-upgrade-big");
@@ -2846,6 +3067,7 @@ tmg_tree_upgrade_big (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::downgrade_brackets()
 tmscm
 tmg_tree_downgrade_brackets (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-downgrade-brackets");
@@ -2863,6 +3085,7 @@ tmg_tree_downgrade_brackets (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::downgrade_big()
 tmscm
 tmg_tree_downgrade_big (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tree-downgrade-big");
@@ -2876,6 +3099,7 @@ tmg_tree_downgrade_big (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::math_status_print()
 tmscm
 tmg_math_status_print () {
   // TMSCM_DEFER_INTS;
@@ -2885,6 +3109,7 @@ tmg_math_status_print () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::math_status_reset()
 tmscm
 tmg_math_status_reset () {
   // TMSCM_DEFER_INTS;
@@ -2894,6 +3119,7 @@ tmg_math_status_reset () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::strip()
 tmscm
 tmg_path_strip (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-strip");
@@ -2909,6 +3135,7 @@ tmg_path_strip (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::path_inf()
 tmscm
 tmg_path_infP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-inf?");
@@ -2924,6 +3151,7 @@ tmg_path_infP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::path_inf_eq()
 tmscm
 tmg_path_inf_eqP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-inf-eq?");
@@ -2939,6 +3167,7 @@ tmg_path_inf_eqP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::path_less()
 tmscm
 tmg_path_lessP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-less?");
@@ -2954,6 +3183,7 @@ tmg_path_lessP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::path_less_eq()
 tmscm
 tmg_path_less_eqP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-less-eq?");
@@ -2969,6 +3199,7 @@ tmg_path_less_eqP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::start()
 tmscm
 tmg_path_start (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-start");
@@ -2984,6 +3215,7 @@ tmg_path_start (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::end()
 tmscm
 tmg_path_end (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-end");
@@ -2999,6 +3231,7 @@ tmg_path_end (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::next_valid()
 tmscm
 tmg_path_next (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-next");
@@ -3014,6 +3247,7 @@ tmg_path_next (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_valid()
 tmscm
 tmg_path_previous (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous");
@@ -3029,6 +3263,7 @@ tmg_path_previous (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::next_word()
 tmscm
 tmg_path_next_word (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-next-word");
@@ -3044,6 +3279,7 @@ tmg_path_next_word (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_word()
 tmscm
 tmg_path_previous_word (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous-word");
@@ -3059,6 +3295,7 @@ tmg_path_previous_word (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::next_node()
 tmscm
 tmg_path_next_node (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-next-node");
@@ -3074,6 +3311,7 @@ tmg_path_next_node (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_node()
 tmscm
 tmg_path_previous_node (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous-node");
@@ -3089,6 +3327,7 @@ tmg_path_previous_node (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::next_tag()
 tmscm
 tmg_path_next_tag (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-next-tag");
@@ -3106,6 +3345,7 @@ tmg_path_next_tag (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_tag()
 tmscm
 tmg_path_previous_tag (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous-tag");
@@ -3123,6 +3363,7 @@ tmg_path_previous_tag (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::next_tag_same_argument()
 tmscm
 tmg_path_next_tag_same_argument (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-next-tag-same-argument");
@@ -3140,6 +3381,7 @@ tmg_path_next_tag_same_argument (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_tag_same_argument()
 tmscm
 tmg_path_previous_tag_same_argument (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous-tag-same-argument");
@@ -3157,6 +3399,7 @@ tmg_path_previous_tag_same_argument (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::next_argument()
 tmscm
 tmg_path_next_argument (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-next-argument");
@@ -3172,6 +3415,7 @@ tmg_path_next_argument (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_argument()
 tmscm
 tmg_path_previous_argument (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous-argument");
@@ -3187,6 +3431,7 @@ tmg_path_previous_argument (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::previous_section()
 tmscm
 tmg_path_previous_section (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "path-previous-section");
@@ -3202,6 +3447,7 @@ tmg_path_previous_section (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::make_modification()
 tmscm
 tmg_make_modification (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "make-modification");
@@ -3219,6 +3465,7 @@ tmg_make_modification (tmscm arg1, tmscm arg2, tmscm arg3) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_assign()
 tmscm
 tmg_modification_assign (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-assign");
@@ -3234,6 +3481,7 @@ tmg_modification_assign (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_insert()
 tmscm
 tmg_modification_insert (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-insert");
@@ -3251,6 +3499,7 @@ tmg_modification_insert (tmscm arg1, tmscm arg2, tmscm arg3) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_remove()
 tmscm
 tmg_modification_remove (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-remove");
@@ -3268,6 +3517,7 @@ tmg_modification_remove (tmscm arg1, tmscm arg2, tmscm arg3) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_split()
 tmscm
 tmg_modification_split (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-split");
@@ -3285,6 +3535,7 @@ tmg_modification_split (tmscm arg1, tmscm arg2, tmscm arg3) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_join()
 tmscm
 tmg_modification_join (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-join");
@@ -3300,6 +3551,7 @@ tmg_modification_join (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_assign_node()
 tmscm
 tmg_modification_assign_node (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-assign-node");
@@ -3315,6 +3567,7 @@ tmg_modification_assign_node (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_insert_node()
 tmscm
 tmg_modification_insert_node (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-insert-node");
@@ -3332,6 +3585,7 @@ tmg_modification_insert_node (tmscm arg1, tmscm arg2, tmscm arg3) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_remove_node()
 tmscm
 tmg_modification_remove_node (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-remove-node");
@@ -3347,6 +3601,7 @@ tmg_modification_remove_node (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::mod_set_cursor()
 tmscm
 tmg_modification_set_cursor (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "modification-set-cursor");
@@ -3364,6 +3619,7 @@ tmg_modification_set_cursor (tmscm arg1, tmscm arg2, tmscm arg3) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_type()
 tmscm
 tmg_modification_kind (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-kind");
@@ -3377,6 +3633,7 @@ tmg_modification_kind (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_path()
 tmscm
 tmg_modification_path (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-path");
@@ -3390,6 +3647,7 @@ tmg_modification_path (tmscm arg1) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_tree()
 tmscm
 tmg_modification_tree (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-tree");
@@ -3403,6 +3661,7 @@ tmg_modification_tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::root()
 tmscm
 tmg_modification_root (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-root");
@@ -3416,6 +3675,7 @@ tmg_modification_root (tmscm arg1) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::index()
 tmscm
 tmg_modification_index (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-index");
@@ -3429,6 +3689,7 @@ tmg_modification_index (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::argument()
 tmscm
 tmg_modification_argument (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-argument");
@@ -3442,6 +3703,7 @@ tmg_modification_argument (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::L()
 tmscm
 tmg_modification_label (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-label");
@@ -3455,6 +3717,7 @@ tmg_modification_label (tmscm arg1) {
   return tree_label_to_tmscm (out);
 }
 
+//! Scheme glue for ::copy()
 tmscm
 tmg_modification_copy (tmscm arg1) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-copy");
@@ -3468,6 +3731,7 @@ tmg_modification_copy (tmscm arg1) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_applicable()
 tmscm
 tmg_modification_applicableP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "modification-applicable?");
@@ -3483,6 +3747,7 @@ tmg_modification_applicableP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::var_clean_apply()
 tmscm
 tmg_modification_apply (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "modification-apply");
@@ -3498,6 +3763,7 @@ tmg_modification_apply (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::var_apply()
 tmscm
 tmg_modification_inplace_apply (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "modification-inplace-apply");
@@ -3513,6 +3779,7 @@ tmg_modification_inplace_apply (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::invert()
 tmscm
 tmg_modification_invert (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-invert");
@@ -3528,6 +3795,7 @@ tmg_modification_invert (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::commute()
 tmscm
 tmg_modification_commuteP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-commute?");
@@ -3543,6 +3811,7 @@ tmg_modification_commuteP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::can_pull()
 tmscm
 tmg_modification_can_pullP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-can-pull?");
@@ -3558,6 +3827,7 @@ tmg_modification_can_pullP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::pull()
 tmscm
 tmg_modification_pull (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-pull");
@@ -3573,6 +3843,7 @@ tmg_modification_pull (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::co_pull()
 tmscm
 tmg_modification_co_pull (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "modification-co-pull");
@@ -3588,6 +3859,7 @@ tmg_modification_co_pull (tmscm arg1, tmscm arg2) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::patch()
 tmscm
 tmg_patch_pair (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_MODIFICATION (arg1, TMSCM_ARG1, "patch-pair");
@@ -3603,6 +3875,7 @@ tmg_patch_pair (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::patch()
 tmscm
 tmg_patch_compound (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_PATCH (arg1, TMSCM_ARG1, "patch-compound");
@@ -3616,6 +3889,7 @@ tmg_patch_compound (tmscm arg1) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::branch_patch()
 tmscm
 tmg_patch_branch (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_PATCH (arg1, TMSCM_ARG1, "patch-branch");
@@ -3629,6 +3903,7 @@ tmg_patch_branch (tmscm arg1) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::patch()
 tmscm
 tmg_patch_birth (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "patch-birth");
@@ -3644,6 +3919,7 @@ tmg_patch_birth (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::patch()
 tmscm
 tmg_patch_author (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_DOUBLE (arg1, TMSCM_ARG1, "patch-author");
@@ -3659,6 +3935,7 @@ tmg_patch_author (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_modification()
 tmscm
 tmg_patch_pairP (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-pair?");
@@ -3672,6 +3949,7 @@ tmg_patch_pairP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_compound()
 tmscm
 tmg_patch_compoundP (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-compound?");
@@ -3685,6 +3963,7 @@ tmg_patch_compoundP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_branch()
 tmscm
 tmg_patch_branchP (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-branch?");
@@ -3698,6 +3977,7 @@ tmg_patch_branchP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_birth()
 tmscm
 tmg_patch_birthP (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-birth?");
@@ -3711,6 +3991,7 @@ tmg_patch_birthP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_author()
 tmscm
 tmg_patch_authorP (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-author?");
@@ -3724,6 +4005,7 @@ tmg_patch_authorP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::N()
 tmscm
 tmg_patch_arity (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-arity");
@@ -3737,6 +4019,7 @@ tmg_patch_arity (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::access()
 tmscm
 tmg_patch_ref (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-ref");
@@ -3752,6 +4035,7 @@ tmg_patch_ref (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_modification()
 tmscm
 tmg_patch_direct (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-direct");
@@ -3765,6 +4049,7 @@ tmg_patch_direct (tmscm arg1) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_inverse()
 tmscm
 tmg_patch_inverse (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-inverse");
@@ -3778,6 +4063,7 @@ tmg_patch_inverse (tmscm arg1) {
   return modification_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_birth()
 tmscm
 tmg_patch_get_birth (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-get-birth");
@@ -3791,6 +4077,7 @@ tmg_patch_get_birth (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_author()
 tmscm
 tmg_patch_get_author (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-get-author");
@@ -3804,6 +4091,7 @@ tmg_patch_get_author (tmscm arg1) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::copy()
 tmscm
 tmg_patch_copy (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-copy");
@@ -3817,6 +4105,7 @@ tmg_patch_copy (tmscm arg1) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_applicable()
 tmscm
 tmg_patch_applicableP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-applicable?");
@@ -3832,6 +4121,7 @@ tmg_patch_applicableP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::var_clean_apply()
 tmscm
 tmg_patch_apply (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "patch-apply");
@@ -3847,6 +4137,7 @@ tmg_patch_apply (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::var_apply()
 tmscm
 tmg_patch_inplace_apply (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "patch-inplace-apply");
@@ -3862,6 +4153,7 @@ tmg_patch_inplace_apply (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::compactify()
 tmscm
 tmg_patch_compactify (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-compactify");
@@ -3875,6 +4167,7 @@ tmg_patch_compactify (tmscm arg1) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::cursor_hint()
 tmscm
 tmg_patch_cursor_hint (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-cursor-hint");
@@ -3890,6 +4183,7 @@ tmg_patch_cursor_hint (tmscm arg1, tmscm arg2) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::invert()
 tmscm
 tmg_patch_invert (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-invert");
@@ -3905,6 +4199,7 @@ tmg_patch_invert (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::commute()
 tmscm
 tmg_patch_commuteP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-commute?");
@@ -3920,6 +4215,7 @@ tmg_patch_commuteP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::can_pull()
 tmscm
 tmg_patch_can_pullP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-can-pull?");
@@ -3935,6 +4231,7 @@ tmg_patch_can_pullP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::pull()
 tmscm
 tmg_patch_pull (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-pull");
@@ -3950,6 +4247,7 @@ tmg_patch_pull (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::co_pull()
 tmscm
 tmg_patch_co_pull (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-co-pull");
@@ -3965,6 +4263,7 @@ tmg_patch_co_pull (tmscm arg1, tmscm arg2) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::remove_set_cursor()
 tmscm
 tmg_patch_remove_set_cursor (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-remove-set-cursor");
@@ -3978,6 +4277,7 @@ tmg_patch_remove_set_cursor (tmscm arg1) {
   return patch_to_tmscm (out);
 }
 
+//! Scheme glue for ::does_modify()
 tmscm
 tmg_patch_modifiesP (tmscm arg1) {
   TMSCM_ASSERT_PATCH (arg1, TMSCM_ARG1, "patch-modifies?");
@@ -3991,6 +4291,7 @@ tmg_patch_modifiesP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_ids()
 tmscm
 tmg_tree_2ids (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree->ids");
@@ -4004,6 +4305,7 @@ tmg_tree_2ids (tmscm arg1) {
   return list_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_trees()
 tmscm
 tmg_id_2trees (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "id->trees");
@@ -4017,6 +4319,7 @@ tmg_id_2trees (tmscm arg1) {
   return list_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_links()
 tmscm
 tmg_vertex_2links (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "vertex->links");
@@ -4030,6 +4333,7 @@ tmg_vertex_2links (tmscm arg1) {
   return list_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_pointer_new()
 tmscm
 tmg_tree_2tree_pointer (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree->tree-pointer");
@@ -4043,6 +4347,7 @@ tmg_tree_2tree_pointer (tmscm arg1) {
   return observer_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_pointer_delete()
 tmscm
 tmg_tree_pointer_detach (tmscm arg1) {
   TMSCM_ASSERT_OBSERVER (arg1, TMSCM_ARG1, "tree-pointer-detach");
@@ -4056,6 +4361,7 @@ tmg_tree_pointer_detach (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::obtain_tree()
 tmscm
 tmg_tree_pointer_2tree (tmscm arg1) {
   TMSCM_ASSERT_OBSERVER (arg1, TMSCM_ARG1, "tree-pointer->tree");
@@ -4069,6 +4375,7 @@ tmg_tree_pointer_2tree (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::all_link_types()
 tmscm
 tmg_current_link_types () {
   // TMSCM_DEFER_INTS;
@@ -4078,6 +4385,7 @@ tmg_current_link_types () {
   return list_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_locus_rendering()
 tmscm
 tmg_get_locus_rendering (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-locus-rendering");
@@ -4091,6 +4399,7 @@ tmg_get_locus_rendering (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_locus_rendering()
 tmscm
 tmg_set_locus_rendering (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "set-locus-rendering");
@@ -4106,6 +4415,7 @@ tmg_set_locus_rendering (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::declare_visited()
 tmscm
 tmg_declare_visited (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "declare-visited");
@@ -4119,6 +4429,7 @@ tmg_declare_visited (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::has_been_visited()
 tmscm
 tmg_has_been_visitedP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "has-been-visited?");
@@ -4132,6 +4443,7 @@ tmg_has_been_visitedP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_graphical_value()
 tmscm
 tmg_graphics_set (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "graphics-set");
@@ -4147,6 +4459,7 @@ tmg_graphics_set (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::has_graphical_value()
 tmscm
 tmg_graphics_hasP (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "graphics-has?");
@@ -4160,6 +4473,7 @@ tmg_graphics_hasP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_graphical_value()
 tmscm
 tmg_graphics_ref (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "graphics-ref");
@@ -4173,6 +4487,7 @@ tmg_graphics_ref (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::graphics_needs_update()
 tmscm
 tmg_graphics_needs_updateP () {
   // TMSCM_DEFER_INTS;
@@ -4182,6 +4497,7 @@ tmg_graphics_needs_updateP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::graphics_notify_update()
 tmscm
 tmg_graphics_notify_update (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "graphics-notify-update");
@@ -4195,6 +4511,7 @@ tmg_graphics_notify_update (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::is_double()
 tmscm
 tmg_string_numberP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-number?");
@@ -4208,6 +4525,7 @@ tmg_string_numberP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::occurs()
 tmscm
 tmg_string_occursP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-occurs?");
@@ -4223,6 +4541,7 @@ tmg_string_occursP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::count_occurrences()
 tmscm
 tmg_string_count_occurrences (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-count-occurrences");
@@ -4238,6 +4557,7 @@ tmg_string_count_occurrences (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_forwards()
 tmscm
 tmg_string_search_forwards (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-search-forwards");
@@ -4255,6 +4575,7 @@ tmg_string_search_forwards (tmscm arg1, tmscm arg2, tmscm arg3) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_backwards()
 tmscm
 tmg_string_search_backwards (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-search-backwards");
@@ -4272,6 +4593,7 @@ tmg_string_search_backwards (tmscm arg1, tmscm arg2, tmscm arg3) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::overlapping()
 tmscm
 tmg_string_overlapping (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-overlapping");
@@ -4287,6 +4609,7 @@ tmg_string_overlapping (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::replace()
 tmscm
 tmg_string_replace (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-replace");
@@ -4304,6 +4627,7 @@ tmg_string_replace (tmscm arg1, tmscm arg2, tmscm arg3) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_alpha()
 tmscm
 tmg_string_alphaP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-alpha?");
@@ -4317,6 +4641,7 @@ tmg_string_alphaP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_locase_alpha()
 tmscm
 tmg_string_locase_alphaP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-locase-alpha?");
@@ -4330,6 +4655,7 @@ tmg_string_locase_alphaP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::upcase_first()
 tmscm
 tmg_upcase_first (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "upcase-first");
@@ -4343,6 +4669,7 @@ tmg_upcase_first (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::locase_first()
 tmscm
 tmg_locase_first (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "locase-first");
@@ -4356,6 +4683,7 @@ tmg_locase_first (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::upcase_all()
 tmscm
 tmg_upcase_all (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "upcase-all");
@@ -4369,6 +4697,7 @@ tmg_upcase_all (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::locase_all()
 tmscm
 tmg_locase_all (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "locase-all");
@@ -4382,6 +4711,7 @@ tmg_locase_all (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::string_union()
 tmscm
 tmg_string_union (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-union");
@@ -4397,6 +4727,7 @@ tmg_string_union (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::string_minus()
 tmscm
 tmg_string_minus (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-minus");
@@ -4412,6 +4743,7 @@ tmg_string_minus (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::escape_generic()
 tmscm
 tmg_escape_generic (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "escape-generic");
@@ -4425,6 +4757,7 @@ tmg_escape_generic (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::escape_verbatim()
 tmscm
 tmg_escape_verbatim (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "escape-verbatim");
@@ -4438,6 +4771,7 @@ tmg_escape_verbatim (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::escape_sh()
 tmscm
 tmg_escape_shell (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "escape-shell");
@@ -4451,6 +4785,7 @@ tmg_escape_shell (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::cork_to_ascii()
 tmscm
 tmg_escape_to_ascii (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "escape-to-ascii");
@@ -4464,6 +4799,7 @@ tmg_escape_to_ascii (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::unescape_guile()
 tmscm
 tmg_unescape_guile (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "unescape-guile");
@@ -4477,6 +4813,7 @@ tmg_unescape_guile (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::scm_quote()
 tmscm
 tmg_string_quote (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-quote");
@@ -4490,6 +4827,7 @@ tmg_string_quote (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::scm_unquote()
 tmscm
 tmg_string_unquote (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-unquote");
@@ -4503,6 +4841,7 @@ tmg_string_unquote (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::convert()
 tmscm
 tmg_string_convert (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-convert");
@@ -4520,6 +4859,7 @@ tmg_string_convert (tmscm arg1, tmscm arg2, tmscm arg3) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::encode_base64()
 tmscm
 tmg_encode_base64 (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "encode-base64");
@@ -4533,6 +4873,7 @@ tmg_encode_base64 (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::decode_base64()
 tmscm
 tmg_decode_base64 (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "decode-base64");
@@ -4546,6 +4887,7 @@ tmg_decode_base64 (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::sourcecode_to_cork()
 tmscm
 tmg_sourcecode_2cork (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "sourcecode->cork");
@@ -4559,6 +4901,7 @@ tmg_sourcecode_2cork (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::cork_to_sourcecode()
 tmscm
 tmg_cork_2sourcecode (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cork->sourcecode");
@@ -4572,6 +4915,7 @@ tmg_cork_2sourcecode (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::utf8_to_cork()
 tmscm
 tmg_utf8_2cork (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "utf8->cork");
@@ -4585,6 +4929,7 @@ tmg_utf8_2cork (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::cork_to_utf8()
 tmscm
 tmg_cork_2utf8 (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cork->utf8");
@@ -4598,6 +4943,7 @@ tmg_cork_2utf8 (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::utf8_to_t2a()
 tmscm
 tmg_utf8_2t2a (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "utf8->t2a");
@@ -4611,6 +4957,7 @@ tmg_utf8_2t2a (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::t2a_to_utf8()
 tmscm
 tmg_t2a_2utf8 (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "t2a->utf8");
@@ -4624,6 +4971,7 @@ tmg_t2a_2utf8 (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::utf8_to_html()
 tmscm
 tmg_utf8_2html (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "utf8->html");
@@ -4637,6 +4985,7 @@ tmg_utf8_2html (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::guess_wencoding()
 tmscm
 tmg_guess_wencoding (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "guess-wencoding");
@@ -4650,6 +4999,7 @@ tmg_guess_wencoding (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_to_xml_name()
 tmscm
 tmg_tm_2xml_name (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tm->xml-name");
@@ -4663,6 +5013,7 @@ tmg_tm_2xml_name (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::old_tm_to_xml_cdata()
 tmscm
 tmg_old_tm_2xml_cdata (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "old-tm->xml-cdata");
@@ -4676,6 +5027,7 @@ tmg_old_tm_2xml_cdata (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_to_xml_cdata()
 tmscm
 tmg_tm_2xml_cdata (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tm->xml-cdata");
@@ -4689,6 +5041,7 @@ tmg_tm_2xml_cdata (tmscm arg1) {
   return object_to_tmscm (out);
 }
 
+//! Scheme glue for ::xml_name_to_tm()
 tmscm
 tmg_xml_name_2tm (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "xml-name->tm");
@@ -4702,6 +5055,7 @@ tmg_xml_name_2tm (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::old_xml_cdata_to_tm()
 tmscm
 tmg_old_xml_cdata_2tm (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "old-xml-cdata->tm");
@@ -4715,6 +5069,7 @@ tmg_old_xml_cdata_2tm (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::xml_unspace()
 tmscm
 tmg_xml_unspace (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "xml-unspace");
@@ -4732,6 +5087,7 @@ tmg_xml_unspace (tmscm arg1, tmscm arg2, tmscm arg3) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_hexadecimal()
 tmscm
 tmg_integer_2hexadecimal (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "integer->hexadecimal");
@@ -4745,6 +5101,7 @@ tmg_integer_2hexadecimal (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_hexadecimal()
 tmscm
 tmg_integer_2padded_hexadecimal (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "integer->padded-hexadecimal");
@@ -4760,6 +5117,7 @@ tmg_integer_2padded_hexadecimal (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::from_hexadecimal()
 tmscm
 tmg_hexadecimal_2integer (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "hexadecimal->integer");
@@ -4773,6 +5131,7 @@ tmg_hexadecimal_2integer (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::tokenize()
 tmscm
 tmg_cpp_string_tokenize (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-string-tokenize");
@@ -4788,6 +5147,7 @@ tmg_cpp_string_tokenize (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::recompose()
 tmscm
 tmg_cpp_string_recompose (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "cpp-string-recompose");
@@ -4803,6 +5163,7 @@ tmg_cpp_string_recompose (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::find_left_bracket()
 tmscm
 tmg_find_left_bracket (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "find-left-bracket");
@@ -4820,6 +5181,7 @@ tmg_find_left_bracket (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::find_right_bracket()
 tmscm
 tmg_find_right_bracket (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "find-right-bracket");
@@ -4837,6 +5199,7 @@ tmg_find_right_bracket (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_encode()
 tmscm
 tmg_string_2tmstring (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string->tmstring");
@@ -4850,6 +5213,7 @@ tmg_string_2tmstring (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_decode()
 tmscm
 tmg_tmstring_2string (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring->string");
@@ -4863,6 +5227,7 @@ tmg_tmstring_2string (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_string_length()
 tmscm
 tmg_tmstring_length (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-length");
@@ -4876,6 +5241,7 @@ tmg_tmstring_length (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_forward_access()
 tmscm
 tmg_tmstring_ref (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-ref");
@@ -4891,6 +5257,7 @@ tmg_tmstring_ref (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_backward_access()
 tmscm
 tmg_tmstring_reverse_ref (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-reverse-ref");
@@ -4906,6 +5273,7 @@ tmg_tmstring_reverse_ref (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_tokenize()
 tmscm
 tmg_tmstring_2list (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring->list");
@@ -4919,6 +5287,7 @@ tmg_tmstring_2list (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_recompose()
 tmscm
 tmg_list_2tmstring (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_STRING (arg1, TMSCM_ARG1, "list->tmstring");
@@ -4932,6 +5301,7 @@ tmg_list_2tmstring (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_char_next()
 tmscm
 tmg_string_next (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-next");
@@ -4947,6 +5317,7 @@ tmg_string_next (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_char_previous()
 tmscm
 tmg_string_previous (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-previous");
@@ -4962,6 +5333,7 @@ tmg_string_previous (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::tm_string_split()
 tmscm
 tmg_tmstring_split (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-split");
@@ -4975,6 +5347,7 @@ tmg_tmstring_split (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::uni_translit()
 tmscm
 tmg_tmstring_translit (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-translit");
@@ -4988,6 +5361,7 @@ tmg_tmstring_translit (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::uni_locase_first()
 tmscm
 tmg_tmstring_locase_first (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-locase-first");
@@ -5001,6 +5375,7 @@ tmg_tmstring_locase_first (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::uni_upcase_first()
 tmscm
 tmg_tmstring_upcase_first (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-upcase-first");
@@ -5014,6 +5389,7 @@ tmg_tmstring_upcase_first (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::uni_locase_all()
 tmscm
 tmg_tmstring_locase_all (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-locase-all");
@@ -5027,6 +5403,7 @@ tmg_tmstring_locase_all (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::uni_upcase_all()
 tmscm
 tmg_tmstring_upcase_all (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tmstring-upcase-all");
@@ -5040,6 +5417,7 @@ tmg_tmstring_upcase_all (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::packrat_define()
 tmscm
 tmg_packrat_define (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "packrat-define");
@@ -5057,6 +5435,7 @@ tmg_packrat_define (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::packrat_property()
 tmscm
 tmg_packrat_property (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "packrat-property");
@@ -5076,6 +5455,7 @@ tmg_packrat_property (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::packrat_inherit()
 tmscm
 tmg_packrat_inherit (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "packrat-inherit");
@@ -5091,6 +5471,7 @@ tmg_packrat_inherit (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::packrat_parse()
 tmscm
 tmg_packrat_parse (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "packrat-parse");
@@ -5108,6 +5489,7 @@ tmg_packrat_parse (tmscm arg1, tmscm arg2, tmscm arg3) {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::packrat_correct()
 tmscm
 tmg_packrat_correctP (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "packrat-correct?");
@@ -5125,6 +5507,7 @@ tmg_packrat_correctP (tmscm arg1, tmscm arg2, tmscm arg3) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::packrat_context()
 tmscm
 tmg_packrat_context (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "packrat-context");
@@ -5144,6 +5527,7 @@ tmg_packrat_context (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return object_to_tmscm (out);
 }
 
+//! Scheme glue for ::initialize_color_decodings()
 tmscm
 tmg_syntax_read_preferences (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "syntax-read-preferences");
@@ -5157,6 +5541,7 @@ tmg_syntax_read_preferences (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::texmacs_document_to_tree()
 tmscm
 tmg_parse_texmacs (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-texmacs");
@@ -5170,6 +5555,7 @@ tmg_parse_texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_to_texmacs()
 tmscm
 tmg_serialize_texmacs (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "serialize-texmacs");
@@ -5183,6 +5569,7 @@ tmg_serialize_texmacs (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::texmacs_to_tree()
 tmscm
 tmg_parse_texmacs_snippet (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-texmacs-snippet");
@@ -5196,6 +5583,7 @@ tmg_parse_texmacs_snippet (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_to_texmacs()
 tmscm
 tmg_serialize_texmacs_snippet (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "serialize-texmacs-snippet");
@@ -5209,6 +5597,7 @@ tmg_serialize_texmacs_snippet (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_to_scheme()
 tmscm
 tmg_texmacs_2stm (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "texmacs->stm");
@@ -5222,6 +5611,7 @@ tmg_texmacs_2stm (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::scheme_document_to_tree()
 tmscm
 tmg_stm_2texmacs (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "stm->texmacs");
@@ -5235,6 +5625,7 @@ tmg_stm_2texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::scheme_to_tree()
 tmscm
 tmg_stm_snippet_2texmacs (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "stm-snippet->texmacs");
@@ -5248,6 +5639,7 @@ tmg_stm_snippet_2texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_to_verbatim()
 tmscm
 tmg_cpp_texmacs_2verbatim (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "cpp-texmacs->verbatim");
@@ -5265,6 +5657,7 @@ tmg_cpp_texmacs_2verbatim (tmscm arg1, tmscm arg2, tmscm arg3) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::verbatim_to_tree()
 tmscm
 tmg_cpp_verbatim_snippet_2texmacs (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-verbatim-snippet->texmacs");
@@ -5282,6 +5675,7 @@ tmg_cpp_verbatim_snippet_2texmacs (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::verbatim_document_to_tree()
 tmscm
 tmg_cpp_verbatim_2texmacs (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-verbatim->texmacs");
@@ -5299,6 +5693,7 @@ tmg_cpp_verbatim_2texmacs (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::parse_latex()
 tmscm
 tmg_parse_latex (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-latex");
@@ -5312,6 +5707,7 @@ tmg_parse_latex (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::parse_latex_document()
 tmscm
 tmg_parse_latex_document (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-latex-document");
@@ -5325,6 +5721,7 @@ tmg_parse_latex_document (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::latex_to_tree()
 tmscm
 tmg_latex_2texmacs (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "latex->texmacs");
@@ -5338,6 +5735,7 @@ tmg_latex_2texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::latex_document_to_tree()
 tmscm
 tmg_cpp_latex_document_2texmacs (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "cpp-latex-document->texmacs");
@@ -5353,6 +5751,7 @@ tmg_cpp_latex_document_2texmacs (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::latex_class_document_to_tree()
 tmscm
 tmg_latex_class_document_2texmacs (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "latex-class-document->texmacs");
@@ -5366,6 +5765,7 @@ tmg_latex_class_document_2texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::tracked_latex_to_texmacs()
 tmscm
 tmg_tracked_latex_2texmacs (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tracked-latex->texmacs");
@@ -5381,6 +5781,7 @@ tmg_tracked_latex_2texmacs (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::conservative_texmacs_to_latex()
 tmscm
 tmg_conservative_texmacs_2latex (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "conservative-texmacs->latex");
@@ -5396,6 +5797,7 @@ tmg_conservative_texmacs_2latex (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tracked_texmacs_to_latex()
 tmscm
 tmg_tracked_texmacs_2latex (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "tracked-texmacs->latex");
@@ -5411,6 +5813,7 @@ tmg_tracked_texmacs_2latex (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::conservative_latex_to_texmacs()
 tmscm
 tmg_conservative_latex_2texmacs (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "conservative-latex->texmacs");
@@ -5426,6 +5829,7 @@ tmg_conservative_latex_2texmacs (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_line_number()
 tmscm
 tmg_get_line_number (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-line-number");
@@ -5441,6 +5845,7 @@ tmg_get_line_number (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_column_number()
 tmscm
 tmg_get_column_number (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "get-column-number");
@@ -5456,6 +5861,7 @@ tmg_get_column_number (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::try_latex_export()
 tmscm
 tmg_try_latex_export (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "try-latex-export");
@@ -5475,6 +5881,7 @@ tmg_try_latex_export (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::parse_xml()
 tmscm
 tmg_parse_xml (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-xml");
@@ -5488,6 +5895,7 @@ tmg_parse_xml (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::parse_html()
 tmscm
 tmg_parse_html (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-html");
@@ -5501,6 +5909,7 @@ tmg_parse_html (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::parse_bib()
 tmscm
 tmg_parse_bib (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "parse-bib");
@@ -5514,6 +5923,7 @@ tmg_parse_bib (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::conservative_bib_import()
 tmscm
 tmg_conservative_bib_import (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "conservative-bib-import");
@@ -5531,6 +5941,7 @@ tmg_conservative_bib_import (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::conservative_bib_export()
 tmscm
 tmg_conservative_bib_export (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "conservative-bib-export");
@@ -5548,6 +5959,7 @@ tmg_conservative_bib_export (tmscm arg1, tmscm arg2, tmscm arg3) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::tmml_upgrade()
 tmscm
 tmg_upgrade_tmml (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "upgrade-tmml");
@@ -5561,6 +5973,7 @@ tmg_upgrade_tmml (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::upgrade_mathml()
 tmscm
 tmg_upgrade_mathml (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "upgrade-mathml");
@@ -5574,6 +5987,7 @@ tmg_upgrade_mathml (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::vernac_to_tree()
 tmscm
 tmg_vernac_2texmacs (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "vernac->texmacs");
@@ -5587,6 +6001,7 @@ tmg_vernac_2texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::vernac_document_to_tree()
 tmscm
 tmg_vernac_document_2texmacs (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "vernac-document->texmacs");
@@ -5600,6 +6015,7 @@ tmg_vernac_document_2texmacs (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::compute_keys()
 tmscm
 tmg_compute_keys_string (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "compute-keys-string");
@@ -5615,6 +6031,7 @@ tmg_compute_keys_string (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::compute_keys()
 tmscm
 tmg_compute_keys_tree (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "compute-keys-tree");
@@ -5630,6 +6047,7 @@ tmg_compute_keys_tree (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::compute_keys()
 tmscm
 tmg_compute_keys_url (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "compute-keys-url");
@@ -5643,6 +6061,7 @@ tmg_compute_keys_url (tmscm arg1) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::compute_index()
 tmscm
 tmg_compute_index_string (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "compute-index-string");
@@ -5658,6 +6077,7 @@ tmg_compute_index_string (tmscm arg1, tmscm arg2) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::compute_index()
 tmscm
 tmg_compute_index_tree (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "compute-index-tree");
@@ -5673,6 +6093,7 @@ tmg_compute_index_tree (tmscm arg1, tmscm arg2) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::compute_index()
 tmscm
 tmg_compute_index_url (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "compute-index-url");
@@ -5686,6 +6107,7 @@ tmg_compute_index_url (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::url()
 tmscm
 tmg_url_2url (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url->url");
@@ -5699,6 +6121,7 @@ tmg_url_2url (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_root()
 tmscm
 tmg_root_2url (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "root->url");
@@ -5712,6 +6135,7 @@ tmg_root_2url (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url()
 tmscm
 tmg_string_2url (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string->url");
@@ -5725,6 +6149,7 @@ tmg_string_2url (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_string()
 tmscm
 tmg_url_2string (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url->string");
@@ -5738,6 +6163,7 @@ tmg_url_2string (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_tree()
 tmscm
 tmg_url_2stree (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url->stree");
@@ -5751,6 +6177,7 @@ tmg_url_2stree (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_system()
 tmscm
 tmg_system_2url (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "system->url");
@@ -5764,6 +6191,7 @@ tmg_system_2url (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_system_string()
 tmscm
 tmg_url_2system (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url->system");
@@ -5777,6 +6205,7 @@ tmg_url_2system (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_unix()
 tmscm
 tmg_unix_2url (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "unix->url");
@@ -5790,6 +6219,7 @@ tmg_unix_2url (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_unix_string()
 tmscm
 tmg_url_2unix (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url->unix");
@@ -5803,6 +6233,7 @@ tmg_url_2unix (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::url()
 tmscm
 tmg_url_unix (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "url-unix");
@@ -5818,6 +6249,7 @@ tmg_url_unix (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_none()
 tmscm
 tmg_url_none () {
   // TMSCM_DEFER_INTS;
@@ -5827,6 +6259,7 @@ tmg_url_none () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_wildcard()
 tmscm
 tmg_url_any () {
   // TMSCM_DEFER_INTS;
@@ -5836,6 +6269,7 @@ tmg_url_any () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_wildcard()
 tmscm
 tmg_url_wildcard (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "url-wildcard");
@@ -5849,6 +6283,7 @@ tmg_url_wildcard (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_pwd()
 tmscm
 tmg_url_pwd () {
   // TMSCM_DEFER_INTS;
@@ -5858,6 +6293,7 @@ tmg_url_pwd () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_parent()
 tmscm
 tmg_url_parent () {
   // TMSCM_DEFER_INTS;
@@ -5867,6 +6303,7 @@ tmg_url_parent () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_ancestor()
 tmscm
 tmg_url_ancestor () {
   // TMSCM_DEFER_INTS;
@@ -5876,6 +6313,7 @@ tmg_url_ancestor () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_concat()
 tmscm
 tmg_url_append (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-append");
@@ -5891,6 +6329,7 @@ tmg_url_append (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_or()
 tmscm
 tmg_url_or (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-or");
@@ -5906,6 +6345,7 @@ tmg_url_or (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_none()
 tmscm
 tmg_url_noneP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-none?");
@@ -5919,6 +6359,7 @@ tmg_url_noneP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_rooted()
 tmscm
 tmg_url_rootedP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-rooted?");
@@ -5932,6 +6373,7 @@ tmg_url_rootedP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_rooted()
 tmscm
 tmg_url_rooted_protocolP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-rooted-protocol?");
@@ -5947,6 +6389,7 @@ tmg_url_rooted_protocolP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_rooted_web()
 tmscm
 tmg_url_rooted_webP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-rooted-web?");
@@ -5960,6 +6403,7 @@ tmg_url_rooted_webP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_rooted_tmfs()
 tmscm
 tmg_url_rooted_tmfsP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-rooted-tmfs?");
@@ -5973,6 +6417,7 @@ tmg_url_rooted_tmfsP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_rooted_tmfs()
 tmscm
 tmg_url_rooted_tmfs_protocolP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-rooted-tmfs-protocol?");
@@ -5988,6 +6433,7 @@ tmg_url_rooted_tmfs_protocolP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_root()
 tmscm
 tmg_url_root (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-root");
@@ -6001,6 +6447,7 @@ tmg_url_root (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::unroot()
 tmscm
 tmg_url_unroot (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-unroot");
@@ -6014,6 +6461,7 @@ tmg_url_unroot (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_atomic()
 tmscm
 tmg_url_atomicP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-atomic?");
@@ -6027,6 +6475,7 @@ tmg_url_atomicP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_concat()
 tmscm
 tmg_url_concatP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-concat?");
@@ -6040,6 +6489,7 @@ tmg_url_concatP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_or()
 tmscm
 tmg_url_orP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-or?");
@@ -6053,6 +6503,7 @@ tmg_url_orP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_ref()
 tmscm
 tmg_url_ref (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-ref");
@@ -6068,6 +6519,7 @@ tmg_url_ref (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::head()
 tmscm
 tmg_url_head (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-head");
@@ -6081,6 +6533,7 @@ tmg_url_head (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::tail()
 tmscm
 tmg_url_tail (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-tail");
@@ -6094,6 +6547,7 @@ tmg_url_tail (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::file_format()
 tmscm
 tmg_url_format (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-format");
@@ -6107,6 +6561,7 @@ tmg_url_format (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::suffix()
 tmscm
 tmg_url_suffix (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-suffix");
@@ -6120,6 +6575,7 @@ tmg_url_suffix (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::basename()
 tmscm
 tmg_url_basename (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-basename");
@@ -6133,6 +6589,7 @@ tmg_url_basename (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::glue()
 tmscm
 tmg_url_glue (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-glue");
@@ -6148,6 +6605,7 @@ tmg_url_glue (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::unglue()
 tmscm
 tmg_url_unglue (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-unglue");
@@ -6163,6 +6621,7 @@ tmg_url_unglue (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::relative()
 tmscm
 tmg_url_relative (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-relative");
@@ -6178,6 +6637,7 @@ tmg_url_relative (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::expand()
 tmscm
 tmg_url_expand (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-expand");
@@ -6191,6 +6651,7 @@ tmg_url_expand (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::factor()
 tmscm
 tmg_url_factor (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-factor");
@@ -6204,6 +6665,7 @@ tmg_url_factor (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::delta()
 tmscm
 tmg_url_delta (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-delta");
@@ -6219,6 +6681,7 @@ tmg_url_delta (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_secure()
 tmscm
 tmg_url_secureP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-secure?");
@@ -6232,6 +6695,7 @@ tmg_url_secureP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::descends()
 tmscm
 tmg_url_descendsP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-descends?");
@@ -6247,6 +6711,7 @@ tmg_url_descendsP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::complete()
 tmscm
 tmg_url_complete (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-complete");
@@ -6262,6 +6727,7 @@ tmg_url_complete (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::resolve()
 tmscm
 tmg_url_resolve (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-resolve");
@@ -6277,6 +6743,7 @@ tmg_url_resolve (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::resolve_in_path()
 tmscm
 tmg_url_resolve_in_path (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-resolve-in-path");
@@ -6290,6 +6757,7 @@ tmg_url_resolve_in_path (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::exists()
 tmscm
 tmg_url_existsP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-exists?");
@@ -6303,6 +6771,7 @@ tmg_url_existsP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::exists_in_path()
 tmscm
 tmg_url_exists_in_pathP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-exists-in-path?");
@@ -6316,6 +6785,7 @@ tmg_url_exists_in_pathP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::exists_in_tex()
 tmscm
 tmg_url_exists_in_texP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-exists-in-tex?");
@@ -6329,6 +6799,7 @@ tmg_url_exists_in_texP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::concretize()
 tmscm
 tmg_url_concretize (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-concretize");
@@ -6342,6 +6813,7 @@ tmg_url_concretize (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::materialize()
 tmscm
 tmg_url_materialize (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-materialize");
@@ -6357,6 +6829,7 @@ tmg_url_materialize (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_of_type()
 tmscm
 tmg_url_testP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-test?");
@@ -6372,6 +6845,7 @@ tmg_url_testP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_regular()
 tmscm
 tmg_url_regularP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-regular?");
@@ -6385,6 +6859,7 @@ tmg_url_regularP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_directory()
 tmscm
 tmg_url_directoryP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-directory?");
@@ -6398,6 +6873,7 @@ tmg_url_directoryP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_symbolic_link()
 tmscm
 tmg_url_linkP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-link?");
@@ -6411,6 +6887,7 @@ tmg_url_linkP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_newer()
 tmscm
 tmg_url_newerP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-newer?");
@@ -6426,6 +6903,7 @@ tmg_url_newerP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::file_size()
 tmscm
 tmg_url_size (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-size");
@@ -6439,6 +6917,7 @@ tmg_url_size (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::last_modified()
 tmscm
 tmg_url_last_modified (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-last-modified");
@@ -6452,6 +6931,7 @@ tmg_url_last_modified (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_temp()
 tmscm
 tmg_url_temp () {
   // TMSCM_DEFER_INTS;
@@ -6461,6 +6941,7 @@ tmg_url_temp () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::url_scratch()
 tmscm
 tmg_url_scratch (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "url-scratch");
@@ -6478,6 +6959,7 @@ tmg_url_scratch (tmscm arg1, tmscm arg2, tmscm arg3) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_scratch()
 tmscm
 tmg_url_scratchP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-scratch?");
@@ -6491,6 +6973,7 @@ tmg_url_scratchP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::web_cache_invalidate()
 tmscm
 tmg_url_cache_invalidate (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-cache-invalidate");
@@ -6504,6 +6987,7 @@ tmg_url_cache_invalidate (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::string_save()
 tmscm
 tmg_string_save (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-save");
@@ -6519,6 +7003,7 @@ tmg_string_save (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::string_load()
 tmscm
 tmg_string_load (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "string-load");
@@ -6532,6 +7017,7 @@ tmg_string_load (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::string_append_to_file()
 tmscm
 tmg_string_append_to_file (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "string-append-to-file");
@@ -6547,6 +7033,7 @@ tmg_string_append_to_file (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::move()
 tmscm
 tmg_system_move (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-move");
@@ -6562,6 +7049,7 @@ tmg_system_move (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::copy()
 tmscm
 tmg_system_copy (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-copy");
@@ -6577,6 +7065,7 @@ tmg_system_copy (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::remove()
 tmscm
 tmg_system_remove (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-remove");
@@ -6590,6 +7079,7 @@ tmg_system_remove (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::mkdir()
 tmscm
 tmg_system_mkdir (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-mkdir");
@@ -6603,6 +7093,7 @@ tmg_system_mkdir (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::rmdir()
 tmscm
 tmg_system_rmdir (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-rmdir");
@@ -6616,6 +7107,7 @@ tmg_system_rmdir (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::search_score()
 tmscm
 tmg_system_search_score (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-search-score");
@@ -6631,6 +7123,7 @@ tmg_system_search_score (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::system()
 tmscm
 tmg_system_1 (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "system-1");
@@ -6646,6 +7139,7 @@ tmg_system_1 (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::system()
 tmscm
 tmg_system_2 (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "system-2");
@@ -6663,6 +7157,7 @@ tmg_system_2 (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::sys_concretize()
 tmscm
 tmg_system_url_2string (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "system-url->string");
@@ -6676,6 +7171,7 @@ tmg_system_url_2string (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::grep()
 tmscm
 tmg_url_grep (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "url-grep");
@@ -6691,6 +7187,7 @@ tmg_url_grep (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::search_file_upwards()
 tmscm
 tmg_url_search_upwards (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "url-search-upwards");
@@ -6708,6 +7205,7 @@ tmg_url_search_upwards (tmscm arg1, tmscm arg2, tmscm arg3) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::persistent_set()
 tmscm
 tmg_persistent_set (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "persistent-set");
@@ -6725,6 +7223,7 @@ tmg_persistent_set (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::persistent_reset()
 tmscm
 tmg_persistent_remove (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "persistent-remove");
@@ -6740,6 +7239,7 @@ tmg_persistent_remove (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::persistent_contains()
 tmscm
 tmg_persistent_hasP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "persistent-has?");
@@ -6755,6 +7255,7 @@ tmg_persistent_hasP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::persistent_get()
 tmscm
 tmg_persistent_get (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "persistent-get");
@@ -6770,6 +7271,7 @@ tmg_persistent_get (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::persistent_file_name()
 tmscm
 tmg_persistent_file_name (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "persistent-file-name");
@@ -6785,6 +7287,7 @@ tmg_persistent_file_name (tmscm arg1, tmscm arg2) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::keep_history()
 tmscm
 tmg_tmdb_keep_history (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-keep-history");
@@ -6800,6 +7303,7 @@ tmg_tmdb_keep_history (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::set_field()
 tmscm
 tmg_tmdb_set_field (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-set-field");
@@ -6821,6 +7325,7 @@ tmg_tmdb_set_field (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) 
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_field()
 tmscm
 tmg_tmdb_get_field (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-get-field");
@@ -6840,6 +7345,7 @@ tmg_tmdb_get_field (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::remove_field()
 tmscm
 tmg_tmdb_remove_field (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-remove-field");
@@ -6859,6 +7365,7 @@ tmg_tmdb_remove_field (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_attributes()
 tmscm
 tmg_tmdb_get_attributes (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-get-attributes");
@@ -6876,6 +7383,7 @@ tmg_tmdb_get_attributes (tmscm arg1, tmscm arg2, tmscm arg3) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_entry()
 tmscm
 tmg_tmdb_set_entry (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-set-entry");
@@ -6895,6 +7403,7 @@ tmg_tmdb_set_entry (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_entry()
 tmscm
 tmg_tmdb_get_entry (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-get-entry");
@@ -6912,6 +7421,7 @@ tmg_tmdb_get_entry (tmscm arg1, tmscm arg2, tmscm arg3) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::remove_entry()
 tmscm
 tmg_tmdb_remove_entry (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-remove-entry");
@@ -6929,6 +7439,7 @@ tmg_tmdb_remove_entry (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::query()
 tmscm
 tmg_tmdb_query (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-query");
@@ -6948,6 +7459,7 @@ tmg_tmdb_query (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::inspect_history()
 tmscm
 tmg_tmdb_inspect_history (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-inspect-history");
@@ -6963,6 +7475,7 @@ tmg_tmdb_inspect_history (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_completions()
 tmscm
 tmg_tmdb_get_completions (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-get-completions");
@@ -6978,6 +7491,7 @@ tmg_tmdb_get_completions (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_name_completions()
 tmscm
 tmg_tmdb_get_name_completions (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tmdb-get-name-completions");
@@ -6993,6 +7507,7 @@ tmg_tmdb_get_name_completions (tmscm arg1, tmscm arg2) {
   return array_string_to_tmscm (out);
 }
 
+//! Scheme glue for ::sqlite3_present()
 tmscm
 tmg_supports_sqlP () {
   // TMSCM_DEFER_INTS;
@@ -7002,6 +7517,7 @@ tmg_supports_sqlP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::sql_exec()
 tmscm
 tmg_sql_exec (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "sql-exec");
@@ -7017,6 +7533,7 @@ tmg_sql_exec (tmscm arg1, tmscm arg2) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::sql_quote()
 tmscm
 tmg_sql_quote (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "sql-quote");
@@ -7030,6 +7547,7 @@ tmg_sql_quote (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::server_start()
 tmscm
 tmg_server_start () {
   // TMSCM_DEFER_INTS;
@@ -7039,6 +7557,7 @@ tmg_server_start () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::server_stop()
 tmscm
 tmg_server_stop () {
   // TMSCM_DEFER_INTS;
@@ -7048,6 +7567,7 @@ tmg_server_stop () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::server_read()
 tmscm
 tmg_server_read (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "server-read");
@@ -7061,6 +7581,7 @@ tmg_server_read (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::server_write()
 tmscm
 tmg_server_write (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "server-write");
@@ -7076,6 +7597,7 @@ tmg_server_write (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::server_started()
 tmscm
 tmg_server_startedP () {
   // TMSCM_DEFER_INTS;
@@ -7085,6 +7607,7 @@ tmg_server_startedP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::client_start()
 tmscm
 tmg_client_start (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "client-start");
@@ -7098,6 +7621,7 @@ tmg_client_start (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::client_stop()
 tmscm
 tmg_client_stop (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "client-stop");
@@ -7111,6 +7635,7 @@ tmg_client_stop (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::client_read()
 tmscm
 tmg_client_read (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "client-read");
@@ -7124,6 +7649,7 @@ tmg_client_read (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::client_write()
 tmscm
 tmg_client_write (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "client-write");
@@ -7139,6 +7665,7 @@ tmg_client_write (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::enter_secure_mode()
 tmscm
 tmg_enter_secure_mode (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "enter-secure-mode");
@@ -7152,6 +7679,7 @@ tmg_enter_secure_mode (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::connection_start()
 tmscm
 tmg_connection_start (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-start");
@@ -7167,6 +7695,7 @@ tmg_connection_start (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::connection_status()
 tmscm
 tmg_connection_status (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-status");
@@ -7182,6 +7711,7 @@ tmg_connection_status (tmscm arg1, tmscm arg2) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::connection_write()
 tmscm
 tmg_connection_write_string (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-write-string");
@@ -7199,6 +7729,7 @@ tmg_connection_write_string (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::connection_write()
 tmscm
 tmg_connection_write (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-write");
@@ -7216,6 +7747,7 @@ tmg_connection_write (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::connection_cmd()
 tmscm
 tmg_connection_cmd (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-cmd");
@@ -7233,6 +7765,7 @@ tmg_connection_cmd (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::connection_eval()
 tmscm
 tmg_connection_eval (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-eval");
@@ -7250,6 +7783,7 @@ tmg_connection_eval (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::connection_interrupt()
 tmscm
 tmg_connection_interrupt (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-interrupt");
@@ -7265,6 +7799,7 @@ tmg_connection_interrupt (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::connection_stop()
 tmscm
 tmg_connection_stop (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "connection-stop");
@@ -7280,6 +7815,7 @@ tmg_connection_stop (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::printer_widget()
 tmscm
 tmg_widget_printer (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-printer");
@@ -7295,6 +7831,7 @@ tmg_widget_printer (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::color_picker_widget()
 tmscm
 tmg_widget_color_picker (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-color-picker");
@@ -7312,6 +7849,7 @@ tmg_widget_color_picker (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::extend()
 tmscm
 tmg_widget_extend (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-extend");
@@ -7327,6 +7865,7 @@ tmg_widget_extend (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::horizontal_menu()
 tmscm
 tmg_widget_hmenu (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-hmenu");
@@ -7340,6 +7879,7 @@ tmg_widget_hmenu (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::vertical_menu()
 tmscm
 tmg_widget_vmenu (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-vmenu");
@@ -7353,6 +7893,7 @@ tmg_widget_vmenu (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::tile_menu()
 tmscm
 tmg_widget_tmenu (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-tmenu");
@@ -7368,6 +7909,7 @@ tmg_widget_tmenu (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::minibar_menu()
 tmscm
 tmg_widget_minibar_menu (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-minibar-menu");
@@ -7381,6 +7923,7 @@ tmg_widget_minibar_menu (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::menu_separator()
 tmscm
 tmg_widget_separator (tmscm arg1) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "widget-separator");
@@ -7394,6 +7937,7 @@ tmg_widget_separator (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::menu_group()
 tmscm
 tmg_widget_menu_group (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "widget-menu-group");
@@ -7409,6 +7953,7 @@ tmg_widget_menu_group (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::pulldown_button()
 tmscm
 tmg_widget_pulldown_button (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-pulldown-button");
@@ -7424,6 +7969,7 @@ tmg_widget_pulldown_button (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::pullright_button()
 tmscm
 tmg_widget_pullright_button (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-pullright-button");
@@ -7439,6 +7985,7 @@ tmg_widget_pullright_button (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::menu_button()
 tmscm
 tmg_widget_menu_button (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-menu-button");
@@ -7460,6 +8007,7 @@ tmg_widget_menu_button (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm ar
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::toggle_widget()
 tmscm
 tmg_widget_toggle (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-toggle");
@@ -7477,6 +8025,7 @@ tmg_widget_toggle (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::balloon_widget()
 tmscm
 tmg_widget_balloon (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-balloon");
@@ -7492,6 +8041,7 @@ tmg_widget_balloon (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::empty_widget()
 tmscm
 tmg_widget_empty () {
   // TMSCM_DEFER_INTS;
@@ -7501,6 +8051,7 @@ tmg_widget_empty () {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::text_widget()
 tmscm
 tmg_widget_text (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "widget-text");
@@ -7520,6 +8071,7 @@ tmg_widget_text (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::input_text_widget()
 tmscm
 tmg_widget_input (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-input");
@@ -7541,6 +8093,7 @@ tmg_widget_input (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::enum_widget()
 tmscm
 tmg_widget_enum (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-enum");
@@ -7562,6 +8115,7 @@ tmg_widget_enum (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::choice_widget()
 tmscm
 tmg_widget_choice (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-choice");
@@ -7579,6 +8133,7 @@ tmg_widget_choice (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::choice_widget()
 tmscm
 tmg_widget_choices (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-choices");
@@ -7596,6 +8151,7 @@ tmg_widget_choices (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::choice_widget()
 tmscm
 tmg_widget_filtered_choice (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-filtered-choice");
@@ -7615,6 +8171,7 @@ tmg_widget_filtered_choice (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::tree_view_widget()
 tmscm
 tmg_widget_tree_view (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-tree-view");
@@ -7632,6 +8189,7 @@ tmg_widget_tree_view (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::xpm_widget()
 tmscm
 tmg_widget_xpm (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "widget-xpm");
@@ -7645,6 +8203,7 @@ tmg_widget_xpm (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::box_widget()
 tmscm
 tmg_widget_box (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "widget-box");
@@ -7666,6 +8225,7 @@ tmg_widget_box (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::glue_widget()
 tmscm
 tmg_widget_glue (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_BOOL (arg1, TMSCM_ARG1, "widget-glue");
@@ -7685,6 +8245,7 @@ tmg_widget_glue (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::glue_widget()
 tmscm
 tmg_widget_color (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "widget-color");
@@ -7706,6 +8267,7 @@ tmg_widget_color (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::horizontal_list()
 tmscm
 tmg_widget_hlist (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-hlist");
@@ -7719,6 +8281,7 @@ tmg_widget_hlist (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::vertical_list()
 tmscm
 tmg_widget_vlist (tmscm arg1) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-vlist");
@@ -7732,6 +8295,7 @@ tmg_widget_vlist (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::aligned_widget()
 tmscm
 tmg_widget_aligned (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-aligned");
@@ -7747,6 +8311,7 @@ tmg_widget_aligned (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::tabs_widget()
 tmscm
 tmg_widget_tabs (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_ARRAY_WIDGET (arg1, TMSCM_ARG1, "widget-tabs");
@@ -7762,6 +8327,7 @@ tmg_widget_tabs (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::icon_tabs_widget()
 tmscm
 tmg_widget_icon_tabs (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_ARRAY_URL (arg1, TMSCM_ARG1, "widget-icon-tabs");
@@ -7779,6 +8345,7 @@ tmg_widget_icon_tabs (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::user_canvas_widget()
 tmscm
 tmg_widget_scrollable (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-scrollable");
@@ -7794,6 +8361,7 @@ tmg_widget_scrollable (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::resize_widget()
 tmscm
 tmg_widget_resize (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5, tmscm arg6, tmscm arg7, tmscm arg8, tmscm arg9, tmscm arg10) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-resize");
@@ -7825,6 +8393,7 @@ tmg_widget_resize (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5, t
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::hsplit_widget()
 tmscm
 tmg_widget_hsplit (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-hsplit");
@@ -7840,6 +8409,7 @@ tmg_widget_hsplit (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::vsplit_widget()
 tmscm
 tmg_widget_vsplit (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-vsplit");
@@ -7855,6 +8425,7 @@ tmg_widget_vsplit (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::texmacs_output_widget()
 tmscm
 tmg_widget_texmacs_output (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "widget-texmacs-output");
@@ -7870,6 +8441,7 @@ tmg_widget_texmacs_output (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::texmacs_input_widget()
 tmscm
 tmg_widget_texmacs_input (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "widget-texmacs-input");
@@ -7887,6 +8459,7 @@ tmg_widget_texmacs_input (tmscm arg1, tmscm arg2, tmscm arg3) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::ink_widget()
 tmscm
 tmg_widget_ink (tmscm arg1) {
   TMSCM_ASSERT_COMMAND (arg1, TMSCM_ARG1, "widget-ink");
@@ -7900,6 +8473,7 @@ tmg_widget_ink (tmscm arg1) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::refresh_widget()
 tmscm
 tmg_widget_refresh (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "widget-refresh");
@@ -7915,6 +8489,7 @@ tmg_widget_refresh (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::refreshable_widget()
 tmscm
 tmg_widget_refreshable (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "widget-refreshable");
@@ -7930,6 +8505,7 @@ tmg_widget_refreshable (tmscm arg1, tmscm arg2) {
   return widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::as_promise_widget()
 tmscm
 tmg_object_2promise_widget (tmscm arg1) {
   TMSCM_ASSERT_OBJECT (arg1, TMSCM_ARG1, "object->promise-widget");
@@ -7943,6 +8519,7 @@ tmg_object_2promise_widget (tmscm arg1) {
   return promise_widget_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_bounding_rectangle()
 tmscm
 tmg_tree_bounding_rectangle (tmscm arg1) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-bounding-rectangle");
@@ -7956,6 +8533,7 @@ tmg_tree_bounding_rectangle (tmscm arg1) {
   return array_int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_widget_size()
 tmscm
 tmg_widget_size (tmscm arg1) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "widget-size");
@@ -7969,6 +8547,7 @@ tmg_widget_size (tmscm arg1) {
   return array_int_to_tmscm (out);
 }
 
+//! Scheme glue for ::show_help_balloon()
 tmscm
 tmg_show_balloon (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_WIDGET (arg1, TMSCM_ARG1, "show-balloon");
@@ -7986,6 +8565,7 @@ tmg_show_balloon (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_style_menu()
 tmscm
 tmg_get_style_menu () {
   // TMSCM_DEFER_INTS;
@@ -7995,6 +8575,7 @@ tmg_get_style_menu () {
   return object_to_tmscm (out);
 }
 
+//! Scheme glue for ::hidden_package()
 tmscm
 tmg_hidden_packageP (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "hidden-package?");
@@ -8008,6 +8589,7 @@ tmg_hidden_packageP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_add_package_menu()
 tmscm
 tmg_get_add_package_menu () {
   // TMSCM_DEFER_INTS;
@@ -8017,6 +8599,7 @@ tmg_get_add_package_menu () {
   return object_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_remove_package_menu()
 tmscm
 tmg_get_remove_package_menu () {
   // TMSCM_DEFER_INTS;
@@ -8026,6 +8609,7 @@ tmg_get_remove_package_menu () {
   return object_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_toggle_package_menu()
 tmscm
 tmg_get_toggle_package_menu () {
   // TMSCM_DEFER_INTS;
@@ -8035,6 +8619,7 @@ tmg_get_toggle_package_menu () {
   return object_to_tmscm (out);
 }
 
+//! Scheme glue for ::windows_refresh()
 tmscm
 tmg_refresh_now (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "refresh-now");
@@ -8048,6 +8633,7 @@ tmg_refresh_now (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_all_buffers()
 tmscm
 tmg_buffer_list () {
   // TMSCM_DEFER_INTS;
@@ -8057,6 +8643,7 @@ tmg_buffer_list () {
   return array_url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_buffer_safe()
 tmscm
 tmg_current_buffer_url () {
   // TMSCM_DEFER_INTS;
@@ -8066,6 +8653,7 @@ tmg_current_buffer_url () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::path_to_buffer()
 tmscm
 tmg_path_to_buffer (tmscm arg1) {
   TMSCM_ASSERT_PATH (arg1, TMSCM_ARG1, "path-to-buffer");
@@ -8079,6 +8667,7 @@ tmg_path_to_buffer (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::make_new_buffer()
 tmscm
 tmg_buffer_new () {
   // TMSCM_DEFER_INTS;
@@ -8088,6 +8677,7 @@ tmg_buffer_new () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::rename_buffer()
 tmscm
 tmg_buffer_rename (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-rename");
@@ -8103,6 +8693,7 @@ tmg_buffer_rename (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::set_buffer_tree()
 tmscm
 tmg_buffer_set (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-set");
@@ -8118,6 +8709,7 @@ tmg_buffer_set (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_buffer_tree()
 tmscm
 tmg_buffer_get (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-get");
@@ -8131,6 +8723,7 @@ tmg_buffer_get (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_buffer_body()
 tmscm
 tmg_buffer_set_body (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-set-body");
@@ -8146,6 +8739,7 @@ tmg_buffer_set_body (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_buffer_body()
 tmscm
 tmg_buffer_get_body (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-get-body");
@@ -8159,6 +8753,7 @@ tmg_buffer_get_body (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_master_buffer()
 tmscm
 tmg_buffer_set_master (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-set-master");
@@ -8174,6 +8769,7 @@ tmg_buffer_set_master (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_master_buffer()
 tmscm
 tmg_buffer_get_master (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-get-master");
@@ -8187,6 +8783,7 @@ tmg_buffer_get_master (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::set_title_buffer()
 tmscm
 tmg_buffer_set_title (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-set-title");
@@ -8202,6 +8799,7 @@ tmg_buffer_set_title (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::get_title_buffer()
 tmscm
 tmg_buffer_get_title (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-get-title");
@@ -8215,6 +8813,7 @@ tmg_buffer_get_title (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_last_save_buffer()
 tmscm
 tmg_buffer_last_save (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-last-save");
@@ -8228,6 +8827,7 @@ tmg_buffer_last_save (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::last_visited()
 tmscm
 tmg_buffer_last_visited (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-last-visited");
@@ -8241,6 +8841,7 @@ tmg_buffer_last_visited (tmscm arg1) {
   return double_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_modified()
 tmscm
 tmg_buffer_modifiedP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-modified?");
@@ -8254,6 +8855,7 @@ tmg_buffer_modifiedP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_modified_since_autosave()
 tmscm
 tmg_buffer_modified_since_autosaveP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-modified-since-autosave?");
@@ -8267,6 +8869,7 @@ tmg_buffer_modified_since_autosaveP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::pretend_buffer_modified()
 tmscm
 tmg_buffer_pretend_modified (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-pretend-modified");
@@ -8280,6 +8883,7 @@ tmg_buffer_pretend_modified (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::pretend_buffer_saved()
 tmscm
 tmg_buffer_pretend_saved (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-pretend-saved");
@@ -8293,6 +8897,7 @@ tmg_buffer_pretend_saved (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::pretend_buffer_autosaved()
 tmscm
 tmg_buffer_pretend_autosaved (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-pretend-autosaved");
@@ -8306,6 +8911,7 @@ tmg_buffer_pretend_autosaved (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::attach_buffer_notifier()
 tmscm
 tmg_buffer_attach_notifier (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-attach-notifier");
@@ -8319,6 +8925,7 @@ tmg_buffer_attach_notifier (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::buffer_has_name()
 tmscm
 tmg_buffer_has_nameP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-has-name?");
@@ -8332,6 +8939,7 @@ tmg_buffer_has_nameP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::is_aux_buffer()
 tmscm
 tmg_buffer_auxP (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-aux?");
@@ -8345,6 +8953,7 @@ tmg_buffer_auxP (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_import()
 tmscm
 tmg_buffer_import (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-import");
@@ -8362,6 +8971,7 @@ tmg_buffer_import (tmscm arg1, tmscm arg2, tmscm arg3) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_load()
 tmscm
 tmg_buffer_load (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-load");
@@ -8375,6 +8985,7 @@ tmg_buffer_load (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_export()
 tmscm
 tmg_buffer_export (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-export");
@@ -8392,6 +9003,7 @@ tmg_buffer_export (tmscm arg1, tmscm arg2, tmscm arg3) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_save()
 tmscm
 tmg_buffer_save (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-save");
@@ -8405,6 +9017,7 @@ tmg_buffer_save (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::import_loaded_tree()
 tmscm
 tmg_tree_import_loaded (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tree-import-loaded");
@@ -8422,6 +9035,7 @@ tmg_tree_import_loaded (tmscm arg1, tmscm arg2, tmscm arg3) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::import_tree()
 tmscm
 tmg_tree_import (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "tree-import");
@@ -8437,6 +9051,7 @@ tmg_tree_import (tmscm arg1, tmscm arg2) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::export_tree()
 tmscm
 tmg_tree_export (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_TREE (arg1, TMSCM_ARG1, "tree-export");
@@ -8454,6 +9069,7 @@ tmg_tree_export (tmscm arg1, tmscm arg2, tmscm arg3) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::load_style_tree()
 tmscm
 tmg_tree_load_style (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "tree-load-style");
@@ -8467,6 +9083,7 @@ tmg_tree_load_style (tmscm arg1) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::focus_on_buffer()
 tmscm
 tmg_buffer_focus (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-focus");
@@ -8480,6 +9097,7 @@ tmg_buffer_focus (tmscm arg1) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_all_views()
 tmscm
 tmg_view_list () {
   // TMSCM_DEFER_INTS;
@@ -8489,6 +9107,7 @@ tmg_view_list () {
   return array_url_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_to_views()
 tmscm
 tmg_buffer_2views (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer->views");
@@ -8502,6 +9121,7 @@ tmg_buffer_2views (tmscm arg1) {
   return array_url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_view_safe()
 tmscm
 tmg_current_view_url () {
   // TMSCM_DEFER_INTS;
@@ -8511,6 +9131,7 @@ tmg_current_view_url () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_to_view()
 tmscm
 tmg_window_2view (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "window->view");
@@ -8524,6 +9145,7 @@ tmg_window_2view (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::view_to_buffer()
 tmscm
 tmg_view_2buffer (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "view->buffer");
@@ -8537,6 +9159,7 @@ tmg_view_2buffer (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::view_to_window()
 tmscm
 tmg_view_2window_url (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "view->window-url");
@@ -8550,6 +9173,7 @@ tmg_view_2window_url (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_new_view()
 tmscm
 tmg_view_new (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "view-new");
@@ -8563,6 +9187,7 @@ tmg_view_new (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_passive_view()
 tmscm
 tmg_view_passive (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "view-passive");
@@ -8576,6 +9201,7 @@ tmg_view_passive (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_recent_view()
 tmscm
 tmg_view_recent (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "view-recent");
@@ -8589,6 +9215,7 @@ tmg_view_recent (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::delete_view()
 tmscm
 tmg_view_delete (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "view-delete");
@@ -8602,6 +9229,7 @@ tmg_view_delete (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_set_view()
 tmscm
 tmg_window_set_view (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "window-set-view");
@@ -8619,6 +9247,7 @@ tmg_window_set_view (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::switch_to_buffer()
 tmscm
 tmg_switch_to_buffer (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "switch-to-buffer");
@@ -8632,6 +9261,7 @@ tmg_switch_to_buffer (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::windows_list()
 tmscm
 tmg_window_list () {
   // TMSCM_DEFER_INTS;
@@ -8641,6 +9271,7 @@ tmg_window_list () {
   return array_url_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_nr_windows()
 tmscm
 tmg_windows_number () {
   // TMSCM_DEFER_INTS;
@@ -8650,6 +9281,7 @@ tmg_windows_number () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_window()
 tmscm
 tmg_current_window () {
   // TMSCM_DEFER_INTS;
@@ -8659,6 +9291,7 @@ tmg_current_window () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::buffer_to_windows()
 tmscm
 tmg_buffer_2windows (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer->windows");
@@ -8672,6 +9305,7 @@ tmg_buffer_2windows (tmscm arg1) {
   return array_url_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_to_buffer()
 tmscm
 tmg_window_to_buffer (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "window-to-buffer");
@@ -8685,6 +9319,7 @@ tmg_window_to_buffer (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_set_buffer()
 tmscm
 tmg_window_set_buffer (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "window-set-buffer");
@@ -8700,6 +9335,7 @@ tmg_window_set_buffer (tmscm arg1, tmscm arg2) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_focus()
 tmscm
 tmg_window_focus (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "window-focus");
@@ -8713,6 +9349,7 @@ tmg_window_focus (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::create_buffer()
 tmscm
 tmg_new_buffer () {
   // TMSCM_DEFER_INTS;
@@ -8722,6 +9359,7 @@ tmg_new_buffer () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::new_buffer_in_new_window()
 tmscm
 tmg_open_buffer_in_window (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "open-buffer-in-window");
@@ -8739,6 +9377,7 @@ tmg_open_buffer_in_window (tmscm arg1, tmscm arg2, tmscm arg3) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::open_window()
 tmscm
 tmg_open_window () {
   // TMSCM_DEFER_INTS;
@@ -8748,6 +9387,7 @@ tmg_open_window () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::open_window()
 tmscm
 tmg_open_window_geometry (tmscm arg1) {
   TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "open-window-geometry");
@@ -8761,6 +9401,7 @@ tmg_open_window_geometry (tmscm arg1) {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::clone_window()
 tmscm
 tmg_clone_window () {
   // TMSCM_DEFER_INTS;
@@ -8770,6 +9411,7 @@ tmg_clone_window () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::kill_buffer()
 tmscm
 tmg_buffer_close (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "buffer-close");
@@ -8783,6 +9425,7 @@ tmg_buffer_close (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::kill_window()
 tmscm
 tmg_kill_window (tmscm arg1) {
   TMSCM_ASSERT_URL (arg1, TMSCM_ARG1, "kill-window");
@@ -8796,6 +9439,7 @@ tmg_kill_window (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::kill_current_window_and_buffer()
 tmscm
 tmg_kill_current_window_and_buffer () {
   // TMSCM_DEFER_INTS;
@@ -8805,6 +9449,7 @@ tmg_kill_current_window_and_buffer () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::project_attach()
 tmscm
 tmg_project_attach (tmscm arg1) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "project-attach");
@@ -8818,6 +9463,7 @@ tmg_project_attach (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::project_attach()
 tmscm
 tmg_project_detach () {
   // TMSCM_DEFER_INTS;
@@ -8827,6 +9473,7 @@ tmg_project_detach () {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::project_attached()
 tmscm
 tmg_project_attachedP () {
   // TMSCM_DEFER_INTS;
@@ -8836,6 +9483,7 @@ tmg_project_attachedP () {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::project_get()
 tmscm
 tmg_project_get () {
   // TMSCM_DEFER_INTS;
@@ -8845,6 +9493,7 @@ tmg_project_get () {
   return url_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_handle()
 tmscm
 tmg_alt_window_handle () {
   // TMSCM_DEFER_INTS;
@@ -8854,6 +9503,7 @@ tmg_alt_window_handle () {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_create()
 tmscm
 tmg_alt_window_create (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-create");
@@ -8873,6 +9523,7 @@ tmg_alt_window_create (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_create()
 tmscm
 tmg_alt_window_create_quit (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-create-quit");
@@ -8892,6 +9543,7 @@ tmg_alt_window_create_quit (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_delete()
 tmscm
 tmg_alt_window_delete (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-delete");
@@ -8905,6 +9557,7 @@ tmg_alt_window_delete (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_show()
 tmscm
 tmg_alt_window_show (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-show");
@@ -8918,6 +9571,7 @@ tmg_alt_window_show (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_hide()
 tmscm
 tmg_alt_window_hide (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-hide");
@@ -8931,6 +9585,7 @@ tmg_alt_window_hide (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_get_size()
 tmscm
 tmg_alt_window_get_size (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-get-size");
@@ -8944,6 +9599,7 @@ tmg_alt_window_get_size (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_set_size()
 tmscm
 tmg_alt_window_set_size (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-set-size");
@@ -8961,6 +9617,7 @@ tmg_alt_window_set_size (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::window_get_position()
 tmscm
 tmg_alt_window_get_position (tmscm arg1) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-get-position");
@@ -8974,6 +9631,7 @@ tmg_alt_window_get_position (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::window_set_position()
 tmscm
 tmg_alt_window_set_position (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_INT (arg1, TMSCM_ARG1, "alt-window-set-position");
@@ -8991,6 +9649,7 @@ tmg_alt_window_set_position (tmscm arg1, tmscm arg2, tmscm arg3) {
   return TMSCM_UNSPECIFIED;
 }
 
+//! Scheme glue for ::bibtex_run()
 tmscm
 tmg_bibtex_run (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   TMSCM_ASSERT_STRING (arg1, TMSCM_ARG1, "bibtex-run");
@@ -9010,6 +9669,7 @@ tmg_bibtex_run (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4) {
   return tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_add_period()
 tmscm
 tmg_bib_add_period (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-add-period");
@@ -9023,6 +9683,7 @@ tmg_bib_add_period (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_locase_first()
 tmscm
 tmg_bib_locase_first (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-locase-first");
@@ -9036,6 +9697,7 @@ tmg_bib_locase_first (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_upcase_first()
 tmscm
 tmg_bib_upcase_first (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-upcase-first");
@@ -9049,6 +9711,7 @@ tmg_bib_upcase_first (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_locase()
 tmscm
 tmg_bib_locase (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-locase");
@@ -9062,6 +9725,7 @@ tmg_bib_locase (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_upcase()
 tmscm
 tmg_bib_upcase (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-upcase");
@@ -9075,6 +9739,7 @@ tmg_bib_upcase (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_default_preserve_case()
 tmscm
 tmg_bib_default_preserve_case (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-default-preserve-case");
@@ -9088,6 +9753,7 @@ tmg_bib_default_preserve_case (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_default_upcase_first()
 tmscm
 tmg_bib_default_upcase_first (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-default-upcase-first");
@@ -9101,6 +9767,7 @@ tmg_bib_default_upcase_first (tmscm arg1) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_purify()
 tmscm
 tmg_bib_purify (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-purify");
@@ -9114,6 +9781,7 @@ tmg_bib_purify (tmscm arg1) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_text_length()
 tmscm
 tmg_bib_text_length (tmscm arg1) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-text-length");
@@ -9127,6 +9795,7 @@ tmg_bib_text_length (tmscm arg1) {
   return int_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_prefix()
 tmscm
 tmg_bib_prefix (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-prefix");
@@ -9142,6 +9811,7 @@ tmg_bib_prefix (tmscm arg1, tmscm arg2) {
   return string_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_empty()
 tmscm
 tmg_bib_emptyP (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-empty?");
@@ -9157,6 +9827,7 @@ tmg_bib_emptyP (tmscm arg1, tmscm arg2) {
   return bool_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_field()
 tmscm
 tmg_bib_field (tmscm arg1, tmscm arg2) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-field");
@@ -9172,6 +9843,7 @@ tmg_bib_field (tmscm arg1, tmscm arg2) {
   return scheme_tree_to_tmscm (out);
 }
 
+//! Scheme glue for ::bib_abbreviate()
 tmscm
 tmg_bib_abbreviate (tmscm arg1, tmscm arg2, tmscm arg3) {
   TMSCM_ASSERT_SCHEME_TREE (arg1, TMSCM_ARG1, "bib-abbreviate");
