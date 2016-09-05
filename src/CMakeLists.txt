@@ -678,6 +678,19 @@ configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/changelog.in
 configure_file(${TEXMACS_SOURCE_DIR}/misc/doxygen/Doxyfile.in
   ${TEXMACS_SOURCE_DIR}/Doxyfile)
 
+### The following symlinks are so that in nginx, I can say:
+###
+### location /texmacs/doxygen/ {
+###    root /home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/doxygen/html;
+### }
+### Which causes it to look for:
+### /home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/doxygen/html/texmacs/doxygen/index.html
+###
+execute_process(COMMAND mkdir --parents ${TEXMACS_SOURCE_DIR}/doxygen/html)
+execute_process(COMMAND ln -s . ${TEXMACS_SOURCE_DIR}/doxygen/html/texmacs)
+execute_process(COMMAND ln -s . ${TEXMACS_SOURCE_DIR}/doxygen/html/doxygen)
+
+
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
 ### --------------------------------------------------------------------
