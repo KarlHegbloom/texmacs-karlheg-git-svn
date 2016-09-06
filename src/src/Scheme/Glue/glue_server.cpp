@@ -656,3 +656,15 @@ initialize_glue_server () {
   tmscm_install_procedure ("yes?",  tmg_yesP, 1, 0, 0);
   tmscm_install_procedure ("quit-TeXmacs",  tmg_quit_TeXmacs, 0, 0, 0);
 }
+
+/******************************************************************************
+*
+* This file has been generated automatically using build-glue.scm
+* from build-glue-server.scm. Please do not edit its contents.
+* Copyright (C) 2000 Joris van der Hoeven
+*
+* This software falls under the GNU general public license version 3 or later.
+* It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+* in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+*
+******************************************************************************/

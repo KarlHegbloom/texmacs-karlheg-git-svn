@@ -1,8 +1,12 @@
 #!/bin/sh
 # Program to make Guile interface to TeXmacs
 
-# update documentation of glue 
-guile -l make-apidoc-module.scm  -c "(quit)" | cat > ../../../TeXmacs/progs/prog/glue-symbols.scm
+# This must be enabled to make this work right with Guile 2.
+GUILE_AUTO_COMPILE=fresh
+export GUILE_AUTO_COMPILE
 
-guile -l make-apidoc-doc.scm  -c "(quit)" | cat > ../../../TeXmacs/doc/devel/scheme/api/glue-auto-doc.en.tm
+# update documentation of glue 
+guile -l make-apidoc-module.scm  -c "(quit)" 2>/dev/null | cat > ../../../TeXmacs/progs/prog/glue-symbols.scm
+
+guile -l make-apidoc-doc.scm  -c "(quit)" 2>/dev/null | cat > ../../../TeXmacs/doc/devel/scheme/api/glue-auto-doc.en.tm
 

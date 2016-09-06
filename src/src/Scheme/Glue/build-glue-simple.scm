@@ -212,5 +212,5 @@
   (build-routines (car l) (cddr l))
   (build-initialization (cadr l) (cddr l)))
 
-(define-macro build
+(define-macro build-glue
   (lambda l (build-main l)))

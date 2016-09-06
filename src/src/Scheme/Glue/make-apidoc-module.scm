@@ -13,7 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define glue-defs '("build-glue-basic.scm" "build-glue-server.scm" "build-glue-editor.scm"))
+(cond-expand
+  (guile-2
+   (define hello #t))
+  (else
+    (define-macro (eval-when conditions . body)
+      (if (or (memq 'eval conditions)
+              (memq 'load conditions)
+              (memq 'expand conditions))
+          `(begin . ,body)
+          '(begin)))))
+
+(eval-when (expand load eval)
+
+  (define glue-defs '("build-glue-basic.scm" "build-glue-server.scm" "build-glue-editor.scm"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Convenient output routine
@@ -60,7 +73,7 @@
 (define (build-main l)
    (build-routines (cddr l)))
 
-(define-macro build
+(define-macro build-glue
   (lambda l (build-main l)))
 
 
@@ -97,5 +110,5 @@
   (map load glue-defs)
   (output "))\n")
 )
-
+)
 

@@ -12,6 +12,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-modules (ice-9 regex))
 
+(cond-expand
+  (guile-2
+   (define hello #t))
+  (else
+    (define-macro (eval-when conditions . body)
+      (if (or (memq 'eval conditions)
+              (memq 'load conditions)
+              (memq 'expand conditions))
+          `(begin . ,body)
+          '(begin)))))
+
+(eval-when (expand load eval)
+  
 (define glue-defs '("build-glue-basic.scm" "build-glue-server.scm" "build-glue-editor.scm"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -67,7 +80,7 @@
 (define (build-main l)
    (build-routines (cddr l)))
 
-(define-macro build
+(define-macro build-glue
   (lambda l (build-main l)))
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -118,5 +131,4 @@ source code.
   Documentation License\".>
 </body>")
 )
-
-  
+)

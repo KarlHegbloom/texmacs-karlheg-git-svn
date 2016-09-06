@@ -221,10 +221,10 @@
 
 ;; Main build routines
 
-(define (build-main l)
+(define (build-glue-main l)
   (build-routines (car l) (cddr l))
   (build-initialization (cadr l) (cddr l)))
 
-(define-macro build
-  (lambda l (build-main l)))
+(define-macro build-glue
+  (lambda l (build-glue-main l)))
 

@@ -1,11 +1,15 @@
 #!/bin/sh
 # Program to make Guile interface to TeXmacs
 
+# This must be enabled to make this work right with Guile 2.
+GUILE_AUTO_COMPILE=fresh
+export GUILE_AUTO_COMPILE
+
 # update documentation of glue 
 ./build-auto-doc
 
 if test $# = 2; then
-  guile -l build-glue.scm -l $1 -c "(quit)" | cat > $2
+  guile -l build-glue.scm -l $1 -c "(quit)" 2>/dev/null | cat > $2
 else
   echo "Usage: build-glue <input.scm> <output.cpp>"
 fi
