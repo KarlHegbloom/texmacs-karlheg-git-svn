@@ -1,4 +1,4 @@
-<TeXmacs|1.0.7.21>
+<TeXmacs|1.99.5>
 
 <style|source>
 
@@ -35,6 +35,10 @@
   <assign|scheme-prompt-color|dark green>
 
   <assign|scheme-input-color|black>
+
+  <assign|session-frac-limit|0.8par>
+
+  <assign|session-table-limit|0.8par>
 
   <\active*>
     <\src-comment>
@@ -90,7 +94,7 @@
 
   <assign|output|<macro|body|<with|mode|prog|<style-with|src-compact|none|<compound|<style-with|src-compact|none|<if|<provides|<merge|<value|prog-language>|-output>>|<merge|<value|prog-language>|-output>|generic-output>>|<arg|body>>>>>>
 
-  <assign|generic-output*|<macro|body|<with|par-mode|justify|par-flexibility|2.0|par-hyphen|normal|math-display|true|<arg|body>>>>
+  <assign|generic-output*|<macro|body|<with|par-mode|justify|par-flexibility|2.0|par-hyphen|normal|math-display|true|math-frac-limit|<value|session-frac-limit>|math-table-limit|<value|session-table-limit>|<arg|body>>>>
 
   <assign|generic-output|<\macro|body>
     <\padded>

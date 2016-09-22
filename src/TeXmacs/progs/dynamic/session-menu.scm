@@ -97,12 +97,13 @@
   (for (name (session-list))
     (let* ((menu-name (session-name name))
            (l (local-connection-variants name)))
-      (assuming (== l (list "default"))
-        ((eval menu-name) (make-session name "default")))
-      (assuming (!= l (list "default"))
-        (-> (eval menu-name)
-            (for (variant l)
-              ((eval variant) (make-session name variant))))))))
+      (assuming (nnull? l)
+        (assuming (== l (list "default"))
+          ((eval menu-name) (make-session name "default")))
+        (assuming (!= l (list "default"))
+          (-> (eval menu-name)
+              (for (variant l)
+                ((eval variant) (make-session name variant)))))))))
 
 (menu-bind insert-session-menu
   (when (and (style-has? "std-dtd") (in-text?))
@@ -157,7 +158,7 @@
 
 (tm-define (standard-options l)
   (:require (in? l field-tags))
-  (list "framed-session" "ring-session"))
+  (list "framed-session" "ring-session" "large-formulas"))
 
 (tm-menu (focus-tag-menu t)
   (:require (field-context? t))

@@ -1,4 +1,4 @@
-<TeXmacs|1.0.7.21>
+<TeXmacs|1.99.5>
 
 <style|<tuple|source|english>>
 
@@ -128,7 +128,7 @@
     </with>
   </macro>>
 
-  <assign|generic-output*|<macro|body|<with|par-mode|justify|par-flexibility|2.0|par-hyphen|normal|math-display|true|<ornament-indent|<plus|<value|session-ring-width>|<value|session-left-indent>>|<value|session-right-indent>|<value|output-vpadding>|<value|output-vpadding>|<with|par-sep|<value|session-par-sep>|par-ver-sep|<value|session-par-ver-sep>|<arg|body>>>>>>
+  <assign|generic-output*|<macro|body|<with|par-mode|justify|par-flexibility|2.0|par-hyphen|normal|math-display|true|math-frac-limit|<value|session-frac-limit>|math-table-limit|<value|session-table-limit>|<ornament-indent|<plus|<value|session-ring-width>|<value|session-left-indent>>|<value|session-right-indent>|<value|output-vpadding>|<value|output-vpadding>|<with|par-sep|<value|session-par-sep>|par-ver-sep|<value|session-par-ver-sep>|<arg|body>>>>>>
 
   <assign|generic-output|<macro|body|<generic-output*|<arg|body>>>>
 

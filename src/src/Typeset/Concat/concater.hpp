@@ -79,11 +79,14 @@ class concater_rep {
   void typeset_below (tree t, path ip);
   void typeset_above (tree t, path ip);
   void typeset_script (tree t, path ip, bool right);
+  void typeset_wide_frac (tree t, path ip);
   void typeset_frac (tree t, path ip);
+  void typeset_wide_sqrt (tree t, path ip);
   void typeset_sqrt (tree t, path ip);
   void typeset_wide (tree t, path ip, bool above);
   void typeset_neg (tree t, path ip);
   void typeset_tree (tree t, path ip);
+  void typeset_wide_table (tree t, path ip);
   void typeset_table (tree t, path ip);
   void print_semantic (box b, tree sem);
   void typeset_syntax (tree t, path ip);
@@ -187,6 +190,8 @@ public:
   friend class document_rep;
 
   friend box              typeset_as_concat (edit_env env, tree t, path ip);
+  friend box              typeset_as_concat (edit_env env, tree t, path ip,
+                                             array<line_item>& a);
   friend box              typeset_as_box (edit_env env, tree t, path ip);
   friend box              typeset_as_atomic (edit_env env, tree t, path ip);
   friend array<line_item> typeset_concat (edit_env env, tree t, path ip);
