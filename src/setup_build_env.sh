@@ -22,4 +22,4 @@ fi
 #export DISTCC_HOSTS="localhost/8 192.168.1.64/4"
 #export DEB_BUILD_OPTIONS=parallel=12
 
-export DEB_BUILD_OPTIONS=parallel=8 nostrip noautodbgsym
+export DEB_BUILD_OPTIONS=parallel=8 nostrip #noautodbgsym
