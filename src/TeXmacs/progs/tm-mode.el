@@ -51,7 +51,7 @@
     plugin-configure
     define-preference-names
     with-focus-after
-    logic-group logic-table logic-dispatcher
+    logic-rule logic-group logic-table logic-dispatcher
     with-aux with-action with-module
     with-cursor with-buffer with-author
     with-server with-database with-database*
@@ -69,7 +69,7 @@
 
 (setq unary-definitions
   '(define define-public define-macro define-public-macro
-    texmacs-module provide-public define-group
+    texmacs-module provide-public define-group define-alternate
     tm-define tm-define-macro lazy-body-macro tm-property request-handler
     tm-menu define-menu tm-widget define-widget tm-generate
     tm-build tm-build-macro tm-build-widget
