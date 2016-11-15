@@ -18,6 +18,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-public-macro (with-cursor p . body)
+  "Save (@func{cursor-path}), move cursor to path @var{p}, returns the result
+of executing @var{body} after restoring the saved (@func{cursor-path})."
   (let* ((pos (gensym))
          (res (gensym)))
     `(with ,pos (position-new)
@@ -29,6 +31,9 @@
          ,res))))
 
 (define-public-macro (cursor-after . body)
+  "Save (@func{cursor-path}), execute @var{body} with cursor moving side-effects,
+then return the resulting (@func{cursor-path}), after restoring the saved
+(@func{cursor-path})."
   (let* ((pos (gensym))
          (res (gensym)))
     `(with ,pos (position-new)
