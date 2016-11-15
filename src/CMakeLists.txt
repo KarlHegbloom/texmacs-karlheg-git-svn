@@ -611,6 +611,8 @@ else(TEXMACS_GUI STREQUAL "Qt")
 endif(TEXMACS_GUI STREQUAL "Qt5")
 
 
+include(Doxygen)
+
 
 ### --------------------------------------------------------------------
 ### Debugging options
@@ -671,6 +673,7 @@ set(datarootdir ${prefix}/share)
 set(datadir ${datarootdir})
 set(tmdata ${datarootdir}/TeXmacs)
 set(tmbin ${exec_prefix}/lib/texmacs/TeXmacs)
+set(tmsrc ${TEXMACS_SOURCE_DIR})
 configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs @ONLY)
 configure_file(misc/scripts/fig2ps.in ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps @ONLY)
 
@@ -682,22 +685,6 @@ configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/control.in
 file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/changelog)
 configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/changelog.in
   ${TEXMACS_SOURCE_DIR}/packages/debian/changelog @ONLY)
-
-configure_file(${TEXMACS_SOURCE_DIR}/misc/doxygen/Doxyfile.in
-  ${TEXMACS_SOURCE_DIR}/Doxyfile)
-
-### The following symlinks are so that in nginx, I can say:
-###
-### location /texmacs/doxygen/ {
-###    root /home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/doxygen/html;
-### }
-### Which causes it to look for:
-### /home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/doxygen/html/texmacs/doxygen/index.html
-###
-execute_process(COMMAND mkdir --parents ${TEXMACS_SOURCE_DIR}/doxygen/html)
-execute_process(COMMAND ln -s . ${TEXMACS_SOURCE_DIR}/doxygen/html/texmacs)
-execute_process(COMMAND ln -s . ${TEXMACS_SOURCE_DIR}/doxygen/html/doxygen)
-
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
