@@ -11,6 +11,8 @@
 *
 ******************************************************************************/
 
+#include "../Scheme/glue.hpp"
+
 //! Scheme glue for ::get_current_editor() -> editor_rep::the_root()
 tmscm
 tmg_root_tree () {

@@ -11,6 +11,8 @@
 *
 ******************************************************************************/
 
+#include "../Scheme/glue.hpp"
+
 //! Scheme glue for ::texmacs_version()
 tmscm
 tmg_texmacs_version_release (tmscm arg1) {

@@ -11,6 +11,8 @@
 *
 ******************************************************************************/
 
+#include "../Scheme/glue.hpp"
+
 //! Scheme glue for ::get_server() -> server_rep::insert_kbd_wildcard()
 tmscm
 tmg_insert_kbd_wildcard (tmscm arg1, tmscm arg2, tmscm arg3, tmscm arg4, tmscm arg5) {
