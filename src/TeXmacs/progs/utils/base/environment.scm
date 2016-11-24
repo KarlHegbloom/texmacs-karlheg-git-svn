@@ -50,6 +50,12 @@
   ("page-screen-top" "Top margin")
   ("page-screen-bot" "Bottom margin")
 
+  ("footnote-sep" "Text between footnote number and footnote text")
+  ("page-fnote-sep" "Vertical distance between text and footnote bar")
+  ("page-fnote-barlen" "Footnote-bar length")
+  ("page-fnote-barsep" "Vertical distance between bar and footnotes")
+  ("par-fnote-sep" "Space between footnotes")
+
   ("table-width" "Table width")
   ("table-height" "Table height")
   ("table-lsep" "Left table padding")
