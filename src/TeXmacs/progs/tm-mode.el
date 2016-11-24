@@ -90,7 +90,10 @@
     with-environment with-environment* converter
     user-confirm user-url
     resize
-    $with))
+    $with
+    define-class define-class-with-accessors
+    define-class-with-accessors-keywords
+    standard-define-class))
 
 (setq binary-no-highlight
   '(client-remote-eval server-remote-eval))
@@ -128,7 +131,7 @@
 
 (setq highlight-keywords
   (append nullary-keywords unary-keywords unary-definitions
-	  binary-keywords ternary-keywords quaternary-keywords
+          binary-keywords ternary-keywords quaternary-keywords
           other-keywords))
 
 (setq highlight-any
@@ -197,7 +200,6 @@
   (put 'let 'scheme-indent-function 'scheme-let-indent))
 
 
-
 ;; (defvar scheme-imenu-generic-expression
 ;;       '((nil
 ;; 	 "^(define\\(\\|-\\(generic\\(\\|-procedure\\)\\|method\\)\\)*\\s-+(?\\(\\sw+\\)" 4)
@@ -206,3 +208,5 @@
 ;; 	("Macros"
 ;; 	 "^(\\(defmacro\\|define-macro\\|define-syntax\\)\\s-+(?\\(\\sw+\\)" 2))
 ;;   "Imenu generic expression for Scheme mode.  See `imenu-generic-expression'.")
+
+(provide 'tm-mode)
