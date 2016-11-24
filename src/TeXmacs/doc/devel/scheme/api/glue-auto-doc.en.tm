@@ -1675,6 +1675,14 @@ source code.
   </explain>
 
   <\explain>
+    <scm|(content? <scm-arg|content>)>
+<explain-synopsis|no synopsis>
+  <|explain>
+    Calls the <c++> function <cpp|tmscm_is_content> which returns
+    <scm|bool>.
+  </explain>
+
+  <\explain>
     <scm|(concat-tokenize-math <scm-arg|content>)>
 <explain-synopsis|no synopsis>
   <|explain>
@@ -9688,6 +9696,14 @@ source code.
   </explain>
 
   <\explain>
+    <scm|(content? <scm-arg|content>)>
+<explain-synopsis|no synopsis>
+  <|explain>
+    Calls the <c++> function <cpp|tmscm_is_content> which returns
+    <scm|bool>.
+  </explain>
+
+  <\explain>
     <scm|(concat-tokenize-math <scm-arg|content>)>
 <explain-synopsis|no synopsis>
   <|explain>
@@ -15132,6 +15148,22 @@ source code.
 <explain-synopsis|no synopsis>
   <|explain>
     Calls the <c++> function <cpp|selection_get_end> which returns
+    <scm|path>.
+  </explain>
+
+  <\explain>
+    <scm|(selection-get-start*)>
+<explain-synopsis|no synopsis>
+  <|explain>
+    Calls the <c++> function <cpp|selection_var_get_start> which returns
+    <scm|path>.
+  </explain>
+
+  <\explain>
+    <scm|(selection-get-end*)>
+<explain-synopsis|no synopsis>
+  <|explain>
+    Calls the <c++> function <cpp|selection_var_get_end> which returns
     <scm|path>.
   </explain>
 

@@ -2209,7 +2209,7 @@ tmg_selection_get_end () {
   return path_to_tmscm (out);
 }
 
-//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_path()
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_var_get_start()
 tmscm
 tmg_selection_get_start_dot () {
   // TMSCM_DEFER_INTS;
@@ -2219,6 +2219,7 @@ tmg_selection_get_start_dot () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_var_get_end()
 tmscm
 tmg_selection_get_end_dot () {
   // TMSCM_DEFER_INTS;
@@ -2228,6 +2229,7 @@ tmg_selection_get_end_dot () {
   return path_to_tmscm (out);
 }
 
+//! Scheme glue for ::get_current_editor() -> editor_rep::selection_get_path()
 tmscm
 tmg_selection_path () {
   // TMSCM_DEFER_INTS;
@@ -3856,3 +3858,5 @@ initialize_glue_editor () {
 * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 *
 ******************************************************************************/
+
+#include "../Scheme/glue.hpp"

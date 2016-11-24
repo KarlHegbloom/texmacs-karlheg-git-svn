@@ -670,3 +670,5 @@ initialize_glue_server () {
 * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 *
 ******************************************************************************/
+
+#include "../Scheme/glue.hpp"

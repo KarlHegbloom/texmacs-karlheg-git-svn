@@ -187,7 +187,6 @@
  (stree->tree scheme_tree_to_tree (tree scheme_tree))
  (tree->string coerce_tree_string (string tree))
  (string->tree coerce_string_tree (tree string))
- (content? tmscm_is_content (bool content))
  (tm->tree tree (tree content))
  (tree-atomic? is_atomic (bool tree))
  (tree-compound? is_compound (bool tree))
@@ -254,6 +253,7 @@
  (cpp-tree-correct-upwards correct_upwards (void tree))
 
  ;; extra routines for content
+ (content? tmscm_is_content (bool content))
  (concat-tokenize-math concat_tokenize (array_tree content))
  (concat-decompose concat_decompose (array_tree content))
  (concat-recompose concat_recompose (tree array_tree))
