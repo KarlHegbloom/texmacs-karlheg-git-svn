@@ -12,12 +12,14 @@ export DH_VERBOSE := 1
 BUILD_DIR := obj-$(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 CMAKE_OPTS :=					\
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=1		\
   -DCMAKE_INSTALL_PREFIX=/usr			\
   -DCMAKE_VERBOSE_MAKEFILE=ON			\
   -DCMAKE_INSTALL_SYSCONFDIR=/etc		\
   -DCMAKE_INSTALL_LOCALSTATEDIR=/var		\
   -DTEXMACS_GUI=Qt5				\
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo
+
+# -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 %:
 	dh --parallel --buildsystem=cmake $@
