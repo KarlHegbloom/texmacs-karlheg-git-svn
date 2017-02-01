@@ -2863,20 +2863,6 @@ tmg_cpp_tree_correct_upwards (tmscm arg1) {
   return TMSCM_UNSPECIFIED;
 }
 
-//! Scheme glue for ::tmscm_is_content()
-tmscm
-tmg_contentP (tmscm arg1) {
-  TMSCM_ASSERT_CONTENT (arg1, TMSCM_ARG1, "content?");
-
-  content in1= tmscm_to_content (arg1);
-
-  // TMSCM_DEFER_INTS;
-  bool out= tmscm_is_content (in1);
-  // TMSCM_ALLOW_INTS;
-
-  return bool_to_tmscm (out);
-}
-
 //! Scheme glue for ::concat_tokenize()
 tmscm
 tmg_concat_tokenize_math (tmscm arg1) {
@@ -10086,7 +10072,6 @@ initialize_glue_basic () {
   tmscm_install_procedure ("cpp-tree-correct-node",  tmg_cpp_tree_correct_node, 1, 0, 0);
   tmscm_install_procedure ("cpp-tree-correct-downwards",  tmg_cpp_tree_correct_downwards, 1, 0, 0);
   tmscm_install_procedure ("cpp-tree-correct-upwards",  tmg_cpp_tree_correct_upwards, 1, 0, 0);
-  tmscm_install_procedure ("content?",  tmg_contentP, 1, 0, 0);
   tmscm_install_procedure ("concat-tokenize-math",  tmg_concat_tokenize_math, 1, 0, 0);
   tmscm_install_procedure ("concat-decompose",  tmg_concat_decompose, 1, 0, 0);
   tmscm_install_procedure ("concat-recompose",  tmg_concat_recompose, 1, 0, 0);

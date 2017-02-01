@@ -25,7 +25,7 @@
 (eval-when (expand load eval)
 
 (output-copyright "build-glue-basic.scm")
-  
+
 (build-glue
  ""
  "initialize_glue_basic"
@@ -253,7 +253,6 @@
  (cpp-tree-correct-upwards correct_upwards (void tree))
 
  ;; extra routines for content
- (content? tmscm_is_content (bool content))
  (concat-tokenize-math concat_tokenize (array_tree content))
  (concat-decompose concat_decompose (array_tree content))
  (concat-recompose concat_recompose (tree array_tree))
