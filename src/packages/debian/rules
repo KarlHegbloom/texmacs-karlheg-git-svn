@@ -24,6 +24,10 @@ CMAKE_OPTS :=					\
 %:
 	dh --parallel --buildsystem=cmake $@
 
+# This could process the .in file. I don't know why it does not.
+debian/control: debian/control.in
+        mv $@ $@.bak
+        cp -f $< $@
 
 override_dh_update_autotools_config:
 	:
