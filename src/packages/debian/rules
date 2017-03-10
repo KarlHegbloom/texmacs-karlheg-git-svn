@@ -17,26 +17,35 @@ CMAKE_OPTS :=					\
   -DCMAKE_VERBOSE_MAKEFILE=ON			\
   -DCMAKE_INSTALL_SYSCONFDIR=/etc		\
   -DCMAKE_INSTALL_LOCALSTATEDIR=/var		\
-  -DTEXMACS_GUI=Qt5				\
+  -DTEXMACS_GUI=Qt5
 
 # -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
-%:
+%: cmake debian/changelog debian/control
 	dh --parallel --buildsystem=cmake $@
 
-# This could process the .in file. I don't know why it does not.
-debian/control: debian/control.in
-        mv $@ $@.bak
-        cp -f $< $@
-
-override_dh_update_autotools_config:
-	:
-
-override_dh_auto_configure:
+cmake:
 	(mkdir ${BUILD_DIR}; \
 	cd ${BUILD_DIR};     \
 	cmake ${CMAKE_OPTS} ..)
 
 
+debian/changelog:
+	cp $@.in $@
+	touch $@.in
+
+debian/control:
+	cp $@.in $@
+	touch $@.in
+
+
+override_dh_update_autotools_config:
+	:
+
+override_dh_auto_configure: cmake
+	:
+
 override_dh_strip:
 	:
+
+.PHONY: cmake
