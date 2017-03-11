@@ -1,5 +1,7 @@
 # Mirror of GNU TeXmacs svn repository #
 
+__This is my WIP topic branch for making it work with [Guile 2.2](https://github.com/KarlHegbloom/guile/releases).__
+
 I apologize for the difficulties I may have caused by having used `git rebase` on my syrinx branch. I did not yet understand what kind of difficulties that can cause for people. Now I do. From now on, here in my local repository at home, I will:
 
     git stash                  # if needed
