@@ -2,8 +2,8 @@
 ;;; For more information see (info "(emacs) Directory Variables")
 
 ((nil
-  (cmake-ide-project-dir . "~/src/TeXmacs/texmacs-git-svn-guile-1.8/src")
-  (cmake-ide-build-dir . "~/src/TeXmacs/texmacs-git-svn-guile-1.8/src/obj-x86_64-linux-gnu")
+  (cmake-ide-project-dir . "~/src/TeXmacs/texmacs-git-svn/src")
+  (cmake-ide-build-dir . "~/src/TeXmacs/texmacs-git-svn/src/obj-x86_64-linux-gnu")
   (org-default-notes-file . "~/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org")
   (org-refile-targets
    ("~/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org" :maxlevel . 7)
