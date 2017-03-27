@@ -2,15 +2,17 @@
 ;;; For more information see (info "(emacs) Directory Variables")
 
 ((nil
-  (cmake-ide-project-dir . "~/src/TeXmacs/texmacs-git-svn-guile-1.8/src")
-  (cmake-ide-build-dir . "~/src/TeXmacs/texmacs-git-svn-guile-1.8/src/obj-x86_64-linux-gnu")
-  (org-default-notes-file . "~/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org")
+  (cmake-ide-project-dir . "/Users/vagrant/Source/texmacs-git-svn-guile-1.8/src")
+  (cmake-ide-build-dir . "/Users/vagrant/Source/texmacs-git-svn-guile-1.8/src/obj-x86_64-macos-sierra-macports")
+  (org-default-notes-file . "/home/karlheg/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org")
   (org-refile-targets
    ("~/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org" :maxlevel . 7)
    (org-agenda-files :maxlevel . 7))
+  (eval . (setenv "TEXMACS_PATH" "/Users/vagrant/Source/texmacs-git-svn-guile-1.8/src/TeXmacs"))
+  (eval . (setenv "TEXMACS_BIN_PATH" "/Users/vagrant/Source/texmacs-git-svn-guile-1.8/src/debian/texmacs/usr/lib/texmacs/TeXmacs"))
   (eval . (setenv "GDB" "gdb -i=mi "))
   (eval . (when (not (string-match "ccache" (getenv "PATH")))
-            (setenv "PATH" (string-join (list "/usr/lib/ccache:" (getenv "PATH"))))))
+            (setenv "PATH" (string-join (list "/opt/local/libexec/ccache:" (getenv "PATH"))))))
   (eval . (setenv "DEB_BUILD_OPTIONS" (string-join (list "parallel=8 nostrip "
                                                          (or (getenv "DEB_BUILD_OPTIONS") "")))))
   (indent-tabs-mode . nil)
