@@ -6,7 +6,11 @@
 #  Guile_LIBRARIES - link these to use Guile
 #  Guile_VERSION_STRING - version of Guile
 
-FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config)
+include(LibFindMacros)
+include(CheckIncludeFile)
+#include(CheckCSourceCompiles)
+
+FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config guile18-config guile2-config guile20-config guile22-config)
 
 # if guile-config has been found
 IF(GUILECONFIG_EXECUTABLE)
@@ -24,6 +28,10 @@ IF(GUILECONFIG_EXECUTABLE)
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  compile 
       OUTPUT_VARIABLE _guileconfig_compile )
 
+    EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  info includedir
+      OUTPUT_VARIABLE _guileconfig_includedir )
+
+
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  info libdir 
       OUTPUT_VARIABLE _guileconfig_libdir )
 
@@ -31,18 +39,17 @@ IF(GUILECONFIG_EXECUTABLE)
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  "--version"
       OUTPUT_VARIABLE _guileconfig_version ERROR_VARIABLE _guileconfig_version )
     
-  
     
     ## parsing
-    STRING(REGEX MATCHALL "[-][L]([^ ;])+" _guile_libdirs_with_prefix "${_guileconfig_link}" )
-    STRING(REGEX MATCHALL "[-][l]([^ ;])+" _guile_libraries_with_prefix "${_guileconfig_link}" )
-    STRING(REGEX MATCHALL "[-][I]([^ ;])+" _guile_includes_with_prefix "${_guileconfig_compile}" )
-    STRING(REGEX MATCHALL "[-][D]([^ ;])+" _guile_definitions_with_prefix "${_guileconfig_compile}" )
+    STRING(REGEX MATCHALL "[-][L]([^ ;])+[ ;]?" _guile_libdirs_with_prefix "${_guileconfig_link}" )
+    STRING(REGEX MATCHALL "[-][l]([^ ;])+[ ;]?" _guile_libraries_with_prefix "${_guileconfig_link}" )
+    #STRING(REGEX MATCHALL "[-][I]([^ ;])+[ ;]?" _guile_includes_with_prefix "${_guileconfig_compile}" )
+    STRING(REGEX MATCHALL "[-][D]([^ ;])+[ ;]?" _guile_definitions_with_prefix "${_guileconfig_compile}" )
     STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" Guile_VERSION_STRING "${_guileconfig_version}")
       
     STRING(REPLACE "-L" " " _guile_libdirs ${_guile_libdirs_with_prefix} "")
     STRING(REPLACE "-l" " " _guile_lib_list "${_guile_libraries_with_prefix}" )
-    STRING(REPLACE "-I" " " _guile_includes "${_guile_includes_with_prefix}" )
+    #STRING(REPLACE "-I" " " _guile_includes "${_guile_includes_with_prefix}" )
 #    SEPARATE_ARGUMENTS(_guile_libdirs)
     
     # MESSAGE(STATUS ${_guile_libraries_with_prefix})
@@ -68,14 +75,24 @@ IF(GUILECONFIG_EXECUTABLE)
 
 
     SET(Guile_FOUND YES)
-    SET(Guile_INCLUDE_DIRS ${_guile_includes})
+    #SET(Guile_INCLUDE_DIRS ${_guile_includes})
+    SET(Guile_INCLUDE_DIRS ${_guileconfig_includedir})
     SET(Guile_LIBRARIES ${_guile_libraries})
     SET(Guile_CFLAGS ${_guile_definitions_with_prefix})
-    
-    MESSAGE(">>>" "${Guile_INCLUDE_DIRS}")
-    MESSAGE(">>>" "${Guile_LIBRARIES}")
-    MESSAGE(">>>" "${Guile_CFLAGS}")
-    MESSAGE(">>>" "${_guileconfig_version}")
+
+    set(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${Guile_LIBRARIES})
+    set(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
+
+    check_include_file(libguile18.h GUILE_HEADER_18)
+
+    if(NOT CMAKE_REQUIRED_QUIET)
+      message(STATUS "${_guileconfig_version}")
+      message(STATUS "Guile_INCLUDE_DIRS=${Guile_INCLUDE_DIRS}")
+      message(STATUS "Guile_LIBRARIES=${Guile_LIBRARIES}")
+      message(STATUS "Guile_CFLAGS=${Guile_CFLAGS}")
+      message(STATUS "GUILE_HEADER_18=${GUILE_HEADER_18}")
+    endif(NOT CMAKE_REQUIRED_QUIET)
     
   ELSE( NOT _return_VALUE)
 

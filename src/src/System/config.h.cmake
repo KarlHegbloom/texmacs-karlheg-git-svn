@@ -14,17 +14,14 @@
 #cmakedefine USE_GS 1
 
 /* gs path relative to TEXMACS_PATH */
-#cmakedefine XXXGS_EXE "@GS_EXE@"
+#cmakedefine GS_EXE "@GS_EXE@"
 
 /* gs fonts */
-#cmakedefine XXXGS_FONTS "@GS_FONTS@"
+#cmakedefine GS_FONTS "@GS_FONTS@"
 
 /* gs lib */
-#cmakedefine XXXGS_LIB "@GS_LIB@"
+#cmakedefine GS_LIB "@GS_LIB@"
 
-
-/* Guile version */
-#cmakedefine CONFIG_GUILE_SERIAL @CONFIG_GUILE_SERIAL@
 
 /* Guile version */
 #cmakedefine GUILE_A 1
@@ -37,6 +34,15 @@
 
 /* Guile version */
 #cmakedefine GUILE_D 1
+
+#cmakedefine GUILE_HEADER_16 1
+#cmakedefine GUILE_HEADER_18 1
+
+/* Guile version */
+#cmakedefine CONFIG_GUILE_SERIAL @CONFIG_GUILE_SERIAL@
+
+#cmakedefine GUILE_VERSION @GUILE_VERSION@
+
 #cmakedefine SCM_SIZET @SCM_SIZET@
 
 

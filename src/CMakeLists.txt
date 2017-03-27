@@ -25,6 +25,8 @@
 
 cmake_minimum_required(VERSION 3.5)
 
+set(CMAKE_REQUIRED_QUIET NO)
+
 if(NOT CMAKE_BUILD_TYPE)
  set(CMAKE_BUILD_TYPE Debug CACHE STRING
    "Choose the type of build, options are:
@@ -43,7 +45,52 @@ set(PACKAGE TeXmacs)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
 
-find_package(Guile REQUIRED)
+### --------------------------------------------------------------------
+### Include standard modules
+### --------------------------------------------------------------------
+
+include(CheckFunctionExists)
+include(CheckLibraryExists)
+include(CheckIncludeFile)
+include(CheckTypeSize)
+include(FindPkgConfig)
+include(CheckCSourceCompiles)
+include(CMakeDependentOption)
+
+### --------------------------------------------------------------------
+### Check for standard functionalities
+### --------------------------------------------------------------------
+
+check_type_size(FILE     HAVE_FILE)
+check_type_size(intptr_t HAVE_INTPTR_T)
+check_type_size(time_t   HAVE_TIME_T)
+
+check_include_file(inttypes.h  HAVE_INTTYPES_H)
+check_include_file(memory.h    HAVE_MEMORY_H)
+check_include_file(stdlib.h    HAVE_STDLIB_H)
+check_include_file(strings.h   HAVE_STRINGS_H)
+check_include_file(string.h    HAVE_STRING_H)
+check_include_file(sys/stat.h  HAVE_SYS_STAT_H)
+check_include_file(unistd.h    HAVE_UNISTD_H)
+check_include_file(X11/Xlib.h  HAVE_X11_XLIB_H)
+check_include_file(X11/Xutil.h HAVE_X11_XUTIL_H)
+check_include_file(pty.h       HAVE_PTY_H)
+check_include_file(util.h      HAVE_UTIL_H)
+
+check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
+
+check_function_exists(setenv       HAVE_SETENV)
+#check_function_exists(putenv       HAVE_PUTENV)
+if(${HAVE_SETENV})
+  set(CONFIG_STD_SETENV "#define STD_SETENV")
+endif(${HAVE_SETENV})
+
+# Get the info about Guile since it's version information will be part of the
+# package version information in preparation for the transition to Guile 2.n.
+#
+find_package(Guile REQUIRED) # ./cmake/FindGuile.cmake
+check_include_file(libguile18.h GUILE_HEADER_18 "-I${Guile_INCLUDE_DIRS}")
+
 
 if(Guile_VERSION_STRING VERSION_LESS 2.0)
   set(DEVEL_VERSION "1.99.9")
@@ -164,45 +211,6 @@ endif("${PKG_DATE}" STREQUAL "")
 message(STATUS "--  ${PKG_MAINTAINER}  ${PKG_DATE}")
 
 
-### --------------------------------------------------------------------
-### Include standard modules
-### --------------------------------------------------------------------
-
-include(CheckFunctionExists)
-include(CheckLibraryExists)
-include(CheckIncludeFile)
-include(CheckTypeSize)
-include(FindPkgConfig)
-include(CheckCSourceCompiles)
-include(CMakeDependentOption)
-
-### --------------------------------------------------------------------
-### Check for standard functionalities
-### --------------------------------------------------------------------
-
-check_type_size(FILE     HAVE_FILE)
-check_type_size(intptr_t HAVE_INTPTR_T)
-check_type_size(time_t   HAVE_TIME_T)
-
-check_include_file(inttypes.h  HAVE_INTTYPES_H)
-check_include_file(memory.h    HAVE_MEMORY_H)
-check_include_file(stdlib.h    HAVE_STDLIB_H)
-check_include_file(strings.h   HAVE_STRINGS_H)
-check_include_file(string.h    HAVE_STRING_H)
-check_include_file(sys/stat.h  HAVE_SYS_STAT_H)
-check_include_file(unistd.h    HAVE_UNISTD_H)
-check_include_file(X11/Xlib.h  HAVE_X11_XLIB_H)
-check_include_file(X11/Xutil.h HAVE_X11_XUTIL_H)
-check_include_file(pty.h       HAVE_PTY_H)
-check_include_file(util.h      HAVE_UTIL_H)
-
-check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
-
-check_function_exists(setenv       HAVE_SETENV)
-#check_function_exists(putenv       HAVE_PUTENV)
-if(${HAVE_SETENV})
-  set(CONFIG_STD_SETENV "#define STD_SETENV")
-endif(${HAVE_SETENV})
 
 ### --------------------------------------------------------------------
 ### Check for dl library
@@ -258,8 +266,6 @@ ENDIF (NOT ${HAVE_DLOPEN})
 ### CMAKE_C_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
 ### CMAKE_C_PLATFORM_ID "Linux"
 
-SET(CONFIG_OS "GNU_LINUX")
-SET(CONFIG_OS_SUFFIX "gnu-linux")
 
 ### CMAKE_CXX_FLAGS ""
 ### CMAKE_CXX_FLAGS_DEBUG "-g"
@@ -317,23 +323,23 @@ SET(CONFIG_OS_SUFFIX "gnu-linux")
 
 
 
-SET(CONFIG_CXXFLAGS "")
-SET(CONFIG_CXXTEMPLATE "")
+#SET(CONFIG_CXXFLAGS "")
+#SET(CONFIG_CXXTEMPLATE "")
 
 #SET(CONFIG_STD_SETENV "#define STD_SETENV")
 
-SET(CONFIG_SO "so")
-SET(CONFIG_LIB_PATH "LD_LIBRARY_PATH")
-SET(CONFIG_CHMOD "chmod -f")
-SET(CONFIG_CXXOPTIMIZE "-ggdb3 -O3 -fexpensive-optimizations -fno-rtti")
-SET(CONFIG_BSTATIC "-Wl,-Bstatic")
-SET(CONFIG_BSHARED "-Wl,-Bdynamic")
-SET(CONFIG_BFLAGS "")
-SET(CONFIG_BPATH "-Wl,-rpath,")
-SET(CONFIG_WORD_LENGTH "4")
-SET(CONFIG_WORD_LENGTH_INC "3")
-SET(CONFIG_WORD_MASK "0xfffffffc")
-SET(CONFIG_MAX_FAST "260 // WORD_LENGTH more than power of 2")
+#SET(CONFIG_SO "so")
+#SET(CONFIG_LIB_PATH "LD_LIBRARY_PATH")
+#SET(CONFIG_CHMOD "chmod -f")
+#SET(CONFIG_CXXOPTIMIZE "-ggdb3 -O3 -fexpensive-optimizations -fno-rtti")
+#SET(CONFIG_BSTATIC "-Wl,-Bstatic")
+#SET(CONFIG_BSHARED "-Wl,-Bdynamic")
+#SET(CONFIG_BFLAGS "")
+#SET(CONFIG_BPATH "-Wl,-rpath,")
+#SET(CONFIG_WORD_LENGTH "4")
+#SET(CONFIG_WORD_LENGTH_INC "3")
+#SET(CONFIG_WORD_MASK "0xfffffffc")
+#SET(CONFIG_MAX_FAST "260 // WORD_LENGTH more than power of 2")
 
 
 ### CMAKE_C_SIZEOF_DATA_PTR "8"
@@ -351,8 +357,15 @@ if (${SIZE_OF_VOIDP} EQUAL 8)
 endif (${SIZE_OF_VOIDP} EQUAL 8)
 
 
+# Must set CONFIG_OS, CONFIG_OS_SUFFIX, CONFIG_HOST_OS, and CONFIG_HOST_VENDOR!
+# TODO make it check for those.
+
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   MESSAGE(STATUS "Final adjustments for an Intel or AMD GNU/Linux host")
+  SET(CONFIG_OS "GNU_LINUX")
+  SET(CONFIG_OS_SUFFIX "gnu-linux")
+  SET(CONFIG_HOST_OS "GNU_LINUX")
+  #SET(CONFIG_HOST_VENDOR "")
   SET(CONFIG_CXXOPTIMIZE "-ggdb3 -O3 -fexpensive-optimizations  -fno-rtti")
   SET(CMAKE_CXX_FLAGS "")
   SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3")
@@ -365,23 +378,47 @@ IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-ggdb3 -O3 -fexpensive-optimizations -fno-rtti")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
+
+IF(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  MESSAGE(STATUS "Final adjustments for a MacOS host")
+  set(CONFIG_OS "MACOS")
+  set(CONFIG_OS_SUFFIX "apple-darwin")
+  set(CONFIG_HOST_OS "MACOS")
+  set(CONFIG_HOST_VENDOR "Apple")
+ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+
+
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
   MESSAGE(STATUS "Final adjustments for an Intel or AMD GNU/BSD host")
+  set(CONFIG_OS "FREEBSD")
+  set(CONFIG_OS_SUFFIX "freebsd")
+  set(CONFIG_HOST_OS "FREEBSD")
+  set(CONFIG_HOST_VENDOR "FreeBSD")
   SET(CONFIG_CXXOPTIMIZE "-g3 -O3 -fexpensive-optimizations")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
+
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
   MESSAGE(STATUS "Final adjustments for an Intel or AMS Solaris host")
+  set(CONFIG_OS "SUNOS")
+  set(CONFIG_OS_SUFFIX "sun-sunos")
+  set(CONFIG_HOST_OS "SUNOS")
+  set(CONFIG_HOST_VENDOR "Sun")
   SET(CONFIG_CXXOPTIMIZE "-g3 -O3 -fexpensive-optimizations")
   SET(CONFIG_BPATH "-Wl,-R,")
 #  SET(X11_LDFLAGS "${X_LIBS} -lXext -lX11 -lsocket")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
 
+
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
   MESSAGE(STATUS "Final adjustments for cygwin host")
   SET(CONFIG_OS "CYGWIN")
+  set(CONFIG_OS_SUFFIX "cygwin")
+  set(CONFIG_HOST_OS "CYGWIN")
+  set(CONFIG_HOST_VENDOR "Cygwin")
   SET(CONFIG_BFLAGS "-Wl,-stack,8388608")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
+
 
 ### --------------------------------------------------------------------
 ### Package Data
@@ -440,6 +477,11 @@ find_package(Imlib2)
 
 ### find_package(Axel) # What is/was Axel?
 
+message(STATUS "CAIRO_CFLAGS=${CAIRO_CFLAGS}")
+message(STATUS "CAIRO_CFLAGS_OTHERS=${CAIRO_CFLAGS_OTHERS}")
+message(STATUS "Cairo_INCLUDE_DIRS=${Cairo_INCLUDE_DIRS}")
+message(STATUS "Cairo_LIBRARIES=${Cairo_LIBRARIES}")
+
 
 ### --------------------------------------------------------------------
 ###  Guile
@@ -465,6 +507,11 @@ else(Guile_VERSION_STRING VERSION_LESS 1.6)
 endif(Guile_VERSION_STRING VERSION_LESS 1.6)
 
 string(APPEND PKGREV "-guile-" ${Guile_VERSION_STRING})
+
+message(STATUS "Guile_CFLAGS=${Guile_CFLAGS}")
+message(STATUS "Guile_INCLUDE_DIRS=${Guile_INCLUDE_DIRS}")
+message(STATUS "Guile_LIBRARIES=${Guile_LIBRARIES}")
+
 
 set(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
 set(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
@@ -656,8 +703,8 @@ configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_
 set(CONFIG_STD_SETENV "#define STD_SETENV")
 
 set(tm_orig ${TEXMACS_SOURCE_DIR})
-set(CONFIG_HOST_OS "linux-gnu") # TODO: should not be hard-coded
-set(CONFIG_HOST_VENDOR "pc") # TODO: should not be hard-coded
+#set(CONFIG_HOST_OS "linux-gnu") # TODO: should not be hard-coded
+#set(CONFIG_HOST_VENDOR "pc") # TODO: should not be hard-coded
 set(CONFIG_HOST_CPU ${CMAKE_SYSTEM_PROCESSOR})
 set(CONFIG_USER $ENV{USER})
 string(TIMESTAMP CONFIG_DATE)
@@ -665,6 +712,7 @@ set(tm_devel TeXmacs-${DEVEL_VERSION})
 set(tm_stable TeXmacs-${STABLE_VERSION})
 set(tm_devel_release ${tm_devel}-${DEVEL_RELEASE})
 set(tm_stable_release ${tm_stable}-${STABLE_RELEASE})
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.in ${TEXMACS_SOURCE_DIR}/src/System/tm_configure.hpp)
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.in ${TEXMACS_BINARY_DIR}/src/System/tm_configure.hpp)
 
 set(prefix ${CMAKE_INSTALL_PREFIX})

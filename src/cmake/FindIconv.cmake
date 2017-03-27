@@ -13,13 +13,18 @@ IF (ICONV_INCLUDE_DIR AND ICONV_LIBRARIES)
   SET(ICONV_FIND_QUIETLY TRUE)
 ENDIF (ICONV_INCLUDE_DIR AND ICONV_LIBRARIES)
 
+# TODO maybe replace lists of directories like this with
+# some sort of system-local configurable variable's value?
+#
 FIND_PATH(ICONV_INCLUDE_DIR iconv.h 
+  /opt/local/include
   /usr/include 
   /usr/local/include 
 ) 
  
 FIND_LIBRARY(ICONV_LIBRARIES NAMES iconv c
-  PATHS 
+  PATHS
+  /opt/local/lib
   /usr/lib/
   /usr/local/lib
   ) 
