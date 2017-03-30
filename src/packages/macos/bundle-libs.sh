@@ -30,66 +30,68 @@ function set_rpath
 	
 function bundle_all_libs
 {
-#	$1   executable  or library path (relative to Contents directory)
-  local libdest="Resources/lib"
+    #	$1   executable  or library path (relative to Contents directory)
+    local libdest="Resources/lib"
 
-  echo "Bundling all libraries for [$1]"
-  bundle_all_libs_sub "$1"
+    echo "Bundling all libraries for [$1]"
+    bundle_all_libs_sub "$1"
 }
   
 function bundle_all_libs_sub
 {
-# $file is library to process with path relative to Contents directory
+    # $file is library to process with path relative to Contents directory
 
-	local lib change cmdout libname file="$1" rpath="$2" d
-	[[ $(otool -DX "$file") == @executable_path/../$file ]] && return 0
-	echo "Process $file"
+    local lib change cmdout libname file="$1" rpath="$2" d
+    [[ $(otool -DX "$file") == @executable_path/../$file ]] && return 0
+    echo "Process $file"
     chmod +w "$file"  # Needed e.g. with homebrew (libraries are 622)
-  install_name_tool -id "@executable_path/../$file" "$file" || return 31
-	cmdout="$(otool -LX "$file")" || return 41
-	# Add local Libs and Force bundling of (system) libltdl (changed in OSX 10.8)
-  while read -r lib version
-  do
+    install_name_tool -id "@executable_path/../$file" "$file" || return 31
+    cmdout="$(otool -LX "$file")" || return 41
+    # Add local Libs and Force bundling of (system) libltdl (changed in OSX 10.8)
+    while read -r lib version
+    do
   	case $lib in
-  	@executable_path/../$file) ;;
-  	/System*) ;;
-  	/+(opt/local|sw|Users|usr/local)/*/lib*.dylib|/usr/lib/libltdl.*.dylib)
-    local blib="$(basename $lib)"
-   	[ -f "$libdest/$blib" ] || cp "$lib" "$libdest" && chmod u+w "$libdest/$blib" || return 11
-    bundle_all_libs_sub "$libdest/$blib" || return $?
-    change="$change -change $lib  @executable_path/../Resources/lib/$blib"
-    ;; 
-    *.framework/*)
-    local fwloc="${lib%%.framework/*}.framework"; 
-    if [[ ! "$fwloc" =~ ^/.* ]]; then 
-      if [[ -f /Library/Frameworks/$lib ]]
-      then fwloc="/Library/Frameworks/$fwloc"
-      else  
-        if [[ -f "$QT_FRAMEWORKS_PATH/$lib" ]]
-        then fwloc="$QT_FRAMEWORKS_PATH/$fwloc"
-        else return 32
-        fi
-      fi
-    fi
+  	    @executable_path/../$file)
+            ;;
+  	    /System*)
+            ;;
+            /+(opt/local|sw|Users|usr/local)/*/lib*.dylib|/usr/lib/libltdl.*.dylib)
+                local blib="$(basename $lib)"
+   	        [ -f "$libdest/$blib" ] || cp "$lib" "$libdest" && chmod u+w "$libdest/$blib" || return 11
+                bundle_all_libs_sub "$libdest/$blib" || return $?
+                change="$change -change $lib  @executable_path/../Resources/lib/$blib"
+            ;;
+            *.framework/*)
+                local fwloc="${lib%%.framework/*}.framework"; 
+                if [[ ! "$fwloc" =~ ^/.* ]]; then 
+                    if [[ -f /Library/Frameworks/$lib ]]
+                    then fwloc="/Library/Frameworks/$fwloc"
+                    else  
+                        if [[ -f "$QT_FRAMEWORKS_PATH/$lib" ]]
+                        then fwloc="$QT_FRAMEWORKS_PATH/$fwloc"
+                        else return 32
+                        fi
+                    fi
+                fi
 
-    local fwname="${fwloc##*/}"
-    local blib=$(basename $lib)
-    local fwbase="Frameworks/$fwname"
-    [ -d "$fwbase" ] || mkdir "$fwbase" || return 12
-    for d in Resources Contents
-    do [ -d "$fwloc/$d" -a ! -d "$fwbase/$d" ] && { cp -RL "$fwloc/$d" "$fwbase" || return 13; }
-    done
-    [ -f "$fwbase/$blib" ] || cp "$fwloc/${lib#*.framework}" "$fwbase" || return 14
-    bundle_all_libs_sub "$fwbase/$blib" || return $?
-    change="$change -change $lib  @executable_path/../$fwbase/$blib"
+                local fwname="${fwloc##*/}"
+                local blib=$(basename $lib)
+                local fwbase="Frameworks/$fwname"
+                [ -d "$fwbase" ] || mkdir "$fwbase" || return 12
+                for d in Resources Contents
+                do [ -d "$fwloc/$d" -a ! -d "$fwbase/$d" ] && { cp -RL "$fwloc/$d" "$fwbase" || return 13; }
+                done
+                [ -f "$fwbase/$blib" ] || cp "$fwloc/${lib#*.framework}" "$fwbase" || return 14
+                bundle_all_libs_sub "$fwbase/$blib" || return $?
+                change="$change -change $lib  @executable_path/../$fwbase/$blib"
 		;;
-		esac
+            esac
 	done <<< "$cmdout"
-  set_rpath "$file" change || return $?
-  [ "$rpath" ] && change+=" -add_rpath $rpath"
-  [ -z "$change" ] && return 0
-  install_name_tool $change "$file" || return 33
-  return 0
+    set_rpath "$file" change || return $?
+    [ "$rpath" ] && change+=" -add_rpath $rpath"
+    [ -z "$change" ] && return 0
+    install_name_tool $change "$file" || return 33
+    return 0
 }
 
 

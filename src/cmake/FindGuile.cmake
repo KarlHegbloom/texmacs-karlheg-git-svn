@@ -10,34 +10,42 @@ include(LibFindMacros)
 include(CheckIncludeFile)
 #include(CheckCSourceCompiles)
 
-FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config guile18-config guile2-config guile20-config guile22-config)
+find_program(GUILE_EXECUTABLE NAMES guile guile18 guile2 guile20 guile22 guile-2 guile-2.0 guile-2.2)
+find_program(GUILESNARF_EXECUTABLE NAMES guile-snarf guile18-snarf guile2-snarf guile20-snarf guile22-snarf guile-2-snarf guile-2.0-snarf guile-2.2-snarf)
+find_program(GUILETOOLS_EXECUTABLE NAMES guile-tools guile18-tools guile2-tools guile20-tools guile22-tools guile-2-tools guile-2.0-tools guile-2.2-tools)
+
+find_program(GUILECONFIG_EXECUTABLE NAMES guile-config guile18-config guile2-config guile20-config guile22-config guile-2-config guile-2.0-config guile-2.2-config)
 
 # if guile-config has been found
 IF(GUILECONFIG_EXECUTABLE)
 
   EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE} link 
-    OUTPUT_VARIABLE _guileconfigDevNull RESULT_VARIABLE _return_VALUE  )
+    OUTPUT_VARIABLE _guileconfigDevNull RESULT_VARIABLE _return_VALUE  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   # and if the package of interest also exists for guile-config, then
   # get the information
   IF(NOT _return_VALUE)
 
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  link 
-      OUTPUT_VARIABLE _guileconfig_link )
+      OUTPUT_VARIABLE _guileconfig_link OUTPUT_STRIP_TRAILING_WHITESPACE)
     
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  compile 
-      OUTPUT_VARIABLE _guileconfig_compile )
+      OUTPUT_VARIABLE _guileconfig_compile OUTPUT_STRIP_TRAILING_WHITESPACE)
 
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  info includedir
-      OUTPUT_VARIABLE _guileconfig_includedir )
+      OUTPUT_VARIABLE _guileconfig_includedir OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  info libdir 
-      OUTPUT_VARIABLE _guileconfig_libdir )
+      OUTPUT_VARIABLE _guileconfig_libdir OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 
     EXECUTE_PROCESS(COMMAND ${GUILECONFIG_EXECUTABLE}  "--version"
-      OUTPUT_VARIABLE _guileconfig_version ERROR_VARIABLE _guileconfig_version )
+      OUTPUT_VARIABLE _guileconfig_version ERROR_VARIABLE _guileconfig_version OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+
+    EXECUTE_PROCESS(COMMAND ${GUILE_EXECUTABLE} -q -c "(let ((ver (version))) (set! ver (substring ver 0 (string-rindex ver (car (string->list \".\"))))) (map (lambda (str) (if (string-suffix? ver str) (display str))) %load-path))"
+      OUTPUT_VARIABLE _GUILE_LOAD_PATH_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
     
     
     ## parsing
@@ -79,6 +87,8 @@ IF(GUILECONFIG_EXECUTABLE)
     SET(Guile_INCLUDE_DIRS ${_guileconfig_includedir})
     SET(Guile_LIBRARIES ${_guile_libraries})
     SET(Guile_CFLAGS ${_guile_definitions_with_prefix})
+    SET(Guile_LIBDIR ${_guileconfig_libdir})
+    SET(GUILE_LOAD_PATH_DIR ${_GUILE_LOAD_PATH_DIR})
 
     set(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
     set(CMAKE_REQUIRED_LIBRARIES ${Guile_LIBRARIES})
@@ -92,6 +102,8 @@ IF(GUILECONFIG_EXECUTABLE)
       message(STATUS "Guile_LIBRARIES=${Guile_LIBRARIES}")
       message(STATUS "Guile_CFLAGS=${Guile_CFLAGS}")
       message(STATUS "GUILE_HEADER_18=${GUILE_HEADER_18}")
+      message(STATUS "Guile_LIBDIR=${Guile_LIBDIR}")
+      message(STATUS "GUILE_LOAD_PATH_DIR=${GUILE_LOAD_PATH_DIR}")
     endif(NOT CMAKE_REQUIRED_QUIET)
     
   ELSE( NOT _return_VALUE)

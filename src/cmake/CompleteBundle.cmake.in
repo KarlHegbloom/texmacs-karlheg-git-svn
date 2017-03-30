@@ -25,11 +25,13 @@ function(gp_item_default_embedded_path_override item default_embedded_path_var)
   # By default, embed things right next to the main bundle executable:
   #
   set (install_name_prefix "@executable_path")
+  #
   # -------------------------------------------------------------------
   # If your application uses plugins then you should consider using the following
   #  instead but will limit your deployment to OS X 10.4. There is also a patch
   #  needed for CMake that as of Sept 30, 2008 has NOT been applied to CMake.
-  #  set (install_name_prefix "@loader_path")
+  #
+  # set (install_name_prefix "@loader_path")
   
   set(path "${install_name_prefix}/../../Contents/MacOS")
 

@@ -56,6 +56,8 @@ include(CheckTypeSize)
 include(FindPkgConfig)
 include(CheckCSourceCompiles)
 include(CMakeDependentOption)
+#include(AddFileDependencies)
+
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
@@ -114,6 +116,12 @@ set(PKG_MAINTAINER "Karl M. Hegbloom <karl.hegbloom@gmail.com>"
 message(STATUS "  TEXMACS_SOURCE_DIR is: ${TEXMACS_SOURCE_DIR}")
 
 
+find_package(Git)
+if(Git_FOUND)
+  message(STATUS "Git found: ${GIT_EXECUTABLE}")
+endif(Git_FOUND)
+
+
 ### Set GITDIR. Not set if not there.
 if(EXISTS "${TEXMACS_SOURCE_DIR}/.git" AND
     NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/.git" AND
@@ -137,7 +145,6 @@ endif(EXISTS "${TEXMACS_SOURCE_DIR}/.git" AND
   NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/.git" AND
   NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.git")
 
-
 if(NOT "${GITDIR}" STREQUAL "")
   message(STATUS "  GITDIR is: ${GITDIR}")
 endif(NOT "${GITDIR}" STREQUAL "")
@@ -152,13 +159,19 @@ if(IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.svn")
 
 elseif(NOT "${GITDIR}" STREQUAL "" AND IS_DIRECTORY "${GITDIR}/svn")
   message(STATUS "This is a git svn clone.")
+  ####
+  ##
   ## Do not use `git svn info` for this because it provides incorrect results.
   ## Instead, parse the `git rev-list` for the information that git svn writes
   ## into the commit log during `git svn rebase` on the svn-trunk branch,
   ## which is then merged into the present branch.
-  ## Requires sed.
-  execute_process(COMMAND git rev-list --max-count=100 --pretty=medium HEAD@{0}
-    COMMAND sed -rne "/git-svn-id:/ {s,.*://.*@([^ ]+).*,\\1,p ;/./ q 0}"
+  ##
+  ## Requires GNU sed unless or until this is fixed to work with other sed.
+  ##
+  find_program(GNU_SED_EXECUTABLE NAMES gsed sed)
+
+  execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --max-count=100 --pretty=medium HEAD@{0}
+    COMMAND ${GNU_SED_EXECUTABLE} -rne "/git-svn-id:/ {s,.*://.*@([^ ]+).*,\\1,p ;/./ q 0}"
     WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
     OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif(IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.svn")
@@ -186,7 +199,9 @@ endif(NOT "${SVNREV}" STREQUAL "")
 if(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
   message(STATUS "Getting git commit count and head treeish for PKGREV")
   ## We use the commit count to get monotonically increasing version numbers.
-  execute_process(COMMAND git log --oneline COMMAND wc -l
+  execute_process(COMMAND git log --oneline
+    COMMAND wc -l
+    COMMAND sed -e "s, ,,g"
     WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
     OUTPUT_VARIABLE GITCOMMITCOUNT ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND git log -n 1 --oneline COMMAND cut -f1 -d\ #
@@ -385,6 +400,13 @@ IF(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
   set(CONFIG_OS_SUFFIX "apple-darwin")
   set(CONFIG_HOST_OS "MACOS")
   set(CONFIG_HOST_VENDOR "Apple")
+  set(CONFIG_QTPIPES 1)
+  set(CONFIG_CXXFLAGS "-I${CMAKE_INSTALL_PREFIX}/include")
+  set(CONFIG_BSHARED "")
+  set(CONFIG_BFLAGS "-framework Cocoa -framework IOKit")
+  set(CONFIG_BPATH "")
+  set(CONFIG_SO "dylib")
+  set(CONFIG_LIB_PATH "DYLD_LIBRARY_PATH")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 
 
@@ -477,10 +499,10 @@ find_package(Imlib2)
 
 ### find_package(Axel) # What is/was Axel?
 
-message(STATUS "CAIRO_CFLAGS=${CAIRO_CFLAGS}")
-message(STATUS "CAIRO_CFLAGS_OTHERS=${CAIRO_CFLAGS_OTHERS}")
-message(STATUS "Cairo_INCLUDE_DIRS=${Cairo_INCLUDE_DIRS}")
-message(STATUS "Cairo_LIBRARIES=${Cairo_LIBRARIES}")
+# message(STATUS "CAIRO_CFLAGS=${CAIRO_CFLAGS}")
+# message(STATUS "CAIRO_CFLAGS_OTHERS=${CAIRO_CFLAGS_OTHERS}")
+# message(STATUS "Cairo_INCLUDE_DIRS=${Cairo_INCLUDE_DIRS}")
+# message(STATUS "Cairo_LIBRARIES=${Cairo_LIBRARIES}")
 
 
 ### --------------------------------------------------------------------
@@ -597,6 +619,7 @@ if(TEXMACS_GUI STREQUAL "Qt5")
     set(NO_FAST_ALLOC 1)
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
+    set(CONFIG_QTPIPES 1)
     set(QTPIPES 1)
     message(STATUS "Enabling Qt5 GUI")
   else(Qt5_FOUND)
@@ -618,6 +641,7 @@ elseif(TEXMACS_GUI STREQUAL "Qt4")
     set(NO_FAST_ALLOC 1)
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
+    set(CONFIG_QTPIPES 1)
     set(QTPIPES 1)
     message(STATUS "Enabling Qt4 GUI")
   else(QT4_FOUND)
@@ -627,6 +651,8 @@ elseif(TEXMACS_GUI STREQUAL "Qt4")
 
 elseif(TEXMACS_GUI STREQUAL "Aqua")
 
+  unset(CONFIG_QTPIPES)
+  unset(QTPIPES)
   if (APPLE)
     set(GUI_TYPE MACOSX_BUNDLE)
 
@@ -648,6 +674,8 @@ elseif(TEXMACS_GUI STREQUAL "Aqua")
 
 else(TEXMACS_GUI STREQUAL "Qt")
 
+  unset(CONFIG_QTPIPES)
+  unset(QTPIPES)
   find_package(X11)
 
   set(CONFIG_X11 "X11 Widkit Ghostscript")
@@ -722,6 +750,7 @@ set(datadir ${datarootdir})
 set(tmdata ${datarootdir}/TeXmacs)
 set(tmbin ${exec_prefix}/lib/texmacs/TeXmacs)
 set(tmsrc ${TEXMACS_SOURCE_DIR})
+
 configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs @ONLY)
 configure_file(misc/scripts/fig2ps.in ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps @ONLY)
 
@@ -753,19 +782,43 @@ ADD_SUBDIRECTORY(src)
 ### Complete bundle if MacOSX
 ### --------------------------------------------------------------------
 
+if(APPLE)
+  configure_file(${TEXMACS_SOURCE_DIR}/packages/macos/Info.plist.in
+    ${TEXMACS_SOURCE_DIR}/packages/macos/Info.plist @ONLY)
+  # configure_file(${TEXMACS_SOURCE_DIR}/packages/macos/Info.plist.in
+  #   ${TEXMACS_SOURCE_DIR}/misc/bundle/Info.plist @ONLY)
+  configure_file(${TEXMACS_SOURCE_DIR}/packages/macos/Info-Xcode.plist.in
+    ${TEXMACS_SOURCE_DIR}/packages/macos/Info-Xcode.plist @ONLY)
+  configure_file(${TEXMACS_SOURCE_DIR}/packages/macos/Base.xcconfig.in
+    ${TEXMACS_SOURCE_DIR}/packages/macos/Base.xcconfig.in @ONLY)
+endif(APPLE)
+
 IF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
   SET(BUNDLE_DEBUG_EXTENSION)
   IF (DEBUG)
-    SET(BUNDLE_DEBUG_EXTENSION "_debug")
+    SET(BUNDLE_DEBUG_EXTENSION _debug)
   ENDIF (DEBUG)  
-  SET(APP_BUNDLE_NAME ${TeXmacs_binary_name}${BUNDLE_DEBUG_EXTENSION}".app")
+  # SET(APP_BUNDLE_NAME ${TeXmacs_bundle_name}${BUNDLE_DEBUG_EXTENSION}".app")
+  SET(APP_BUNDLE_NAME TeXmacs${BUNDLE_DEBUG_EXTENSION}${PKGREV}.app)
+
   ADD_CUSTOM_TARGET ( bundle
             mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS 
     COMMAND mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
-    COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/Info.plist ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
-    COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/TeXmacs ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
+    COMMAND cp ${TEXMACS_SOURCE_DIR}/packages/macos/Info.plist    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
+    COMMAND cp ${TEXMACS_SOURCE_DIR}/packages/macos/TeXmacs    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
     COMMAND chmod a+x  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS/TeXmacs
-  )
+    COMMAND cp ${TEXMACS_BINARY_DIR}/${TeXmacs_binary_name} ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
+    COMMAND chmod a+x  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS/${TeXmacs_binary_name}
+    COMMAND cp ${GUILE_EXECUTABLE}    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
+    COMMAND chmod a+x ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS/`basename ${GUILE_EXECUTABLE}`
+    COMMAND mkdir -p ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources/lib/`basename ${Guile_LIBDIR}`
+    COMMAND cp -a ${Guile_LIBDIR}/*.dylib    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources/lib/`basename ${Guile_LIBDIR}`
+    COMMAND mkdir -p ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources/share/guile
+    COMMAND cp -a ${GUILE_LOAD_PATH_DIR}    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources/share/guile
+    )
+
+    #COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/Info.plist ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
+    #COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/TeXmacs ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
 ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 
 
