@@ -39,3 +39,4 @@ tags
 src/TeXmacs/fonts/tfm/pctex/
 src/TeXmacs/fonts/type1/pctex/
 src/TeXmacs/progs/scripts/
+src/.dir-locals.el

@@ -743,6 +743,8 @@ set(tm_stable_release ${tm_stable}-${STABLE_RELEASE})
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.in ${TEXMACS_SOURCE_DIR}/src/System/tm_configure.hpp)
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/tm_configure.in ${TEXMACS_BINARY_DIR}/src/System/tm_configure.hpp)
 
+configure_file(${TEXMACS_SOURCE_DIR}/.dir-locals.el.in ${TEXMACS_SOURCE_DIR}/.dir-locals.el @ONLY)
+
 set(prefix ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix ${prefix})
 set(datarootdir ${prefix}/share)
