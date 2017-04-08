@@ -856,24 +856,6 @@ set(TeXmacs_binary_name "texmacs.bin")
 # If we are build a "Debug" version then put that on the built Application
 # SET (EXE_DEBUG_EXTENSION "_debug")
 
-### --------------------------------------------------------------------
-### Compile sources
-### --------------------------------------------------------------------
-
-add_subdirectory(src)
-
-add_custom_target(pluginsrc ALL)
-file(GLOB pluginsrcMF
-  ${TEXMACS_SOURCE_DIR}/plugins/*/Makefile)
-foreach(MF ${pluginsrcMF})
-  get_filename_component(MFDIR ${MF} DIRECTORY)
-  string(REPLACE / _ MF_DIR ${MFDIR})
-  add_custom_target(${MF_DIR}
-    cd ${MFDIR} && make
-    VERBATIM)
-  add_dependencies(pluginsrc ${MF_DIR})
-endforeach(MF ${pluginsrcMF})
-
 
 ### --------------------------------------------------------------------
 ### Complete bundle if MacOSX
@@ -1045,11 +1027,9 @@ if(APPLE AND NOT TEXMACS_GUI STREQUAL X11 AND CONFIG_MACOS_INSTALL_INTO_BUNDLEDI
     RENAME gs)
 
 
-  install(DIRECTORY ${Guile_LIBDIR}
-    FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
-    DIRECTORY_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FILES_MATCHING PATTERN "*.dylib")
+  file(GLOB guile_dylibs ${Guile_LIBDIR}/*.dylib)
+  install(FILES ${guile_dylibs}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
   install(DIRECTORY ${GUILE_LOAD_PATH_DIR} USE_SOURCE_PERMISSIONS
     DESTINATION ${CMAKE_INSTALL_DATADIR}/guile)
@@ -1065,13 +1045,34 @@ if(APPLE AND NOT TEXMACS_GUI STREQUAL X11 AND CONFIG_MACOS_INSTALL_INTO_BUNDLEDI
       DIRECTORY_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
       DESTINATION ${CMAKE_INSTALL_PREFIX}/Plugins)
   endforeach(dir ${CONFIG_QT_PLUGINS_LIST})
-
+else(APPLE AND NOT TEXMACS_GUI STREQUAL X11 AND CONFIG_MACOS_INSTALL_INTO_BUNDLEDIR)
+  if(WIN32)
+    # TODO ?
+    include(GNUInstallDirs)
+  else(WIN32)
+    include(GNUInstallDirs)
+  endif(WIN32)
 endif(APPLE AND NOT TEXMACS_GUI STREQUAL X11 AND CONFIG_MACOS_INSTALL_INTO_BUNDLEDIR)
 
 
-if(WIN32)
-# TODO ?
-endif(WIN32)
+
+### --------------------------------------------------------------------
+### Compile sources
+### --------------------------------------------------------------------
+
+add_subdirectory(src)
+
+add_custom_target(pluginsrc ALL)
+file(GLOB pluginsrcMF
+  ${TEXMACS_SOURCE_DIR}/plugins/*/Makefile)
+foreach(MF ${pluginsrcMF})
+  get_filename_component(MFDIR ${MF} DIRECTORY)
+  string(REPLACE / _ MF_DIR ${MFDIR})
+  add_custom_target(${MF_DIR}
+    cd ${MFDIR} && make
+    VERBATIM)
+  add_dependencies(pluginsrc ${MF_DIR})
+endforeach(MF ${pluginsrcMF})
 
 ### --------------------------------------------------------------------
 ### Installation
@@ -1141,27 +1142,37 @@ endforeach(TOOL)
 # After all other installation tasks have completed:
 #
 if(APPLE AND NOT TEXMACS_GUI STREQUAL X11 AND CONFIG_MACOS_INSTALL_INTO_BUNDLEDIR)
+  install(CODE "
+message(STATUS \"Calling bundle-libs2.sh...\")
+execute_process(COMMAND ${TEXMACS_SOURCE_DIR}/packages/macos/bundle-libs2.sh
+                WORKING_DIRECTORY ${APP_BUNDLE_STAGING_DIR}/Contents
+               )
+message(STATUS \"Calling bundle-libs2.sh... Done.\")
+")
+  
+  
   #set(TeXmacs_Libraries_Dirs)
-  set(TeXmacs_bundle_ignoreItems fig2ps gs TeXmacs texmacs tm_gs
-    add_to_insert_menu.sci bbox_add.pl init-scilab.sce maxima_detect perl-tm_asy
-    plotout.sci populates_demo_menu.sci r_install realpath.py rm_from_insert_menu.sci
-    scilab-demo.sce tm_asy tm_asy2 tm_dratex tm_eukleides tm_eukleides.old tm_feynmf
-    tm_gnuplot tm_lisp tm_lush tm_maple tm_mathematica tm_matlab tm_maxima tm_mupad
-    tm_mupad_help tm_octave tm_octave.bat tm_python tm_python.bat
-    tm_reduce tm_sage tm_texgraph tm_xypic tmstree.sci)
+  # set(TeXmacs_bundle_ignoreItems fig2ps gs TeXmacs texmacs tm_gs
+  #   add_to_insert_menu.sci bbox_add.pl init-scilab.sce maxima_detect perl-tm_asy
+  #   plotout.sci populates_demo_menu.sci r_install realpath.py rm_from_insert_menu.sci
+  #   scilab-demo.sce tm_asy tm_asy2 tm_dratex tm_eukleides tm_eukleides.old tm_feynmf
+  #   tm_gnuplot tm_lisp tm_lush tm_maple tm_mathematica tm_matlab tm_maxima tm_mupad
+  #   tm_mupad_help tm_octave tm_octave.bat tm_python tm_python.bat
+  #   tm_reduce tm_sage tm_texgraph tm_xypic tmstree.sci)
   # TODO This fails because texmacs is a shell script wrapper!
   # I will need to make a copy of the BundleUtilities.cmake file and fix it there.
-  install(CODE "
-message(\"Fixup Bundle...\")
-set(BU_COPY_FULL_FRAMEWORK_CONTENTS YES)
-set(BU_CHMOD_BUNDLE_ITEMS YES)
-file(GLOB_RECURSE PLUGINS
-    \"\${CMAKE_INSTALL_PREFIX}/Plugins/*.dylib\"
-    \"\${CMAKE_INSTALL_LIBDIR}/${Guile_LIBDIR_basename}/*.dylib\")
-include(BundleUtilities)
-fixup_bundle(\"${APP_BUNDLE_STAGING_DIR}\" \"\${PLUGINS}\" \"/opt/local/lib;${Guile_LIBDIR}\" IGNORE_ITEM \"${TeXmacs_bundle_ignoreItems}\")
-message(\"Fixup Bundle... done.\")
-")
+#   install(CODE "
+# message(\"Fixup Bundle...\")
+# set(BU_COPY_FULL_FRAMEWORK_CONTENTS YES)
+# set(BU_CHMOD_BUNDLE_ITEMS YES)
+# file(GLOB_RECURSE PLUGINS
+#     \"\${CMAKE_INSTALL_PREFIX}/Plugins/*.dylib\"
+#     \"\${CMAKE_INSTALL_LIBDIR}/${Guile_LIBDIR_basename}/*.dylib\")
+# include(BundleUtilities)
+# fixup_bundle(\"${APP_BUNDLE_STAGING_DIR}\" \"\${PLUGINS}\" \"/opt/local/lib;${Guile_LIBDIR}\" IGNORE_ITEM \"${TeXmacs_bundle_ignoreItems}\")
+# message(\"Fixup Bundle... done.\")
+# ")
+
 endif(APPLE AND NOT TEXMACS_GUI STREQUAL X11 AND CONFIG_MACOS_INSTALL_INTO_BUNDLEDIR)
 
 set(CPACK_BINARY_DRAGNDROP ON)
