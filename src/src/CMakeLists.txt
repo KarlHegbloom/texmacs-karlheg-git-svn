@@ -775,4 +775,4 @@ SET_TARGET_PROPERTIES(${TeXmacs_binary_name}
     RUNTIME_OUTPUT_DIRECTORY ${TEXMACS_BINARY_DIR}
 )
 
-install(TARGETS ${TeXmacs_binary_name} DESTINATION lib/texmacs/TeXmacs/bin)
+install(TARGETS ${TeXmacs_binary_name} DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}) # lib/texmacs/TeXmacs/bin)

@@ -1,6 +1,12 @@
 #!/bin/sh
 # Program to make a postscript image from a fig picture with latex labels
 
+# TODO How does this differ from the fig2ps that is in MacPorts? Can it be
+# used instead? And what about the transfig tools and latex command used
+# below? For a MacOS dmg self-contained package, they would need to be
+# included, or at least a run-time dependency declared, advising the user to
+# install those programs via MacPorts.
+
 datarootdir="@datarootdir@"
 datadir="@datadir@"
 
