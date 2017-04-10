@@ -790,19 +790,19 @@ if(APPLE)
   configure_file(${TEXMACS_SOURCE_DIR}/packages/macos/Info-Xcode.plist.in
     ${TEXMACS_SOURCE_DIR}/packages/macos/Info-Xcode.plist @ONLY)
   configure_file(${TEXMACS_SOURCE_DIR}/packages/macos/Base.xcconfig.in
-    ${TEXMACS_SOURCE_DIR}/packages/macos/Base.xcconfig.in @ONLY)
+    ${TEXMACS_SOURCE_DIR}/packages/macos/Base.xcconfig @ONLY)
 endif(APPLE)
 
 IF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
   SET(BUNDLE_DEBUG_EXTENSION)
   IF (DEBUG)
     SET(BUNDLE_DEBUG_EXTENSION _debug)
-  ENDIF (DEBUG)  
+  ENDIF (DEBUG)
   # SET(APP_BUNDLE_NAME ${TeXmacs_bundle_name}${BUNDLE_DEBUG_EXTENSION}".app")
   SET(APP_BUNDLE_NAME TeXmacs${BUNDLE_DEBUG_EXTENSION}${PKGREV}.app)
 
   ADD_CUSTOM_TARGET ( bundle
-            mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS 
+            mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
     COMMAND mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
     COMMAND cp ${TEXMACS_SOURCE_DIR}/packages/macos/Info.plist    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
     COMMAND cp ${TEXMACS_SOURCE_DIR}/packages/macos/TeXmacs    ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
