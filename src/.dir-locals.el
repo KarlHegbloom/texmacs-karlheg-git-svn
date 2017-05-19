@@ -1,6 +1,13 @@
 ;;; Directory Local Variables
 ;;; For more information see (info "(emacs) Directory Variables")
 
+                   ;; "~/src/Guile/guile-2.2-git/emacs/TAGS"
+                   ;; "~/src/Guile/guile-2.2-git/test-suite/standalone/TAGS"
+                   ;; "~/src/Guile/guile-2.2-git/test-suite/TAGS"
+                   ;; "~/src/Guile/guile-2.2-git/bootstrap/TAGS"
+                   ;; "~/src/Guile/guile-2.2-git/doc/ref/TAGS"
+                   ;; "~/src/Guile/guile-2.2-git/doc/TAGS"
+
 ((nil
   (cmake-ide-project-dir . "~/src/TeXmacs/texmacs-git-svn/src")
   (cmake-ide-build-dir . "~/src/TeXmacs/texmacs-git-svn/src/obj-x86_64-linux-gnu")
@@ -13,6 +20,12 @@
             (setenv "PATH" (string-join (list "/usr/lib/ccache:" (getenv "PATH"))))))
   (eval . (setenv "DEB_BUILD_OPTIONS" (string-join (list "parallel=8 nostrip "
                                                          (or (getenv "DEB_BUILD_OPTIONS") "")))))
+  (tags-table-list . ("~/src/TeXmacs/texmacs-git-svn/src/TAGS"
+                      "~/src/Guile/guile-2.2-git/TAGS"
+                      "~/src/Guile/guile-2.2-git/libguile/TAGS"
+                      "~/src/Guile/guile-2.2-git/lib/TAGS"
+                      "~/src/Guile/guile-2.2-git/module/TAGS"
+                      "~/src/Guile/guile-2.2-git/guile-readline/TAGS"))
   (indent-tabs-mode . nil)
   (fill-column . 132)
   (org-startup-truncated . t)

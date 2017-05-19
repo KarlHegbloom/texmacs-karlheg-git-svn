@@ -83,12 +83,13 @@ else
                        plugins/**/*.cpp
                        plugins/**/*.h
                        plugins/**/*.c
-                       /usr/share/guile/${ver}/**/*.scm
-                       /usr/share/guile/${ver}/**/*.ss
-                       /usr/share/guile/site/**/*.scm
-                       /usr/include/guile/${ver}/libguile.h
-                       /usr/include/guile/${ver}/libguile/**/*.h
                        ~/.TeXmacs/progs/**/*.scm)
+
+                       # /usr/share/guile/${ver}/**/*.scm
+                       # /usr/share/guile/${ver}/**/*.ss
+                       # /usr/share/guile/site/**/*.scm
+                       # /usr/include/guile/${ver}/libguile.h
+                       # /usr/include/guile/${ver}/libguile/**/*.h
 
     "$etags[@]" \
         "$rxargs[@]" \
