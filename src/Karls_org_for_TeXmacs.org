@@ -1,0 +1,70 @@
+#+TITLE Karl Hegbloom's <<To Do items for TeXmacs>>
+
+#+TODO: TODO(t) WIP(w!) WAITING(W@/!) TESTING(T!) VERIFY(v@/!) FIXME(f@/!) | DONE(d!/!) CANCELED(c@/!) S.E.P.(s@/!)
+#+PRIORITIES: A D B
+
+#+TAGS: {TodoKind : @feature @bug }
+#+TAGS: [assigned : karlheg ]
+#+TAGS: [subsys   : @scheme @style @documentation ]
+
+#+TAGS: [ Issue : {@Issue_.+} ]
+
+
+* TODO Packaging issues needing resolved
+  + [ ] General Packaging Issues
+    + [ ] Plugins: Ship compiled or as source?
+      + [ ] Compiled pros
+      + [ ] Compiled console
+      + [ ] Source pros
+      + [ ] Source cons
+    + [ ] Compilability of the plugin code - when compiled in advanced
+      + [ ] Installation of build-depends, building of binary package
+    + [ ] Compilability of the plugin code - when shipped as source
+      + [ ] Documentation of build-depends, inside each plugin Makefile
+      + [ ] Install the plugins in /usr/src (or macports equivalent?)
+      + [ ] Ensure that they are owned by root:src (or macports equiv)
+      + [ ] They need to be able to find ../../src/System/config.h
+        and maybe other TeXmacs headers, as well as the headers and
+        libraries for anything they are to be linked with.
+  + [ ] MacOS Packaging Issues
+    + [ ] Common
+      + [ ] ~(setenv "DYLD_LIBRARY_PATH" "/opt/local/lib/guile18")~ was
+        necessary in my ~/.guile in order to cause it to successfully
+        execute ~(use-modules (ice-9 readline))~.
+    + [ ] Macports
+      + [ ] Consider use the macports build as basis for the dmg or pkg
+        format build. Probably commonly done?
+    + [ ] dmg or pkg
+      + [ ] Copy in everything needed, fix up for installed location
+        There's a script for it that can be improved...
+        + [ ] It needs to have a complete Guile 1.8 inside it's own
+          directory, down in /Applications/TeXmacs-1.99.5.app/Contents.
+  + [ ] Linux Packaging Issues
+  + [ ] Windows Packaging Issues
+
+
+* TODO The ~texmacs~ script does the wrong thing wrt already set TEXMACS_PATH and TEXMACS_BIN_PATH
+   When TEXMACS_PATH is set, it resets TEXMACS_BIN_PATH without even
+   checking first to see if it has been defined already, i.e., by a
+   user shell environment setting, or the .dir-locals.el here for Emacs.
+
+
+* TODO TeXmacs org mode and outline editting.
+
+
+* TODO Crash in destructor for tree-pointers
+   :PROPERTIES:
+   :ID:       a6ed3415-4740-4c74-8809-af63751ade67
+   :END:
+*** This is documented in file:~/src/Juris-M/zotero-texmacs-integration/crashes.org
+    at item id:b6001b50-f170-4a7e-97e5-79a51be2591d
+
+
+
+
+* TODO Port to Guile 2.2
+
+** Link to where Guile 2.2 sets up the module system (in boot-9.scm):
+  
+   [[file:~/src/Guile/guile-2.2-git/module/ice-9/boot-9.scm::;;;%20{Low%20Level%20Modules}]]
+
