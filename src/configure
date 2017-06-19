@@ -21398,53 +21398,155 @@ fi
     fi
   fi
 
-  # Check for libraries that X11R6 Xt/Xaw programs need.
-  ac_save_LDFLAGS=$LDFLAGS
-  test -n "$x_libraries" && LDFLAGS="$LDFLAGS -L$x_libraries"
-  # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
-  # check for ICE first), but we must link in the order -lSM -lICE or
-  # we get undefined symbols.  So assume we have SM if we have ICE.
-  # These have to be linked with before -lX11, unlike the other
-  # libraries we check for below, so use a different variable.
-  # John Interrante, Karl Berry
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for IceConnectionNumber in -lICE" >&5
-$as_echo_n "checking for IceConnectionNumber in -lICE... " >&6; }
-if ${ac_cv_lib_ICE_IceConnectionNumber+:} false; then :
-  $as_echo_n "(cached) " >&6
+
+  if test x"$CONFIG_OS" = xMACOS; then
+    # Check whether --enable-macosx-extensions was given.
+if test "${enable_macosx_extensions+set}" = set; then :
+  enableval=$enable_macosx_extensions;
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lICE $X_EXTRA_LIBS $LIBS"
+  ac_cv_lib_ICE_IceConnectionNumber=no
+fi
+
+    case "$enable_macosx_extensions" in
+	yes)
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling Mac OSX extensions" >&5
+$as_echo "enabling Mac OSX extensions" >&6; }
+
+$as_echo "#define MACOSX_EXTENSIONS 1" >>confdefs.h
+
+	    CONFIG_MACOS="MacOS"
+    #        CONFIG_BFLAGS="$CONFIG_BFLAGS -framework IOKit"
+	    ;;
+	no)
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling Mac OSX extensions" >&5
+$as_echo "disabling Mac OSX extensions" >&6; }
+	    CONFIG_MACOS=""
+	    ;;
+	*)
+	    as_fn_error $? "bad option --enable-macosx-extensions=$enable_macosx_extensions" "$LINENO" 5
+	    ;;
+    esac
+
+  fi
+
+  case "${host}" in
+    *apple*darwin*)
+
+
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+  OLDCXXFLAGS=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS -arch x86_64 -Xarch_x86_64 -mmacosx-version-min=10.8"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether C++ compiler supports -Xarch_x86_64" >&5
+$as_echo_n "checking for whether C++ compiler supports -Xarch_x86_64... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char IceConnectionNumber ();
 int
 main ()
 {
-return IceConnectionNumber ();
+
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_ICE_IceConnectionNumber=yes
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    Xarch_x86_64="yes"
+
 else
-  ac_cv_lib_ICE_IceConnectionNumber=no
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    Xarch_x86_64="no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
+  CXXFLAGS=$OLDCXXFLAGS
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+      if test "$Xarch_x86_64" = "no"; then
+	QT_CXXFLAGS=`echo $QT_CXXFLAGS | sed "s/ -Xarch_x86_64//g"`
+	QT_LDFLAGS=`echo $QT_LDFLAGS | sed "s/ -Xarch_x86_64//g"`
+      fi
+    ;;
+  esac
+
+  case "${host}" in
+    *apple*darwin*)
+
+
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+  OLDCXXFLAGS=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether C++ compiler supports -stdlib" >&5
+$as_echo_n "checking for whether C++ compiler supports -stdlib... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    Stdlib="yes"
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    Stdlib="no"
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ICE_IceConnectionNumber" >&5
-$as_echo "$ac_cv_lib_ICE_IceConnectionNumber" >&6; }
-if test "x$ac_cv_lib_ICE_IceConnectionNumber" = xyes; then :
-  X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  CXXFLAGS=$OLDCXXFLAGS
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+      if test "$Stdlib" = "no"; then
+	QT_CXXFLAGS=`echo $QT_CXXFLAGS | sed 's/ -stdlib=[^[:space:]]*//g'`
+	QT_LDFLAGS=`echo $QT_LDFLAGS | sed 's/ -stdlib=[^[:space:]]*//g'`
+      fi
+   ;;
+  esac
+
+
+#--------------------------------------------------------------------
+# Windows console
+#--------------------------------------------------------------------
+
+if test x"$CONFIG_OS" = xMINGW; then
+
+# Check whether --enable-console was given.
+if test "${enable_console+set}" = set; then :
+  enableval=$enable_console;
 fi
 
   LDFLAGS=$ac_save_LDFLAGS
@@ -23325,6 +23427,7 @@ $as_echo "disabling experimental Cocoa port" >&6; }
 # Native PDF renderer based on Hummus
 #--------------------------------------------------------------------
 
+
 # Check whether --enable-pdf-renderer was given.
 if test "${enable_pdf_renderer+set}" = set; then :
   enableval=$enable_pdf_renderer;
@@ -25015,117 +25118,6 @@ $as_echo "disabling optimizations" >&6; } ;;
 	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: customizing optimizations, $enable_optimize" >&5
 $as_echo "customizing optimizations, $enable_optimize" >&6; } ;;
   esac
-
-
-#--------------------------------------------------------------------
-# Fix for Mac OS X with genuine GCC and Qt framework
-#--------------------------------------------------------------------
-
-
-
-case "${host}" in
-  *apple*darwin*)
-
-
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-  OLDCXXFLAGS=$CXXFLAGS
-  CXXFLAGS="$CXXFLAGS -arch x86_64 -Xarch_x86_64 -mmacosx-version-min=10.8"
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether C++ compiler supports -Xarch_x86_64" >&5
-$as_echo_n "checking for whether C++ compiler supports -Xarch_x86_64... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-    Xarch_x86_64="yes"
-
-else
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-    Xarch_x86_64="no"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-  CXXFLAGS=$OLDCXXFLAGS
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-    if test "$Xarch_x86_64" = "no"; then
-      QT_CXXFLAGS=`echo $QT_CXXFLAGS | sed "s/ -Xarch_x86_64//g"`
-      QT_LDFLAGS=`echo $QT_LDFLAGS | sed "s/ -Xarch_x86_64//g"`
-    fi;;
-esac
-
-
-
-
-
-case "${host}" in
-  *apple*darwin*)
-
-
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-  OLDCXXFLAGS=$CXXFLAGS
-  CXXFLAGS="$CXXFLAGS -stdlib=libc++"
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether C++ compiler supports -stdlib" >&5
-$as_echo_n "checking for whether C++ compiler supports -stdlib... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-    Stdlib="yes"
-
-else
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-    Stdlib="no"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-  CXXFLAGS=$OLDCXXFLAGS
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
 
 
 #--------------------------------------------------------------------
