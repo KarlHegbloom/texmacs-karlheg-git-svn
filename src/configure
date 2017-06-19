@@ -813,7 +813,6 @@ with_axel
 with_gs
 with_sqlite3
 with_sparkle
-enable_fastalloc
 enable_macosx_extensions
 enable_console
 with_x
@@ -828,7 +827,7 @@ enable_debug
 enable_assert
 enable_warnings
 enable_experimental
-enable_optimize
+enable_fastalloc
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1467,7 +1466,6 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-guile2=yes    enable compilation with Guile 2, for development
                           purposes
-  --disable-fastalloc     omit fast allocator for small objects
   --disable-macosx-extensions
                           do not use Mac specific services (spellchecker,
                           image handling, ...)
@@ -1484,7 +1482,7 @@ Optional Features:
   --enable-assert         exit on failed assertions in code
   --enable-warnings       print warning messages during compilation
   --enable-experimental   support new style rewriting code
-  --enable-optimize[=ARG] compile with optimizations [guessed]
+  --disable-fastalloc     omit fast allocator for small objects
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -21116,55 +21114,16 @@ $as_echo "final adjustments for a generic host" >&6; }
     ;;
   esac
 
+  case "$GXX_VERSION" in
+    3.* | 4.*)
+#     CONFIG_BSTATIC="-static"
+      CONFIG_BSHARED="-dynamic"
+    ;;
+  esac
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#--------------------------------------------------------------------
-# Temporary fix for link problem
-#--------------------------------------------------------------------
-
-case "$GXX_VERSION" in
-     3.* | 4.*)
-#	 CONFIG_BSTATIC="-static"
-	 CONFIG_BSHARED="-dynamic"
-     ;;
-esac
-
-fi
-
-    if test $ac_cv_func_gethostbyname = no; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gethostbyname in -lnsl" >&5
-$as_echo_n "checking for gethostbyname in -lnsl... " >&6; }
-if ${ac_cv_lib_nsl_gethostbyname+:} false; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML_ParserCreate in -lexpat" >&5
+$as_echo_n "checking for XML_ParserCreate in -lexpat... " >&6; }
+if ${ac_cv_lib_expat_XML_ParserCreate+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -21202,10 +21161,9 @@ if test "x$ac_cv_lib_nsl_gethostbyname" = xyes; then :
   X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"
 fi
 
-      if test $ac_cv_lib_nsl_gethostbyname = no; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gethostbyname in -lbsd" >&5
-$as_echo_n "checking for gethostbyname in -lbsd... " >&6; }
-if ${ac_cv_lib_bsd_gethostbyname+:} false; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for xcb_disconnect in -lxcb" >&5
+$as_echo_n "checking for xcb_disconnect in -lxcb... " >&6; }
+if ${ac_cv_lib_xcb_xcb_disconnect+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -21246,130 +21204,43 @@ fi
       fi
     fi
 
-    # lieder@skyler.mavd.honeywell.com says without -lsocket,
-    # socket/setsockopt and other routines are undefined under SCO ODT
-    # 2.0.  But -lsocket is broken on IRIX 5.2 (and is not necessary
-    # on later versions), says Simon Leinen: it contains gethostby*
-    # variants that don't use the name server (or something).  -lsocket
-    # must be given before -lnsl if both are needed.  We assume that
-    # if connect needs -lnsl, so does gethostbyname.
-    ac_fn_cxx_check_func "$LINENO" "connect" "ac_cv_func_connect"
-if test "x$ac_cv_func_connect" = xyes; then :
 
-fi
 
-    if test $ac_cv_func_connect = no; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for connect in -lsocket" >&5
-$as_echo_n "checking for connect in -lsocket... " >&6; }
-if ${ac_cv_lib_socket_connect+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lsocket $X_EXTRA_LIBS $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char connect ();
-int
-main ()
-{
-return connect ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_socket_connect=yes
-else
-  ac_cv_lib_socket_connect=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_socket_connect" >&5
-$as_echo "$ac_cv_lib_socket_connect" >&6; }
-if test "x$ac_cv_lib_socket_connect" = xyes; then :
-  X_EXTRA_LIBS="-lsocket $X_EXTRA_LIBS"
-fi
 
-    fi
 
-    # Guillermo Gomez says -lposix is necessary on A/UX.
-    ac_fn_cxx_check_func "$LINENO" "remove" "ac_cv_func_remove"
-if test "x$ac_cv_func_remove" = xyes; then :
 
-fi
 
-    if test $ac_cv_func_remove = no; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for remove in -lposix" >&5
-$as_echo_n "checking for remove in -lposix... " >&6; }
-if ${ac_cv_lib_posix_remove+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lposix  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char remove ();
-int
-main ()
-{
-return remove ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_posix_remove=yes
-else
-  ac_cv_lib_posix_remove=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_posix_remove" >&5
-$as_echo "$ac_cv_lib_posix_remove" >&6; }
-if test "x$ac_cv_lib_posix_remove" = xyes; then :
-  X_EXTRA_LIBS="$X_EXTRA_LIBS -lposix"
-fi
 
-    fi
 
-    # BSDI BSD/OS 2.1 needs -lipc for XOpenDisplay.
-    ac_fn_cxx_check_func "$LINENO" "shmat" "ac_cv_func_shmat"
-if test "x$ac_cv_func_shmat" = xyes; then :
 
-fi
 
-case "$enable_fastalloc" in
-    yes)
-        ;;
-    no)
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling fast allocator for small objects" >&5
-$as_echo "disabling fast allocator for small objects" >&6; }
 
-$as_echo "#define NO_FAST_ALLOC 1" >>confdefs.h
 
-	;;
-    *)
-	as_fn_error $? "bad option --enable-fastalloc=$enable_fastalloc" "$LINENO" 5
-	;;
-esac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------
+# Memory allocation options
+#--------------------------------------------------------------------
+
+TM_FASTALLOC
 
 #--------------------------------------------------------------------
 # MacOS X extensions (spellchecker, image loading)
@@ -25086,53 +24957,26 @@ $as_echo "disabling experimental style rewriting code" >&6; }
 #--------------------------------------------------------------------
 
 
-  if test "$optimize_default" = "yes"; then
-    case "$GXX_VERSION" in
-      3.3.3 | 3.3.4 | 4.*)
-	;;
-      2.96 | 3.0 | 3.0.* | 3.1 | 3.1.* | 3.2 | 3.2.* | 3.3 | 3.3.*)
-	case "${host}" in
-	  i*86-*-linux-gnu* | i*86-*-freebsd*)
-	    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using g++ 3.*, optimize without inline by default" >&5
-$as_echo "$as_me: WARNING: using g++ 3.*, optimize without inline by default" >&2;}
-	    optimize_default="no-inline"
-	  ;;
-	  *)
-	    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using g++ 3.*, optimize without inline by default" >&5
-$as_echo "$as_me: WARNING: using g++ 3.*, optimize without inline by default" >&2;}
-	    optimize_default="no-inline"
-	  ;;
-	esac
-      ;;
-    esac
-  fi
-
-  # Check whether --enable-optimize was given.
-if test "${enable_optimize+set}" = set; then :
-  enableval=$enable_optimize;
+  # Check whether --enable-fastalloc was given.
+if test "${enable_fastalloc+set}" = set; then :
+  enableval=$enable_fastalloc;
 else
-  enable_optimize="$optimize_default"
+  enable_fastalloc="yes"
 fi
 
-
-  case "$enable_optimize" in
+  case "$enable_fastalloc" in
       yes)
-	  # keep optimization options
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling optimizations, $CONFIG_CXXOPTIMIZE" >&5
-$as_echo "enabling optimizations, $CONFIG_CXXOPTIMIZE" >&6; } ;;
-      no-inline)
-	  optimize_no_inline="-fno-default-inline -fno-inline"
-	  CONFIG_CXXOPTIMIZE="$CONFIG_CXXOPTIMIZE $optimize_no_inline"
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling optimizations, $CONFIG_CXXOPTIMIZE" >&5
-$as_echo "enabling optimizations, $CONFIG_CXXOPTIMIZE" >&6; } ;;
+	  ;;
       no)
-	  CONFIG_CXXOPTIMIZE=""
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling optimizations" >&5
-$as_echo "disabling optimizations" >&6; } ;;
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling fast allocator for small objects" >&5
+$as_echo "disabling fast allocator for small objects" >&6; }
+
+$as_echo "#define NO_FAST_ALLOC 1" >>confdefs.h
+
+	  ;;
       *)
-	  CONFIG_CXXOPTIMIZE="$enable_optimize"
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: customizing optimizations, $enable_optimize" >&5
-$as_echo "customizing optimizations, $enable_optimize" >&6; } ;;
+	  as_fn_error $? "bad option --enable-fastalloc=$enable_fastalloc" "$LINENO" 5
+	  ;;
   esac
 
 
@@ -25140,13 +24984,92 @@ $as_echo "customizing optimizations, $enable_optimize" >&6; } ;;
 # Default paths for installation
 #--------------------------------------------------------------------
 
+
+  if test "$prefix" = ""; then
+    prefix=/usr/local
+  fi
+  if test "$prefix" = "NONE"; then
+    prefix=/usr/local
+  fi
+  if test "$exec_prefix" = ""; then
+    exec_prefix='${prefix}'
+  fi
+  if test "$exec_prefix" = "NONE"; then
+    exec_prefix='${prefix}'
+  fi
+  if test "$exec_prefix" = '${prefix}'; then
+    exec_prefix='${prefix}'
+  fi
+  if test "$includedir" = ""; then
+    includedir='${prefix}/include'
+  fi
+  if test "$includedir" = "NONE"; then
+    includedir='${prefix}/include'
+  fi
+  if test "$includedir" = '${prefix}/include'; then
+    includedir='${prefix}/include'
+  fi
+  if test "$libdir" = ""; then
+    libdir='${exec_prefix}/lib'
+  fi
+  if test "$libdir" = "NONE"; then
+    libdir='${exec_prefix}/lib'
+  fi
+  if test "$libdir" = '${exec_prefix}/lib'; then
+    libdir='${exec_prefix}/lib'
+  fi
+  if test "$bindir" = ""; then
+    bindir='${exec_prefix}/bin'
+  fi
+  if test "$bindir" = "NONE"; then
+    bindir=${exec_prefix}/bin
+  fi
+  if test "$bindir" = '${exec_prefix}/bin'; then
+    bindir='${exec_prefix}/bin'
+  fi
+  if test "$datarootdir" = ""; then
+    datarootdir='${prefix}/share'
+  fi
+  if test "$datarootdir" = "NONE"; then
+    datarootdir='${prefix}/share'
+  fi
+  if test "$datarootdir" = '${prefix}/share'; then
+    datarootdir='${prefix}/share'
+  fi
+  if test "$datadir" = ""; then
+    datadir='${prefix}/share'
+  fi
+  if test "$datadir" = "NONE"; then
+    datadir='${prefix}/share'
+  fi
+  if test "$datadir" = '${prefix}/share'; then
+    datadir='${prefix}/share'
+  fi
+  if test "$mandir" = ""; then
+    mandir='${datarootdir}/man'
+  fi
+  if test "$mandir" = "NONE"; then
+    mandir='${datarootdir}/man'
+  fi
+  if test "$mandir" = '${datarootdir}/man'; then
+    mandir='${datarootdir}/man'
+  fi
+  if test "$libexecdir" = ""; then
+    libexecdir='${exec_prefix}/libexec'
+  fi
+  if test "$libexecdir" = "NONE"; then
+    libexecdir='${exec_prefix}/libexec'
+  fi
+  if test "$libexecdir" = '${exec_prefix}/libexec'; then
+    libexecdir='${exec_prefix}/libexec'
+  fi
+
   curdir="`pwd`"
   tmorig=${curdir}
   tmdir=${PACKAGE}
   tmsrc=${curdir}/${tmdir}
   tmbin=${libexecdir}/${tmdir}
   tmdata=${datadir}/${tmdir}
-
 
 
 
@@ -25161,10 +25084,26 @@ $as_echo "customizing optimizations, $enable_optimize" >&6; } ;;
   tm_underscore_devel=${PACKAGE}_${DEVEL_VERSION}
   tm_debian_name_devel=${DEBIAN_NAME}_${DEVEL_VERSION}
 
+  if test "$DEVEL_RELEASE" = "1"; then
+    tm_devel=${PACKAGE}-${DEVEL_VERSION}
+  else
+    tm_devel=${PACKAGE}-${DEVEL_VERSION}-R${DEVEL_RELEASE}
+  fi
+  tm_devel_release=${PACKAGE}-${DEVEL_VERSION}-${DEVEL_RELEASE}
+  tm_underscore_devel=${PACKAGE}_${DEVEL_VERSION}
+  tm_debian_name_devel=${DEBIAN_NAME}_${DEVEL_VERSION}
 
 
 
 
+
+  if test "$STABLE_RELEASE" = "1"; then
+    tm_stable=${PACKAGE}-${STABLE_VERSION}
+  else
+    tm_stable=${PACKAGE}-${STABLE_VERSION}-R${STABLE_RELEASE}
+  fi
+  tm_stable_release=${PACKAGE}-${STABLE_VERSION}-${STABLE_RELEASE}
+  tm_underscore_stable=${PACKAGE}_${STABLE_VERSION}
 
   if test "$STABLE_RELEASE" = "1"; then
     tm_stable=${PACKAGE}-${STABLE_VERSION}
