@@ -5099,8 +5099,9 @@ done
 
 
 #--------------------------------------------------------------------
-# Checks for Guile
+# External libraries, functions and binaries
 #--------------------------------------------------------------------
+
 
 
 # Check whether --with-guile was given.
@@ -7944,10 +7945,6 @@ if ${ICONV_CPPFLAGS+:} false; then :
 
 
 
-#--------------------------------------------------------------------
-# Checks for dl library
-#--------------------------------------------------------------------
-
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dlopen" >&5
 $as_echo_n "checking for library containing dlopen... " >&6; }
 if ${ac_cv_search_dlopen+:} false; then :
@@ -8134,10 +8131,6 @@ fi
 fi
 
 
-
-#--------------------------------------------------------------------
-# Checks for iconv library
-#--------------------------------------------------------------------
 
 
 # Check whether --with-iconv was given.
@@ -15718,10 +15711,6 @@ $as_echo "$as_me: ICONV_LDFLAGS:$ICONV_LDFLAGS" >&6;}
 
 
 
-#--------------------------------------------------------------------
-# Checks for freetype library
-#--------------------------------------------------------------------
-
 
 # Check whether --with-freetype was given.
 if test "${with_freetype+set}" = set; then :
@@ -18434,10 +18423,6 @@ $as_echo "$as_me: FREETYPE_LDFLAGS:$FREETYPE_LDFLAGS" >&6;}
 
 
 
-#--------------------------------------------------------------------
-# Checks for Cairo library
-#--------------------------------------------------------------------
-
 
 # Check whether --with-cairo was given.
 if test "${with_cairo+set}" = set; then :
@@ -18532,10 +18517,6 @@ $as_echo "$as_me: CAIRO_LDFLAGS:$CAIRO_LDFLAGS" >&6;}
 
 
 
-
-#--------------------------------------------------------------------
-# Checks for Imlib2 library
-#--------------------------------------------------------------------
 
 
 # Check whether --with-imlib2 was given.
@@ -18634,10 +18615,6 @@ $as_echo "$as_me: IMLIB2_LDFLAGS:$IMLIB2_LDFLAGS" >&6;}
 
 
 
-#--------------------------------------------------------------------
-# Checks for Axel library
-#--------------------------------------------------------------------
-
 
 # Check whether --with-axel was given.
 if test "${with_axel+set}" = set; then :
@@ -18731,9 +18708,6 @@ $as_echo "$as_me: AXEL_LDFLAGS:$AXEL_LDFLAGS" >&6;}
 
 
 
-#--------------------------------------------------------------------
-# Checks for ghostscript library
-#--------------------------------------------------------------------
 
 
 # Check whether --with-gs was given.
@@ -18886,10 +18860,6 @@ $as_echo "disabling ghostscript support" >&6; }
 
 
 
-#--------------------------------------------------------------------
-# Checks for sqlite3 library
-#--------------------------------------------------------------------
-
 
 # Check whether --with-sqlite3 was given.
 if test "${with_sqlite3+set}" = set; then :
@@ -18983,10 +18953,6 @@ $as_echo "$as_me: SQLITE3_LDFLAGS:$SQLITE3_LDFLAGS" >&6;}
 
 
 
-
-#--------------------------------------------------------------------
-# Checks for (Win)Sparkle framework
-#--------------------------------------------------------------------
 
 
 
@@ -19153,8 +19119,9 @@ $as_echo "$as_me: SPARKLE_LDFLAGS:$SPARKLE_LDFLAGS" >&6;}
 
 
 #--------------------------------------------------------------------
-# Handle different systems case by case
+# Further TeXmacs settings
 #--------------------------------------------------------------------
+
 
   CONFIG_OS="GNU_LINUX"
   CONFIG_OS_SUFFIX="${host}"
@@ -19532,18 +19499,7 @@ fi
 
 
 
-$as_echo "#define USE_SPARKLE 1" >>confdefs.h
-
-#--------------------------------------------------------------------
-# Memory allocation options
-#--------------------------------------------------------------------
-
 TM_FASTALLOC
-
-#--------------------------------------------------------------------
-# MacOS X extensions (spellchecker, image loading)
-#--------------------------------------------------------------------
-
 
   if test x"$CONFIG_OS" = xMACOS; then
     # Check whether --enable-macosx-extensions was given.
@@ -19684,11 +19640,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
   esac
 
 
-#--------------------------------------------------------------------
-# Windows console
-#--------------------------------------------------------------------
-
-
   if test x"$CONFIG_OS" = xMINGW; then
     # Check whether --enable-console was given.
 if test "${enable_console+set}" = set; then :
@@ -19707,11 +19658,6 @@ $as_echo "disabling Windows console" >&6; }
 	    ;;
     esac
   fi
-
-
-#--------------------------------------------------------------------
-# Gui selection
-#--------------------------------------------------------------------
 
 
 
@@ -23626,11 +23572,6 @@ $as_echo "disabling experimental Cocoa port" >&6; }
 
 
 
-#--------------------------------------------------------------------
-# Native PDF renderer based on Hummus
-#--------------------------------------------------------------------
-
-
 # Check whether --enable-pdf-renderer was given.
 if test "${enable_pdf_renderer+set}" = set; then :
   enableval=$enable_pdf_renderer;
@@ -25099,11 +25040,6 @@ $as_echo "$as_me: PDF_LDFLAGS:$PDF_LDFLAGS" >&6;}
 
 
 
-#--------------------------------------------------------------------
-# Debugging options
-#--------------------------------------------------------------------
-
-
   #STD_DEBUG_FLAGS="-fno-rtti -fno-exceptions"
   #if test "$enable_cocoa" = "yes"; then
   #    STD_DEBUG_FLAGS="-fno-exceptions"
@@ -25297,11 +25233,6 @@ $as_echo "disabling experimental style rewriting code" >&6; }
 
 
 
-#--------------------------------------------------------------------
-# Optimization options
-#--------------------------------------------------------------------
-
-
   # Check whether --enable-fastalloc was given.
 if test "${enable_fastalloc+set}" = set; then :
   enableval=$enable_fastalloc;
@@ -25323,11 +25254,6 @@ $as_echo "#define NO_FAST_ALLOC 1" >>confdefs.h
 	  as_fn_error $? "bad option --enable-fastalloc=$enable_fastalloc" "$LINENO" 5
 	  ;;
   esac
-
-
-#--------------------------------------------------------------------
-# Default paths for installation
-#--------------------------------------------------------------------
 
 
   if test "$prefix" = ""; then
