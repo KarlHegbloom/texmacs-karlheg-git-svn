@@ -727,9 +727,18 @@ GUILE_CXX
 CONFIG_GUILE_SERIAL
 GUILE_DATA_PATH
 GUILE_CONFIG
+X_EXTRA_LIBS
+X_LIBS
+X_PRE_LIBS
+X_CFLAGS
+X11_LDFLAGS
+X11_CFLAGS
+X11_CPP
+X11_CXX
 EGREP
 GREP
 CXXCPP
+XMKMF
 ac_ct_OBJCXX
 OBJCXXFLAGS
 OBJCXX
@@ -803,6 +812,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_x
 with_guile
 enable_guile2
 with_iconv
@@ -844,8 +854,8 @@ OBJC
 OBJCFLAGS
 OBJCXX
 OBJCXXFLAGS
-CXXCPP
 XMKMF
+CXXCPP
 TMPDIR'
 
 
@@ -1487,6 +1497,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-x                use the X Window System
   --with-guile[=DIR]      where to find guile-config [system]
   --with-iconv[=DIR]      where to find iconv []
   --with-freetype[DIR=]   where to find freetype-config []
@@ -1513,8 +1524,8 @@ Some influential environment variables:
   OBJCFLAGS   Objective C compiler flags
   OBJCXX      Objective C++ compiler command
   OBJCXXFLAGS Objective C++ compiler flags
-  CXXCPP      C++ preprocessor
   XMKMF       Path to xmkmf, Makefile generator for X Window System
+  CXXCPP      C++ preprocessor
   TMPDIR      A temporary directory with write access [/tmp]
 
 Use these variables to override the choices made by `configure' or to help
@@ -1791,22 +1802,20 @@ fi
 
 } # ac_fn_cxx_try_run
 
-# ac_fn_cxx_check_type LINENO TYPE VAR INCLUDES
-# ---------------------------------------------
-# Tests whether TYPE exists after having included INCLUDES, setting cache
-# variable VAR accordingly.
-ac_fn_cxx_check_type ()
+# ac_fn_cxx_try_cpp LINENO
+# ------------------------
+# Try to preprocess conftest.$ac_ext, and return whether this succeeded.
+ac_fn_cxx_try_cpp ()
 {
   as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  rm -f conftest.$ac_objext conftest$ac_exeext
-  if { { ac_try="$ac_link"
+  if { { ac_try="$ac_cpp conftest.$ac_ext"
 case "(($ac_try" in
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
 eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
 $as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_link") 2>conftest.err
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.err
   ac_status=$?
   if test -s conftest.err; then
     grep -v '^ *+' conftest.err >conftest.er1
@@ -1814,12 +1823,9 @@ $as_echo "$ac_try_echo"; } >&5
     mv -f conftest.er1 conftest.err
   fi
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } && {
-	 test -z "$ac_cxx_werror_flag" ||
+  test $ac_status = 0; } > conftest.i && {
+	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
 	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 $as_test_x conftest$ac_exeext
        }; then :
   ac_retval=0
 else
@@ -1851,34 +1857,27 @@ if (sizeof (($2)))
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-else
-  eval "$3=yes"
+    ac_retval=1
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
-} # ac_fn_cxx_check_type
+} # ac_fn_cxx_try_cpp
 
-# ac_fn_cxx_try_cpp LINENO
-# ------------------------
-# Try to preprocess conftest.$ac_ext, and return whether this succeeded.
-ac_fn_cxx_try_cpp ()
+# ac_fn_cxx_try_link LINENO
+# -------------------------
+# Try to link conftest.$ac_ext, and return whether this succeeded.
+ac_fn_cxx_try_link ()
 {
   as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  if { { ac_try="$ac_cpp conftest.$ac_ext"
+  rm -f conftest.$ac_objext conftest$ac_exeext
+  if { { ac_try="$ac_link"
 case "(($ac_try" in
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
 eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
 $as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.err
+  (eval "$ac_link") 2>conftest.err
   ac_status=$?
   if test -s conftest.err; then
     grep -v '^ *+' conftest.err >conftest.er1
@@ -1886,21 +1885,29 @@ $as_echo "$ac_try_echo"; } >&5
     mv -f conftest.er1 conftest.err
   fi
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } > conftest.i && {
-	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
+  test $ac_status = 0; } && {
+	 test -z "$ac_cxx_werror_flag" ||
 	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
        }; then :
   ac_retval=0
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-    ac_retval=1
+	ac_retval=1
 fi
+  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
+  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
+  # interfere with the next link command; also delete a directory that is
+  # left behind by Apple's compiler.  We do this before executing the actions.
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
   as_fn_set_status $ac_retval
 
-} # ac_fn_cxx_try_cpp
+} # ac_fn_cxx_try_link
 
 # ac_fn_cxx_check_header_compile LINENO HEADER VAR INCLUDES
 # ---------------------------------------------------------
@@ -5016,6 +5023,1326 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+
+  CFLAGS__ax_save_flags=$CFLAGS
+
+
+
+  CPPFLAGS__ax_save_flags=$CPPFLAGS
+
+
+
+  CXXFLAGS__ax_save_flags=$CXXFLAGS
+
+
+
+  LDFLAGS__ax_save_flags=$LDFLAGS
+
+
+
+  LIBS__ax_save_flags=$LIBS
+
+
+
+  OBJCFLAGS__ax_save_flags=$OBJCFLAGS
+
+
+
+  OBJCXXFLAGS__ax_save_flags=$OBJCXXFLAGS
+
+
+
+
+
+  unset CFLAGS;unset CXXFLAGS;unset CPPFLAGS;unset LDFLAGS;unset LIBS;
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for X" >&5
+$as_echo_n "checking for X... " >&6; }
+
+
+# Check whether --with-x was given.
+if test "${with_x+set}" = set; then :
+  withval=$with_x;
+fi
+
+# $have_x is `yes', `no', `disabled', or empty when we do not yet know.
+if test "x$with_x" = xno; then
+  # The user explicitly disabled X.
+  have_x=disabled
+else
+  case $x_includes,$x_libraries in #(
+    *\'*) as_fn_error $? "cannot use X directory names containing '" "$LINENO" 5;; #(
+    *,NONE | NONE,*) if ${ac_cv_have_x+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  # One or both of the vars are not set, and there is no cached value.
+ac_x_includes=no ac_x_libraries=no
+rm -f -r conftest.dir
+if mkdir conftest.dir; then
+  cd conftest.dir
+  cat >Imakefile <<'_ACEOF'
+incroot:
+	@echo incroot='${INCROOT}'
+usrlibdir:
+	@echo usrlibdir='${USRLIBDIR}'
+libdir:
+	@echo libdir='${LIBDIR}'
+_ACEOF
+  if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
+    # GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
+    for ac_var in incroot usrlibdir libdir; do
+      eval "ac_im_$ac_var=\`\${MAKE-make} $ac_var 2>/dev/null | sed -n 's/^$ac_var=//p'\`"
+    done
+    # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
+    for ac_extension in a so sl dylib la dll; do
+      if test ! -f "$ac_im_usrlibdir/libX11.$ac_extension" &&
+	 test -f "$ac_im_libdir/libX11.$ac_extension"; then
+	ac_im_usrlibdir=$ac_im_libdir; break
+      fi
+    done
+    # Screen out bogus values from the imake configuration.  They are
+    # bogus both because they are the default anyway, and because
+    # using them would break gcc on systems where it needs fixed includes.
+    case $ac_im_incroot in
+	/usr/include) ac_x_includes= ;;
+	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
+    esac
+    case $ac_im_usrlibdir in
+	/usr/lib | /usr/lib64 | /lib | /lib64) ;;
+	*) test -d "$ac_im_usrlibdir" && ac_x_libraries=$ac_im_usrlibdir ;;
+    esac
+  fi
+  cd ..
+  rm -f -r conftest.dir
+fi
+
+# Standard set of common directories for X headers.
+# Check X11 before X11Rn because it is often a symlink to the current release.
+ac_x_header_dirs='
+/usr/X11/include
+/usr/X11R7/include
+/usr/X11R6/include
+/usr/X11R5/include
+/usr/X11R4/include
+
+/usr/include/X11
+/usr/include/X11R7
+/usr/include/X11R6
+/usr/include/X11R5
+/usr/include/X11R4
+
+/usr/local/X11/include
+/usr/local/X11R7/include
+/usr/local/X11R6/include
+/usr/local/X11R5/include
+/usr/local/X11R4/include
+
+/usr/local/include/X11
+/usr/local/include/X11R7
+/usr/local/include/X11R6
+/usr/local/include/X11R5
+/usr/local/include/X11R4
+
+/usr/X386/include
+/usr/x386/include
+/usr/XFree86/include/X11
+
+/usr/include
+/usr/local/include
+/usr/unsupported/include
+/usr/athena/include
+/usr/local/x11r5/include
+/usr/lpp/Xamples/include
+
+/usr/openwin/include
+/usr/openwin/share/include'
+
+if test "$ac_x_includes" = no; then
+  # Guess where to find include files, by looking for Xlib.h.
+  # First, try using that file with no special directory specified.
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <X11/Xlib.h>
+_ACEOF
+if ac_fn_cxx_try_cpp "$LINENO"; then :
+  # We can compile using X headers with no special include directory.
+ac_x_includes=
+else
+  for ac_dir in $ac_x_header_dirs; do
+  if test -r "$ac_dir/X11/Xlib.h"; then
+    ac_x_includes=$ac_dir
+    break
+  fi
+done
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+fi # $ac_x_includes = no
+
+if test "$ac_x_libraries" = no; then
+  # Check for the libraries.
+  # See if we find them without any special options.
+  # Don't add to $LIBS permanently.
+  ac_save_LIBS=$LIBS
+  LIBS="-lX11 $LIBS"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <X11/Xlib.h>
+int
+main ()
+{
+XrmInitialize ()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  LIBS=$ac_save_LIBS
+# We can link X programs with no special library path.
+ac_x_libraries=
+else
+  LIBS=$ac_save_LIBS
+for ac_dir in `$as_echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
+do
+  # Don't even attempt the hair of trying to link an X program!
+  for ac_extension in a so sl dylib la dll; do
+    if test -r "$ac_dir/libX11.$ac_extension"; then
+      ac_x_libraries=$ac_dir
+      break 2
+    fi
+  done
+done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi # $ac_x_libraries = no
+
+case $ac_x_includes,$ac_x_libraries in #(
+  no,* | *,no | *\'*)
+    # Didn't find X, or a directory has "'" in its name.
+    ac_cv_have_x="have_x=no";; #(
+  *)
+    # Record where we found X for the cache.
+    ac_cv_have_x="have_x=yes\
+	ac_x_includes='$ac_x_includes'\
+	ac_x_libraries='$ac_x_libraries'"
+esac
+fi
+;; #(
+    *) have_x=yes;;
+  esac
+  eval "$ac_cv_have_x"
+fi # $with_x != no
+
+if test "$have_x" != yes; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_x" >&5
+$as_echo "$have_x" >&6; }
+  no_x=yes
+else
+  # If each of the values was on the command line, it overrides each guess.
+  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
+  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
+  # Update the cache value to reflect the command line values.
+  ac_cv_have_x="have_x=yes\
+	ac_x_includes='$x_includes'\
+	ac_x_libraries='$x_libraries'"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: libraries $x_libraries, headers $x_includes" >&5
+$as_echo "libraries $x_libraries, headers $x_includes" >&6; }
+fi
+
+# path building : the first two levels
+  lstx=/{usr,opt}/{.,local,xX386,XFree86,athena,openwin,lpp,unsupported}
+# path building : the next two levels
+  lstx=$lstx/{{.,[Xx]11*,share,Xamples}/include,include/[Xx]11*}
+  if [[ $no_x != "yes" ]]
+  then [[ -z $x_includes ]] && x_includes="$(dirname $x_libraries)/include"
+    lstx="$x_includes $lstx"
+  fi
+  no_x=yes
+  for x_includes in $(eval echo $lstx)
+  do if [ -d $x_includes ]
+      then CPPFLAGS="-I$x_includes"
+        for ac_header in X11/Xlib.h X11/Xutil.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+          unset no_x
+
+else
+
+          unset x_libraries #the AC_X_PATH path must be forgotten
+          no_x="yes"
+
+fi
+
+done
+
+        test $no_x || break 2 #found headers
+      fi
+  done
+  if test $no_x
+  then unset x_includes
+  else x_libraries=${x_includes/include/lib}
+  fi
+  CFLAGS=$CFLAGS__ax_save_flags
+
+
+  CPPFLAGS=$CPPFLAGS__ax_save_flags
+
+
+  CXXFLAGS=$CXXFLAGS__ax_save_flags
+
+
+  LDFLAGS=$LDFLAGS__ax_save_flags
+
+
+  LIBS=$LIBS__ax_save_flags
+
+
+  OBJCFLAGS=$OBJCFLAGS__ax_save_flags
+
+
+  OBJCXXFLAGS=$OBJCXXFLAGS__ax_save_flags
+
+
+
+
+  LC_SCATTER_FLAGS_list="-I$x_includes -L$x_libraries -lXext -lX11"
+
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
+    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
+    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
+    fi
+
+  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
+  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while test -n "$LC_SCATTER_FLAGS_flag"
+  do
+    case "$LC_SCATTER_FLAGS_flag" in
+      -l*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then X11_LIBS="$X11_LIBS $LC_SCATTER_FLAGS_flag"
+  else
+if ${X11_LIBS+:} false; then :
+
+  case " $X11_LIBS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LIBS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: X11_LIBS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append X11_LIBS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LIBS=\"\$X11_LIBS\""; } >&5
+  (: X11_LIBS="$X11_LIBS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  X11_LIBS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LIBS=\"\$X11_LIBS\""; } >&5
+  (: X11_LIBS="$X11_LIBS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -L*|-framework*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then X11_LDFLAGS="$X11_LDFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${X11_LDFLAGS+:} false; then :
+
+  case " $X11_LDFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: X11_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append X11_LDFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LDFLAGS=\"\$X11_LDFLAGS\""; } >&5
+  (: X11_LDFLAGS="$X11_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  X11_LDFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LDFLAGS=\"\$X11_LDFLAGS\""; } >&5
+  (: X11_LDFLAGS="$X11_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -I*|-U*|-D*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then X11_CPPFLAGS="$X11_CPPFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${X11_CPPFLAGS+:} false; then :
+
+  case " $X11_CPPFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: X11_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append X11_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CPPFLAGS=\"\$X11_CPPFLAGS\""; } >&5
+  (: X11_CPPFLAGS="$X11_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  X11_CPPFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CPPFLAGS=\"\$X11_CPPFLAGS\""; } >&5
+  (: X11_CPPFLAGS="$X11_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -F*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then X11_CPPFLAGS="$X11_CPPFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${X11_CPPFLAGS+:} false; then :
+
+  case " $X11_CPPFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: X11_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append X11_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CPPFLAGS=\"\$X11_CPPFLAGS\""; } >&5
+  (: X11_CPPFLAGS="$X11_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  X11_CPPFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CPPFLAGS=\"\$X11_CPPFLAGS\""; } >&5
+  (: X11_CPPFLAGS="$X11_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -Wl,-F*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then X11_LDFLAGS="$X11_LDFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${X11_LDFLAGS+:} false; then :
+
+  case " $X11_LDFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: X11_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append X11_LDFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LDFLAGS=\"\$X11_LDFLAGS\""; } >&5
+  (: X11_LDFLAGS="$X11_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  X11_LDFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_LDFLAGS=\"\$X11_LDFLAGS\""; } >&5
+  (: X11_LDFLAGS="$X11_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -Wl,*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib X11" >&5
+$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib X11" >&2;};;
+      -*)
+        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__$LC_SCATTER_FLAGS_flag" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag" >&5
+$as_echo_n "checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag... " >&6; }
+if eval \${$as_CACHEVAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+  ax_check_save_flags=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS  $LC_SCATTER_FLAGS_flag"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  eval "$as_CACHEVAR=yes"
+else
+  eval "$as_CACHEVAR=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS=$ax_check_save_flags
+fi
+eval ac_res=\$$as_CACHEVAR
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
+
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then X11_CXXFLAGS="$X11_CXXFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${X11_CXXFLAGS+:} false; then :
+
+  case " $X11_CXXFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CXXFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: X11_CXXFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append X11_CXXFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CXXFLAGS=\"\$X11_CXXFLAGS\""; } >&5
+  (: X11_CXXFLAGS="$X11_CXXFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  X11_CXXFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : X11_CXXFLAGS=\"\$X11_CXXFLAGS\""; } >&5
+  (: X11_CXXFLAGS="$X11_CXXFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&5
+$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&2;}
+fi
+;;
+      *) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&5
+$as_echo "$as_me: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&2;};;
+    esac
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
+    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
+    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
+    fi
+
+  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
+  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  done
+  unset ${!LC_SCATTER_FLAGS_*}
+
+
+  X11_CXX=$X11_CXXFLAGS
+
+  X11_CPP=$X11_CPPFLAGS
+
+  if [[ $enable_dumpflags =~ (^|[[:space:]])(X11|ALL)($|[[:space:]]) ]]
+  then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: X11_CFLAGS:$X11_CFLAGS" >&5
+$as_echo "$as_me: X11_CFLAGS:$X11_CFLAGS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: X11_CXXFLAGS:$X11_CXXFLAGS" >&5
+$as_echo "$as_me: X11_CXXFLAGS:$X11_CXXFLAGS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: X11_CPPFLAGS:$X11_CPPFLAGS" >&5
+$as_echo "$as_me: X11_CPPFLAGS:$X11_CPPFLAGS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: X11_LIBS:$X11_LIBS" >&5
+$as_echo "$as_me: X11_LIBS:$X11_LIBS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: X11_LDFLAGS:$X11_LDFLAGS" >&5
+$as_echo "$as_me: X11_LDFLAGS:$X11_LDFLAGS" >&6;}
+
+
+  fi
+# adaptation layer remove when finished
+  X11_CFLAGS="$X11_CXXFLAGS $X11_CPPFLAGS"
+
+  X11_LDFLAGS=""
+
+
+
+  if [ -z "" -a -n "$SEMISTATIC" ]
+  then  X11_LIBS="$SEMISTATIC $X11_LIBS $SEMIDYNAMIC"
+  fi
+
+
+  LC_MERGE_FLAGS_list="$X11_LDFLAGS"
+  if [[ "LDFLAGS" =~ $(echo "(^|_)LIBS") ]]
+  then
+  LC_PREPEND_LIST_list="$X11_LDFLAGS"
+  #pop the old list
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LDFLAGS)" # remove unnecessary spaces and add a heading space
+  LDFLAGS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LDFLAGS" = "$LC_GETPOP_FLAG_1"
+  then LDFLAGS=${LDFLAGS#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LDFLAGS } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LDFLAGS=$(echo $LDFLAGS)
+    else LDFLAGS=$(echo $LDFLAGS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while [[ $LC_PREPEND_LIST_flag ]]
+  do
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
+  else
+if ${LC_PREPEND_LIST_nlist+:} false; then :
+
+  case " $LC_PREPEND_LIST_nlist " in #(
+  *" $LC_PREPEND_LIST_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
+  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LDFLAGS)" # remove unnecessary spaces and add a heading space
+  LDFLAGS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LDFLAGS" = "$LC_GETPOP_FLAG_1"
+  then LDFLAGS=${LDFLAGS#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LDFLAGS } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LDFLAGS=$(echo $LDFLAGS)
+    else LDFLAGS=$(echo $LDFLAGS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+
+  done
+  # append new list
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
+    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while [[ $LC_PREPEND_LIST_flag ]]
+  do
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
+  else
+if ${LC_PREPEND_LIST_nlist+:} false; then :
+
+  case " $LC_PREPEND_LIST_nlist " in #(
+  *" $LC_PREPEND_LIST_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
+  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
+    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+
+  done
+  LDFLAGS=
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
+    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while [[ $LC_PREPEND_LIST_flag ]]
+  do  LDFLAGS="$LC_PREPEND_LIST_flag $LDFLAGS"
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
+    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  done
+  unset ${!LC_PREPEND_LIST_*}
+
+  else  while [ "$LC_MERGE_FLAGS_list" ]
+        do
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_MERGE_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_MERGE_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_MERGE_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_MERGE_FLAGS_list=${LC_MERGE_FLAGS_list#}; unset LC_MERGE_FLAGS_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_MERGE_FLAGS_list } # strip heading
+    LC_MERGE_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_MERGE_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list)
+    else LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_MERGE_FLAGS_flag})
+    fi
+
+  LC_MERGE_FLAGS_flag=$(echo $LC_MERGE_FLAGS_flag)    # normalize whitespaces
+  LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_MERGE_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+
+  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then LDFLAGS="$LDFLAGS $LC_MERGE_FLAGS_flag"
+  else
+if ${LDFLAGS+:} false; then :
+
+  case " $LDFLAGS " in #(
+  *" $LC_MERGE_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS already contains \$LC_MERGE_FLAGS_flag"; } >&5
+  (: LDFLAGS already contains $LC_MERGE_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append LDFLAGS " $LC_MERGE_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS=\"\$LDFLAGS\""; } >&5
+  (: LDFLAGS="$LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  LDFLAGS=$LC_MERGE_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS=\"\$LDFLAGS\""; } >&5
+  (: LDFLAGS="$LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+        done
+  fi
+  unset ${!LC_MERGE_FLAGS_*}
+
+  LC_MERGE_FLAGS_list="$X11_LIBS"
+  if [[ "LIBS" =~ $(echo "(^|_)LIBS") ]]
+  then
+  LC_PREPEND_LIST_list="$X11_LIBS"
+  #pop the old list
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
+  LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LIBS" = "$LC_GETPOP_FLAG_1"
+  then LIBS=${LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LIBS } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LIBS=$(echo $LIBS)
+    else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while [[ $LC_PREPEND_LIST_flag ]]
+  do
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
+  else
+if ${LC_PREPEND_LIST_nlist+:} false; then :
+
+  case " $LC_PREPEND_LIST_nlist " in #(
+  *" $LC_PREPEND_LIST_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
+  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
+  LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LIBS" = "$LC_GETPOP_FLAG_1"
+  then LIBS=${LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LIBS } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LIBS=$(echo $LIBS)
+    else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+
+  done
+  # append new list
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
+    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while [[ $LC_PREPEND_LIST_flag ]]
+  do
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
+  else
+if ${LC_PREPEND_LIST_nlist+:} false; then :
+
+  case " $LC_PREPEND_LIST_nlist " in #(
+  *" $LC_PREPEND_LIST_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
+  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
+  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
+    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+
+  done
+  LIBS=
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
+    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  while [[ $LC_PREPEND_LIST_flag ]]
+  do  LIBS="$LC_PREPEND_LIST_flag $LIBS"
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
+  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
+  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
+    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
+    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    fi
+
+  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
+  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  done
+  unset ${!LC_PREPEND_LIST_*}
+
+  else  while [ "$LC_MERGE_FLAGS_list" ]
+        do
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_MERGE_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_MERGE_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_MERGE_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_MERGE_FLAGS_list=${LC_MERGE_FLAGS_list#}; unset LC_MERGE_FLAGS_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_MERGE_FLAGS_list } # strip heading
+    LC_MERGE_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_MERGE_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list)
+    else LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_MERGE_FLAGS_flag})
+    fi
+
+  LC_MERGE_FLAGS_flag=$(echo $LC_MERGE_FLAGS_flag)    # normalize whitespaces
+  LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_MERGE_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+
+  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then LIBS="$LIBS $LC_MERGE_FLAGS_flag"
+  else
+if ${LIBS+:} false; then :
+
+  case " $LIBS " in #(
+  *" $LC_MERGE_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LIBS already contains \$LC_MERGE_FLAGS_flag"; } >&5
+  (: LIBS already contains $LC_MERGE_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append LIBS " $LC_MERGE_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LIBS=\"\$LIBS\""; } >&5
+  (: LIBS="$LIBS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  LIBS=$LC_MERGE_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LIBS=\"\$LIBS\""; } >&5
+  (: LIBS="$LIBS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+        done
+  fi
+  unset ${!LC_MERGE_FLAGS_*}
+
+
+  unset ${!LC_COMBINE_FLAGS_*}
+
+
+ac_fn_cxx_check_type "$LINENO" "FILE" "ac_cv_type_FILE" "$ac_includes_default"
+if test "x$ac_cv_type_FILE" = xyes; then :
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_FILE 1
+_ACEOF
+
+
 fi
 
 ac_fn_cxx_check_type "$LINENO" "intptr_t" "ac_cv_type_intptr_t" "$ac_includes_default"
@@ -5035,6 +6362,689 @@ cat >>confdefs.h <<_ACEOF
 #define HAVE_TIME_T 1
 _ACEOF
 
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for X" >&5
+$as_echo_n "checking for X... " >&6; }
+
+
+# Check whether --with-x was given.
+if test "${with_x+set}" = set; then :
+  withval=$with_x;
+fi
+
+# $have_x is `yes', `no', `disabled', or empty when we do not yet know.
+if test "x$with_x" = xno; then
+  # The user explicitly disabled X.
+  have_x=disabled
+else
+  case $x_includes,$x_libraries in #(
+    *\'*) as_fn_error $? "cannot use X directory names containing '" "$LINENO" 5;; #(
+    *,NONE | NONE,*) if ${ac_cv_have_x+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  # One or both of the vars are not set, and there is no cached value.
+ac_x_includes=no ac_x_libraries=no
+rm -f -r conftest.dir
+if mkdir conftest.dir; then
+  cd conftest.dir
+  cat >Imakefile <<'_ACEOF'
+incroot:
+	@echo incroot='${INCROOT}'
+usrlibdir:
+	@echo usrlibdir='${USRLIBDIR}'
+libdir:
+	@echo libdir='${LIBDIR}'
+_ACEOF
+  if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
+    # GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
+    for ac_var in incroot usrlibdir libdir; do
+      eval "ac_im_$ac_var=\`\${MAKE-make} $ac_var 2>/dev/null | sed -n 's/^$ac_var=//p'\`"
+    done
+    # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
+    for ac_extension in a so sl dylib la dll; do
+      if test ! -f "$ac_im_usrlibdir/libX11.$ac_extension" &&
+	 test -f "$ac_im_libdir/libX11.$ac_extension"; then
+	ac_im_usrlibdir=$ac_im_libdir; break
+      fi
+    done
+    # Screen out bogus values from the imake configuration.  They are
+    # bogus both because they are the default anyway, and because
+    # using them would break gcc on systems where it needs fixed includes.
+    case $ac_im_incroot in
+	/usr/include) ac_x_includes= ;;
+	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
+    esac
+    case $ac_im_usrlibdir in
+	/usr/lib | /usr/lib64 | /lib | /lib64) ;;
+	*) test -d "$ac_im_usrlibdir" && ac_x_libraries=$ac_im_usrlibdir ;;
+    esac
+  fi
+  cd ..
+  rm -f -r conftest.dir
+fi
+
+# Standard set of common directories for X headers.
+# Check X11 before X11Rn because it is often a symlink to the current release.
+ac_x_header_dirs='
+/usr/X11/include
+/usr/X11R7/include
+/usr/X11R6/include
+/usr/X11R5/include
+/usr/X11R4/include
+
+/usr/include/X11
+/usr/include/X11R7
+/usr/include/X11R6
+/usr/include/X11R5
+/usr/include/X11R4
+
+/usr/local/X11/include
+/usr/local/X11R7/include
+/usr/local/X11R6/include
+/usr/local/X11R5/include
+/usr/local/X11R4/include
+
+/usr/local/include/X11
+/usr/local/include/X11R7
+/usr/local/include/X11R6
+/usr/local/include/X11R5
+/usr/local/include/X11R4
+
+/usr/X386/include
+/usr/x386/include
+/usr/XFree86/include/X11
+
+/usr/include
+/usr/local/include
+/usr/unsupported/include
+/usr/athena/include
+/usr/local/x11r5/include
+/usr/lpp/Xamples/include
+
+/usr/openwin/include
+/usr/openwin/share/include'
+
+if test "$ac_x_includes" = no; then
+  # Guess where to find include files, by looking for Xlib.h.
+  # First, try using that file with no special directory specified.
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <X11/Xlib.h>
+_ACEOF
+if ac_fn_cxx_try_cpp "$LINENO"; then :
+  # We can compile using X headers with no special include directory.
+ac_x_includes=
+else
+  for ac_dir in $ac_x_header_dirs; do
+  if test -r "$ac_dir/X11/Xlib.h"; then
+    ac_x_includes=$ac_dir
+    break
+  fi
+done
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+fi # $ac_x_includes = no
+
+if test "$ac_x_libraries" = no; then
+  # Check for the libraries.
+  # See if we find them without any special options.
+  # Don't add to $LIBS permanently.
+  ac_save_LIBS=$LIBS
+  LIBS="-lX11 $LIBS"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <X11/Xlib.h>
+int
+main ()
+{
+XrmInitialize ()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  LIBS=$ac_save_LIBS
+# We can link X programs with no special library path.
+ac_x_libraries=
+else
+  LIBS=$ac_save_LIBS
+for ac_dir in `$as_echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
+do
+  # Don't even attempt the hair of trying to link an X program!
+  for ac_extension in a so sl dylib la dll; do
+    if test -r "$ac_dir/libX11.$ac_extension"; then
+      ac_x_libraries=$ac_dir
+      break 2
+    fi
+  done
+done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi # $ac_x_libraries = no
+
+case $ac_x_includes,$ac_x_libraries in #(
+  no,* | *,no | *\'*)
+    # Didn't find X, or a directory has "'" in its name.
+    ac_cv_have_x="have_x=no";; #(
+  *)
+    # Record where we found X for the cache.
+    ac_cv_have_x="have_x=yes\
+	ac_x_includes='$ac_x_includes'\
+	ac_x_libraries='$ac_x_libraries'"
+esac
+fi
+;; #(
+    *) have_x=yes;;
+  esac
+  eval "$ac_cv_have_x"
+fi # $with_x != no
+
+if test "$have_x" != yes; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_x" >&5
+$as_echo "$have_x" >&6; }
+  no_x=yes
+else
+  # If each of the values was on the command line, it overrides each guess.
+  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
+  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
+  # Update the cache value to reflect the command line values.
+  ac_cv_have_x="have_x=yes\
+	ac_x_includes='$x_includes'\
+	ac_x_libraries='$x_libraries'"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: libraries $x_libraries, headers $x_includes" >&5
+$as_echo "libraries $x_libraries, headers $x_includes" >&6; }
+fi
+
+if test "$no_x" = yes; then
+  # Not all programs may use this symbol, but it does not hurt to define it.
+
+$as_echo "#define X_DISPLAY_MISSING 1" >>confdefs.h
+
+  X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
+else
+  if test -n "$x_includes"; then
+    X_CFLAGS="$X_CFLAGS -I$x_includes"
+  fi
+
+  # It would also be nice to do this for all -L options, not just this one.
+  if test -n "$x_libraries"; then
+    X_LIBS="$X_LIBS -L$x_libraries"
+    # For Solaris; some versions of Sun CC require a space after -R and
+    # others require no space.  Words are not sufficient . . . .
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether -R must be followed by a space" >&5
+$as_echo_n "checking whether -R must be followed by a space... " >&6; }
+    ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
+    ac_xsave_cxx_werror_flag=$ac_cxx_werror_flag
+    ac_cxx_werror_flag=yes
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+       X_LIBS="$X_LIBS -R$x_libraries"
+else
+  LIBS="$ac_xsave_LIBS -R $x_libraries"
+       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	  X_LIBS="$X_LIBS -R $x_libraries"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: neither works" >&5
+$as_echo "neither works" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+    ac_cxx_werror_flag=$ac_xsave_cxx_werror_flag
+    LIBS=$ac_xsave_LIBS
+  fi
+
+  # Check for system-dependent libraries X programs must link with.
+  # Do this before checking for the system-independent R6 libraries
+  # (-lICE), since we may need -lsocket or whatever for X linking.
+
+  if test "$ISC" = yes; then
+    X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
+  else
+    # Martyn Johnson says this is needed for Ultrix, if the X
+    # libraries were built with DECnet support.  And Karl Berry says
+    # the Alpha needs dnet_stub (dnet does not exist).
+    ac_xsave_LIBS="$LIBS"; LIBS="$LIBS $X_LIBS -lX11"
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XOpenDisplay ();
+int
+main ()
+{
+return XOpenDisplay ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dnet_ntoa in -ldnet" >&5
+$as_echo_n "checking for dnet_ntoa in -ldnet... " >&6; }
+if ${ac_cv_lib_dnet_dnet_ntoa+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldnet  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dnet_ntoa ();
+int
+main ()
+{
+return dnet_ntoa ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_dnet_dnet_ntoa=yes
+else
+  ac_cv_lib_dnet_dnet_ntoa=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dnet_dnet_ntoa" >&5
+$as_echo "$ac_cv_lib_dnet_dnet_ntoa" >&6; }
+if test "x$ac_cv_lib_dnet_dnet_ntoa" = xyes; then :
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"
+fi
+
+    if test $ac_cv_lib_dnet_dnet_ntoa = no; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dnet_ntoa in -ldnet_stub" >&5
+$as_echo_n "checking for dnet_ntoa in -ldnet_stub... " >&6; }
+if ${ac_cv_lib_dnet_stub_dnet_ntoa+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldnet_stub  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dnet_ntoa ();
+int
+main ()
+{
+return dnet_ntoa ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_dnet_stub_dnet_ntoa=yes
+else
+  ac_cv_lib_dnet_stub_dnet_ntoa=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dnet_stub_dnet_ntoa" >&5
+$as_echo "$ac_cv_lib_dnet_stub_dnet_ntoa" >&6; }
+if test "x$ac_cv_lib_dnet_stub_dnet_ntoa" = xyes; then :
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"
+fi
+
+    fi
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+    LIBS="$ac_xsave_LIBS"
+
+    # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
+    # to get the SysV transport functions.
+    # Chad R. Larson says the Pyramis MIS-ES running DC/OSx (SVR4)
+    # needs -lnsl.
+    # The nsl library prevents programs from opening the X display
+    # on Irix 5.2, according to T.E. Dickey.
+    # The functions gethostbyname, getservbyname, and inet_addr are
+    # in -lbsd on LynxOS 3.0.1/i386, according to Lars Hecking.
+    ac_fn_cxx_check_func "$LINENO" "gethostbyname" "ac_cv_func_gethostbyname"
+if test "x$ac_cv_func_gethostbyname" = xyes; then :
+
+fi
+
+    if test $ac_cv_func_gethostbyname = no; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gethostbyname in -lnsl" >&5
+$as_echo_n "checking for gethostbyname in -lnsl... " >&6; }
+if ${ac_cv_lib_nsl_gethostbyname+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnsl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gethostbyname ();
+int
+main ()
+{
+return gethostbyname ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_nsl_gethostbyname=yes
+else
+  ac_cv_lib_nsl_gethostbyname=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_nsl_gethostbyname" >&5
+$as_echo "$ac_cv_lib_nsl_gethostbyname" >&6; }
+if test "x$ac_cv_lib_nsl_gethostbyname" = xyes; then :
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"
+fi
+
+      if test $ac_cv_lib_nsl_gethostbyname = no; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gethostbyname in -lbsd" >&5
+$as_echo_n "checking for gethostbyname in -lbsd... " >&6; }
+if ${ac_cv_lib_bsd_gethostbyname+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lbsd  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gethostbyname ();
+int
+main ()
+{
+return gethostbyname ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_bsd_gethostbyname=yes
+else
+  ac_cv_lib_bsd_gethostbyname=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_bsd_gethostbyname" >&5
+$as_echo "$ac_cv_lib_bsd_gethostbyname" >&6; }
+if test "x$ac_cv_lib_bsd_gethostbyname" = xyes; then :
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lbsd"
+fi
+
+      fi
+    fi
+
+    # lieder@skyler.mavd.honeywell.com says without -lsocket,
+    # socket/setsockopt and other routines are undefined under SCO ODT
+    # 2.0.  But -lsocket is broken on IRIX 5.2 (and is not necessary
+    # on later versions), says Simon Leinen: it contains gethostby*
+    # variants that don't use the name server (or something).  -lsocket
+    # must be given before -lnsl if both are needed.  We assume that
+    # if connect needs -lnsl, so does gethostbyname.
+    ac_fn_cxx_check_func "$LINENO" "connect" "ac_cv_func_connect"
+if test "x$ac_cv_func_connect" = xyes; then :
+
+fi
+
+    if test $ac_cv_func_connect = no; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for connect in -lsocket" >&5
+$as_echo_n "checking for connect in -lsocket... " >&6; }
+if ${ac_cv_lib_socket_connect+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lsocket $X_EXTRA_LIBS $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char connect ();
+int
+main ()
+{
+return connect ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_socket_connect=yes
+else
+  ac_cv_lib_socket_connect=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_socket_connect" >&5
+$as_echo "$ac_cv_lib_socket_connect" >&6; }
+if test "x$ac_cv_lib_socket_connect" = xyes; then :
+  X_EXTRA_LIBS="-lsocket $X_EXTRA_LIBS"
+fi
+
+    fi
+
+    # Guillermo Gomez says -lposix is necessary on A/UX.
+    ac_fn_cxx_check_func "$LINENO" "remove" "ac_cv_func_remove"
+if test "x$ac_cv_func_remove" = xyes; then :
+
+fi
+
+    if test $ac_cv_func_remove = no; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for remove in -lposix" >&5
+$as_echo_n "checking for remove in -lposix... " >&6; }
+if ${ac_cv_lib_posix_remove+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lposix  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char remove ();
+int
+main ()
+{
+return remove ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_posix_remove=yes
+else
+  ac_cv_lib_posix_remove=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_posix_remove" >&5
+$as_echo "$ac_cv_lib_posix_remove" >&6; }
+if test "x$ac_cv_lib_posix_remove" = xyes; then :
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lposix"
+fi
+
+    fi
+
+    # BSDI BSD/OS 2.1 needs -lipc for XOpenDisplay.
+    ac_fn_cxx_check_func "$LINENO" "shmat" "ac_cv_func_shmat"
+if test "x$ac_cv_func_shmat" = xyes; then :
+
+fi
+
+    if test $ac_cv_func_shmat = no; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for shmat in -lipc" >&5
+$as_echo_n "checking for shmat in -lipc... " >&6; }
+if ${ac_cv_lib_ipc_shmat+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lipc  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char shmat ();
+int
+main ()
+{
+return shmat ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_ipc_shmat=yes
+else
+  ac_cv_lib_ipc_shmat=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ipc_shmat" >&5
+$as_echo "$ac_cv_lib_ipc_shmat" >&6; }
+if test "x$ac_cv_lib_ipc_shmat" = xyes; then :
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lipc"
+fi
+
+    fi
+  fi
+
+  # Check for libraries that X11R6 Xt/Xaw programs need.
+  ac_save_LDFLAGS=$LDFLAGS
+  test -n "$x_libraries" && LDFLAGS="$LDFLAGS -L$x_libraries"
+  # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
+  # check for ICE first), but we must link in the order -lSM -lICE or
+  # we get undefined symbols.  So assume we have SM if we have ICE.
+  # These have to be linked with before -lX11, unlike the other
+  # libraries we check for below, so use a different variable.
+  # John Interrante, Karl Berry
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for IceConnectionNumber in -lICE" >&5
+$as_echo_n "checking for IceConnectionNumber in -lICE... " >&6; }
+if ${ac_cv_lib_ICE_IceConnectionNumber+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lICE $X_EXTRA_LIBS $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char IceConnectionNumber ();
+int
+main ()
+{
+return IceConnectionNumber ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_ICE_IceConnectionNumber=yes
+else
+  ac_cv_lib_ICE_IceConnectionNumber=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ICE_IceConnectionNumber" >&5
+$as_echo "$ac_cv_lib_ICE_IceConnectionNumber" >&6; }
+if test "x$ac_cv_lib_ICE_IceConnectionNumber" = xyes; then :
+  X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"
+fi
+
+  LDFLAGS=$ac_save_LDFLAGS
 
 fi
 
@@ -5064,9 +7074,8 @@ done
 
 
 #--------------------------------------------------------------------
-# External libraries, functions and binaries
+# Checks for Guile
 #--------------------------------------------------------------------
-
 
 
 # Check whether --with-guile was given.
@@ -5567,35 +7576,158 @@ _ACEOF
     as_fn_error $? " cannot work without Guile" "$LINENO" 5
   fi
 
+else
+  ac_cv_search_dlopen=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dlopen" >&5
+$as_echo "$ac_cv_search_dlopen" >&6; }
+ac_res=$ac_cv_search_dlopen
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+$as_echo "#define TM_DYNAMIC_LINKING dlopen" >>confdefs.h
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dld_link" >&5
+$as_echo_n "checking for library containing dld_link... " >&6; }
+if ${ac_cv_search_dld_link+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dld_link ();
+int
+main ()
+{
+return dld_link ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' libdl libdld; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_search_dld_link=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_dld_link+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_dld_link+:} false; then :
+
+else
+  ac_cv_search_dld_link=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dld_link" >&5
+$as_echo "$ac_cv_search_dld_link" >&6; }
+ac_res=$ac_cv_search_dld_link
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+$as_echo "#define TM_DYNAMIC_LINKING dld_link" >>confdefs.h
+
+else
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing shl_load" >&5
+$as_echo_n "checking for library containing shl_load... " >&6; }
+if ${ac_cv_search_shl_load+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char shl_load ();
+int
+main ()
+{
+return shl_load ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' libdl libdld; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_search_shl_load=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_shl_load+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_shl_load+:} false; then :
+
+else
+  ac_cv_search_shl_load=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_shl_load" >&5
+$as_echo "$ac_cv_search_shl_load" >&6; }
+ac_res=$ac_cv_search_shl_load
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+
+$as_echo "#define TM_DYNAMIC_LINKING shl_load" >>confdefs.h
+
+else
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: dynamic linking using dlopen will not work" >&5
+$as_echo "$as_me: WARNING: dynamic linking using dlopen will not work" >&2;}
+
+fi
 
 
-  CFLAGS__ax_save_flags=$CFLAGS
+fi
+
+
+fi
 
 
 
-  CPPFLAGS__ax_save_flags=$CPPFLAGS
 
-
-
-  CXXFLAGS__ax_save_flags=$CXXFLAGS
-
-
-
-  LDFLAGS__ax_save_flags=$LDFLAGS
-
-
-
-  LIBS__ax_save_flags=$LIBS
-
-
-
-  OBJCFLAGS__ax_save_flags=$OBJCFLAGS
-
-
-
-  OBJCXXFLAGS__ax_save_flags=$OBJCXXFLAGS
-
-
+# Check whether --with-iconv was given.
+if test "${with_iconv+set}" = set; then :
+  withval=$with_iconv;
+else
+  unset withval;
+fi
 
 
    if [ "$GUILE_CFLAGS" ]; then CFLAGS=$GUILE_CFLAGS;fi; if [ "$GUILE_CXXFLAGS" ]; then CXXFLAGS=$GUILE_CXXFLAGS;fi; if [ "$GUILE_CPPFLAGS" ]; then CPPFLAGS=$GUILE_CPPFLAGS;fi; if [ "$GUILE_LIBS" ]; then LIBS=$GUILE_LIBS;fi;
@@ -5956,7 +8088,10 @@ if ${CFLAGS+:} false; then :
      ;;
 esac
 
-else
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
 
   CFLAGS=-static
   { { $as_echo "$as_me:${as_lineno-$LINENO}: : CFLAGS=\"\$CFLAGS\""; } >&5
@@ -5965,7 +8100,6 @@ else
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
 
-fi
 
   fi
 
@@ -6288,28 +8422,25 @@ $as_echo "$as_me: skipping presence test for the library $LC_SET_FLAGS_dep" >&6;
     then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
     fi
   fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
+;;
+      -I*|-U*|-D*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
   else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
+if ${ICONV_CPPFLAGS+:} false; then :
 
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
+  case " $ICONV_CPPFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; } ;; #(
   *) :
 
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
@@ -6318,9 +8449,9 @@ esac
 
 else
 
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
@@ -6328,7 +8459,30 @@ else
 fi
 
   fi
+;;
+      -F*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${ICONV_CPPFLAGS+:} false; then :
 
+  case " $ICONV_CPPFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
 
   LC_GETPOP_FLAG_sepa=-
   LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
@@ -6343,70 +8497,35 @@ fi
     else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
     fi
 
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
 
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+fi
+
   fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  done
-  # append new list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
+;;
+      -Wl,-F*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_LDFLAGS="$ICONV_LDFLAGS $LC_SCATTER_FLAGS_flag"
   else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
+if ${ICONV_LDFLAGS+:} false; then :
 
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
-  else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
-
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
+  case " $ICONV_LDFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; } ;; #(
   *) :
 
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+     as_fn_append ICONV_LDFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
+  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
@@ -6415,9 +8534,81 @@ esac
 
 else
 
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
+  ICONV_LDFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
+  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -Wl,*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&5
+$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&2;};;
+      -*)
+        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__$LC_SCATTER_FLAGS_flag" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag" >&5
+$as_echo_n "checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag... " >&6; }
+if eval \${$as_CACHEVAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+  ax_check_save_flags=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS  $LC_SCATTER_FLAGS_flag"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  eval "$as_CACHEVAR=yes"
+else
+  eval "$as_CACHEVAR=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS=$ax_check_save_flags
+fi
+eval ac_res=\$$as_CACHEVAR
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
+
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_CXXFLAGS="$ICONV_CXXFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${ICONV_CXXFLAGS+:} false; then :
+
+  case " $ICONV_CXXFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_CXXFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append ICONV_CXXFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
+  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  ICONV_CXXFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
+  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
@@ -6426,34 +8617,41 @@ fi
 
   fi
 
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&5
+$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&2;}
+fi
+;;
+      *) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&5
+$as_echo "$as_me: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&2;};;
+    esac
 
   LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
+  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
   else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
+    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
+    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
     fi
 
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
+  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
 
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
   fi
 
     if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
     fi
   fi
 
   unset ${!LC_GETPOP_FLAG_*}
-
 
   done
   LIBS=
@@ -6478,75 +8676,77 @@ fi
   then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
   fi
 
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
+else
 
-  unset ${!LC_GETPOP_FLAG_*}
+  LC_SCATTER_FLAGS_list="-liconv"
 
   while [[ $LC_PREPEND_LIST_flag ]]
   do  LIBS="$LC_PREPEND_LIST_flag $LIBS"
 
   LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
+  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
   else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
-    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
+    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
+    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
     fi
 
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
+  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
+  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
 
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
   fi
 
     if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
+    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
     fi
   fi
 
   unset ${!LC_GETPOP_FLAG_*}
 
-  done
-  unset ${!LC_PREPEND_LIST_*}
-
-  else  while [ "$LC_MERGE_FLAGS_list" ]
-        do
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_MERGE_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_MERGE_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_MERGE_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_MERGE_FLAGS_list=${LC_MERGE_FLAGS_list#}; unset LC_MERGE_FLAGS_flag     # flag not found
+  while test -n "$LC_SCATTER_FLAGS_flag"
+  do
+    case "$LC_SCATTER_FLAGS_flag" in
+      -l*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_LIBS="$ICONV_LIBS $LC_SCATTER_FLAGS_flag"
   else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_MERGE_FLAGS_list } # strip heading
-    LC_MERGE_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_MERGE_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list)
-    else LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_MERGE_FLAGS_flag})
-    fi
+if ${ICONV_LIBS+:} false; then :
 
-  LC_MERGE_FLAGS_flag=$(echo $LC_MERGE_FLAGS_flag)    # normalize whitespaces
-  LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag//\/\//\/}   # normalize path separator
+  case " $ICONV_LIBS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_LIBS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
 
-  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_MERGE_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
+     as_fn_append ICONV_LIBS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
+  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
 
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
+else
 
-  unset ${!LC_GETPOP_FLAG_*}
+  ICONV_LIBS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
+  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
 
+fi
 
   if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
   then LIBS="$LIBS $LC_MERGE_FLAGS_flag"
@@ -6583,6 +8783,12 @@ else
 fi
 
   fi
+;;
+      -I*|-U*|-D*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${ICONV_CPPFLAGS+:} false; then :
 
         done
   fi
@@ -6626,17 +8832,250 @@ esac
   LC_PREPEND_LIST_list="-l$LC_SET_FLAGS_lib"
   #pop the old list
 
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
-  LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LIBS" = "$LC_GETPOP_FLAG_1"
-  then LIBS=${LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
+else
+
+  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -F*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
   else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LIBS } # strip heading
+if ${ICONV_CPPFLAGS+:} false; then :
+
+  case " $ICONV_CPPFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
+  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -Wl,-F*)
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_LDFLAGS="$ICONV_LDFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${ICONV_LDFLAGS+:} false; then :
+
+  case " $ICONV_LDFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append ICONV_LDFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
+  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  ICONV_LDFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
+  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+;;
+      -Wl,*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&5
+$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&2;};;
+      -*)
+        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__$LC_SCATTER_FLAGS_flag" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag" >&5
+$as_echo_n "checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag... " >&6; }
+if eval \${$as_CACHEVAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+  ax_check_save_flags=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS  $LC_SCATTER_FLAGS_flag"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  eval "$as_CACHEVAR=yes"
+else
+  eval "$as_CACHEVAR=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS=$ax_check_save_flags
+fi
+eval ac_res=\$$as_CACHEVAR
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
+
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
+  then ICONV_CXXFLAGS="$ICONV_CXXFLAGS $LC_SCATTER_FLAGS_flag"
+  else
+if ${ICONV_CXXFLAGS+:} false; then :
+
+  case " $ICONV_CXXFLAGS " in #(
+  *" $LC_SCATTER_FLAGS_flag "*) :
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
+  (: ICONV_CXXFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } ;; #(
+  *) :
+
+     as_fn_append ICONV_CXXFLAGS " $LC_SCATTER_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
+  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+     ;;
+esac
+
+else
+
+  ICONV_CXXFLAGS=$LC_SCATTER_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
+  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+
+fi
+
+  fi
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&5
+$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&2;}
+fi
+;;
+      *) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&5
+$as_echo "$as_me: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&2;};;
+    esac
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
+  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
+  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
+    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
+    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
+    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
+    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
+    fi
+
+  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
+  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
+
+  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
+  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  fi
+
+    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
+    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
+    fi
+  fi
+
+  unset ${!LC_GETPOP_FLAG_*}
+
+  done
+  unset ${!LC_SCATTER_FLAGS_*}
+
+fi
+
+    fi
+
+  CFLAGS=$CFLAGS__ax_save_flags
+
+
+  CPPFLAGS=$CPPFLAGS__ax_save_flags
+
+
+  CXXFLAGS=$CXXFLAGS__ax_save_flags
+
+
+  LDFLAGS=$LDFLAGS__ax_save_flags
+
+
+  LIBS=$LIBS__ax_save_flags
+
+
+  OBJCFLAGS=$OBJCFLAGS__ax_save_flags
+
+
+  OBJCXXFLAGS=$OBJCXXFLAGS__ax_save_flags
+
+
+
+
+   if [ "$ICONV_CFLAGS" ]; then CFLAGS=$ICONV_CFLAGS;fi; if [ "$ICONV_CXXFLAGS" ]; then CXXFLAGS=$ICONV_CXXFLAGS;fi; if [ "$ICONV_CPPFLAGS" ]; then CPPFLAGS=$ICONV_CPPFLAGS;fi; if [ "$ICONV_LIBS" ]; then LIBS=$ICONV_LIBS;fi;
+
+  LC_MERGE_FLAGS_list="$ICONV_LDFLAGS"
+  if [[ "LDFLAGS" =~ $(echo "(^|_)LIBS") ]]
+  then
+  LC_PREPEND_LIST_list="$ICONV_LDFLAGS"
+  #pop the old list
+
+  LC_GETPOP_FLAG_sepa=-
+  LC_GETPOP_FLAG_1=" $(echo $LDFLAGS)" # remove unnecessary spaces and add a heading space
+  LDFLAGS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LDFLAGS" = "$LC_GETPOP_FLAG_1"
+  then LDFLAGS=${LDFLAGS#}; unset LC_PREPEND_LIST_flag     # flag not found
+  else
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LDFLAGS } # strip heading
     LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
     if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LIBS=$(echo $LIBS)
-    else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    then LDFLAGS=$(echo $LDFLAGS)
+    else LDFLAGS=$(echo $LDFLAGS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
     fi
 
   LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
@@ -6693,16 +9132,16 @@ fi
 
 
   LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
-  LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LIBS" = "$LC_GETPOP_FLAG_1"
-  then LIBS=${LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
+  LC_GETPOP_FLAG_1=" $(echo $LDFLAGS)" # remove unnecessary spaces and add a heading space
+  LDFLAGS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
+  if test "$LDFLAGS" = "$LC_GETPOP_FLAG_1"
+  then LDFLAGS=${LDFLAGS#}; unset LC_PREPEND_LIST_flag     # flag not found
   else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LIBS } # strip heading
+    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LDFLAGS } # strip heading
     LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
     if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LIBS=$(echo $LIBS)
-    else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
+    then LDFLAGS=$(echo $LDFLAGS)
+    else LDFLAGS=$(echo $LDFLAGS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
     fi
 
   LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
@@ -6818,7 +9257,7 @@ fi
 
 
   done
-  LIBS=
+  LDFLAGS=
 
   LC_GETPOP_FLAG_sepa=-
   LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
@@ -6848,7 +9287,7 @@ fi
   unset ${!LC_GETPOP_FLAG_*}
 
   while [[ $LC_PREPEND_LIST_flag ]]
-  do  LIBS="$LC_PREPEND_LIST_flag $LIBS"
+  do  LDFLAGS="$LC_PREPEND_LIST_flag $LDFLAGS"
 
   LC_GETPOP_FLAG_sepa=-
   LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
@@ -6911,22 +9350,22 @@ fi
 
 
   if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LIBS="$LIBS $LC_MERGE_FLAGS_flag"
+  then LDFLAGS="$LDFLAGS $LC_MERGE_FLAGS_flag"
   else
-if ${LIBS+:} false; then :
+if ${LDFLAGS+:} false; then :
 
-  case " $LIBS " in #(
+  case " $LDFLAGS " in #(
   *" $LC_MERGE_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LIBS already contains \$LC_MERGE_FLAGS_flag"; } >&5
-  (: LIBS already contains $LC_MERGE_FLAGS_flag) 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS already contains \$LC_MERGE_FLAGS_flag"; } >&5
+  (: LDFLAGS already contains $LC_MERGE_FLAGS_flag) 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; } ;; #(
   *) :
 
-     as_fn_append LIBS " $LC_MERGE_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LIBS=\"\$LIBS\""; } >&5
-  (: LIBS="$LIBS") 2>&5
+     as_fn_append LDFLAGS " $LC_MERGE_FLAGS_flag"
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS=\"\$LDFLAGS\""; } >&5
+  (: LDFLAGS="$LDFLAGS") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
@@ -6935,9 +9374,9 @@ esac
 
 else
 
-  LIBS=$LC_MERGE_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LIBS=\"\$LIBS\""; } >&5
-  (: LIBS="$LIBS") 2>&5
+  LDFLAGS=$LC_MERGE_FLAGS_flag
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS=\"\$LDFLAGS\""; } >&5
+  (: LDFLAGS="$LDFLAGS") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
@@ -7503,6 +9942,8 @@ else
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
 
+else
+  as_fn_error $? "compulsory library $LC_SET_FLAGS_dep not found" "$LINENO" 5
 fi
 
   fi
@@ -7833,7 +10274,8 @@ else
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }
 
-fi
+  done
+  # append new list
 
   fi
 
@@ -7844,2059 +10286,6 @@ fi
 
   unset ${!LC_COMBINE_FLAGS_*}
 
-
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dlopen" >&5
-$as_echo_n "checking for library containing dlopen... " >&6; }
-if ${ac_cv_search_dlopen+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dlopen ();
-int
-main ()
-{
-return dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' libdl libdld; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_search_dlopen=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_dlopen+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_dlopen+:} false; then :
-
-else
-  ac_cv_search_dlopen=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dlopen" >&5
-$as_echo "$ac_cv_search_dlopen" >&6; }
-ac_res=$ac_cv_search_dlopen
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
-$as_echo "#define TM_DYNAMIC_LINKING dlopen" >>confdefs.h
-
-else
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing dld_link" >&5
-$as_echo_n "checking for library containing dld_link... " >&6; }
-if ${ac_cv_search_dld_link+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dld_link ();
-int
-main ()
-{
-return dld_link ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' libdl libdld; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_search_dld_link=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_dld_link+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_dld_link+:} false; then :
-
-else
-  ac_cv_search_dld_link=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_dld_link" >&5
-$as_echo "$ac_cv_search_dld_link" >&6; }
-ac_res=$ac_cv_search_dld_link
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
-$as_echo "#define TM_DYNAMIC_LINKING dld_link" >>confdefs.h
-
-else
-
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing shl_load" >&5
-$as_echo_n "checking for library containing shl_load... " >&6; }
-if ${ac_cv_search_shl_load+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char shl_load ();
-int
-main ()
-{
-return shl_load ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' libdl libdld; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_search_shl_load=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_shl_load+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_shl_load+:} false; then :
-
-else
-  ac_cv_search_shl_load=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_shl_load" >&5
-$as_echo "$ac_cv_search_shl_load" >&6; }
-ac_res=$ac_cv_search_shl_load
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-
-$as_echo "#define TM_DYNAMIC_LINKING shl_load" >>confdefs.h
-
-else
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: dynamic linking using dlopen will not work" >&5
-$as_echo "$as_me: WARNING: dynamic linking using dlopen will not work" >&2;}
-
-fi
-
-
-fi
-
-
-fi
-
-
-
-
-# Check whether --with-iconv was given.
-if test "${with_iconv+set}" = set; then :
-  withval=$with_iconv;
-else
-  unset withval;
-fi
-
-
-if [[ "$withval" != no ]]
-then
-  _LC_ICONV_TEMP=$(mktemp -t texmacsXXXXXX)
-
-  _LC_ICONV_PATH=$(echo ${LDFLAGS//\/lib/\/include})
-
-
-  CFLAGS__ax_save_flags=$CFLAGS
-
-
-
-  CPPFLAGS__ax_save_flags=$CPPFLAGS
-
-
-
-  CXXFLAGS__ax_save_flags=$CXXFLAGS
-
-
-
-  LDFLAGS__ax_save_flags=$LDFLAGS
-
-
-
-  LIBS__ax_save_flags=$LIBS
-
-
-
-  OBJCFLAGS__ax_save_flags=$OBJCFLAGS
-
-
-
-  OBJCXXFLAGS__ax_save_flags=$OBJCXXFLAGS
-
-
-
-  # try to find a header somewhere in this path and ask for its location
-  CPPFLAGS="${_LC_ICONV_PATH//-L/-I} -I$withval/include -I/opt/local/include -I/sw/include -MM -MF $_LC_ICONV_TEMP"
-
-
-
-  unset ICONV_CFLAGS;unset ICONV_CXXFLAGS;unset ICONV_CPPFLAGS;unset ICONV_LDFLAGS;unset ICONV_LIBS; # no previous iconv definition allowed
-  ac_fn_cxx_check_header_preproc "$LINENO" "iconv.h" "ac_cv_header_iconv_h"
-if test "x$ac_cv_header_iconv_h" = xyes; then :
-
-    _LC_ICONV_DEPEND=$(<$_LC_ICONV_TEMP)
-    _LC_ICONV_ICONV=${_LC_ICONV_DEPEND%/include/iconv.h*}
-    if  [[ "$_LC_ICONV_DEPEND" == "$_LC_ICONV_ICONV" ]]
-    then
-      # don't add the default path to the LDFLAGS
-      { $as_echo "$as_me:${as_lineno-$LINENO}: iconv found in default compiler location" >&5
-$as_echo "$as_me: iconv found in default compiler location" >&6;}
-
-  LC_MERGE_FLAGS_list="-liconv"
-  if [[ "ICONV_LIBS" =~ $(echo "(^|_)LIBS") ]]
-  then
-  LC_PREPEND_LIST_list="-liconv"
-  #pop the old list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $ICONV_LIBS)" # remove unnecessary spaces and add a heading space
-  ICONV_LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$ICONV_LIBS" = "$LC_GETPOP_FLAG_1"
-  then ICONV_LIBS=${ICONV_LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$ICONV_LIBS } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then ICONV_LIBS=$(echo $ICONV_LIBS)
-    else ICONV_LIBS=$(echo $ICONV_LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
-  else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
-
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $ICONV_LIBS)" # remove unnecessary spaces and add a heading space
-  ICONV_LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$ICONV_LIBS" = "$LC_GETPOP_FLAG_1"
-  then ICONV_LIBS=${ICONV_LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$ICONV_LIBS } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then ICONV_LIBS=$(echo $ICONV_LIBS)
-    else ICONV_LIBS=$(echo $ICONV_LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  done
-  # append new list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
-  else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
-
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  done
-  ICONV_LIBS=
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
-    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do  ICONV_LIBS="$LC_PREPEND_LIST_flag $ICONV_LIBS"
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
-    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  done
-  unset ${!LC_PREPEND_LIST_*}
-
-  else  while [ "$LC_MERGE_FLAGS_list" ]
-        do
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_MERGE_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_MERGE_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_MERGE_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_MERGE_FLAGS_list=${LC_MERGE_FLAGS_list#}; unset LC_MERGE_FLAGS_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_MERGE_FLAGS_list } # strip heading
-    LC_MERGE_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_MERGE_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list)
-    else LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_MERGE_FLAGS_flag})
-    fi
-
-  LC_MERGE_FLAGS_flag=$(echo $LC_MERGE_FLAGS_flag)    # normalize whitespaces
-  LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_MERGE_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LIBS="$ICONV_LIBS $LC_MERGE_FLAGS_flag"
-  else
-if ${ICONV_LIBS+:} false; then :
-
-  case " $ICONV_LIBS " in #(
-  *" $LC_MERGE_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS already contains \$LC_MERGE_FLAGS_flag"; } >&5
-  (: ICONV_LIBS already contains $LC_MERGE_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LIBS " $LC_MERGE_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
-  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LIBS=$LC_MERGE_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
-  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-        done
-  fi
-  unset ${!LC_MERGE_FLAGS_*}
-
-    else
-      _LC_ICONV_ICONV=${_LC_ICONV_ICONV##* }
-      { $as_echo "$as_me:${as_lineno-$LINENO}: iconv found in $_LC_ICONV_ICONV" >&5
-$as_echo "$as_me: iconv found in $_LC_ICONV_ICONV" >&6;}
-
-if [ "$_LC_ICONV_ICONV" ]
-then
-
-  LC_SCATTER_FLAGS_list="-I$_LC_ICONV_ICONV/include -L$_LC_ICONV_ICONV/lib -liconv"
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
-    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
-    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
-    fi
-
-  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
-  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while test -n "$LC_SCATTER_FLAGS_flag"
-  do
-    case "$LC_SCATTER_FLAGS_flag" in
-      -l*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LIBS="$ICONV_LIBS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_LIBS+:} false; then :
-
-  case " $ICONV_LIBS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_LIBS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LIBS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
-  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LIBS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
-  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -L*|-framework*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LDFLAGS="$ICONV_LDFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_LDFLAGS+:} false; then :
-
-  case " $ICONV_LDFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LDFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LDFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -I*|-U*|-D*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_CPPFLAGS+:} false; then :
-
-  case " $ICONV_CPPFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -F*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_CPPFLAGS+:} false; then :
-
-  case " $ICONV_CPPFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -Wl,-F*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LDFLAGS="$ICONV_LDFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_LDFLAGS+:} false; then :
-
-  case " $ICONV_LDFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LDFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LDFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -Wl,*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&5
-$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&2;};;
-      -*)
-        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__$LC_SCATTER_FLAGS_flag" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag" >&5
-$as_echo_n "checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag... " >&6; }
-if eval \${$as_CACHEVAR+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-  ax_check_save_flags=$CXXFLAGS
-  CXXFLAGS="$CXXFLAGS  $LC_SCATTER_FLAGS_flag"
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  eval "$as_CACHEVAR=yes"
-else
-  eval "$as_CACHEVAR=no"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  CXXFLAGS=$ax_check_save_flags
-fi
-eval ac_res=\$$as_CACHEVAR
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
-
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_CXXFLAGS="$ICONV_CXXFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_CXXFLAGS+:} false; then :
-
-  case " $ICONV_CXXFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_CXXFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_CXXFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
-  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_CXXFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
-  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&5
-$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&2;}
-fi
-;;
-      *) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&5
-$as_echo "$as_me: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&2;};;
-    esac
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
-    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
-    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
-    fi
-
-  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
-  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  done
-  unset ${!LC_SCATTER_FLAGS_*}
-
-else
-
-  LC_SCATTER_FLAGS_list="-liconv"
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
-    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
-    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
-    fi
-
-  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
-  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while test -n "$LC_SCATTER_FLAGS_flag"
-  do
-    case "$LC_SCATTER_FLAGS_flag" in
-      -l*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LIBS="$ICONV_LIBS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_LIBS+:} false; then :
-
-  case " $ICONV_LIBS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_LIBS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LIBS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
-  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LIBS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LIBS=\"\$ICONV_LIBS\""; } >&5
-  (: ICONV_LIBS="$ICONV_LIBS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -L*|-framework*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LDFLAGS="$ICONV_LDFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_LDFLAGS+:} false; then :
-
-  case " $ICONV_LDFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LDFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LDFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -I*|-U*|-D*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_CPPFLAGS+:} false; then :
-
-  case " $ICONV_CPPFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -F*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_CPPFLAGS="$ICONV_CPPFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_CPPFLAGS+:} false; then :
-
-  case " $ICONV_CPPFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_CPPFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_CPPFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_CPPFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CPPFLAGS=\"\$ICONV_CPPFLAGS\""; } >&5
-  (: ICONV_CPPFLAGS="$ICONV_CPPFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -Wl,-F*)
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_LDFLAGS="$ICONV_LDFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_LDFLAGS+:} false; then :
-
-  case " $ICONV_LDFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_LDFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_LDFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_LDFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_LDFLAGS=\"\$ICONV_LDFLAGS\""; } >&5
-  (: ICONV_LDFLAGS="$ICONV_LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-;;
-      -Wl,*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&5
-$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped for lib ICONV" >&2;};;
-      -*)
-        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__$LC_SCATTER_FLAGS_flag" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag" >&5
-$as_echo_n "checking whether C++ compiler accepts $LC_SCATTER_FLAGS_flag... " >&6; }
-if eval \${$as_CACHEVAR+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-  ax_check_save_flags=$CXXFLAGS
-  CXXFLAGS="$CXXFLAGS  $LC_SCATTER_FLAGS_flag"
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  eval "$as_CACHEVAR=yes"
-else
-  eval "$as_CACHEVAR=no"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  CXXFLAGS=$ax_check_save_flags
-fi
-eval ac_res=\$$as_CACHEVAR
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
-
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then ICONV_CXXFLAGS="$ICONV_CXXFLAGS $LC_SCATTER_FLAGS_flag"
-  else
-if ${ICONV_CXXFLAGS+:} false; then :
-
-  case " $ICONV_CXXFLAGS " in #(
-  *" $LC_SCATTER_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS already contains \$LC_SCATTER_FLAGS_flag"; } >&5
-  (: ICONV_CXXFLAGS already contains $LC_SCATTER_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append ICONV_CXXFLAGS " $LC_SCATTER_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
-  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  ICONV_CXXFLAGS=$LC_SCATTER_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : ICONV_CXXFLAGS=\"\$ICONV_CXXFLAGS\""; } >&5
-  (: ICONV_CXXFLAGS="$ICONV_CXXFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&5
-$as_echo "$as_me: WARNING: Flag $LC_SCATTER_FLAGS_flag dropped" >&2;}
-fi
-;;
-      *) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&5
-$as_echo "$as_me: WARNING: Flags $LC_SCATTER_FLAGS_flag NOT managed" >&2;};;
-    esac
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_SCATTER_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_SCATTER_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_SCATTER_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_SCATTER_FLAGS_list=${LC_SCATTER_FLAGS_list#}; unset LC_SCATTER_FLAGS_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SCATTER_FLAGS_list } # strip heading
-    LC_SCATTER_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_SCATTER_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list)
-    else LC_SCATTER_FLAGS_list=$(echo $LC_SCATTER_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_SCATTER_FLAGS_flag})
-    fi
-
-  LC_SCATTER_FLAGS_flag=$(echo $LC_SCATTER_FLAGS_flag)    # normalize whitespaces
-  LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_SCATTER_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_SCATTER_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_SCATTER_FLAGS_flag=${LC_SCATTER_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  done
-  unset ${!LC_SCATTER_FLAGS_*}
-
-fi
-
-    fi
-
-  CFLAGS=$CFLAGS__ax_save_flags
-
-
-  CPPFLAGS=$CPPFLAGS__ax_save_flags
-
-
-  CXXFLAGS=$CXXFLAGS__ax_save_flags
-
-
-  LDFLAGS=$LDFLAGS__ax_save_flags
-
-
-  LIBS=$LIBS__ax_save_flags
-
-
-  OBJCFLAGS=$OBJCFLAGS__ax_save_flags
-
-
-  OBJCXXFLAGS=$OBJCXXFLAGS__ax_save_flags
-
-
-
-
-   if [ "$ICONV_CFLAGS" ]; then CFLAGS=$ICONV_CFLAGS;fi; if [ "$ICONV_CXXFLAGS" ]; then CXXFLAGS=$ICONV_CXXFLAGS;fi; if [ "$ICONV_CPPFLAGS" ]; then CPPFLAGS=$ICONV_CPPFLAGS;fi; if [ "$ICONV_LIBS" ]; then LIBS=$ICONV_LIBS;fi;
-
-  LC_MERGE_FLAGS_list="$ICONV_LDFLAGS"
-  if [[ "LDFLAGS" =~ $(echo "(^|_)LIBS") ]]
-  then
-  LC_PREPEND_LIST_list="$ICONV_LDFLAGS"
-  #pop the old list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LDFLAGS)" # remove unnecessary spaces and add a heading space
-  LDFLAGS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LDFLAGS" = "$LC_GETPOP_FLAG_1"
-  then LDFLAGS=${LDFLAGS#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LDFLAGS } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LDFLAGS=$(echo $LDFLAGS)
-    else LDFLAGS=$(echo $LDFLAGS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
-  else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
-
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LDFLAGS)" # remove unnecessary spaces and add a heading space
-  LDFLAGS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LDFLAGS" = "$LC_GETPOP_FLAG_1"
-  then LDFLAGS=${LDFLAGS#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LDFLAGS } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LDFLAGS=$(echo $LDFLAGS)
-    else LDFLAGS=$(echo $LDFLAGS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  done
-  # append new list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
-  else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
-
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  done
-  LDFLAGS=
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
-    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do  LDFLAGS="$LC_PREPEND_LIST_flag $LDFLAGS"
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_nlist)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_nlist=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_nlist" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_nlist=${LC_PREPEND_LIST_nlist#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_nlist } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist)
-    else LC_PREPEND_LIST_nlist=$(echo $LC_PREPEND_LIST_nlist${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  done
-  unset ${!LC_PREPEND_LIST_*}
-
-  else  while [ "$LC_MERGE_FLAGS_list" ]
-        do
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_MERGE_FLAGS_list)" # remove unnecessary spaces and add a heading space
-  LC_MERGE_FLAGS_list=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_MERGE_FLAGS_list" = "$LC_GETPOP_FLAG_1"
-  then LC_MERGE_FLAGS_list=${LC_MERGE_FLAGS_list#}; unset LC_MERGE_FLAGS_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_MERGE_FLAGS_list } # strip heading
-    LC_MERGE_FLAGS_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_MERGE_FLAGS_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list)
-    else LC_MERGE_FLAGS_list=$(echo $LC_MERGE_FLAGS_list${LC_GETPOP_FLAG_tail#$LC_MERGE_FLAGS_flag})
-    fi
-
-  LC_MERGE_FLAGS_flag=$(echo $LC_MERGE_FLAGS_flag)    # normalize whitespaces
-  LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_MERGE_FLAGS_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_MERGE_FLAGS_flag=${LC_MERGE_FLAGS_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  if [[ "$LC_MERGE_FLAGS_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LDFLAGS="$LDFLAGS $LC_MERGE_FLAGS_flag"
-  else
-if ${LDFLAGS+:} false; then :
-
-  case " $LDFLAGS " in #(
-  *" $LC_MERGE_FLAGS_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS already contains \$LC_MERGE_FLAGS_flag"; } >&5
-  (: LDFLAGS already contains $LC_MERGE_FLAGS_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append LDFLAGS " $LC_MERGE_FLAGS_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS=\"\$LDFLAGS\""; } >&5
-  (: LDFLAGS="$LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  LDFLAGS=$LC_MERGE_FLAGS_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LDFLAGS=\"\$LDFLAGS\""; } >&5
-  (: LDFLAGS="$LDFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-        done
-  fi
-  unset ${!LC_MERGE_FLAGS_*}
-
-
-  if test -n "$LNSTATIC"
-  then
-  if [[ "-static" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then CFLAGS="$CFLAGS -static"
-  else
-if ${CFLAGS+:} false; then :
-
-  case " $CFLAGS " in #(
-  *" -static "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : CFLAGS already contains -static"; } >&5
-  (: CFLAGS already contains -static) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append CFLAGS " -static"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : CFLAGS=\"\$CFLAGS\""; } >&5
-  (: CFLAGS="$CFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  CFLAGS=-static
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : CFLAGS=\"\$CFLAGS\""; } >&5
-  (: CFLAGS="$CFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-
-  if [[ "-static" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then CXXFLAGS="$CXXFLAGS -static"
-  else
-if ${CXXFLAGS+:} false; then :
-
-  case " $CXXFLAGS " in #(
-  *" -static "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : CXXFLAGS already contains -static"; } >&5
-  (: CXXFLAGS already contains -static) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append CXXFLAGS " -static"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : CXXFLAGS=\"\$CXXFLAGS\""; } >&5
-  (: CXXFLAGS="$CXXFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  CXXFLAGS=-static
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : CXXFLAGS=\"\$CXXFLAGS\""; } >&5
-  (: CXXFLAGS="$CXXFLAGS") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-  fi
-# check the libs depencies
-  LC_SET_FLAGS_libs=$ICONV_LIBS
-
-  LC_GETPOP_FLAG_sepa=-l
-  LC_GETPOP_FLAG_1=" $(echo $LC_SET_FLAGS_libs)" # remove unnecessary spaces and add a heading space
-  LC_SET_FLAGS_libs=${LC_GETPOP_FLAG_1%% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_SET_FLAGS_libs" = "$LC_GETPOP_FLAG_1"
-  then LC_SET_FLAGS_libs=${LC_SET_FLAGS_libs#}; unset LC_SET_FLAGS_lib     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SET_FLAGS_libs } # strip heading
-    LC_SET_FLAGS_lib=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_SET_FLAGS_lib" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_SET_FLAGS_libs=$(echo $LC_SET_FLAGS_libs)
-    else LC_SET_FLAGS_libs=$(echo $LC_SET_FLAGS_libs${LC_GETPOP_FLAG_tail#$LC_SET_FLAGS_lib})
-    fi
-
-  LC_SET_FLAGS_lib=$(echo $LC_SET_FLAGS_lib)    # normalize whitespaces
-  LC_SET_FLAGS_lib=${LC_SET_FLAGS_lib//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_SET_FLAGS_lib" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_SET_FLAGS_lib=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_SET_FLAGS_lib=${LC_SET_FLAGS_lib#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
- # the main lib
-
-  LC_GETPOP_FLAG_sepa=-l
-  LC_GETPOP_FLAG_1=" $(echo $LC_SET_FLAGS_libs)" # remove unnecessary spaces and add a heading space
-  LC_SET_FLAGS_libs=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_SET_FLAGS_libs" = "$LC_GETPOP_FLAG_1"
-  then LC_SET_FLAGS_libs=${LC_SET_FLAGS_libs#}; unset LC_SET_FLAGS_dep     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_SET_FLAGS_libs } # strip heading
-    LC_SET_FLAGS_dep=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_SET_FLAGS_dep" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_SET_FLAGS_libs=$(echo $LC_SET_FLAGS_libs)
-    else LC_SET_FLAGS_libs=$(echo $LC_SET_FLAGS_libs${LC_GETPOP_FLAG_tail#$LC_SET_FLAGS_dep})
-    fi
-
-  LC_SET_FLAGS_dep=$(echo $LC_SET_FLAGS_dep)    # normalize whitespaces
-  LC_SET_FLAGS_dep=${LC_SET_FLAGS_dep//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_SET_FLAGS_dep" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_SET_FLAGS_dep=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_SET_FLAGS_dep=${LC_SET_FLAGS_dep#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
- # the dependency lib
-  while test -n "$LC_SET_FLAGS_dep"
-  do
-case $LC_SET_FLAGS_dep in
-  z)     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflate in -lz" >&5
-$as_echo_n "checking for inflate in -lz... " >&6; }
-if ${ac_cv_lib_z_inflate+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lz  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char inflate ();
-int
-main ()
-{
-return inflate ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_z_inflate=yes
-else
-  ac_cv_lib_z_inflate=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_inflate" >&5
-$as_echo "$ac_cv_lib_z_inflate" >&6; }
-if test "x$ac_cv_lib_z_inflate" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBZ 1
-_ACEOF
-
-  LIBS="-lz $LIBS"
-
-else
-  as_fn_error $? "compulsory library $LC_SET_FLAGS_dep not found" "$LINENO" 5
-fi
-;;
-  png)   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_read_png in -lpng" >&5
-$as_echo_n "checking for png_read_png in -lpng... " >&6; }
-if ${ac_cv_lib_png_png_read_png+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpng  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char png_read_png ();
-int
-main ()
-{
-return png_read_png ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_png_png_read_png=yes
-else
-  ac_cv_lib_png_png_read_png=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png_png_read_png" >&5
-$as_echo "$ac_cv_lib_png_png_read_png" >&6; }
-if test "x$ac_cv_lib_png_png_read_png" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBPNG 1
-_ACEOF
-
-  LIBS="-lpng $LIBS"
-
-else
-  as_fn_error $? "compulsory library $LC_SET_FLAGS_dep not found" "$LINENO" 5
-fi
-;;
-  png12) { $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_read_png in -lpng12" >&5
-$as_echo_n "checking for png_read_png in -lpng12... " >&6; }
-if ${ac_cv_lib_png12_png_read_png+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpng12  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char png_read_png ();
-int
-main ()
-{
-return png_read_png ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_png12_png_read_png=yes
-else
-  ac_cv_lib_png12_png_read_png=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png12_png_read_png" >&5
-$as_echo "$ac_cv_lib_png12_png_read_png" >&6; }
-if test "x$ac_cv_lib_png12_png_read_png" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBPNG12 1
-_ACEOF
-
-  LIBS="-lpng12 $LIBS"
-
-else
-  as_fn_error $? "compulsory library $LC_SET_FLAGS_dep not found" "$LINENO" 5
-fi
-;;
-  gmp)   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __gmpf_init in -lgmp" >&5
-$as_echo_n "checking for __gmpf_init in -lgmp... " >&6; }
-if ${ac_cv_lib_gmp___gmpf_init+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgmp  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char __gmpf_init ();
-int
-main ()
-{
-return __gmpf_init ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_gmp___gmpf_init=yes
-else
-  ac_cv_lib_gmp___gmpf_init=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gmp___gmpf_init" >&5
-$as_echo "$ac_cv_lib_gmp___gmpf_init" >&6; }
-if test "x$ac_cv_lib_gmp___gmpf_init" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGMP 1
-_ACEOF
-
-  LIBS="-lgmp $LIBS"
-
-else
-  as_fn_error $? "compulsory library $LC_SET_FLAGS_dep not found" "$LINENO" 5
-fi
-;;
-  *)     { $as_echo "$as_me:${as_lineno-$LINENO}: skipping presence test for the library $LC_SET_FLAGS_dep" >&5
-$as_echo "$as_me: skipping presence test for the library $LC_SET_FLAGS_dep" >&6;}
-  LC_MERGE_FLAGS_list="-l$LC_SET_FLAGS_dep"
-  if [[ "LIBS" =~ $(echo "(^|_)LIBS") ]]
-  then
-  LC_PREPEND_LIST_list="-l$LC_SET_FLAGS_dep"
-  #pop the old list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
-  LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LIBS" = "$LC_GETPOP_FLAG_1"
-  then LIBS=${LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LIBS } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LIBS=$(echo $LIBS)
-    else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-  while [[ $LC_PREPEND_LIST_flag ]]
-  do
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^[:space:]*-Wl,.+") ]]
-  then LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist $LC_PREPEND_LIST_flag"
-  else
-if ${LC_PREPEND_LIST_nlist+:} false; then :
-
-  case " $LC_PREPEND_LIST_nlist " in #(
-  *" $LC_PREPEND_LIST_flag "*) :
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist already contains \$LC_PREPEND_LIST_flag"; } >&5
-  (: LC_PREPEND_LIST_nlist already contains $LC_PREPEND_LIST_flag) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } ;; #(
-  *) :
-
-     as_fn_append LC_PREPEND_LIST_nlist " $LC_PREPEND_LIST_flag"
-     { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-     ;;
-esac
-
-else
-
-  LC_PREPEND_LIST_nlist=$LC_PREPEND_LIST_flag
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: : LC_PREPEND_LIST_nlist=\"\$LC_PREPEND_LIST_nlist\""; } >&5
-  (: LC_PREPEND_LIST_nlist="$LC_PREPEND_LIST_nlist") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }
-
-fi
-
-  fi
-
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LIBS)" # remove unnecessary spaces and add a heading space
-  LIBS=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LIBS" = "$LC_GETPOP_FLAG_1"
-  then LIBS=${LIBS#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LIBS } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LIBS=$(echo $LIBS)
-    else LIBS=$(echo $LIBS${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
-
-  if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
-  then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-  fi
-
-    if [ $LC_GETPOP_FLAG_sepa != - ]    # just return the value
-    then LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag#$LC_GETPOP_FLAG_sepa}
-    fi
-  fi
-
-  unset ${!LC_GETPOP_FLAG_*}
-
-
-  done
-  # append new list
-
-  LC_GETPOP_FLAG_sepa=-
-  LC_GETPOP_FLAG_1=" $(echo $LC_PREPEND_LIST_list)" # remove unnecessary spaces and add a heading space
-  LC_PREPEND_LIST_list=${LC_GETPOP_FLAG_1% $LC_GETPOP_FLAG_sepa*} # get heading
-  if test "$LC_PREPEND_LIST_list" = "$LC_GETPOP_FLAG_1"
-  then LC_PREPEND_LIST_list=${LC_PREPEND_LIST_list#}; unset LC_PREPEND_LIST_flag     # flag not found
-  else
-    LC_GETPOP_FLAG_tail=${LC_GETPOP_FLAG_1#$LC_PREPEND_LIST_list } # strip heading
-    LC_PREPEND_LIST_flag=${LC_GETPOP_FLAG_tail%% -*}        # get flag and data
-    if test "$LC_PREPEND_LIST_flag" = "$LC_GETPOP_FLAG_tail"  # is there someting after the flag
-    then LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list)
-    else LC_PREPEND_LIST_list=$(echo $LC_PREPEND_LIST_list${LC_GETPOP_FLAG_tail#$LC_PREPEND_LIST_flag})
-    fi
-
-  LC_PREPEND_LIST_flag=$(echo $LC_PREPEND_LIST_flag)    # normalize whitespaces
-  LC_PREPEND_LIST_flag=${LC_PREPEND_LIST_flag//\/\//\/}   # normalize path separator
 
   if [[ "$LC_PREPEND_LIST_flag" =~ $(echo "^-(l|L|D)[[:space:]]+([^[:space:]].*)$") ]]
   then LC_PREPEND_LIST_flag=-${BASH_REMATCH[1]}${BASH_REMATCH[2]}
