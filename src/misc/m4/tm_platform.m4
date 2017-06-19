@@ -1,16 +1,3 @@
-
-#--------------------------------------------------------------------
-#
-# MODULE      : tm_platform.m4
-# DESCRIPTION : Determine various platform dependent settings
-# COPYRIGHT   : (C) 2000, 2017  Joris van der Hoeven
-#
-# This software falls under the GNU general public license version 3 or later.
-# It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
-# in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
-#
-#--------------------------------------------------------------------
-
 AC_DEFUN([TM_PLATFORM],[
   CONFIG_OS="GNU_LINUX"
   CONFIG_OS_SUFFIX="${host}"
@@ -212,16 +199,6 @@ AC_DEFUN([TM_PLATFORM],[
       CONFIG_ARCHS='$(NATIVE_ARCH_ACTUAL)'
     ;;
   esac
-
-  case "$GXX_VERSION" in
-    3.* | 4.*)
-#     CONFIG_BSTATIC="-static"
-      CONFIG_BSHARED="-dynamic"
-    ;;
-  esac
-
-  AC_CHECK_LIB(expat,XML_ParserCreate,[CONFIG_BSTATIC="-lexpat $CONFIG_BSTATIC";CONFIG_STYPE=A])
-  AC_CHECK_LIB(xcb,xcb_disconnect,[CONFIG_BSTATIC="-lxcb $CONFIG_BSTATIC";CONFIG_STYPE=B])
 
   AC_SUBST(CONFIG_OS)
   AC_SUBST(CONFIG_OS_SUFFIX)

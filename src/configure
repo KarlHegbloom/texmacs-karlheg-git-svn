@@ -612,7 +612,6 @@ tmbin
 tmsrc
 tmdir
 tmorig
-CONFIG_EXPERIMENTAL
 CONFIG_CXXDIALECT
 PDF_LDFLAGS
 PDF_CFLAGS
@@ -654,6 +653,7 @@ X11_CPP
 X11_CXX
 XMKMF
 CONFIG_MACOS
+CONFIG_EXPERIMENTAL
 CONFIG_ARCHS
 CONFIG_DATE
 CONFIG_USER
@@ -1798,10 +1798,30 @@ fi
 ac_fn_cxx_check_type ()
 {
   as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
+  rm -f conftest.$ac_objext conftest$ac_exeext
+  if { { ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_link") 2>conftest.err
+  ac_status=$?
+  if test -s conftest.err; then
+    grep -v '^ *+' conftest.err >conftest.er1
+    cat conftest.er1 >&5
+    mv -f conftest.er1 conftest.err
+  fi
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then :
+  ac_retval=0
 else
   eval "$3=no"
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -17137,8 +17157,33 @@ fi
 
 
 
-    if [[ $USE_FREETYPE ]]
-    then
+  # Extract the first word of "freetype-config", so it can be a program name with args.
+set dummy freetype-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_FREETYPE_tmp1+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $FREETYPE_tmp1 in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_FREETYPE_tmp1="$FREETYPE_tmp1" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+as_dummy="${withval:-$PATH}"
+for as_dir in $as_dummy
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_FREETYPE_tmp1="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
 
   if [ -z "freetype" -a -n "$SEMISTATIC" ]
   then  FREETYPE_LIBS="$SEMISTATIC $FREETYPE_LIBS $SEMIDYNAMIC"
@@ -20505,10 +20550,22 @@ if ac_fn_cxx_try_cpp "$LINENO"; then :
   # We can compile using X headers with no special include directory.
 ac_x_includes=
 else
-  for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Xlib.h"; then
-    ac_x_includes=$ac_dir
-    break
+  case $GS_EXE in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_GS_EXE="$GS_EXE" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+as_dummy="${withval:-$PATH}"
+for as_dir in $as_dummy
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_GS_EXE="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
   fi
 done
 fi
@@ -20540,12 +20597,15 @@ else
   LIBS=$ac_save_LIBS
 for ac_dir in `$as_echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
-  # Don't even attempt the hair of trying to link an X program!
-  for ac_extension in a so sl dylib la dll; do
-    if test -r "$ac_dir/libX11.$ac_extension"; then
-      ac_x_libraries=$ac_dir
-      break 2
-    fi
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_GS_DLL="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
   done
 done
 fi
@@ -20757,7 +20817,108 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
+      ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+      ;;
+    esac
+  fi
+
+  OBJFLAGS="$SAVE_CPPFLAGS"
+  LDFLAGS="$SAVE_LDFLAGS"
+  LIBS="$SAVE_LIBS"
+
+
+  SPARKLE_CXX=$SPARKLE_CXXFLAGS
+
+  SPARKLE_CPP=$SPARKLE_CPPFLAGS
+
+  if [[ $enable_dumpflags =~ (^|[[:space:]])(SPARKLE|ALL)($|[[:space:]]) ]]
+  then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: SPARKLE_CFLAGS:$SPARKLE_CFLAGS" >&5
+$as_echo "$as_me: SPARKLE_CFLAGS:$SPARKLE_CFLAGS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: SPARKLE_CXXFLAGS:$SPARKLE_CXXFLAGS" >&5
+$as_echo "$as_me: SPARKLE_CXXFLAGS:$SPARKLE_CXXFLAGS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: SPARKLE_CPPFLAGS:$SPARKLE_CPPFLAGS" >&5
+$as_echo "$as_me: SPARKLE_CPPFLAGS:$SPARKLE_CPPFLAGS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: SPARKLE_LIBS:$SPARKLE_LIBS" >&5
+$as_echo "$as_me: SPARKLE_LIBS:$SPARKLE_LIBS" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: SPARKLE_LDFLAGS:$SPARKLE_LDFLAGS" >&5
+$as_echo "$as_me: SPARKLE_LDFLAGS:$SPARKLE_LDFLAGS" >&6;}
+
+
+  fi
+# adaptation layer remove when finished
+  SPARKLE_CFLAGS="$SPARKLE_CXXFLAGS $SPARKLE_CPPFLAGS"
+
+  SPARKLE_LDFLAGS=""
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------
+# Handle different systems case by case
+#--------------------------------------------------------------------
+
+  CONFIG_OS="GNU_LINUX"
+  CONFIG_OS_SUFFIX="${host}"
+  CONFIG_OS_COMPAT="Unix"
+  CONFIG_MACOS=""
+  CONFIG_CXXFLAGS=""
+  CONFIG_CXXTEMPLATE=""
+  CONFIG_STD_SETENV="#define STD_SETENV"
+  CONFIG_SO="so"
+  CONFIG_LIB_PATH="LD_LIBRARY_PATH"
+  CONFIG_CHMOD="chmod -f"
+  CONFIG_CXXOPTIMIZE="-O2"
+  CONFIG_BSTATIC="-lXdmcp -lXau -lXrender"
+  CONFIG_BSHARED="-Wl,-Bdynamic"
+  CONFIG_BFLAGS=""
+  CONFIG_BPATH="-Wl,-rpath,"
+  CONFIG_LDRT=""
+  CONFIG_WORD_LENGTH="4"
+  CONFIG_WORD_LENGTH_INC="3"
+  CONFIG_WORD_MASK="0xfffffffc"
+  CONFIG_MAX_FAST="260 // WORD_LENGTH more than power of 2"
+  CONFIG_HOST_OS="$host_os"
+  CONFIG_HOST_VENDOR="$host_vendor"
+  CONFIG_HOST_CPU="$host_cpu"
+  CONFIG_USER="$USER"
+  CONFIG_DATE="`date`"
+  CONFIG_QTPIPES="no"
+  # tweak for XCode project
+  CONFIG_ARCHS='$(NATIVE_ARCH)'
+
+  X11_CFLAGS="$X_CFLAGS"
+  X11_LDFLAGS="$X_LIBS -lXext -lX11"
+
+  # The cast to long int works around a bug in the HP C Compiler
+# version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
+# declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
+# This bug is HP SR number 8606223364.
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking size of void *" >&5
+$as_echo_n "checking size of void *... " >&6; }
+if ${ac_cv_sizeof_void_p+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if ac_fn_cxx_compute_int "$LINENO" "(long int) (sizeof (void *))" "ac_cv_sizeof_void_p"        "$ac_includes_default"; then :
+
+else
+  if test "$ac_cv_type_void_p" = yes; then
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error 77 "cannot compute sizeof (void *)
+See \`config.log' for more details" "$LINENO" 5; }
+   else
+     ac_cv_sizeof_void_p=0
+   fi
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dnet_stub_dnet_ntoa" >&5
 $as_echo "$ac_cv_lib_dnet_stub_dnet_ntoa" >&6; }
@@ -20765,22 +20926,236 @@ if test "x$ac_cv_lib_dnet_stub_dnet_ntoa" = xyes; then :
   X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"
 fi
 
-    fi
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-    LIBS="$ac_xsave_LIBS"
 
-    # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
-    # to get the SysV transport functions.
-    # Chad R. Larson says the Pyramis MIS-ES running DC/OSx (SVR4)
-    # needs -lnsl.
-    # The nsl library prevents programs from opening the X display
-    # on Irix 5.2, according to T.E. Dickey.
-    # The functions gethostbyname, getservbyname, and inet_addr are
-    # in -lbsd on LynxOS 3.0.1/i386, according to Lars Hecking.
-    ac_fn_cxx_check_func "$LINENO" "gethostbyname" "ac_cv_func_gethostbyname"
-if test "x$ac_cv_func_gethostbyname" = xyes; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if we are on a 64-bits computer" >&5
+$as_echo_n "checking if we are on a 64-bits computer... " >&6; }
+  if test "$ac_cv_sizeof_void_p" = "8"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    CONFIG_WORD_LENGTH="8"
+    CONFIG_WORD_LENGTH_INC="7"
+    CONFIG_WORD_MASK="0xfffffffffffffff8"
+    CONFIG_MAX_FAST="264 // WORD_LENGTH more than power of 2"
+  elif test "$ac_cv_sizeof_void_p" = "0"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    CONFIG_WORD_LENGTH="8"
+    CONFIG_WORD_LENGTH_INC="7"
+    CONFIG_WORD_MASK="0xfffffffffffffff8"
+    CONFIG_MAX_FAST="264 // WORD_LENGTH more than power of 2"
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  fi
+
+  case "${host}" in
+    i*86-*-linux* | x86_64-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an Intel or AMD GNU/Linux host" >&5
+$as_echo "final adjustments for an Intel or AMD GNU/Linux host" >&6; }
+      CONFIG_OS_SUFFIX="i386-pc-linux-gnu"
+      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
+      CONFIG_QTPIPES="yes"
+    ;;
+    i*86-*-freebsd* | x86_64-*-freebsd*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an Intel or AMD GNU/BSD host" >&5
+$as_echo "final adjustments for an Intel or AMD GNU/BSD host" >&6; }
+      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
+    ;;
+    i*86-*-solaris*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an Intel or AMS Solaris host" >&5
+$as_echo "final adjustments for an Intel or AMS Solaris host" >&6; }
+      CONFIG_CXXOPTIMIZE="-O3"
+      CONFIG_BPATH="-Wl,-R,"
+      X11_LDFLAGS="$X_LIBS -lXext -lX11 -lsocket"
+    ;;
+    *mingw*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for mingw host" >&5
+$as_echo "final adjustments for mingw host" >&6; }
+      CONFIG_OS=MINGW
+      CONFIG_QTPIPES="yes"
+      CONFIG_OS_COMPAT="Windows"
+      CPPFLAGS="$CPPFLAGS -I/usr/local/include -I."
+      CONFIG_LDRT="-L/mingw/lib -lmingw32 -lmingwex"
+      GUILE_LDFLAGS="-lmingwex $GUILE_LDFLAGS -lintl" #added mingwex to mask the internal guile readdir function
+    ;;
+    *-*-cygwin)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for cygwin host" >&5
+$as_echo "final adjustments for cygwin host" >&6; }
+      CONFIG_OS="CYGWIN"
+      CONFIG_BFLAGS="-Wl,-stack,8388608"
+  #    CXX="export CYGWIN=check_case:strict; $CXX"
+  #    AC_SUBST(CXX)
+    ;;
+    *apple*darwin*)
+      echo "$ac_t""final adjustments for a MacOS host" 1>&6
+      CONFIG_OS="MACOS"
+      CONFIG_QTPIPES="yes"
+      CONFIG_CXXFLAGS="-I${prefix}/include"
+      CONFIG_BSHARED=""
+      CONFIG_BFLAGS="-framework Cocoa -framework IOKit"
+      CONFIG_BPATH=""
+      CONFIG_SO="dylib"
+      CONFIG_LIB_PATH="DYLD_LIBRARY_PATH"
+  #    GUILE_LDFLAGS=""
+  #    for l in $($GUILE_CONFIG link)
+  #    do if [[[ $l =~ ^-L ]]]
+  #       then GuileLibPath=${l#-L}
+  #       elif [[[ $l =~ ^-l ]]]
+  #       then lib="$GuileLibPath/lib${l#-l}.a"
+  #            [[[ -f $lib ]]] && GUILE_LDFLAGS+="$lib " || GUILE_LDFLAGS+="${l} " #try to use dynamic lib
+  #       fi
+  #    done
+  ## guile-config doesn't return the need of libnintl
+  #        [[[ -z $LibIntl ]]] && LibIntl="$GuileLibPath/libintl.a" && [[[ -f $LibIntl ]]] && GUILE_LDFLAGS+="$LibIntl "
+  ## We must also modify the iconv library, that should be in same place than guile's lib
+  #        [[[ -z $LibIconv ]]] && LibIconv="$GuileLibPath/libiconv.a" && [[[ -f $LibIconv ]]] && ICONV_LDFLAGS="$LibIconv "
+  ;;
+    *darwin*)
+      echo "$ac_t""final adjustments for a generic Darwin host" 1>&6
+      CONFIG_CXXFLAGS="-I${prefix}/include"
+      CONFIG_BSHARED=""
+      CONFIG_BPATH=""
+      CONFIG_SO="dylib"
+      CONFIG_LIB_PATH="DYLD_LIBRARY_PATH"
+    ;;
+    powerpc-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a PowerPC/GNU-linux host" >&5
+$as_echo "final adjustments for a PowerPC/GNU-linux host" >&6; }
+      CONFIG_OS="POWERPC_GNU_LINUX"
+      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
+    ;;
+    *sun*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a SUN/solaris host" >&5
+$as_echo "final adjustments for a SUN/solaris host" >&6; }
+      CONFIG_OS="SUN"
+      CONFIG_BSTATIC=""
+      CONFIG_BSHARED=""
+      CONFIG_BPATH="-Wl,-R,"
+      X11_LDFLAGS="$X_LIBS -lXext -lX11 -lsocket"
+      CONFIG_WORD_LENGTH="8"
+      CONFIG_WORD_LENGTH_INC="7"
+      CONFIG_WORD_MASK="0xfffffff8"
+      CONFIG_MAX_FAST="264 // WORD_LENGTH more than power of 2"
+      CONFIG_STD_SETENV=""
+    ;;
+    sparc*-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a Sparc host running GNU/Linux" >&5
+$as_echo "final adjustments for a Sparc host running GNU/Linux" >&6; }
+      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
+      CONFIG_WORD_LENGTH="8"
+      CONFIG_WORD_LENGTH_INC="7"
+      CONFIG_WORD_MASK="0xfffffff8"
+      CONFIG_MAX_FAST="264 // WORD_LENGTH more than power of 2"
+      CONFIG_STD_SETENV=""
+    ;;
+    *dec*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a DEC/alpha host" >&5
+$as_echo "final adjustments for a DEC/alpha host" >&6; }
+      CONFIG_BSTATIC=""
+      CONFIG_BSHARED="-shared"
+      CONFIG_STD_SETENV=""
+    ;;
+    *alpha*-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an Alpha GNU/Linux host" >&5
+$as_echo "final adjustments for an Alpha GNU/Linux host" >&6; }
+      CONFIG_BSTATIC=""
+      CONFIG_BSHARED="-shared"
+    ;;
+    s390-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an IBM S/390 GNU/Linux host" >&5
+$as_echo "final adjustments for an IBM S/390 GNU/Linux host" >&6; }
+      CONFIG_STD_SETENV=""
+    ;;
+    ia64-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an Itanium GNU/Linux host" >&5
+$as_echo "final adjustments for an Itanium GNU/Linux host" >&6; }
+      CONFIG_BSTATIC=""
+      CONFIG_BSHARED="-shared"
+    ;;
+    hppa*-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an HP PA_RISC GNU/Linux host" >&5
+$as_echo "final adjustments for an HP PA_RISC GNU/Linux host" >&6; }
+      CONFIG_CXXFLAGS="$CONFIG_CXXFLAGS -fPIC"
+      CONFIG_BSTATIC=""
+      CONFIG_BSHARED="-shared"
+    ;;
+    *sgi-irix*)
+      echo "$ac_t""final adjustments for a SGI/Irix host" 1>&6
+      CONFIG_OS="IRIX"
+      CONFIG_CXXFLAGS=""
+      X_LIBS=-L/usr/lib32
+      CONFIG_BSTATIC=""
+      CONFIG_BSHARED=""
+      CONFIG_BPATH=""
+      X11_LDFLAGS="$X_LIBS -lX11"
+      CONFIG_WORD_MASK="0xfffffff8"
+      CONFIG_STD_SETENV=""
+      CONFIG_CHMOD="chmod"
+      CONFIG_LIB_PATH="LD_LIBRARYN32_PATH"
+    ;;
+    m68k-*-linux* | mips-*-linux* | mipsel-*-linux* | arm*-*-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a supported GNU/Linux host" >&5
+$as_echo "final adjustments for a supported GNU/Linux host" >&6; }
+    ;;
+    *-linux*)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a generic GNU/Linux host" >&5
+$as_echo "final adjustments for a generic GNU/Linux host" >&6; }
+    ;;
+    *)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for a generic host" >&5
+$as_echo "final adjustments for a generic host" >&6; }
+    ;;
+  esac
+
+  case "${host}" in
+    *apple*darwin10*)
+      echo "$ac_t""Xcode 3.2 project tweak (only MacOSX 10.6)" 1>&6
+      CONFIG_ARCHS='$(NATIVE_ARCH_ACTUAL)'
+    ;;
+  esac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------
+# Temporary fix for link problem
+#--------------------------------------------------------------------
+
+case "$GXX_VERSION" in
+     3.* | 4.*)
+#	 CONFIG_BSTATIC="-static"
+	 CONFIG_BSHARED="-dynamic"
+     ;;
+esac
 
 fi
 
@@ -24437,256 +24812,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
   CXXFLAGS=""
 
 
-  #--- Profiling
-
-  # Check whether --enable-profile was given.
-if test "${enable_profile+set}" = set; then :
-  enableval=$enable_profile;
-else
-  enable_profile="no"
-fi
-
-
-  if test "$enable_profile" = "yes"; then
-      if test "$GXX" = "yes"; then
-	  enable_profile="yes"
-      else
-	  enable_profile="none"
-      fi
-  fi
-
-  case "$enable_profile" in
-      yes)
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling gcc profiling compilation flag -pg" >&5
-$as_echo "enabling gcc profiling compilation flag -pg" >&6; }
-	  CONFIG_CXXPROFILE="-pg"
-	  ;;
-      none)
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling gcc profiling compilation flag" >&5
-$as_echo "disabling gcc profiling compilation flag" >&6; }
-	  CONFIG_CXXPROFILE=""
-	  ;;
-      *)
-	  CONFIG_CXXPROFILE=""
-	  ;;
-  esac
-
-  #--- Debugging
-
-  # Check whether --enable-debug was given.
-if test "${enable_debug+set}" = set; then :
-  enableval=$enable_debug;
-else
-  enable_debug="no"
-fi
-
-
-  if test "$enable_debug" = "yes"; then
-      if test "$GXX" = "yes"; then
-	  enable_debug="-ggdb"
-      else
-	  enable_debug="-g3"
-      fi
-  fi
-
-  if test "$enable_debug" = "no"; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling debugging" >&5
-$as_echo "disabling debugging" >&6; }
-      CONFIG_STRIP="strip"
-      CONFIG_CXXDEBUG=""
-      optimize_default="yes"
-  else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling debugging, $enable_debug" >&5
-$as_echo "enabling debugging, $enable_debug" >&6; }
-      CONFIG_STRIP="true"
-      CONFIG_CXXDEBUG="$enable_debug"
-      optimize_default="no"
-  fi
-
-  #--- Assert
-
-  # Check whether --enable-assert was given.
-if test "${enable_assert+set}" = set; then :
-  enableval=$enable_assert;
-else
-  enable_assert="yes"
-fi
-
-
-  if test "$enable_assert" = "no"; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling assertion checking" >&5
-$as_echo "disabling assertion checking" >&6; }
-  else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling assertion checking" >&5
-$as_echo "enabling assertion checking" >&6; }
-
-$as_echo "#define DEBUG_ASSERT 1" >>confdefs.h
-
-  fi
-
-  #--- Warnings
-
-  case "$GXX_VERSION" in
-    none)
-      CONFIG_CXXWARNING="";
-    ;;
-    *)
-      CONFIG_CXXWARNING="-Wall -Wno-return-type"
-    ;;
-  esac
-
-  # Check whether --enable-warnings was given.
-if test "${enable_warnings+set}" = set; then :
-  enableval=$enable_warnings;
-else
-  enable_warnings="yes"
-fi
-
-  case "$enable_warnings" in
-      yes)
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling warning flags $CONFIG_CXXWARNING" >&5
-$as_echo "enabling warning flags $CONFIG_CXXWARNING" >&6; } ;;
-      no)
-	  CONFIG_CXXWARNING=""
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling warning flags" >&5
-$as_echo "disabling warning flags" >&6; } ;;
-      *)
-	  CONFIG_CXXWARNING="$enable_warnings"
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling warning flags $CONFIG_CXXWARNING" >&5
-$as_echo "enabling warning flags $CONFIG_CXXWARNING" >&6; } ;;
-  esac
-
-  #--- Experimental mode
-
-  # Check whether --enable-experimental was given.
-if test "${enable_experimental+set}" = set; then :
-  enableval=$enable_experimental;
-else
-  enable_experimental="no"
-fi
-
-  case "$enable_experimental" in
-      yes)
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling experimental style rewriting code" >&5
-$as_echo "enabling experimental style rewriting code" >&6; }
-
-$as_echo "#define EXPERIMENTAL 1" >>confdefs.h
-
-	  CONFIG_EXPERIMENTAL="Memorizer Environment Evaluate"
-	  ;;
-      no)
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling experimental style rewriting code" >&5
-$as_echo "disabling experimental style rewriting code" >&6; }
-	  CONFIG_EXPERIMENTAL=""
-	  ;;
-      *)
-	  as_fn_error $? "bad option --enable-experimental=$enable_experimental" "$LINENO" 5
-	  ;;
-  esac
-
-
-
-  # Check whether --enable-fastalloc was given.
-if test "${enable_fastalloc+set}" = set; then :
-  enableval=$enable_fastalloc;
-else
-  enable_fastalloc="yes"
-fi
-
-  case "$enable_fastalloc" in
-      yes)
-	  ;;
-      no)
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling fast allocator for small objects" >&5
-$as_echo "disabling fast allocator for small objects" >&6; }
-
-$as_echo "#define NO_FAST_ALLOC 1" >>confdefs.h
-
-	  ;;
-      *)
-	  as_fn_error $? "bad option --enable-fastalloc=$enable_fastalloc" "$LINENO" 5
-	  ;;
-  esac
-
-
-  if test "$prefix" = ""; then
-    prefix=/usr/local
-  fi
-  if test "$prefix" = "NONE"; then
-    prefix=/usr/local
-  fi
-  if test "$exec_prefix" = ""; then
-    exec_prefix='${prefix}'
-  fi
-  if test "$exec_prefix" = "NONE"; then
-    exec_prefix='${prefix}'
-  fi
-  if test "$exec_prefix" = '${prefix}'; then
-    exec_prefix='${prefix}'
-  fi
-  if test "$includedir" = ""; then
-    includedir='${prefix}/include'
-  fi
-  if test "$includedir" = "NONE"; then
-    includedir='${prefix}/include'
-  fi
-  if test "$includedir" = '${prefix}/include'; then
-    includedir='${prefix}/include'
-  fi
-  if test "$libdir" = ""; then
-    libdir='${exec_prefix}/lib'
-  fi
-  if test "$libdir" = "NONE"; then
-    libdir='${exec_prefix}/lib'
-  fi
-  if test "$libdir" = '${exec_prefix}/lib'; then
-    libdir='${exec_prefix}/lib'
-  fi
-  if test "$bindir" = ""; then
-    bindir='${exec_prefix}/bin'
-  fi
-  if test "$bindir" = "NONE"; then
-    bindir=${exec_prefix}/bin
-  fi
-  if test "$bindir" = '${exec_prefix}/bin'; then
-    bindir='${exec_prefix}/bin'
-  fi
-  if test "$datarootdir" = ""; then
-    datarootdir='${prefix}/share'
-  fi
-  if test "$datarootdir" = "NONE"; then
-    datarootdir='${prefix}/share'
-  fi
-  if test "$datarootdir" = '${prefix}/share'; then
-    datarootdir='${prefix}/share'
-  fi
-  if test "$datadir" = ""; then
-    datadir='${prefix}/share'
-  fi
-  if test "$datadir" = "NONE"; then
-    datadir='${prefix}/share'
-  fi
-  if test "$datadir" = '${prefix}/share'; then
-    datadir='${prefix}/share'
-  fi
-  if test "$mandir" = ""; then
-    mandir='${datarootdir}/man'
-  fi
-  if test "$mandir" = "NONE"; then
-    mandir='${datarootdir}/man'
-  fi
-  if test "$mandir" = '${datarootdir}/man'; then
-    mandir='${datarootdir}/man'
-  fi
-  if test "$libexecdir" = ""; then
-    libexecdir='${exec_prefix}/libexec'
-  fi
-  if test "$libexecdir" = "NONE"; then
-    libexecdir='${exec_prefix}/libexec'
-  fi
-  if test "$libexecdir" = '${exec_prefix}/libexec'; then
-    libexecdir='${exec_prefix}/libexec'
-  fi
+#--------------------------------------------------------------------
+# Default paths for installation
+#--------------------------------------------------------------------
 
   curdir="`pwd`"
   tmorig=${curdir}
