@@ -24768,6 +24768,11 @@ $as_echo "$as_me: PDF_LDFLAGS:$PDF_LDFLAGS" >&6;}
 
 
 
+#--------------------------------------------------------------------
+# Debugging options
+#--------------------------------------------------------------------
+
+
   #STD_DEBUG_FLAGS="-fno-rtti -fno-exceptions"
   #if test "$enable_cocoa" = "yes"; then
   #    STD_DEBUG_FLAGS="-fno-exceptions"
@@ -24810,6 +24815,290 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
   CXXFLAGS=""
+
+
+  #--- Profiling
+
+  # Check whether --enable-profile was given.
+if test "${enable_profile+set}" = set; then :
+  enableval=$enable_profile;
+else
+  enable_profile="no"
+fi
+
+
+  if test "$enable_profile" = "yes"; then
+      if test "$GXX" = "yes"; then
+	  enable_profile="yes"
+      else
+	  enable_profile="none"
+      fi
+  fi
+
+  case "$enable_profile" in
+      yes)
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling gcc profiling compilation flag -pg" >&5
+$as_echo "enabling gcc profiling compilation flag -pg" >&6; }
+	  CONFIG_CXXPROFILE="-pg"
+	  ;;
+      none)
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling gcc profiling compilation flag" >&5
+$as_echo "disabling gcc profiling compilation flag" >&6; }
+	  CONFIG_CXXPROFILE=""
+	  ;;
+      *)
+	  CONFIG_CXXPROFILE=""
+	  ;;
+  esac
+
+  #--- Debugging
+
+  # Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then :
+  enableval=$enable_debug;
+else
+  enable_debug="no"
+fi
+
+
+  if test "$enable_debug" = "yes"; then
+      if test "$GXX" = "yes"; then
+	  enable_debug="-ggdb"
+      else
+	  enable_debug="-g3"
+      fi
+  fi
+
+  if test "$enable_debug" = "no"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling debugging" >&5
+$as_echo "disabling debugging" >&6; }
+      CONFIG_STRIP="strip"
+      CONFIG_CXXDEBUG=""
+      optimize_default="yes"
+  else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling debugging, $enable_debug" >&5
+$as_echo "enabling debugging, $enable_debug" >&6; }
+      CONFIG_STRIP="true"
+      CONFIG_CXXDEBUG="$enable_debug"
+      optimize_default="no"
+  fi
+
+  #--- Assert
+
+  # Check whether --enable-assert was given.
+if test "${enable_assert+set}" = set; then :
+  enableval=$enable_assert;
+else
+  enable_assert="yes"
+fi
+
+
+  if test "$enable_assert" = "no"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling assertion checking" >&5
+$as_echo "disabling assertion checking" >&6; }
+  else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling assertion checking" >&5
+$as_echo "enabling assertion checking" >&6; }
+
+$as_echo "#define DEBUG_ASSERT 1" >>confdefs.h
+
+  fi
+
+  #--- Warnings
+
+  case "$GXX_VERSION" in
+    none)
+      CONFIG_CXXWARNING="";
+    ;;
+    *)
+      CONFIG_CXXWARNING="-Wall -Wno-return-type"
+    ;;
+  esac
+
+  # Check whether --enable-warnings was given.
+if test "${enable_warnings+set}" = set; then :
+  enableval=$enable_warnings;
+else
+  enable_warnings="yes"
+fi
+
+  case "$enable_warnings" in
+      yes)
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling warning flags $CONFIG_CXXWARNING" >&5
+$as_echo "enabling warning flags $CONFIG_CXXWARNING" >&6; } ;;
+      no)
+	  CONFIG_CXXWARNING=""
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling warning flags" >&5
+$as_echo "disabling warning flags" >&6; } ;;
+      *)
+	  CONFIG_CXXWARNING="$enable_warnings"
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling warning flags $CONFIG_CXXWARNING" >&5
+$as_echo "enabling warning flags $CONFIG_CXXWARNING" >&6; } ;;
+  esac
+
+
+#--------------------------------------------------------------------
+# Optimization options
+#--------------------------------------------------------------------
+
+if test "$optimize_default" = "yes"; then
+  case "$GXX_VERSION" in
+    3.3.3 | 3.3.4 | 4.*)
+      ;;
+    2.96 | 3.0 | 3.0.* | 3.1 | 3.1.* | 3.2 | 3.2.* | 3.3 | 3.3.*)
+      case "${host}" in
+	i*86-*-linux-gnu* | i*86-*-freebsd*)
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using g++ 3.*, optimize without inline by default" >&5
+$as_echo "$as_me: WARNING: using g++ 3.*, optimize without inline by default" >&2;}
+	  optimize_default="no-inline"
+	;;
+	*)
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using g++ 3.*, optimize without inline by default" >&5
+$as_echo "$as_me: WARNING: using g++ 3.*, optimize without inline by default" >&2;}
+	  optimize_default="no-inline"
+	;;
+      esac
+    ;;
+  esac
+fi
+
+# Check whether --enable-optimize was given.
+if test "${enable_optimize+set}" = set; then :
+  enableval=$enable_optimize;
+else
+  enable_optimize="$optimize_default"
+fi
+
+
+case "$enable_optimize" in
+    yes)
+	# keep optimization options
+  	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling optimizations, $CONFIG_CXXOPTIMIZE" >&5
+$as_echo "enabling optimizations, $CONFIG_CXXOPTIMIZE" >&6; } ;;
+    no-inline)
+	optimize_no_inline="-fno-default-inline -fno-inline"
+	CONFIG_CXXOPTIMIZE="$CONFIG_CXXOPTIMIZE $optimize_no_inline"
+  	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling optimizations, $CONFIG_CXXOPTIMIZE" >&5
+$as_echo "enabling optimizations, $CONFIG_CXXOPTIMIZE" >&6; } ;;
+    no)
+	CONFIG_CXXOPTIMIZE=""
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling optimizations" >&5
+$as_echo "disabling optimizations" >&6; } ;;
+    *)
+	CONFIG_CXXOPTIMIZE="$enable_optimize"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: customizing optimizations, $enable_optimize" >&5
+$as_echo "customizing optimizations, $enable_optimize" >&6; } ;;
+esac
+
+#--------------------------------------------------------------------
+# Fix for Mac OS X with genuine GCC and Qt framework
+#--------------------------------------------------------------------
+
+
+
+case "${host}" in
+  *apple*darwin*)
+
+
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+  OLDCXXFLAGS=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS -arch x86_64 -Xarch_x86_64 -mmacosx-version-min=10.8"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether C++ compiler supports -Xarch_x86_64" >&5
+$as_echo_n "checking for whether C++ compiler supports -Xarch_x86_64... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    Xarch_x86_64="yes"
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    Xarch_x86_64="no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  CXXFLAGS=$OLDCXXFLAGS
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+    if test "$Xarch_x86_64" = "no"; then
+      QT_CXXFLAGS=`echo $QT_CXXFLAGS | sed "s/ -Xarch_x86_64//g"`
+      QT_LDFLAGS=`echo $QT_LDFLAGS | sed "s/ -Xarch_x86_64//g"`
+    fi;;
+esac
+
+
+
+
+
+case "${host}" in
+  *apple*darwin*)
+
+
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+  OLDCXXFLAGS=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether C++ compiler supports -stdlib" >&5
+$as_echo_n "checking for whether C++ compiler supports -stdlib... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    Stdlib="yes"
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    Stdlib="no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  CXXFLAGS=$OLDCXXFLAGS
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
 
 
 #--------------------------------------------------------------------
