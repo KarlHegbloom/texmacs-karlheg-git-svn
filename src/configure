@@ -21452,6 +21452,7 @@ fi
 fi
 
 
+
   CONFIG_X11=""
   CONFIG_COCOA=""
   CONFIG_GUI="X11"
@@ -23264,6 +23265,31 @@ $as_echo "disabling experimental Cocoa port" >&6; }
 	  as_fn_error $? "bad option --enable-cocoa=$enable_cocoa" "$LINENO" 5
 	  ;;
   esac
+
+  case "$CONFIG_GUI" in
+      X11)
+	  CONFIG_X11="X11 Widkit"
+	  if test "x${CONFIG_GS}" != "xGhostscript"; then
+	    CONFIG_X11="$CONFIG_X11 Ghostscript"
+	  fi
+	  CONFIG_GUI_DEFINE="X11TEXMACS"
+  #        AC_DEFINE(X11TEXMACS, 1, [Use standard X11 port])
+	  ;;
+      COCOA)
+	  CONFIG_COCOA="Cocoa"
+	  CONFIG_GUI_DEFINE="AQUATEXMACS"
+  #        AC_DEFINE(AQUATEXMACS, 1, [Enable experimental Cocoa port])
+	  ;;
+      QT)
+	  CONFIG_QT="Qt"
+	  CONFIG_GUI_DEFINE="QTTEXMACS"
+  #        AC_DEFINE(QTTEXMACS, 1, [Enable experimental Qt port])
+	  ;;
+  esac
+
+
+
+
 
   case "$CONFIG_GUI" in
       X11)
