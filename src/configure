@@ -23295,10 +23295,9 @@ $as_echo "disabling experimental Cocoa port" >&6; }
 
 
 
-
-
-
-
+#--------------------------------------------------------------------
+# Native PDF renderer based on Hummus
+#--------------------------------------------------------------------
 
 # Check whether --enable-pdf-renderer was given.
 if test "${enable_pdf_renderer+set}" = set; then :
