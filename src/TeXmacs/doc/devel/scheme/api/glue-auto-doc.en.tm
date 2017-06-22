@@ -20872,6 +20872,14 @@ source code.
   </explain>
 
   <\explain>
+    <scm|(select-from-cursor-if-active)>
+<explain-synopsis|no synopsis>
+  <|explain>
+    Calls the <c++> function <cpp|select_from_cursor_if_active> which returns
+    <scm|void>.
+  </explain>
+
+  <\explain>
     <scm|(select-from-keyboard <scm-arg|bool>)>
 <explain-synopsis|no synopsis>
   <|explain>
@@ -23124,6 +23132,14 @@ source code.
 <explain-synopsis|no synopsis>
   <|explain>
     Calls the <c++> function <cpp|select_from_cursor> which returns
+    <scm|void>.
+  </explain>
+
+  <\explain>
+    <scm|(select-from-cursor-if-active)>
+<explain-synopsis|no synopsis>
+  <|explain>
+    Calls the <c++> function <cpp|select_from_cursor_if_active> which returns
     <scm|void>.
   </explain>
 
