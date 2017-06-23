@@ -21664,7 +21664,7 @@ source code.
   </explain>
 
   <\explain>
-    <scm|(print-snippet <scm-arg|url> <scm-arg|content>)>
+    <scm|(print-snippet <scm-arg|url> <scm-arg|content> <scm-arg|bool>)>
 <explain-synopsis|no synopsis>
   <|explain>
     Calls the <c++> function <cpp|print_snippet> which returns
@@ -23928,7 +23928,7 @@ source code.
   </explain>
 
   <\explain>
-    <scm|(print-snippet <scm-arg|url> <scm-arg|content>)>
+    <scm|(print-snippet <scm-arg|url> <scm-arg|content> <scm-arg|bool>)>
 <explain-synopsis|no synopsis>
   <|explain>
     Calls the <c++> function <cpp|print_snippet> which returns
