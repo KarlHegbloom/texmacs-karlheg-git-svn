@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-convert)
-  (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+;; (texmacs-module (kernel texmacs tm-convert)
+;;   (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+
+(define-module (kernel texmacs tm-convert)
+  :use-module (kernel texmacs tm-define)
+  :use-module (kernel texmacs tm-modes))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lazy formats

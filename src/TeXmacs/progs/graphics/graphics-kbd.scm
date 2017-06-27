@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-kbd)
-  (:use (generic generic-kbd)
-        (utils library cursor)
-        (graphics graphics-env)
-        (graphics graphics-main)
-        (graphics graphics-edit)))
+;; (texmacs-module (graphics graphics-kbd)
+;;   (:use (generic generic-kbd)
+;;         (utils library cursor)
+;;         (graphics graphics-env)
+;;         (graphics graphics-main)
+;;         (graphics graphics-edit)))
+
+(define-module (graphics graphics-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (utils library cursor)
+  :use-module (graphics graphics-env)
+  :use-module (graphics graphics-main)
+  :use-module (graphics graphics-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Various contexts

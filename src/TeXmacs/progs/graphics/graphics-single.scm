@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,10 +15,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-single)
-  (:use (graphics graphics-object)
-        (graphics graphics-env)
-        (graphics graphics-main)))
+;; (texmacs-module (graphics graphics-single)
+;;   (:use (graphics graphics-object)
+;;         (graphics graphics-env)
+;;         (graphics graphics-main)))
+
+(define-module (graphics graphics-single)
+  :use-module (graphics graphics-object)
+  :use-module (graphics graphics-env)
+  :use-module (graphics graphics-main))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic operations

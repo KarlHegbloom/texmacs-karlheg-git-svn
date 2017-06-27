@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -17,7 +18,7 @@
 ;;
 ;;  - Truly index all code with an indexer, instead of patching scheme's read.
 ;;  - Be aware of context: create new ptrees on the fly based on the
-;;    environment. This needs online parsing and will be difficult. 
+;;    environment. This needs online parsing and will be difficult.
 ;;  - Suggest parameters in function calls.
 ;;  - Provide an alternative interface using (non-modal) popups or greyed out
 ;;    text after the cursor.
@@ -25,8 +26,13 @@
 ;;    better portability.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog scheme-autocomplete)
-  (:use (utils library ptrees) (prog glue-symbols)))
+;; (texmacs-module (prog scheme-autocomplete)
+;;   (:use (utils library ptrees) (prog glue-symbols)))
+
+(define-module (prog scheme-autocomplete)
+  :use-module (utils library ptrees)
+  :use-module (prog glue-symbols))
+
 
 (define completions (make-ptree))
 

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-menu)
-  (:use (graphics graphics-env)
-	(graphics graphics-main)
-        (graphics graphics-edit)))
+;; (texmacs-module (graphics graphics-menu)
+;;   (:use (graphics graphics-env)
+;; 	(graphics graphics-main)
+;;         (graphics graphics-edit)))
+
+(define-module (graphics graphics-menu)
+  :use-module (graphics graphics-env)
+  :use-module (graphics graphics-main)
+  :use-module (graphics graphics-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Submenus

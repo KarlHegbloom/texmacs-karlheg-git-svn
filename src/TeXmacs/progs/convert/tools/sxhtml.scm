@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools sxhtml)
-  (:use (convert tools sxml)))
+;; (texmacs-module (convert tools sxhtml)
+;;   (:use (convert tools sxml)))
+
+(define-module (convert tools sxhtml)
+  :use-module (convert tools sxml))
+
 
 ;; TODO: rewrite the predicates using DRD
 ;; TODO: consolidate with htmltm dispatch DRD

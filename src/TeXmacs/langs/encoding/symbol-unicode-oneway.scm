@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; One-way conversion of some TeXmacs symbols to Unicode.
 
 ;; (C) 2003  David Allouche

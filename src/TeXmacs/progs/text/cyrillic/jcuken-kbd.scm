@@ -1,4 +1,4 @@
-;;; coding: utf-8
+;;; -*- coding: raw-text -*-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -11,8 +11,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text cyrillic jcuken-kbd)
-  (:use (text text-kbd)))
+(define-module (text cyrillic jcuken-kbd)
+  :use-module (text text-kbd))
 
 (kbd-map
   (:mode in-cyrillic-jcuken?)

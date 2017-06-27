@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-menu)
-  (:use (dynamic calc-table)))
+;; (texmacs-module (dynamic calc-menu)
+;;   (:use (dynamic calc-table)))
+
+(define-module (dynamic calc-menu)
+  :use-module (dynamic calc-table))
+
 
 (menu-bind calc-table-menu
   ("Textual spreadsheet" (make-calc-table 'textual-table))

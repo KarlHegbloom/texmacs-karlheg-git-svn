@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; Special characters for HTML
 
 ;; Character entity set. Typical invocation:

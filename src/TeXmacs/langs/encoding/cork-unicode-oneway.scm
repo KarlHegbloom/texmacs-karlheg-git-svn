@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; Cork characters which have no unicode equivalent
 
 ;; (C) 2003  David Allouche

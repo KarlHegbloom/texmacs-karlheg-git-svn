@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert mathml tmmath)
-  (:use (convert tools tmconcat)
-	(convert tools tmtable)
-	(convert mathml mathml-drd)
-	(convert rewrite tmtm-brackets)))
+;; (texmacs-module (convert mathml tmmath)
+;;   (:use (convert tools tmconcat)
+;; 	(convert tools tmtable)
+;; 	(convert mathml mathml-drd)
+;; 	(convert rewrite tmtm-brackets)))
+
+(define-module (convert mathml tmmath)
+  :use-module (convert tools tmconcat)
+  :use-module (convert tools tmtable)
+  :use-module (convert mathml mathml-drd)
+  :use-module (convert rewrite tmtm-brackets))
+
 
 (define tmmath-env (make-ahash-table))
 

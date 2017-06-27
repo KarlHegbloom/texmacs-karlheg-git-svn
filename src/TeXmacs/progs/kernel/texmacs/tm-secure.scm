@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,16 +13,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-secure)
-  (:use (kernel texmacs tm-define) (kernel texmacs tm-plugins)))
+;; (texmacs-module (kernel texmacs tm-secure)
+;;   (:use (kernel texmacs tm-define) (kernel texmacs tm-plugins)))
+
+(define-module (kernel texmacs tm-secure)
+  :use-module (kernel texmacs tm-define)
+  :use-module (kernel texmacs tm-plugins))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Primitive secure functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-public-macro (define-secure-symbols . l)
+(define-macro (define-secure-symbols . l)
   (for-each (lambda (x) (property-set! x :secure #t '())) l)
   '(noop))
+(export-syntax define-secure-symbols)
 
 (define-secure-symbols
   boolean? null? symbol? string? pair? list?

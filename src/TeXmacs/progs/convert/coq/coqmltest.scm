@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert coq coqmltest)
-  (:use (convert coq coqmlscm)
-        (convert coq scmcoqml)))
+;; (texmacs-module (convert coq coqmltest)
+;;   (:use (convert coq coqmlscm)
+;;         (convert coq scmcoqml)))
+
+(define-module (convert coq coqmltest)
+  :use-module (convert coq coqmlscm)
+  :use-module (convert coq scmcoqml))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Idempotence

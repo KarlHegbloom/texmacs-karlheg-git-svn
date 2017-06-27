@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; Special symbol conversion for some unicode characters in math mode
 
 ;; (C) 2003  David Allouche

@@ -32,26 +32,26 @@
 #include "Qt/qt_gui.hpp"
 #endif
 
-bool 
+bool
 mac_alternate_startup () {
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1060
   NSUInteger nsmods = [NSEvent modifierFlags];
   return (nsmods &  NSAlternateKeyMask);
 #else
-  return ((CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState) 
+  return ((CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState)
            & NSDeviceIndependentModifierFlagsMask) == kCGEventFlagMaskAlternate);
 #endif
 }
 
 
-void 
+void
 mac_fix_paths () {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   /* add appropriate TEXMACS_PATH to the current environment */
 #if 0
   setenv("TEXMACS_PATH",
-         [[[[NSBundle mainBundle] resourcePath] 
-           stringByAppendingPathComponent:@"share/TeXmacs"] 
+         [[[[NSBundle mainBundle] resourcePath]
+           stringByAppendingPathComponent:@"share/TeXmacs"]
           cStringUsingEncoding:NSUTF8StringEncoding],
          1);
 #endif
@@ -59,13 +59,17 @@ mac_fix_paths () {
   /* FIXME: make this user-defined */
   // FIXME: encoding here is not quite correct!!!
   setenv("PATH",
-         [[[NSString stringWithCString:getenv("PATH") encoding:NSASCIIStringEncoding] 
+         [[[NSString stringWithCString:getenv("PATH") encoding:NSASCIIStringEncoding]
            stringByAppendingString:@":/usr/texbin"]
           cStringUsingEncoding:NSUTF8StringEncoding],
-         1); 
-  setenv("GUILE_LOAD_PATH","/opt/local/share/guile/1.8",1);
+         1);
+  // TODO: Discover this rather than hard-coding the location, so that it can
+  // work as an app bundle that has a guile bundled inside of it.
+  //
+  // This is the correct location for Guile from MacPorts:
+  setenv("GUILE_LOAD_PATH","/opt/local/share/guile/2.2",1);
   system("printenv");
-  [pool release];  
+  [pool release];
 }
 
 
@@ -74,16 +78,21 @@ mac_fix_paths () {
 #ifdef QTTEXMACS
 #if 1
 //HACK:
-// the following code fixes a bug in Qt/Cocoa which do not correctly handle
+//
+// The following code fixes a bug in Qt/Cocoa which do not correctly handle
 // Ctrl+Tab key combination. In particular no QKeyDown event is generated for
 // Shift+Tab and Ctrl+Tab. For this reason we intercept the event at the Cocoa
 // level and just perform manually the translation to equivalent Qt event which
-// is then sent directly to the focused widget. 
+// is then sent directly to the focused widget.
+//
 // It is rather simplistic approach but seems to work.
-// Since it is an hack, the filter is  installed  only if we link againts the 
+//
+// Since it is an hack, the filter is installed only if we link againts the
 // bugged version of Qt.
+//
 // This filter is installed in qt_gui.cpp
-// To use the API we need to compile in ObjC 2.0 since blocks are required
+//
+// To use the API we need to compile in ObjC 2.0, since blocks are required.
 
 NSEvent *
 mac_handler_body (NSEvent *event) {
@@ -98,7 +107,7 @@ mac_handler_body (NSEvent *event) {
         if (nsmods &  NSControlKeyMask) modifs |= Qt::MetaModifier;
         if (nsmods &  NSAlternateKeyMask) modifs |= Qt::AltModifier;
         if (nsmods &  NSCommandKeyMask) modifs |= Qt::ControlModifier;
-        
+
 #if 0 // DEBUGGING CODE
         QString str;
         if (key == NSBackTabCharacter) str.append("Shift+");
@@ -107,10 +116,10 @@ mac_handler_body (NSEvent *event) {
         if (nsmods &  NSCommandKeyMask) str.append("Meta+");
         str.append("Tab");
         cout << str.toAscii().constData() << LF;
-#endif      
-        
-        QKeyEvent *qe = new QKeyEvent(([event type] == NSKeyDown) ? 
-                                      QEvent::KeyPress : QEvent::KeyRelease, 
+#endif
+
+        QKeyEvent *qe = new QKeyEvent(([event type] == NSKeyDown) ?
+                                      QEvent::KeyPress : QEvent::KeyRelease,
                                       Qt::Key_Tab, modifs);
         QApplication::postEvent(qApp->focusWidget(), qe);
         return nil;
@@ -119,19 +128,19 @@ mac_handler_body (NSEvent *event) {
   }
   return event;
 }
-  
-void 
+
+void
 mac_install_filter () {
 #if NS_BLOCKS_AVAILABLE
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-  
+
   NSEvent * (^mac_handler)(NSEvent * ) = ^ (NSEvent *event) {
     return mac_handler_body(event);
   };
-  [NSEvent addLocalMonitorForEventsMatchingMask: NSKeyDownMask | NSKeyUpMask 
+  [NSEvent addLocalMonitorForEventsMatchingMask: NSKeyDownMask | NSKeyUpMask
                                         handler:mac_handler];
   [pool release];
-  
+
 #endif
 }
 
@@ -141,10 +150,10 @@ mac_install_filter () {
 //#ifdef Q_WS_MAC
 #if 0
 
-// this code is not used. It was an hack. Maybe sometimes in the future we
-// should drop it
+// This code is not used. It was an hack. Maybe sometimes in the future we
+// should drop it?
 
-void 
+void
 cancel_tracking (NSMenu *menu) {
   [menu cancelTracking];
   for (NSMenuItem *item in [menu itemArray]) {
@@ -155,7 +164,7 @@ cancel_tracking (NSMenu *menu) {
 }
 
 
-void 
+void
 mac_cancel_menu_tracking () {
 #ifdef QT_MAC_USE_COCOA
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -164,8 +173,8 @@ mac_cancel_menu_tracking () {
   [mainMenu cancelTrackingWithoutAnimation];
   {
     NSString *nss = [NSString stringWithCString:"\x1b" encoding:NSASCIIStringEncoding];
-    NSEvent *ke = [NSEvent keyEventWithType: NSKeyDown location:NSMakePoint(0,0) modifierFlags:0 
-                                  timestamp:1 windowNumber:0 context:0 characters:nss 
+    NSEvent *ke = [NSEvent keyEventWithType: NSKeyDown location:NSMakePoint(0,0) modifierFlags:0
+                                  timestamp:1 windowNumber:0 context:0 characters:nss
                 charactersIgnoringModifiers:nss isARepeat:NO keyCode:0x1b];
     [mainMenu performKeyEquivalent:ke];
   }
@@ -181,7 +190,7 @@ mac_cancel_menu_tracking () {
 /* remote controller */
 /*********************/
 
-@interface TMRemoteDelegate : NSObject <HIDRemoteDelegate> 
+@interface TMRemoteDelegate : NSObject <HIDRemoteDelegate>
 {
   // -- HID Remote --
 	HIDRemote			*hidRemote;
@@ -204,7 +213,7 @@ mac_cancel_menu_tracking () {
 	}
 }
 
-static string 
+static string
 from_nsstring (NSString *s) {
   const char *cstr = [s cStringUsingEncoding:NSUTF8StringEncoding];
   return utf8_to_cork(string((char*)cstr));
@@ -217,7 +226,7 @@ from_nsstring (NSString *s) {
 fromHardwareWithAttributes:(NSMutableDictionary *)attributes
 {
   (void) theHidRemote; (void) attributes;
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   mac_remote_button (from_nsstring([self buttonNameForButtonCode:buttonCode]), isPressed);
   [pool release];
 }
@@ -240,63 +249,63 @@ fromHardwareWithAttributes:(NSMutableDictionary *)attributes
 		case kHIDRemoteButtonCodeUp:
 			return (@"ir-up");
       break;
-      
+
 		case kHIDRemoteButtonCodeDown:
 			return (@"ir-down");
       break;
-      
+
 		case kHIDRemoteButtonCodeLeft:
 			return (@"ir-left");
       break;
-      
+
 		case kHIDRemoteButtonCodeRight:
 			return (@"ir-right");
       break;
-      
+
 		case kHIDRemoteButtonCodeCenter:
 			return (@"ir-center");
       break;
-      
+
 		case kHIDRemoteButtonCodePlay:
 			return (@"ir-play");
       break;
-      
+
 		case kHIDRemoteButtonCodeMenu:
 			return (@"ir-menu");
       break;
-      
+
 		case kHIDRemoteButtonCodeUpHold:
 			return (@"ir-up-hold");
       break;
-      
+
 		case kHIDRemoteButtonCodeDownHold:
 			return (@"ir-down-hold");
       break;
-      
+
 		case kHIDRemoteButtonCodeLeftHold:
 			return (@"ir-left-hold");
       break;
-      
+
 		case kHIDRemoteButtonCodeRightHold:
 			return (@"ir-right-hold");
       break;
-      
+
 		case kHIDRemoteButtonCodeCenterHold:
 			return (@"ir-center-hold");
       break;
-      
+
 		case kHIDRemoteButtonCodePlayHold:
 			return (@"ir-play-hold");
       break;
-      
+
 		case kHIDRemoteButtonCodeMenuHold:
 			return (@"ir-menu-hold");
       break;
-      
+
     default:
       ;
 	}
-	
+
   return ([NSString stringWithFormat:@"ir-button-%x", (int)buttonCode]);
 }
 
@@ -326,25 +335,25 @@ fromHardwareWithAttributes:(NSMutableDictionary *)attributes
 				remoteMode = kHIDRemoteModeShared;
 				remoteModeName = @"shared";
         break;
-        
+
 			case 1:
 				remoteMode = kHIDRemoteModeExclusive;
 				remoteModeName = @"exclusive";
         break;
-        
+
 			case 2:
 				remoteMode = kHIDRemoteModeExclusiveAuto;
 				remoteModeName = @"exclusive (auto)";
         break;
 		}
-    
+
 		// Check whether the installation of Candelair is required to reliably operate in this mode
 		if ([HIDRemote isCandelairInstallationRequiredForRemoteMode:remoteMode])
 		{
 			// Reliable usage of the remote in this mode under this operating system version
 			// requires the Candelair driver to be installed. Tell the user about it.
 			NSAlert *alert;
-			
+
 			if ((alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Candelair driver installation necessary", @"")
 			                             defaultButton:NSLocalizedString(@"Download", @"")
                                  alternateButton:NSLocalizedString(@"More information", @"")
@@ -356,13 +365,13 @@ fromHardwareWithAttributes:(NSMutableDictionary *)attributes
 					case NSAlertDefaultReturn:
 						[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.candelair.com/download/"]];
             break;
-            
+
 					case NSAlertAlternateReturn:
 						[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.candelair.com/"]];
             break;
 				}
 			}
-		}	
+		}
 		else
 		{
 			// Candelair is either already installed or not required under this OS release => proceed!
@@ -387,9 +396,9 @@ fromHardwareWithAttributes:(NSMutableDictionary *)attributes
 
 TMRemoteDelegate* remote_delegate = nil;
 
-void 
+void
 mac_begin_remote () {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   if (!remote_delegate) {
     remote_delegate = [[TMRemoteDelegate alloc] init];
   }
@@ -398,15 +407,15 @@ mac_begin_remote () {
   [pool release];
 }
 
-void 
+void
 mac_end_remote () {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   [remote_delegate startStopRemote:false];
   [remote_delegate cleanupRemote];
   [pool release];
 }
 
-void 
+void
 mac_remote_button (string button, bool pressed) {
   if (pressed) external_event (button, texmacs_time ());
 }
@@ -428,7 +437,7 @@ double
 mac_screen_scale_factor() {
   CGFloat scale;
   NSScreen *screen = [NSScreen mainScreen];
-    
+
   if ([screen respondsToSelector:@selector(backingScaleFactor)])
       scale = [screen backingScaleFactor];
   else
@@ -439,18 +448,19 @@ mac_screen_scale_factor() {
 // end scale factor detection
 
 #if defined (MAC_OS_X_VERSION_10_10)
-/* A bug in OSX Yosemite inserts duplicate entries in the environment. This
- affects child processes: in particular, the PATH is not properly inherited
- unless we remove the duplicates and most plugins fail to start (since they are
- indirectly invoked through tm_* scripts.
- 
- This code is adapted from Joe Cheng's https://github.com/jcheng5/envmunge
+/*
+  A bug in OSX Yosemite inserts duplicate entries in the environment. This
+  affects child processes: in particular, the PATH is not properly inherited
+  unless we remove the duplicates and most plugins fail to start (since they
+  are indirectly invoked through tm_* scripts.
+
+  This code is adapted from Joe Cheng's https://github.com/jcheng5/envmunge
  */
 void
 mac_fix_yosemite_bug() {
   hashset<string> entries;
   hashset<string> duplicates;
-  
+
     // Find duplicate entries in the environment
   for (char** entry = *_NSGetEnviron(); *entry; ++entry) {
     array<string> pair = tokenize (string (*entry), "=");

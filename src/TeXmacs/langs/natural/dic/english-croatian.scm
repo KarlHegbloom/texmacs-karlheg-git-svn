@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("a modifier" "modifikator a")
 ("a series" "serija a")
 ("abbreviation" "kratica")

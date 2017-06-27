@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert coq gallinatm)
-  (:use (convert tools tmtable)
-	(convert tools sxml)
-	(convert tools xmltm)))
+;; (texmacs-module (convert coq gallinatm)
+;;   (:use (convert tools tmtable)
+;; 	(convert tools sxml)
+;; 	(convert tools xmltm)))
+
+(define-module (convert coq gallinatm)
+  :use-module (convert tools tmtable)
+  :use-module (convert tools sxml)
+  :use-module (convert tools xmltm))
+
 
 (define map map-in-order)
 

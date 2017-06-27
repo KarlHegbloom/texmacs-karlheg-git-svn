@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-drd)
-  (:use (utils library cursor)
-        (utils library tree)
-        (utils edit variants)))
+;; (texmacs-module (graphics graphics-drd)
+;;   (:use (utils library cursor)
+;;         (utils library tree)
+;;         (utils edit variants)))
+
+(define-module (graphics graphics-drd)
+  :use-module (utils library cursor)
+  :use-module (utils library tree)
+  :use-module (utils edit variants))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Properties of the graphical tags

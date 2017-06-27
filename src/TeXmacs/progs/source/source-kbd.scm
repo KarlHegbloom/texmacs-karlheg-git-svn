@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (source source-kbd)
-  (:use (generic generic-kbd)
-	(source source-edit)))
+;; (texmacs-module (source source-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(source source-edit)))
+
+(define-module (source source-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (source source-edit))
+
 
 (kbd-map
   ("altcmd )" (make-style-with "src-compact" "none"))

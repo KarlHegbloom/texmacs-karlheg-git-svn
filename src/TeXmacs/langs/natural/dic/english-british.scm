@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("align table at the center" "align table at the centre")
 ("align table at the horizontal center" "align table at the horizontal centre")
 ("authorize" "authorise")

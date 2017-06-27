@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert coq scmcoqml)
-  (:use (convert coq coqmlout)))
+;; (texmacs-module (convert coq scmcoqml)
+;;   (:use (convert coq coqmlout)))
+
+(define-module (convert coq scmcoqml)
+  :use-module (convert coq coqmlout))
+
 
 (define map map-in-order)
 

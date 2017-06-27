@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : apidoc-markup.scm
@@ -11,16 +13,21 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Most of the procedures in this file are wrappers to the procedures in 
-;; apidoc-funcs which will be used in <extern> and <action> tags in the scheme 
+;; Most of the procedures in this file are wrappers to the procedures in
+;; apidoc-funcs which will be used in <extern> and <action> tags in the scheme
 ;; documentation. Most of them are needed for example in the style file
 ;; packages/documentation/scheme-api.ts.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-markup)
-  (:use (doc apidoc-funcs)
-        (kernel gui gui-markup)))
+;; (texmacs-module (doc apidoc-markup)
+;;   (:use (doc apidoc-funcs)
+;;         (kernel gui gui-markup)))
+
+(define-module (doc apidoc-markup)
+  :use-module (doc apidoc-funcs)
+  :use-module (kernel gui gui-markup))
+
 
 (tm-define (doc-module-synopsis tname)
   ;TODO

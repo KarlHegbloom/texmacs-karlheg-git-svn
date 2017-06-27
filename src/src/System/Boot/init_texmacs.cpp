@@ -284,8 +284,14 @@ init_env_vars () {
   // Handle binary, library and guile paths for plugins
   url bin_path= get_env_path ("PATH") | plugin_path ("bin");
   set_env_path ("PATH", bin_path);
+
+#ifdef OS_MACOS
+  url lib_path= get_env_path ("DYLD_LIBRARY_PATH") | plugin_path ("lib");
+  set_env_path ("DYLD_LIBRARY_PATH", lib_path);
+#else
   url lib_path= get_env_path ("LD_LIBRARY_PATH") | plugin_path ("lib");
   set_env_path ("LD_LIBRARY_PATH", lib_path);
+#endif
 
   // Get TeXmacs style and package paths
   url style_root=

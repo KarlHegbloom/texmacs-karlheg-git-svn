@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : bib-widgets.scm
@@ -15,8 +16,13 @@
 ;;  - Handle external BibTeX.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex bib-widgets)
-  (:use (bibtex bib-complete) (generic document-edit)))
+;; (texmacs-module (bibtex bib-widgets)
+;;   (:use (bibtex bib-complete) (generic document-edit)))
+
+(define-module (bibtex bib-widgets)
+  :use-module (bibtex bib-complete)
+  :use-module (generic document-edit))
+
 
 (define bibwid-url (string->url ""))
 (define bibwid-style "tm-plain")

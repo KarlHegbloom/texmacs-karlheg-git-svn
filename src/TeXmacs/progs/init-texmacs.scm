@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,6 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; I'm wrapping things that don't work in guile-2.2 with cond-expand, but I'm not trying to ensure backward compatibility right
+;; now. ~karlheg
+
+(display "TeXmacs] starting\n")
+(display "In module: ")
+(display (module-name (current-module)))
+(newline)
+;; that displayed: In module: (guile-user)
+
+;; Perhaps all or some of this also belongs in texmacs-core?
+
 (cond ((os-mingw?)
        (debug-set! stack 0))
       ((os-macos?)
@@ -19,9 +31,6 @@
       (else
        (debug-set! stack 1000000)))
 
-(display "TeXmacs] starting\n")
-
-(use-modules (texmacs-core))
 
 (define boot-start (texmacs-time))
 (define remote-client-list (list))
@@ -29,8 +38,15 @@
 (define developer-mode?
   (equal? (cpp-get-preference "developer tool" "off") "on"))
 
-(if developer-mode?
-    (debug-enable 'backtrace 'debug))
+(cond-expand
+  (guile-2.2
+   (if developer-mode?
+       (debug-enable 'backtrace))
+   )
+  (guile
+   (if developer-mode?
+       (debug-enable 'backtrace 'debug))
+   ))
 
 (define (%new-read-hook sym) (noop)) ; for autocompletion
 
@@ -41,10 +57,11 @@
     tm-define tm-menu menu-bind tm-widget ,@macro-keywords))
 
 (define old-read read)
-(define (new-read port)
+(define* (new-read :optional port)
   "A redefined reader which stores line number and file name in symbols."
   ;; FIXME: handle overloaded definitions
-  (let ((form (old-read port)))
+  (let* ((port (or port (current-input-port)))
+         (form (old-read port)))
     (if (and (pair? form) (member (car form) def-keywords))
         (let* ((l (source-property form 'line))
                (c (source-property form 'column))
@@ -80,6 +97,7 @@
 ;; TODO: scheme file caching using (set! primitive-load ...) and
 ;; (set! %search-load-path)
 
+;; 'debug not an option in guile-2.2; use cond-expand if this is uncommented.
 ;;(debug-enable 'backtrace 'debug)
 ;; (define load-indent 0)
 ;; (define old-primitive-load primitive-load)
@@ -94,33 +112,57 @@
 ;; (set! primitive-load new-primitive-load)
 
 ;(display "Booting TeXmacs kernel functionality\n")
-(if (os-mingw?)
-    (load "kernel/boot/boot.scm")
-    (load (url-concretize "$TEXMACS_PATH/progs/kernel/boot/boot.scm")))
-(display "before use modules\n")
-(use-modules (kernel boot compat) (kernel boot abbrevs)
-                 (kernel boot debug) (kernel boot srfi)
-                 (kernel boot ahash-table) (kernel boot prologue))
-(use-modules (kernel library base) (kernel library list)
-                 (kernel library tree) (kernel library content)
-                 (kernel library patch))
-(use-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
-(use-modules (kernel logic logic-rules) (kernel logic logic-query)
-                 (kernel logic logic-data))
-(use-modules (kernel texmacs tm-define)
-                 (kernel texmacs tm-preferences) (kernel texmacs tm-modes)
-                 (kernel texmacs tm-plugins) (kernel texmacs tm-secure)
-                 (kernel texmacs tm-convert) (kernel texmacs tm-dialogue)
-                 (kernel texmacs tm-language) (kernel texmacs tm-file-system)
-                 (kernel texmacs tm-states))
-(use-modules (kernel gui gui-markup)
-                 (kernel gui menu-define) (kernel gui menu-widget)
-                 (kernel gui kbd-define) (kernel gui kbd-handlers)
-                 (kernel gui menu-test)
-                 (kernel old-gui old-gui-widget)
-                 (kernel old-gui old-gui-factory)
-                 (kernel old-gui old-gui-form)
-                 (kernel old-gui old-gui-test))
+;;; Devel note: Already loaded in boot-texmacs.scm ~karlheg
+;; (if (os-mingw?)
+;;     (load "kernel/boot/boot.scm")
+;;     (load (url-concretize "$TEXMACS_PATH/progs/kernel/boot/boot.scm")))
+;; (display "before use modules\n")
+;; (use-modules (kernel boot compat) (kernel boot abbrevs)
+;;              (kernel boot debug) (kernel boot srfi)
+;;              (kernel boot ahash-table) (kernel boot prologue))
+;; (re-export-modules (kernel boot compat) (kernel boot abbrevs)
+;;                    (kernel boot debug) (kernel boot srfi)
+;;                    (kernel boot ahash-table) (kernel boot prologue))
+;; (use-modules (kernel library base) (kernel library list)
+;;              (kernel library tree) (kernel library content)
+;;              (kernel library patch))
+;; (re-export-modules (kernel library base) (kernel library list)
+;;                    (kernel library tree) (kernel library content)
+;;                    (kernel library patch))
+;; (use-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
+;; (re-export-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
+;; (use-modules (kernel logic logic-rules) (kernel logic logic-query)
+;;              (kernel logic logic-data))
+;; (re-export-modules (kernel logic logic-rules) (kernel logic logic-query)
+;;                    (kernel logic logic-data))
+;; (use-modules (kernel texmacs tm-define)
+;;              (kernel texmacs tm-preferences) (kernel texmacs tm-modes)
+;;              (kernel texmacs tm-plugins) (kernel texmacs tm-secure)
+;;              (kernel texmacs tm-convert) (kernel texmacs tm-dialogue)
+;;              (kernel texmacs tm-language) (kernel texmacs tm-file-system)
+;;              (kernel texmacs tm-states))
+;; (re-export-modules (kernel texmacs tm-define)
+;;                    (kernel texmacs tm-preferences) (kernel texmacs tm-modes)
+;;                    (kernel texmacs tm-plugins) (kernel texmacs tm-secure)
+;;                    (kernel texmacs tm-convert) (kernel texmacs tm-dialogue)
+;;                    (kernel texmacs tm-language) (kernel texmacs tm-file-system)
+;;                    (kernel texmacs tm-states))
+;; (use-modules (kernel gui gui-markup)
+;;              (kernel gui menu-define) (kernel gui menu-widget)
+;;              (kernel gui kbd-define) (kernel gui kbd-handlers)
+;;              (kernel gui menu-test)
+;;              (kernel old-gui old-gui-widget)
+;;              (kernel old-gui old-gui-factory)
+;;              (kernel old-gui old-gui-form)
+;;              (kernel old-gui old-gui-test))
+;; (re-export-modules (kernel gui gui-markup)
+;;                    (kernel gui menu-define) (kernel gui menu-widget)
+;;                    (kernel gui kbd-define) (kernel gui kbd-handlers)
+;;                    (kernel gui menu-test)
+;;                    (kernel old-gui old-gui-widget)
+;;                    (kernel old-gui old-gui-factory)
+;;                    (kernel old-gui old-gui-form)
+;;                    (kernel old-gui old-gui-test))
 ;(display* "time: " (- (texmacs-time) boot-start) "\n")
 ;(display* "memory: " (texmacs-memory) " bytes\n")
 

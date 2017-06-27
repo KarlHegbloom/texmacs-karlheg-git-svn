@@ -64,7 +64,52 @@
 
 * TODO Port to Guile 2.2
 
-** Link to where Guile 2.2 sets up the module system (in boot-9.scm):
+** texmacs-module vs Guile's built-in define-module
+
+   The functionality of ~texmacs-module~ that I see it has over Guile's built-in ~define-module~ is the ~:inherit~ keyword, which is not
+   used at all in the Guile 1.8 version of TeXmacs anyway, so it's not needed or used by anything, as you can see:
+
+#+begin_example
+M-x find-grep
+  find . -type f -name '*.scm' -exec grep --color -nH -e :inherit \{\} +
+
+  ./kernel/boot/boot.scm:132:	  ((equal? (car action) :inherit) (cons 'inherit-modules (cdr action)))
+#+end_example
+
+
+   Also, when I look at the definition of the ~inherit-modules~ macro, it looks to me like it ought to be named ~re-export-modules~. The
+   ~texmacs-module~ macro displays a warning that "=The option :export is no longer supported=", so the keyword ~:export~ is not expected
+   to be used.
+
+#+begin_example
+M-x find-grep
+  find . -type f -name '*.scm' -exec grep --color -nH -e inherit-modules \{\} +
+
+  ./kernel/boot/boot.scm:118:(define-macro (inherit-modules . which-list)
+  ./kernel/boot/boot.scm:132:	  ((equal? (car action) :inherit) (cons 'inherit-modules (cdr action)))
+  ./init-texmacs.scm:95:(inherit-modules (kernel boot compat) (kernel boot abbrevs)
+  ./init-texmacs.scm:98:(inherit-modules (kernel library base) (kernel library list)
+  ./init-texmacs.scm:101:(inherit-modules (kernel regexp regexp-match) (kernel regexp regexp-select))
+  ./init-texmacs.scm:102:(inherit-modules (kernel logic logic-rules) (kernel logic logic-query)
+  ./init-texmacs.scm:104:(inherit-modules (kernel texmacs tm-define)
+  ./init-texmacs.scm:110:(inherit-modules (kernel gui gui-markup)
+#+end_example
+
+   Ok, so here's what I want to do. I want to drop support for Guile 1.8 entirely, and jump directly to Guile 2.2, which is
+   released. It is available in Macports, and I have a deb compiled for the time between now and when it appears in Ubuntu.
+
+   I am reading boot-9.scm and wondering if the ~binder~ and ~module-observer~ things are going to be useable for this... there's a note
+   there warning that the interface to the binder will change soon; read it in context. I wonder if those are used for lazy loading?
+
+   Ok, so all of the bindings from tm-define.scm etc. will need to be defined at the core level, and available to everything... But
+   what about the order of loading of the modules and the affect upon the resolution of overloaded tm-define'd functions? What
+   module namespace will their primary function exist in? The things handed in to ~tm-define~ are closed in the module and lexical
+   environment wherein they are defined? So anything in those must be in a module where it can "see" all the needed definitions.
+
+   Where can we use fluids, in the form of parameters?
+
+
+** TODO Read: Link to where Guile 2.2 sets up the module system (in boot-9.scm):
   
    [[file:~/src/Guile/guile-2.2-git/module/ice-9/boot-9.scm::;;;%20{Low%20Level%20Modules}]]
 

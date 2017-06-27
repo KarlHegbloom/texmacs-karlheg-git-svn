@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs keyboard prefix-kbd)
-  (:use (utils library cursor)
-	(utils edit selections)
-	(texmacs texmacs tm-server)
-	(texmacs texmacs tm-files)
-	(generic generic-edit)))
+;; (texmacs-module (texmacs keyboard prefix-kbd)
+;;   (:use (utils library cursor)
+;; 	(utils edit selections)
+;; 	(texmacs texmacs tm-server)
+;; 	(texmacs texmacs tm-files)
+;; 	(generic generic-edit)))
+
+(define-module (texmacs keyboard prefix-kbd)
+  :use-module (utils library cursor)
+  :use-module (utils edit selections)
+  :use-module (texmacs texmacs tm-server)
+  :use-module (texmacs texmacs tm-files)
+  :use-module (generic generic-edit))
+
 
 (set-variant-keys "tab" "S-tab")
 

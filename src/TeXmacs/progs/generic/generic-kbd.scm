@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,19 +13,34 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic generic-kbd)
-  (:use (texmacs keyboard prefix-kbd)
-        (utils edit variants)
-        (utils edit auto-close)
-        (utils library cursor)
-        (generic document-edit)
-        (generic generic-edit)
-        (generic format-edit)
-        (generic format-geometry-edit)
-        (source source-edit)
-        (texmacs texmacs tm-files)
-        (texmacs texmacs tm-print)
-        (doc help-funcs)))
+;; (texmacs-module (generic generic-kbd)
+;;   (:use (texmacs keyboard prefix-kbd)
+;;         (utils edit variants)
+;;         (utils edit auto-close)
+;;         (utils library cursor)
+;;         (generic document-edit)
+;;         (generic generic-edit)
+;;         (generic format-edit)
+;;         (generic format-geometry-edit)
+;;         (source source-edit)
+;;         (texmacs texmacs tm-files)
+;;         (texmacs texmacs tm-print)
+;;         (doc help-funcs)))
+
+(define-module (generic generic-kbd)
+  :use-module (texmacs keyboard prefix-kbd)
+  :use-module (utils edit variants)
+  :use-module (utils edit auto-close)
+  :use-module (utils library cursor)
+  :use-module (generic document-edit)
+  :use-module (generic generic-edit)
+  :use-module (generic format-edit)
+  :use-module (generic format-geometry-edit)
+  :use-module (source source-edit)
+  :use-module (texmacs texmacs tm-files)
+  :use-module (texmacs texmacs tm-print)
+  :use-module (doc help-funcs))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General shortcuts for all modes

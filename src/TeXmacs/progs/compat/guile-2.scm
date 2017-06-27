@@ -1,4 +1,5 @@
-;; (compat guile-2) -- guile 2.0 interface for older guiles
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 ;; Copyright (C) 2009, 2010 Andy Wingo <wingo at pobox dot com>
 
 ;; This program is free software: you can redistribute it and/or modify

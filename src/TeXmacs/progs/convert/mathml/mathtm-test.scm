@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert mathml mathtm-test)
-  (:use (convert html htmltm)))
+;; (texmacs-module (convert mathml mathtm-test)
+;;   (:use (convert html htmltm)))
+
+(define-module (convert mathml mathtm-test)
+  :use-module (convert html htmltm))
+
 
 (tm-define (regtest-mathtm)
   (define (with-math x) `(with "mode" "math" ,x))

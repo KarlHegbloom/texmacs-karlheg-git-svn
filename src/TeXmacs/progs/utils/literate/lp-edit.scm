@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils literate lp-edit)
-  (:use (utils library cursor)
-        (generic document-edit)
-        (dynamic dynamic-drd)))
+;; (texmacs-module (utils literate lp-edit)
+;;   (:use (utils library cursor)
+;;         (generic document-edit)
+;;         (dynamic dynamic-drd)))
+
+(define-module (utils literate lp-edit)
+  :use-module (utils library cursor)
+  :use-module (generic document-edit)
+  :use-module (dynamic dynamic-drd))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; DRD properties

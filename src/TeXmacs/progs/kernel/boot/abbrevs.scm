@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -13,7 +14,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (kernel boot abbrevs)
-  :use-module (texmacs-core))
+  :use-module (kernel library base))
+
+;; Todo: don't really need define-public since it's all in (guile) module.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Common notations
@@ -70,9 +73,7 @@
   (symbol->keyword (string->symbol (string-append "%" (number->string x)))))
 
 (define-public (save-object file value)
-  (if (guile-c?)
-      (pretty-print value (open-file (url-materialize file "") OPEN_WRITE))
-      (write value (open-file (url-materialize file "") OPEN_WRITE)))
+  (write value (open-file (url-materialize file "") OPEN_WRITE))
   (flush-all-ports))
 
 (define-public (load-object file)
@@ -87,8 +88,12 @@
 ;; Common programming constructs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-public-macro (when cond? . body)
-  `(if ,cond? (begin ,@body)))
+(cond-expand
+  (guile-2.2
+   (noop))
+  (else
+    (define-public-macro (when cond? . body)
+      `(if ,cond? (begin ,@body)))))
 
 (define-public-macro (unless cond? . body)
   `(if (not ,cond?) (begin ,@body)))

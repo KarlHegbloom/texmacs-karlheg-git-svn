@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (table table-kbd)
-  (:use (generic generic-kbd)
-	(table table-edit)))
+;; (texmacs-module (table table-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(table table-edit)))
+
+(define-module (table table-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (table table-edit))
+
 
 (kbd-map
   (:mode in-table?)

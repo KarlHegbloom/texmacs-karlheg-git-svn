@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus view-menu)
-  (:use
-    (texmacs texmacs tm-view)
-    (texmacs texmacs tm-server)
-    (texmacs texmacs tm-files)))
+;; (texmacs-module (texmacs menus view-menu)
+;;   (:use
+;;     (texmacs texmacs tm-view)
+;;     (texmacs texmacs tm-server)
+;;     (texmacs texmacs tm-files)))
+
+(define-module (texmacs menus view-menu)
+  :use-module (texmacs texmacs tm-view)
+  :use-module (texmacs texmacs tm-server)
+  :use-module (texmacs texmacs tm-files))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Extra toolbars at the bottom

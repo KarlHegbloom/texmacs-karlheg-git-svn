@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("abbreviation" "okraj�ava")
 ("about menu" "o programu")
 ("about" "o programu")

@@ -1,5 +1,5 @@
 option(BUILD_DOCUMENTATION
-  "Create and install the HTML based API documentation (requires Doxygen)" ON)
+  "Create and install the HTML based API documentation (requires Doxygen)" OFF)
 
 if(BUILD_DOCUMENTATION)
 

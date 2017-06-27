@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-plugins)
-  (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+;; (texmacs-module (kernel texmacs tm-plugins)
+;;   (:use (kernel texmacs tm-define) (kernel texmacs tm-modes)))
+
+(define-module (kernel texmacs tm-plugins)
+  :use-module (kernel texmacs tm-define)
+  :use-module (kernel texmacs tm-modes))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lazy exports from other modules
@@ -490,7 +496,7 @@
       (list (car cmd) (list 'unquote `(lambda () ,(cadr cmd))))
       cmd))
 
-(define-public-macro (plugin-configure name2 . options)
+(define-macro (plugin-configure name2 . options)
   "Declare and configure plug-in with name @name2 according to @options"
   (let* ((name (if (string? name2) name2 (symbol->string name2)))
          (supports-name? (string->symbol (string-append "supports-" name "?")))
@@ -505,6 +511,7 @@
        (if reconfigure-flag? (ahash-set! plugin-data-table ,name #t))
        (plugin-configure-cmds ,name
 	 ,(list 'quasiquote (map plugin-configure-sub options))))))
+(export-syntax plugin-configure)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization of plugins

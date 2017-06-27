@@ -1,106 +1,81 @@
 #!/bin/zsh
 
-ctags=(ctags-exuberant)
-etags=(ctags-exuberant -e)
+etags=(/usr/bin/etags)
 
-rxargs=('--regex-Scheme=/^\(define +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-alternate +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\((standard-)?define-class +([^[:space:]\)]+)/\2/e'
-        '--regex-Scheme=/^\(define-class-with-accessors +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-class-with-accessors-keywords +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-export-macro +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-format +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-graphics +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-group +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-language +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-macro +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-menu +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-module +\(([^[:space:]\)]+ *([^[:space:])])*)/\1/e'
-        '--regex-Scheme=/^\(define-public +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-public-macro +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-table +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(define-widget +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(extend-table +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(logic-dispatcher +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(logic-group +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(logic-rule +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(logic-table +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(menu-bind +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(plugin-input-converters +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(provide-public +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(smart-table +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(texmacs-module +\(([^[:space:]\)]+ *([^[:space:]\)])*)/\1/e'
-        '--regex-Scheme=/^\(tm-call-back +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-define +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-define-macro +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-generate +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-menu +([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-property +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-property-overloaded +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-service +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tm-widget +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-Scheme=/^\(tmfs-[^[:space:]]+-handler +\(?\(?([^[:space:]\)]+)/\1/e'
-        '--regex-C++=/ *tmscm_install_procedure +\("([^"]+)"/\1/e')
+rxargs=('--regex={scheme}/^ *(define\(-once\)? +(?(?\([^[:space:])]+\)/\2/'
+        '--regex={scheme}/^ *(define-alternate +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(\(standard-\)?define-class +\([^[:space:])]+\)/\2/'
+        '--regex={scheme}/^ *(define-class-with-accessors +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-class-with-accessors-keywords +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-export-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-format +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-graphics +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-group +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-language +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(defmacro +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-syntax +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-syntax-rule +(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-syntax-parameter +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-menu +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-module +(\([^[:space:])]+ *\([^[:space:])]\)*\)/\1/'
+        '--regex={scheme}/^ *(define-public +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-public-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-widget +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(extend-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-dispatcher +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-group +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-rule +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(menu-bind +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(plugin-input-converters +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(provide-public +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(smart-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(texmacs-module +(\([^[:space:])]+ *\([^[:space:])]\)*\)/\1/'
+        '--regex={scheme}/^ *(tm-call-back +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-define +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-define-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-generate +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-menu +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-property +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-property-overloaded +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-service +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-widget +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tmfs-[^[:space:]]+-handler +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={c++}/ *tmscm_install_procedure *("\([^"]+\)"/\1/')
 
+ver=2.2
 
-if [ -f /usr/include/libguile.h ]; then
+guile2x_file_args=(TeXmacs/**/*.scm
+                   src/**/*.hpp
+                   src/**/*.cpp
+                   src/**/*.m
+                   src/**/*.mm
+                   plugins/**/*.scm
+                   plugins/**/*.cpp
+                   plugins/**/*.h
+                   plugins/**/*.c
+                   ~/.TeXmacs/progs/**/*.scm)
 
-    guile18_file_args=(TeXmacs/**/*.scm
-                       src/**/*.hpp
-                       src/**/*.cpp
-                       plugins/**/*.scm
-                       plugins/**/*.cpp
-                       plugins/**/*.h
-                       plugins/**/*.c
-                       ~/src/Guile/guile-1.8/**/*.scm
-                       ~/src/Guile/guile-1.8/**/*.ss
-                       ~/src/Guile/guile-1.8/libguile.h
-                       ~/src/Guile/guile-1.8/**/*.h
-                       ~/src/Guile/guile-1.8/**/*.c
-                       ~/.TeXmacs/progs/**/*.scm)
+guile2x_found_file_args=( $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print) )
 
-    "$etags[@]" \
-        "$rxargs[@]" \
-        "$guile18_file_args[@]" \
-        $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
+"$etags[@]"                                                                         \
+    "$rxargs[@]"                                                                    \
+    "$guile2x_file_args[@]"                                                         \
+    "$guile2x_found_file_args[@]"                                                   \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/TAGS                      \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/lib/TAGS                  \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/libguile/TAGS             \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/bootstrap/TAGS            \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/module/TAGS               \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/guile-readline/TAGS       \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/emacs/TAGS                \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/test-suite/TAGS           \
+    --include=/home/karlheg/src/Guile/guile-2.2-git/doc/TAGS			\
+    --include=/home/karlheg/src/Guile/bdwgc/TAGS
 
-    "$ctags[@]" \
-        "$rxargs[@]" \
-        "$guile18_file_args[@]" \
-        $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
-
-else
-    if dpkg --status guile-2.0-dev >/dev/null 2>&1; then
-        ver=2.0
-    else
-        ver=2.2
-    fi
-
-    guile2x_file_args=(TeXmacs/**/*.scm
-                       src/**/*.hpp
-                       src/**/*.cpp
-                       plugins/**/*.scm
-                       plugins/**/*.cpp
-                       plugins/**/*.h
-                       plugins/**/*.c
-                       ~/.TeXmacs/progs/**/*.scm)
-
-                       # /usr/share/guile/${ver}/**/*.scm
-                       # /usr/share/guile/${ver}/**/*.ss
-                       # /usr/share/guile/site/**/*.scm
-                       # /usr/include/guile/${ver}/libguile.h
-                       # /usr/include/guile/${ver}/libguile/**/*.h
-
-    "$etags[@]" \
-        "$rxargs[@]" \
-        "$guile2x_file_args[@]" \
-        $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
-
-    "$ctags[@]" \
-        "$rxargs[@]" \
-        "$guile2x_file_args[@]" \
-        $(find ~/.TeXmacs/plugins/**/progs ~/.TeXmacs/plugins/**/src -type f -print)
-fi
-
-# ebrowse src/**/*.hpp \
-#         src/**/*.cpp
+ebrowse src/**/*.hpp \
+        src/**/*.cpp \
+        src/**/*.m \
+        src/**/*.mm

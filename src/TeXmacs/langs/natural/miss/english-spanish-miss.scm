@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; â˜® â˜¯ â˜­ â˜º
 ; Copyright David Moriano García (2001), Álvaro Tejero Cantero
 ("A.M.S. subject classification" "clasificación por temas de la AMS")
 ("GNU" "GNU")

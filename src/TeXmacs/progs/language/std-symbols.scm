@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,7 +13,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (language std-symbols))
+;; (texmacs-module (language std-symbols))
+
+(define-module (language std-symbols))
+
 
 (define-language std-symbols
   (:synopsis "default semantics for mathematical symbols")
@@ -23,7 +27,7 @@
     (:spacing default default)
     "<assign>" "<backassign>"
     "<plusassign>" "<minusassign>" "<astassign>" "<overassign>")
-  
+
   (define Flux-symbol
     (:type infix)
     (:spacing default default)

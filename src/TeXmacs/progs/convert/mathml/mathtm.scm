@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -33,11 +34,18 @@
 
 ;; !!! Check semantic of mathvariant on multiple symbols !!!
 
-(texmacs-module (convert mathml mathtm)
-  (:use (convert tools tmtable)
-	(convert tools sxml)
-	(convert tools xmltm)
-	(convert mathml mathml-drd)))
+;; (texmacs-module (convert mathml mathtm)
+;;   (:use (convert tools tmtable)
+;; 	(convert tools sxml)
+;; 	(convert tools xmltm)
+;; 	(convert mathml mathml-drd)))
+
+(define-module (convert mathml mathtm)
+  :use-module (convert tools tmtable)
+  :use-module (convert tools sxml)
+  :use-module (convert tools xmltm)
+  :use-module (convert mathml mathml-drd))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Special

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,7 +13,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-states))
+;; (texmacs-module (kernel texmacs tm-states))
+
+(define-module (kernel texmacs tm-states))
+
 
 ;; Low-level API
 (define-public (state-create slotlist)
@@ -125,7 +129,7 @@
   (if ref
       (set-car! (cdr ref) val)))
 
-(define-public-macro (define-state name . slotlists)
+(define-macro (define-state name . slotlists)
 ;; slotlists === ((slots ((<NAME-SLOT1> <INIT1>) ... (<NAME-SLOTN> <INITN>)))
 ;;                (props ((<NAME-PROP1> <PROP1>) ... (<NAME-PROPN> <PROPN>))))
   (let* ((theslots (copy-tree slotlists))
@@ -140,25 +144,30 @@
 				  `(lambda () (set! ,(car x) ,(cadr x)))))
 			   ',props))
 	  (set! ,name (state-create (append '(,slots ,props) `(,cprops))))))))
+(export-syntax define-state)
 
-(define-public-macro (with-state sr . body)
+(define-macro (with-state sr . body)
  `(begin
      (state-load ,sr)
      (with res (begin . ,body)
        (state-save ,sr)
        res)))
+(export-syntax with-state)
 
-(define-public-macro (with-state-by-name name . body)
+(define-macro (with-state-by-name name . body)
  `(with sr ,name
      (with-state sr . ,body)))
+(export-syntax with-state-by-name)
 
-(define-public-macro (with-state-slots sr . body)
+(define-macro (with-state-slots sr . body)
  `(begin
      (state-load ,sr #f)
      (with res (begin . ,body)
        (state-save ,sr)
        res)))
+(export-syntax with-state-slots)
 
-(define-public-macro (with-state-slots-by-name name . body)
+(define-macro (with-state-slots-by-name name . body)
  `(with sr ,name
      (with-state-slots sr . ,body)))
+(export-syntax with-state-slots-by-name)

@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("a modifier" "")
 ("acknowledgment" "")
 ("add switch after" "")

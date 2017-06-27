@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -13,17 +14,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (kernel library list)
-  :use-module (texmacs-core))
+  :use-module (kernel boot abbrevs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructors
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(provide-public (cons* . l)
-  "Construct a list from head of several elements and a tail."
-  ;; This function is in the kernel since GUILE-1.4.0
-  (let ((r (reverse l)))
-    (append (reverse (cdr r)) (car r))))
+(cond-expand
+  (guile-2.2
+   (noop))
+  (else
+    (provide-public (cons* . l)
+      "Construct a list from head of several elements and a tail."
+      ;; This function is in the kernel since GUILE-1.4.0
+      (let ((r (reverse l)))
+        (append (reverse (cdr r)) (car r))))))
 
 (define-public (rcons l x)
   "Append @x to @l at the end."

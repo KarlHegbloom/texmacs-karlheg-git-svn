@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : tmvernac.scm
@@ -11,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert coq tmvernac)
-          (:use (convert coq vernacout)))
+;; (texmacs-module (convert coq tmvernac)
+;;           (:use (convert coq vernacout)))
+
+(define-module (convert coq tmvernac)
+  :use-module (convert coq vernacout))
+
 
 (define mode "text")
 

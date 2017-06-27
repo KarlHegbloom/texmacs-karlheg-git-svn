@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils relate live-menu)
-  (:use (utils relate live-view)))
+;; (texmacs-module (utils relate live-menu)
+;;   (:use (utils relate live-view)))
+
+(define-module (utils relate live-menu)
+  :use-module (utils relate live-view))
+
 
 ;; TODO: better undo in case of several mirrors in one document
 ;; TODO: nested mirrors don't work appropriately (due to unique identifier

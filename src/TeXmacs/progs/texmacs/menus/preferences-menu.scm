@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,15 +13,25 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus preferences-menu)
-  (:use
-    (utils edit auto-close)
-    (texmacs texmacs tm-server)
-    (texmacs texmacs tm-view)
-    (texmacs texmacs tm-print)
-    (texmacs keyboard config-kbd)
-    (convert latex init-latex)
-    (language natural)))
+;; (texmacs-module (texmacs menus preferences-menu)
+;;   (:use
+;;     (utils edit auto-close)
+;;     (texmacs texmacs tm-server)
+;;     (texmacs texmacs tm-view)
+;;     (texmacs texmacs tm-print)
+;;     (texmacs keyboard config-kbd)
+;;     (convert latex init-latex)
+;;     (language natural)))
+
+(define-module (texmacs menus preferences-menu)
+  :use-module (utils edit auto-close)
+  :use-module (texmacs texmacs tm-server)
+  :use-module (texmacs texmacs tm-view)
+  :use-module (texmacs texmacs tm-print)
+  :use-module (texmacs keyboard config-kbd)
+  :use-module (convert latex init-latex)
+  :use-module (language natural))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Preferred scripting language

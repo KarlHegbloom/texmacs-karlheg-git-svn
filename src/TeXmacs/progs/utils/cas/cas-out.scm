@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -13,8 +14,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils cas cas-out)
-  (:use (convert tools tmconcat) (utils cas cas-rewrite)))
+;; (texmacs-module (utils cas cas-out)
+;;   (:use (convert tools tmconcat) (utils cas cas-rewrite)))
+
+(define-module (utils cas cas-out)
+  :use-module (convert tools tmconcat)
+  :use-module (utils cas cas-rewrite))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; How to print special operators

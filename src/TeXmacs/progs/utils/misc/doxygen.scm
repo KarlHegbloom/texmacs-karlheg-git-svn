@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils misc doxygen)
-  (:use (ice-9 rdelim)))
+;; (texmacs-module (utils misc doxygen)
+;;   (:use (ice-9 rdelim)))
+
+(define-module (utils misc doxygen)
+  :use-module (ice-9 rdelim))
+
 
 (display "TeXmacs] Loading doxygen C++ support\n")
 

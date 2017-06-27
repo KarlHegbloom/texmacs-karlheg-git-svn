@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ; Copyright David Moriano Garc�a (2001), �lvaro Tejero Cantero
 ; (alvaro@antalia.com, 2001,2002,2003).
 ("a modifier" "modificador A")

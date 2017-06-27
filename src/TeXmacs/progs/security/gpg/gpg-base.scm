@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (security gpg gpg-base)
-  (:use (utils base environment))
-  (:use (database db-users)))
+;; (texmacs-module (security gpg gpg-base)
+;;   (:use (utils base environment))
+;;   (:use (database db-users)))
+
+(define-module (security gpg gpg-base)
+  :use-module (utils base environment)
+  :use-module (database db-users))
+
 
 ;(display "TeXmacs] Loading GnuPG base support (http://www.gnupg.org)\n")
 

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,8 +15,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-kbd)
-  (:use (doc apidoc-widgets)))
+;; (texmacs-module (doc apidoc-kbd)
+;;   (:use (doc apidoc-widgets)))
+
+(define-module (doc apidoc-kbd)
+  :use-module (doc apidoc-widgets))
+
 
 (tm-define (macro-popup-help)
   (:synopsis "Pops up the help window for the innermost TeXmacs macro")

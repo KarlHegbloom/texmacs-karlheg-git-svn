@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-kbd)
-  (:use (math math-kbd)    
-        (dynamic calc-table)))
+;; (texmacs-module (dynamic calc-kbd)
+;;   (:use (math math-kbd)    
+;;         (dynamic calc-table)))
+
+(define-module (dynamic calc-kbd)
+  :use-module (math math-kbd)
+  :use-module (dynamic calc-table))
+
 
 (kbd-map
   (:require (inside? 'calc-table))

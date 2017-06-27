@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,16 +13,28 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html tmhtml)
-  (:use (convert tools tmconcat)
-	(convert mathml tmmath)
-	(convert tools stm)
-	(convert tools tmlength)
-	(convert tools tmtable)
-	(convert tools old-tmtable)
-	(convert tools sxml)
-	(convert tools sxhtml)
-	(convert html htmlout)))
+;; (texmacs-module (convert html tmhtml)
+;;   (:use (convert tools tmconcat)
+;; 	(convert mathml tmmath)
+;; 	(convert tools stm)
+;; 	(convert tools tmlength)
+;; 	(convert tools tmtable)
+;; 	(convert tools old-tmtable)
+;; 	(convert tools sxml)
+;; 	(convert tools sxhtml)
+;; 	(convert html htmlout)))
+
+(define-module (convert html tmhtml)
+  :use-module (convert tools tmconcat)
+  :use-module (convert mathml tmmath)
+  :use-module (convert tools stm)
+  :use-module (convert tools tmlength)
+  :use-module (convert tools tmtable)
+  :use-module (convert tools old-tmtable)
+  :use-module (convert tools sxml)
+  :use-module (convert tools sxhtml)
+  :use-module (convert html htmlout))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization

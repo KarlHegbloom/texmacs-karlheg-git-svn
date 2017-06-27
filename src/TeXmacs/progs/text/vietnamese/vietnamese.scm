@@ -1,3 +1,4 @@
+;;; -*- coding: raw-text -*-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -10,8 +11,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text vietnamese vietnamese)
-  (:use (text text-kbd)))
+(define-module (text vietnamese vietnamese)
+  :use-module (text text-kbd))
 
 (kbd-map
   ;;(:mode in-vietnamese-vietnamese?)

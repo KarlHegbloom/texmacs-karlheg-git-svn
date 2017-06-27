@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : apidoc-menu.scm
@@ -12,13 +14,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; The contents of this file are preliminary and simple. Things TO-DO are:
-;;  - this list 
+;;  - this list
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-menu)
-  (:use (prog scheme-tools)
-        (doc apidoc-widgets)))
+;; (texmacs-module (doc apidoc-menu)
+;;   (:use (prog scheme-tools)
+;;         (doc apidoc-widgets)))
+
+(define-module (doc apidoc-menu)
+  :use-module (prog scheme-tools)
+  :use-module (doc apidoc-widgets))
+
 
 (menu-bind apidoc-manual-menu
   ("Insert symbol documentation" (interactive ask-insert-symbol-doc))

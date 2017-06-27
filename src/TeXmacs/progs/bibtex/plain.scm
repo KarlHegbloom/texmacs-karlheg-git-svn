@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -25,8 +26,12 @@
 ;; "technical report"
 ;; "volume"
 
-(texmacs-module (bibtex plain)
-  (:use (bibtex bib-utils)))
+;; (texmacs-module (bibtex plain)
+;;   (:use (bibtex bib-utils)))
+
+(define-module (bibtex plain)
+  :use-module (bibtex bib-utils))
+
 
 (bib-define-style "plain" "plain")
 

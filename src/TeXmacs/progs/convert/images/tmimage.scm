@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -13,9 +14,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert images tmimage)
-  (:use (convert tmml tmmlout)
-        (convert tmml tmtmml)))
+;; (texmacs-module (convert images tmimage)
+;;   (:use (convert tmml tmmlout)
+;;         (convert tmml tmtmml)))
+
+(define-module (convert images tmimage)
+  :use-module (convert tmml tmmlout)
+  :use-module (convert tmml tmtmml))
+
 
 ;; (display "Texmacs] Loading module tmimage\n")
 

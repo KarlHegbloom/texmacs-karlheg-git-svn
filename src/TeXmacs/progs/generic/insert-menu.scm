@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic insert-menu)
-  (:use (generic generic-edit)
-	(generic format-edit)
-	(generic format-geometry-edit)))
+;; (texmacs-module (generic insert-menu)
+;;   (:use (generic generic-edit)
+;; 	(generic format-edit)
+;; 	(generic format-geometry-edit)))
+
+(define-module (generic insert-menu)
+  :use-module (generic generic-edit)
+  :use-module (generic format-edit)
+  :use-module (generic format-geometry-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Insert links

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-edit)
-  (:use (utils library tree)
-	(utils edit variants)
-	(text text-edit)
-	(doc tmdoc-drd)))
+;; (texmacs-module (doc tmdoc-edit)
+;;   (:use (utils library tree)
+;; 	(utils edit variants)
+;; 	(text text-edit)
+;; 	(doc tmdoc-drd)))
+
+(define-module (doc tmdoc-edit)
+  :use-module (utils library tree)
+  :use-module (utils edit variants)
+  :use-module (text text-edit)
+  :use-module (doc tmdoc-drd))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inserting meta data

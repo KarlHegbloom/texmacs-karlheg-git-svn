@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,7 +13,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (utils misc tm-keywords))
+;; (texmacs-module (utils misc tm-keywords))
+
+(define-module (utils misc tm-keywords))
+
 
 (define kws (string-load (unix->url "$TEXMACS_PATH/progs/tm-mode.el")))
 (define kwo (string->object (string-append "(" kws ")")))

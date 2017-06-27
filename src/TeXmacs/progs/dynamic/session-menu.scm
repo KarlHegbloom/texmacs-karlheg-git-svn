@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic session-menu)
-  (:use (dynamic session-edit)
-        (dynamic program-edit)
-        (generic generic-menu)))
+;; (texmacs-module (dynamic session-menu)
+;;   (:use (dynamic session-edit)
+;;         (dynamic program-edit)
+;;         (generic generic-menu)))
+
+(define-module (dynamic session-menu)
+  :use-module (dynamic session-edit)
+  :use-module (dynamic program-edit)
+  :use-module (generic generic-menu))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Remote plugins

@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : apidoc-funcs.scm
@@ -22,9 +24,15 @@
 ;;  - this list
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-funcs)
-  (:use (convert rewrite init-rewrite) (doc apidoc-collect) 
-        (kernel gui gui-markup)))
+;; (texmacs-module (doc apidoc-funcs)
+;;   (:use (convert rewrite init-rewrite) (doc apidoc-collect) 
+;;         (kernel gui gui-markup)))
+
+(define-module (doc apidoc-funcs)
+  :use-module (convert rewrite init-rewrite)
+  :use-module (doc apidoc-collect)
+  :use-module (kernel gui gui-markup))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Conversions related to modules:

@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("A modifier" "modificador A")
 ("GNU" "GNU")
 ("H modifier" "modificador H")

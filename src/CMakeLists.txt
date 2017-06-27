@@ -781,7 +781,7 @@ endforeach(TOOL)
 ### Last so everything is defined when it happens.
 option(SAVE_SYSTEM_INFORMATION
   "Save cmake System Information to CMakeSystemInformation.txt"
-  ON)
+  OFF)
 if(${SAVE_SYSTEM_INFORMATION})
   set(RESULT_FILE CMakeSystemInformation.txt)
   include(SystemInformation)

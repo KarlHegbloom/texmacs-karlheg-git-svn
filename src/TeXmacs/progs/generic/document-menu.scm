@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic document-menu)
-  (:use (generic document-edit)
-        (generic generic-menu)
-        (texmacs menus file-menu)))
+;; (texmacs-module (generic document-menu)
+;;   (:use (generic document-edit)
+;;         (generic generic-menu)
+;;         (texmacs menus file-menu)))
+
+(define-module (generic document-menu)
+  :use-module (generic document-edit)
+  :use-module (generic generic-menu)
+  :use-module (texmacs menus file-menu))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Project menu

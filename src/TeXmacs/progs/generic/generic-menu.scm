@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,13 +13,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic generic-menu)
-  (:use (utils edit variants)
-	(generic generic-edit)
-	(generic format-edit)
-	(generic format-geometry-edit)
-        (generic document-edit)
-        (source source-edit)))
+;; (texmacs-module (generic generic-menu)
+;;   (:use (utils edit variants)
+;; 	(generic generic-edit)
+;; 	(generic format-edit)
+;; 	(generic format-geometry-edit)
+;;         (generic document-edit)
+;;         (source source-edit)))
+
+(define-module (generic generic-menu)
+  :use-module (utils edit variants)
+  :use-module (generic generic-edit)
+  :use-module (generic format-edit)
+  :use-module (generic format-geometry-edit)
+  :use-module (generic document-edit)
+  :use-module (source source-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variants

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic session-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-	(utils plugins plugin-cmd)
-	(dynamic session-drd)
-	(dynamic fold-edit)))
+;; (texmacs-module (dynamic session-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(utils plugins plugin-cmd)
+;; 	(dynamic session-drd)
+;; 	(dynamic fold-edit)))
+
+(define-module (dynamic session-edit)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (utils plugins plugin-cmd)
+  :use-module (dynamic session-drd)
+  :use-module (dynamic fold-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Style package rules for sessions

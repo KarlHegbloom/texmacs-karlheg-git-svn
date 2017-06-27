@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-markup)
-  (:use (utils library tree)
-        (utils library cursor)
-        (dynamic fold-edit)))
+;; (texmacs-module (dynamic fold-markup)
+;;   (:use (utils library tree)
+;;         (utils library cursor)
+;;         (dynamic fold-edit)))
+
+(define-module (dynamic fold-markup)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (dynamic fold-edit))
+
 
 (define (screens-parent? t)
   (with p (tree-up t)

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic scripts-menu)
-  (:use (dynamic scripts-edit)))
+;; (texmacs-module (dynamic scripts-menu)
+;;   (:use (dynamic scripts-edit)))
+
+(define-module (dynamic scripts-menu)
+  :use-module (dynamic scripts-edit))
+
 
 (menu-bind scripts-eval-menu
   (when (script-evaluable?)

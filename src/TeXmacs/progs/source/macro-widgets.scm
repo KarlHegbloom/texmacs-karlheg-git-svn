@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (source macro-widgets)
-  (:use (source macro-edit)
-	(version version-edit) ;; FIXME: for selection-trees
-	))
+;; (texmacs-module (source macro-widgets)
+;;   (:use (source macro-edit)
+;; 	(version version-edit) ;; FIXME: for selection-trees
+;; 	))
+
+(define-module (source macro-widgets)
+  :use-module (source macro-edit)
+  :use-module (version version-edit) ;; FIXME: for selection-trees
+  )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutines for macro editing widgets

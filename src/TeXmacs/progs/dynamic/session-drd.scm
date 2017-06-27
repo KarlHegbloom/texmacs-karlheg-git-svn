@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic session-drd)
-  (:use (dynamic dynamic-drd)))
+;; (texmacs-module (dynamic session-drd)
+;;   (:use (dynamic dynamic-drd)))
+
+(define-module (dynamic session-drd)
+  :use-module (dynamic dynamic-drd))
+
 
 ;; fold <-> unfold toggles
 

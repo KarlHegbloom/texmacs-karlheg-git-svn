@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog prog-kbd)
-  (:use (kernel gui kbd-define)
-        (utils edit selections)
-        (prog scheme-tools) 
-        (prog scheme-edit) (prog cpp-edit) (prog python-edit)))
+;; (texmacs-module (prog prog-kbd)
+;;   (:use (kernel gui kbd-define)
+;;         (utils edit selections)
+;;         (prog scheme-tools) 
+;;         (prog scheme-edit) (prog cpp-edit) (prog python-edit)))
+
+(define-module (prog prog-kbd)
+  :use-module (kernel gui kbd-define)
+  :use-module (utils edit selections)
+  :use-module (prog scheme-tools)
+  :use-module (prog scheme-edit)
+  :use-module (prog cpp-edit)
+  :use-module (prog python-edit))
+
 
 (kbd-map
   (:mode in-prog?)

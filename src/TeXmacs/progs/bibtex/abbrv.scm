@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex abbrv)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex abbrv)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex abbrv)
+  :use-module (bibtex bib-utils)
+  :use-module (bibtex plain))
 
 (bib-define-style "abbrv" "plain")
 

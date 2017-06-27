@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MODULE      : regexp-select.scm
@@ -18,8 +19,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (kernel regexp regexp-select)
-  :use-module (texmacs-core))
-(use-modules (kernel boot ahash-table))
+  :use-module (kernel boot ahash-table))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Intersections of matches
@@ -272,22 +273,28 @@
 ;;     (with-module texmacs-user
 ;;       (define-public (select . args) (apply tm-select args)))
 ;;     )
-(with-module texmacs-user
-  (cond-expand
-    (os-mingw
-     (define-public guile-select #f)
-     (define-public (select . args)
-       (use-modules (kernel regexp regexp-select))
-       (apply tm-select args)))
-    (else
-      (define-public guile-select select)
-      (define-public (select . args)
-        (use-modules (kernel regexp regexp-select))
-        (if (= (length args) 2)
-            (apply tm-select args)
-            (apply guile-select args))))))
+(eval-when (compile)
+  (set-current-module texmacs-user))
+
+(cond-expand
+  (os-mingw
+   (define-public guile-select #f)
+   (define-public (select . args)
+     (use-modules (kernel regexp regexp-select))
+     (apply tm-select args)))
+  (else
+    (use-modules (kernel regexp regexp-select))
+    (define-public guile-select select)
+    (define-public (select . args)
+      (if (= (length args) 2)
+          (apply tm-select args)
+          (apply guile-select args)))))
+
+(eval-when (compile)
+  (set-current-module (resolve-module '(kernel regexp regexp-select))))
 
 (define-public (tm-ref t . l)
   (and (tm? t)
        (with r (select t l)
 	 (and (nnull? r) (car r)))))
+

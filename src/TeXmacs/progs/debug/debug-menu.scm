@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,7 +13,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (debug debug-menu))
+(define-module (debug debug-menu))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Memory
@@ -28,12 +29,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (debug-backtrace-errors?) (in? 'backtrace (debug-options)))
-(tm-define (debug-toggle-backtrace-errors)
-  (:synopsis "Toggle scheme backtracing of errors.")
-  (:check-mark "v" debug-backtrace-errors?)
-  (if (debug-backtrace-errors?)
-      (debug-disable 'backtrace 'debug)
-      (debug-enable 'backtrace 'debug)))
+(cond-expand
+  (guile-2.2
+   (tm-define (debug-toggle-backtrace-errors)
+     (:synopsis "Toggle scheme backtracing of errors.")
+     (:check-mark "v" debug-backtrace-errors?)
+     (if (debug-backtrace-errors?)
+         (debug-disable 'backtrace)
+         (debug-enable 'backtrace)))
+   )
+  (guile
+   (tm-define (debug-toggle-backtrace-errors)
+     (:synopsis "Toggle scheme backtracing of errors.")
+     (:check-mark "v" debug-backtrace-errors?)
+     (if (debug-backtrace-errors?)
+         (debug-disable 'backtrace 'debug)
+         (debug-enable 'backtrace 'debug)))
+   ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General debugging options

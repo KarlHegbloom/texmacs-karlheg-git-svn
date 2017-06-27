@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-preferences)
-  (:use (kernel texmacs tm-define)))
+;; (texmacs-module (kernel texmacs tm-preferences)
+;;   (:use (kernel texmacs tm-define)))
+
+(define-module (kernel texmacs tm-preferences)
+  :use-module (kernel texmacs tm-define))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Defining preference call back routines
@@ -33,10 +38,17 @@
        (ahash-set! preferences-call-back ,which ,call-back)
        (notify-preference ,which))))
 
-(define-public-macro (define-preferences . l)
-  (append '(begin)
-          (map-in-order define-preference l)
-          (map-in-order define-preference-call-back l)))
+;; (cond-expand
+;;   (guile-2.2
+;;    (
+;;    )
+;;   (else
+    (define-macro (define-preferences . l)
+      (append '(begin)
+              (map-in-order define-preference l)
+              (map-in-order define-preference-call-back l)))
+    (export-syntax define-preferences)
+;;)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting and getting preferences
@@ -133,10 +145,11 @@
    `(ahash-set! preference-decode-table
                 (cons ,which ,(cadr x)) ,(car x)))
 
-(define-public-macro (define-preference-names which . l)
+(define-macro (define-preference-names which . l)
   `(begin
      ,@(map (lambda (x) (set-preference-encode which x)) l)
      ,@(map (lambda (x) (set-preference-decode which x)) l)))
+(export-syntax define-preference-names)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Look and feel

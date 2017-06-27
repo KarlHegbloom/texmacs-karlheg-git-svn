@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (client client-live)
-  (:use (utils relate live-connection)
-        (utils relate live-view)
-        (client client-tmfs)))
+;; (texmacs-module (client client-live)
+;;   (:use (utils relate live-connection)
+;;         (utils relate live-view)
+;;         (client client-tmfs)))
+
+(define-module (client client-live)
+  :use-module (utils relate live-connection)
+  :use-module (utils relate live-view)
+  :use-module (client client-tmfs))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tags for remote live documents

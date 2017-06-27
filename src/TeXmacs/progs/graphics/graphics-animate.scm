@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-animate)
-  (:use (graphics graphics-group)
-        (generic format-edit)
-        (dynamic animate-edit)))
+;; (texmacs-module (graphics graphics-animate)
+;;   (:use (graphics graphics-group)
+;;         (generic format-edit)
+;;         (dynamic animate-edit)))
+
+(define-module (graphics graphics-animate)
+  :use-module (graphics graphics-group)
+  :use-module (generic format-edit)
+  :use-module (dynamic animate-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Animating individual objects

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (security wallet wallet-base)
-  (:use (security gpg gpg-wallet)))
+;; (texmacs-module (security wallet wallet-base)
+;;   (:use (security gpg gpg-wallet)))
+
+(define-module (security wallet wallet-base)
+  :use-module (security gpg gpg-wallet))
+
 
 ;; So far portable implementation is based on GnuPG
 (tm-define (supports-wallet?)

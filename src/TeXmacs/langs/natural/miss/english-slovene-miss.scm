@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("a modifier" "")
 ("aligned" "")
 ("automatically close brackets" "")

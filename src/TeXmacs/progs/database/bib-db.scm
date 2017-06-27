@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (database bib-db)
-  (:use (database db-convert)
-        (database db-edit)
-        (convert bibtex init-bibtex)
-        (convert bibtex bibtexout)))
+;; (texmacs-module (database bib-db)
+;;   (:use (database db-convert)
+;;         (database db-edit)
+;;         (convert bibtex init-bibtex)
+;;         (convert bibtex bibtexout)))
+
+(define-module (database bib-db)
+  :use-module (database db-convert)
+  :use-module (database db-edit)
+  :use-module (convert bibtex init-bibtex)
+  :use-module (convert bibtex bibtexout))
+
 
 (tm-define (bib-database) (user-database "bib"))
 

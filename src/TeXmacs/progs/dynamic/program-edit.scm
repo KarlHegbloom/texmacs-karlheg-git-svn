@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,13 +13,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic program-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-	(utils plugins plugin-cmd)
-	(dynamic program-drd)
-	(dynamic program-menu)
-	(dynamic fold-edit)))
+;; (texmacs-module (dynamic program-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(utils plugins plugin-cmd)
+;; 	(dynamic program-drd)
+;; 	(dynamic program-menu)
+;; 	(dynamic fold-edit)))
+
+(define-module (dynamic program-edit)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (utils plugins plugin-cmd)
+  :use-module (dynamic program-drd)
+  :use-module (dynamic program-menu)
+  :use-module (dynamic fold-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Switches

@@ -1,4 +1,5 @@
-
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : calc-markup.scm
@@ -11,10 +12,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-markup)
-  (:use (utils library tree)
-        (utils library cursor)
-        (dynamic calc-edit)))
+;; (texmacs-module (dynamic calc-markup)
+;;   (:use (utils library tree)
+;;         (utils library cursor)
+;;         (dynamic calc-edit)))
+
+(define-module (dynamic calc-markup)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (dynamic calc-edit))
+
 
 (tm-define (calc-check-callback v)
   (:secure #t)

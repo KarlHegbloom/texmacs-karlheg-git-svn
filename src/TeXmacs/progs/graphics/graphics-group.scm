@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,11 +15,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-group)
-  (:use (graphics graphics-env)
-        (graphics graphics-single)
-        (kernel gui kbd-handlers)
-        (dynamic animate-edit)))
+;; (texmacs-module (graphics graphics-group)
+;;   (:use (graphics graphics-env)
+;;         (graphics graphics-single)
+;;         (kernel gui kbd-handlers)
+;;         (dynamic animate-edit)))
+
+(define-module (graphics graphics-group)
+  :use-module (graphics graphics-env)
+  :use-module (graphics graphics-single)
+  :use-module (kernel gui kbd-handlers)
+  :use-module (dynamic animate-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Group edit mode

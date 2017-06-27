@@ -1,4 +1,4 @@
-;;; coding: utf-8
+;;; coding: iso-8859-1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,11 +14,18 @@
 ;; See menu-define.scm for the grammar of menus
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (fonts font-new-widgets)
-  (:use (kernel gui menu-widget)
-        (fonts font-sample)
-        (generic format-edit)
-        (generic document-edit)))
+;; (texmacs-module (fonts font-new-widgets)
+;;   (:use (kernel gui menu-widget)
+;;         (fonts font-sample)
+;;         (generic format-edit)
+;;         (generic document-edit)))
+
+(define-module (fonts font-new-widgets)
+  :use-module (kernel gui menu-widget)
+  :use-module (fonts font-sample)
+  :use-module (generic format-edit)
+  :use-module (generic document-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Font samples

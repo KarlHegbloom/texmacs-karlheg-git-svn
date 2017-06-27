@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -13,11 +14,15 @@
 ;; Things to do:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus developer-menu))
+;; (texmacs-module (texmacs menus developer-menu))
 
-(use-modules (prog scheme-tools) (prog scheme-menu)
-             (doc apidoc) (doc apidoc-widgets)
-             (language natural))
+(define-module (texmacs menus developer-menu)
+  :use-module (prog scheme-tools)
+  :use-module (prog scheme-menu)
+  :use-module (doc apidoc)
+  :use-module (doc apidoc-widgets)
+  :use-module (language natural))
+
 
 (define (scm-load-buffer u)
    (load-buffer u) 

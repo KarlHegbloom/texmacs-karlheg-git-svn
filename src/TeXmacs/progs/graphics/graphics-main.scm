@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,8 +15,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-main)
-  (:use (graphics graphics-utils)))
+;; (texmacs-module (graphics graphics-main)
+;;   (:use (graphics graphics-utils)))
+
+(define-module (graphics graphics-main)
+  :use-module (graphics graphics-utils))
+
 
 ;; TODO: Have a look at if there is still some part of the previous
 ;;   mess due to unsafe synchro (fetching grids, egrid-as-vgrid?, etc.)

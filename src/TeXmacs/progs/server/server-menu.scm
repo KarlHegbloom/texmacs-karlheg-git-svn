@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (server server-menu)
-  (:use (server server-base)
-        (server server-db)
-        (server server-tmfs)
-        (server server-sync)))
+;; (texmacs-module (server server-menu)
+;;   (:use (server server-base)
+;;         (server server-db)
+;;         (server server-tmfs)
+;;         (server server-sync)))
+
+(define-module (server server-menu)
+  :use-module (server server-base)
+  :use-module (server server-db)
+  :use-module (server server-tmfs)
+  :use-module (server server-sync))
+
 
 (menu-bind start-server-menu
   ("Start server" (server-start)))

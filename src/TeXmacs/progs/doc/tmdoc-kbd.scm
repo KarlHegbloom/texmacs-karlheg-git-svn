@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-kbd)
-  (:use (text text-kbd)))
+;; (texmacs-module (doc tmdoc-kbd)
+;;   (:use (text text-kbd)))
+
+(define-module (doc tmdoc-kbd)
+  :use-module (text text-kbd))
+
 
 (kbd-map
   (:mode in-manual?)

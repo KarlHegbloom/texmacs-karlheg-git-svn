@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; Portions (C) International Organization for Standardization 1986
 ;; Permission to copy in any form is granted for use with
 ;; conforming SGML systems and applications as defined in

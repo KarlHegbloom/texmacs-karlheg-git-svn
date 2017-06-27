@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic format-geometry-edit)
-  (:use (utils edit selections)
-	(generic generic-edit)
-        (generic format-drd)))
+;; (texmacs-module (generic format-geometry-edit)
+;;   (:use (utils edit selections)
+;; 	(generic generic-edit)
+;;         (generic format-drd)))
+
+(define-module (generic format-geometry-edit)
+  :use-module (utils edit selections)
+  :use-module (generic generic-edit)
+  :use-module (generic format-drd))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customizable step changes for length modifications

@@ -1,5 +1,3 @@
-;;; coding: utf-8
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : xmltm-test.scm
@@ -12,8 +10,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools xmltm-test)
-  (:use (convert tools xmltm)))
+;; (texmacs-module (convert tools xmltm-test)
+;;   (:use (convert tools xmltm)))
+
+(define-module (convert tools xmltm-test)
+  :use-module (convert tools xmltm))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Parser

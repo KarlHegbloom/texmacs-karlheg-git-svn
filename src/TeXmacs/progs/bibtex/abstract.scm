@@ -1,3 +1,5 @@
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -11,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex abstract)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex abstract)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex abstract)
+  :use-module (bibtex bib-utils)
+  :use-module (bibtex plain))
 
 (bib-define-style "abstract" "plain")
 

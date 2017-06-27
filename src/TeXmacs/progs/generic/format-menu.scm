@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic format-menu)
-  (:use (generic generic-menu)
-	(generic format-edit)
-	(generic format-geometry-edit)))
+;; (texmacs-module (generic format-menu)
+;;   (:use (generic generic-menu)
+;; 	(generic format-edit)
+;; 	(generic format-geometry-edit)))
+
+(define-module (generic format-menu)
+  :use-module (generic generic-menu)
+  :use-module (generic format-edit)
+  :use-module (generic format-geometry-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menus for fonts

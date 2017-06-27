@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; â˜® â˜¯ â˜­ â˜º
 ("A modifier" "A-vaihtonäppäin")
 ("GNU" "GNU")
 ("H modifier" "H-vaihtonäppäin")

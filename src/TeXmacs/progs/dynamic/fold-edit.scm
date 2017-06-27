@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,13 +13,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-edit)
-  (:use (utils library tree)
-        (utils library cursor)
-        (dynamic dynamic-drd)
-        (generic generic-edit)
-        (generic document-edit)
-        (text text-edit)))
+;; (texmacs-module (dynamic fold-edit)
+;;   (:use (utils library tree)
+;;         (utils library cursor)
+;;         (dynamic dynamic-drd)
+;;         (generic generic-edit)
+;;         (generic document-edit)
+;;         (text text-edit)))
+
+(define-module (dynamic fold-edit)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (dynamic dynamic-drd)
+  :use-module (generic generic-edit)
+  :use-module (generic document-edit)
+  :use-module (text text-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Style package rules for beamer

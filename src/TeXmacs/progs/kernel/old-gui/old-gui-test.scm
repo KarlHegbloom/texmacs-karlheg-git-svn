@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; Coding: utf-8
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,7 +13,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel old-gui old-gui-test))
+;; (texmacs-module (kernel old-gui old-gui-test))
+
+(define-module (kernel old-gui old-gui-test))
+
 
 (tm-define (open-test-widget)
   ;; NOTE: close with Done in order to test other widgets

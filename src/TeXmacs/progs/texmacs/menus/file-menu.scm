@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs menus file-menu)
-  (:use
-    (utils library cursor)
-    (texmacs texmacs tm-server)
-    (texmacs texmacs tm-files)
-    (texmacs texmacs tm-print)))
+;; (texmacs-module (texmacs menus file-menu)
+;;   (:use
+;;     (utils library cursor)
+;;     (texmacs texmacs tm-server)
+;;     (texmacs texmacs tm-files)
+;;     (texmacs texmacs tm-print)))
+
+(define-module (texmacs menus file-menu)
+  :use-module (utils library cursor)
+  :use-module (texmacs texmacs tm-server)
+  :use-module (texmacs texmacs tm-files)
+  :use-module (texmacs texmacs tm-print))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dynamic menu for existing buffers

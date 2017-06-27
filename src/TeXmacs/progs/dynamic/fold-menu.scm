@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-menu)
-  (:use (dynamic fold-edit)
-        (generic generic-menu)
-	(generic document-menu)
-        (generic format-widgets)))
+;; (texmacs-module (dynamic fold-menu)
+;;   (:use (dynamic fold-edit)
+;;         (generic generic-menu)
+;; 	(generic document-menu)
+;;         (generic format-widgets)))
+
+(define-module (dynamic fold-menu)
+  :use-module (dynamic fold-edit)
+  :use-module (generic generic-menu)
+  :use-module (generic document-menu)
+  :use-module (generic format-widgets))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menus for direct folding and switching

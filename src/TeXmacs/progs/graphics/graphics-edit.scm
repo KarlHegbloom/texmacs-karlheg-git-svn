@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,11 +15,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (graphics graphics-edit)
-  (:use (graphics graphics-env)
-        (graphics graphics-single)
-        (graphics graphics-group)
-        (graphics graphics-animate)))
+;; (texmacs-module (graphics graphics-edit)
+;;   (:use (graphics graphics-env)
+;;         (graphics graphics-single)
+;;         (graphics graphics-group)
+;;         (graphics graphics-animate)))
+
+(define-module (graphics graphics-edit)
+  :use-module (graphics graphics-env)
+  :use-module (graphics graphics-single)
+  :use-module (graphics graphics-group)
+  :use-module (graphics graphics-animate))
 
 
 ;; TODO:

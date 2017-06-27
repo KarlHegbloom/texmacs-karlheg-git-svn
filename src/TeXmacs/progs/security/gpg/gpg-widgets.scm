@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (security gpg gpg-widgets)
-  (:use (security gpg gpg-base)
-	(security wallet wallet-menu)))
+;; (texmacs-module (security gpg gpg-widgets)
+;;   (:use (security gpg gpg-base)
+;; 	(security wallet wallet-menu)))
+
+(define-module (security gpg gpg-widgets)
+  :use-module (security gpg gpg-base)
+  :use-module (security wallet wallet-menu))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc

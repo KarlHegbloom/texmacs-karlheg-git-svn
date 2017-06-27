@@ -254,7 +254,7 @@ init_std_drd () {
         name (1, "accent"));
   init (NEG, "neg", fixed (1) -> accessible (0) -> name ("negation"));
   init (TREE, "tree", repeat (2, 1) -> accessible (0));
-  init (SYNTAX, "syntax", fixed (1, 1, BIFORM) ->        
+  init (SYNTAX, "syntax", fixed (1, 1, BIFORM) ->
         accessible (0) -> name (0, "body") ->
         regular (1) -> name (1, "syntax"));
 

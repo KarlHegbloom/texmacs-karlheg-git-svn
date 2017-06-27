@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,16 +15,24 @@
 ;;
 ;; The contents of this file are preliminary and simple. Things TO-DO are:
 ;;  - Use gui:help-window-visible in init-texmacs.scm (or elsewhere)
-;;  - this list 
+;;  - this list
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog scheme-tools)
-  (:use (convert rewrite init-rewrite) 
-        (doc apidoc-collect)
-        (doc apidoc-widgets)
-        (kernel texmacs tm-preferences)
-        (kernel gui kbd-handlers)))
+;; (texmacs-module (prog scheme-tools)
+;;   (:use (convert rewrite init-rewrite) 
+;;         (doc apidoc-collect)
+;;         (doc apidoc-widgets)
+;;         (kernel texmacs tm-preferences)
+;;         (kernel gui kbd-handlers)))
+
+(define-module (prog scheme-tools)
+  :use-module (convert rewrite init-rewrite)
+  :use-module (doc apidoc-collect)
+  :use-module (doc apidoc-widgets)
+  :use-module (kernel texmacs tm-preferences)
+  :use-module (kernel gui kbd-handlers))
+
 
 (tm-define char-set:stopmark
            (char-set-adjoin char-set:whitespace #\( #\) #\" #\'))

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc tmdoc-menu)
-  (:use (text text-menu)
-        (doc tmdoc-edit)
-        (doc apidoc-menu)))
+;; (texmacs-module (doc tmdoc-menu)
+;;   (:use (text text-menu)
+;;         (doc tmdoc-edit)
+;;         (doc apidoc-menu)))
+
+(define-module (doc tmdoc-menu)
+  :use-module (text text-menu)
+  :use-module (doc tmdoc-edit)
+  :use-module (doc apidoc-menu))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menus for TeXmacs documentation

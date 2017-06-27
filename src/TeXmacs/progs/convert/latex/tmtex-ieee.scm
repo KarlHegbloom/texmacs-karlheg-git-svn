@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-ieee)
-  (:use (convert latex tmtex)))
+;; (texmacs-module (convert latex tmtex-ieee)
+;;   (:use (convert latex tmtex)))
+
+(define-module (convert latex tmtex-ieee)
+  :use-module (convert latex tmtex))
+
 
 (define conference? #f)
 (define clustered? #f)

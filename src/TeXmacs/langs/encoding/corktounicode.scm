@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; Two-way conversions between Cork and Unicode
 
 ;; (C) 2003  Felix Breuer, David Allouche

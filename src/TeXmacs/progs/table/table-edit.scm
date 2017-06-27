@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (table table-edit)
-  (:use (utils library tree)
-	(utils base environment)
-	(utils edit variants)
-        (utils edit selections)
-        (utils library cursor)))
+;; (texmacs-module (table table-edit)
+;;   (:use (utils library tree)
+;; 	(utils base environment)
+;; 	(utils edit variants)
+;;         (utils edit selections)
+;;         (utils library cursor)))
+
+(define-module (table table-edit)
+  :use-module (utils library tree)
+  :use-module (utils base environment)
+  :use-module (utils edit variants)
+  :use-module (utils edit selections)
+  :use-module (utils library cursor))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some drd properties, which should go into table-drd.scm later on

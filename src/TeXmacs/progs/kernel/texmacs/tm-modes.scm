@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (kernel texmacs tm-modes)
-  (:use
-    (kernel logic logic-rules) (kernel logic logic-query) (kernel logic logic-data)
-    (kernel texmacs tm-plugins) (kernel texmacs tm-preferences)))
+;; (texmacs-module (kernel texmacs tm-modes)
+;;   (:use
+;;     (kernel logic logic-rules) (kernel logic logic-query) (kernel logic logic-data)
+;;     (kernel texmacs tm-plugins) (kernel texmacs tm-preferences)))
+
+(define-module (kernel texmacs tm-modes)
+  :use-module (kernel logic logic-rules)
+  :use-module (kernel logic logic-query)
+  :use-module (kernel logic logic-data)
+  :use-module (kernel texmacs tm-plugins)
+  :use-module (kernel texmacs tm-preferences))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Defining new modes
@@ -43,12 +52,13 @@
           (list 'begin defn arch1 arch2)
           (list 'begin defn arch1 arch2 logic-cmd)))))
 
-(define-public-macro (texmacs-modes . l)
+(define-macro (texmacs-modes . l)
   `(begin
      (set! temp-module ,(current-module))
      (set-current-module texmacs-user)
      ,@(map texmacs-mode l)
      (set-current-module temp-module)))
+(export-syntax texmacs-modes)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Checking modes
@@ -253,7 +263,7 @@
          (lazy-initialize-do (cdr l) id))
         (else (cons (car l) (lazy-initialize-do (cdr l) id)))))
 
-(define-public-macro (lazy-initialize module pred?)
+(define-macro (lazy-initialize module pred?)
   `(with id lazy-initialize-id
      (set! lazy-initialize-id (+ id 1))
      (lazy-initialize-impl id
@@ -266,6 +276,7 @@
        (set! lazy-initialize-pending
              (lazy-initialize-do lazy-initialize-pending id))
        (import-from ,module))))
+(export-syntax lazy-initialize)
 
 (define-public (lazy-initialize-force)
   (set! lazy-initialize-pending

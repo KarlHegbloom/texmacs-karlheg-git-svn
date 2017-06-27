@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs texmacs tm-files)
-  (:use (texmacs texmacs tm-server)
-        (texmacs texmacs tm-print)
-        (utils library cursor)))
+;; (texmacs-module (texmacs texmacs tm-files)
+;;   (:use (texmacs texmacs tm-server)
+;;         (texmacs texmacs tm-print)
+;;         (utils library cursor)))
+
+(define-module (texmacs texmacs tm-files)
+  :use-module (texmacs texmacs tm-server)
+  :use-module (texmacs texmacs tm-print)
+  :use-module (utils library cursor))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Supplementary routines on urls, taking into account the TeXmacs file system

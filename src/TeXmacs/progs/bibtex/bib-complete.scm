@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : bib-complete.scm
@@ -11,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex bib-complete)
-  (:use (utils library ptrees)))
+;; (texmacs-module (bibtex bib-complete)
+;;   (:use (utils library ptrees)))
+
+(define-module (bibtex bib-complete)
+  :use-module (utils library ptrees))
+
 
 (define parse-times (make-ahash-table))
 (define parse-results (make-ahash-table))

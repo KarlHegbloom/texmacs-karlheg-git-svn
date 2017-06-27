@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tools xmltm)
-  (:use (convert tools stm) (convert tools sxml)
-	(convert tools environment) (convert tools tmconcat)))
+;; (texmacs-module (convert tools xmltm)
+;;   (:use (convert tools stm) (convert tools sxml)
+;; 	(convert tools environment) (convert tools tmconcat)))
+
+(define-module (convert tools xmltm)
+  :use-module (convert tools stm)
+  :use-module (convert tools sxml)
+  :use-module (convert tools environment)
+  :use-module (convert tools tmconcat))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; XML namespace normalization

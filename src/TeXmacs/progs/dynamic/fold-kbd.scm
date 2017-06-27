@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic fold-kbd)
-  (:use (generic generic-kbd)
-	(dynamic fold-edit)))
+;; (texmacs-module (dynamic fold-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(dynamic fold-edit)))
+
+(define-module (dynamic fold-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (dynamic fold-edit))
+
 
 (define (reset-buffer-players)
   (players-set-elapsed (buffer-tree) 0.0)

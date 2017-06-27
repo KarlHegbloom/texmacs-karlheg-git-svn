@@ -252,12 +252,12 @@ cache_initialize () {
   if (get_env ("TEXMACS_DOC_PATH") == "")
     texmacs_doc_path= url_system ("$TEXMACS_PATH/doc");
   else texmacs_doc_path= url_system ("$TEXMACS_DOC_PATH");
-  
+
   texmacs_path_string = concretize (texmacs_path);
   texmacs_home_path_string = concretize (texmacs_home_path);
   texmacs_doc_path_string = concretize (texmacs_doc_path);
   texmacs_font_path_string = concretize (texmacs_home_path * "fonts/");
-   
+
   cache_refresh ();
   if (is_recursively_up_to_date (texmacs_path * "fonts/type1") &&
       is_recursively_up_to_date (texmacs_path * "fonts/truetype") &&

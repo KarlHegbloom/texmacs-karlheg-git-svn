@@ -1,4 +1,4 @@
-;;; coding: utf-8
+;;; xcodingx: NOTutf-8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +12,19 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (texmacs keyboard latex-kbd)
-  (:use (utils edit auto-close)
-	(generic format-edit)
-	(generic generic-edit)
-	(text text-edit)))
+;; (texmacs-module (texmacs keyboard latex-kbd)
+;;   (:use (utils edit auto-close)
+;; 	(generic format-edit)
+;; 	(generic generic-edit)
+;; 	(text text-edit)))
+
+(define-module (texmacs keyboard latex-kbd)
+  :use-module (utils edit auto-close)
+  :use-module (generic format-edit)
+  :use-module (generic generic-edit)
+  :use-module (text text-edit))
+
+(display "\n\nWarning: TODO (texmacs keyboard latex-kbd) scm source file encoding needs checking!\n\n")
 
 (kbd-symbols
   "alpha" "beta" "gamma" "delta" "epsilon"

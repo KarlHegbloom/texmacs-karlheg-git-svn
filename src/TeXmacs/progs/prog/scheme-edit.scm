@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (prog scheme-edit)
-  (:use (prog prog-edit)
-        (prog scheme-tools) (prog scheme-autocomplete)
-        (utils misc tm-keywords)))
+;; (texmacs-module (prog scheme-edit)
+;;   (:use (prog prog-edit)
+;;         (prog scheme-tools) (prog scheme-autocomplete)
+;;         (utils misc tm-keywords)))
+
+(define-module (prog scheme-edit)
+  :use-module (prog prog-edit)
+  :use-module (prog scheme-tools)
+  :use-module (prog scheme-autocomplete)
+  :use-module (utils misc tm-keywords))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Treatment of special characters

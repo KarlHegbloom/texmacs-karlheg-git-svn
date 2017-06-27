@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -15,14 +16,20 @@
 ;; The contents of this file are preliminary and simple. Things TO-DO are:
 ;;  - Use gui:help-window-visible in init-texmacs.scm (or elsewhere)
 ;;  - Move generic window and preference handling procedures elsewhere
-;;  - this list 
+;;  - this list
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-widgets)
-  (:use (doc apidoc-funcs)
-        (doc apidoc-collect)
-        (kernel texmacs tm-preferences)))
+;; (texmacs-module (doc apidoc-widgets)
+;;   (:use (doc apidoc-funcs)
+;;         (doc apidoc-collect)
+;;         (kernel texmacs tm-preferences)))
+
+(define-module (doc apidoc-widgets)
+  :use-module (doc apidoc-funcs)
+  :use-module (doc apidoc-collect)
+  :use-module (kernel texmacs tm-preferences))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; A contextual help widget

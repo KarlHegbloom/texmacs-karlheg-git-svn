@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (client client-menu)
-  (:use (client client-base)
-        (client client-db)
-        (client client-widgets)))
+;; (texmacs-module (client client-menu)
+;;   (:use (client client-base)
+;;         (client client-db)
+;;         (client client-widgets)))
+
+(define-module (client client-menu)
+  :use-module (client client-base)
+  :use-module (client client-db)
+  :use-module (client client-widgets))
+
 
 (menu-bind start-client-menu
   (with l (client-accounts)

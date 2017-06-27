@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic format-edit)
-  (:use (utils base environment)
-	(utils edit selections)
-	(utils library cursor)
-	(generic generic-edit)))
+;; (texmacs-module (generic format-edit)
+;;   (:use (utils base environment)
+;; 	(utils edit selections)
+;; 	(utils library cursor)
+;; 	(generic generic-edit)))
+
+(define-module (generic format-edit)
+  :use-module (utils base environment)
+  :use-module (utils edit selections)
+  :use-module (utils library cursor)
+  :use-module (generic generic-edit))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic with manipulations

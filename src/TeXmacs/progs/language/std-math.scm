@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (language std-math)
-  (:use (language std-symbols)))
+;; (texmacs-module (language std-math)
+;;   (:use (language std-symbols)))
+
+(define-module (language std-math)
+  :use-module (language std-symbols))
+
 
 (define-language std-math-operators
   (:synopsis "standard mathematical operators")

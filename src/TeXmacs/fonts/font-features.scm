@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 (Al\ Bayan Al\ Bayan)
 (Al\ Bayan\ PUA Al\ Bayan\ PUA)
 (Al\ Nile Al\ Nile)

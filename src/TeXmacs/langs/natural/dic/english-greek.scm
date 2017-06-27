@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ("a modifier" "τροποποιητής a")
 ("a series" "σειρά a")
 ("abbreviation" "συντομογραφία")

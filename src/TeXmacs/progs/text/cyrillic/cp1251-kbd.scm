@@ -1,4 +1,4 @@
-;;; coding: utf-8
+;; -*- coding: raw-text -*-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +12,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text cyrillic cp1251-kbd)
-  (:use (text text-kbd)))
+(define-module (text cyrillic cp1251-kbd)
+  :use-module (text text-kbd))
 
 (kbd-map
   (:mode in-cyrillic-cp1251?)

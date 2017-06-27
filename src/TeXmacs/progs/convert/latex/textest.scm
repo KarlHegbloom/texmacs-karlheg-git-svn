@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex textest)
-  (:use
-    (convert tools tmpre) (convert tools output)
-    (convert latex tmtex) (convert latex texout)))
+;; (texmacs-module (convert latex textest)
+;;   (:use
+;;     (convert tools tmpre) (convert tools output)
+;;     (convert latex tmtex) (convert latex texout)))
+
+(define-module (convert latex textest)
+  :use-module (convert tools tmpre)
+  :use-module (convert tools output)
+  :use-module (convert latex tmtex)
+  :use-module (convert latex texout))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX output

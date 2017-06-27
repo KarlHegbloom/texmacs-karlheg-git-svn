@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,14 +13,24 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic calc-edit)
-  (:use (text text-drd)
-        (text text-structure)
-        (link locus-edit)
-        (version version-edit)
-        (dynamic session-edit)
-        (dynamic scripts-edit)
-        (dynamic calc-drd)))
+;; (texmacs-module (dynamic calc-edit)
+;;   (:use (text text-drd)
+;;         (text text-structure)
+;;         (link locus-edit)
+;;         (version version-edit)
+;;         (dynamic session-edit)
+;;         (dynamic scripts-edit)
+;;         (dynamic calc-drd)))
+
+(define-module (dynamic calc-edit)
+  :use-module (text text-drd)
+  :use-module (text text-structure)
+  :use-module (link locus-edit)
+  :use-module (version version-edit)
+  :use-module (dynamic session-edit)
+  :use-module (dynamic scripts-edit)
+  :use-module (dynamic calc-drd))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Spreadsheet evaluation

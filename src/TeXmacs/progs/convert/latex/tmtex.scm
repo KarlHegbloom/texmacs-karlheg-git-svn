@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,16 +13,26 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex)
-  (:use (convert tools tmpre)
-	(convert tools old-tmtable)
-	(convert tools tmlength)
-	(convert rewrite tmtm-brackets)
-	(convert latex texout)
-        (doc tmdoc-markup)
-	(convert latex latex-tools)))
+;; (texmacs-module (convert latex tmtex)
+;;   (:use (convert tools tmpre)
+;; 	(convert tools old-tmtable)
+;; 	(convert tools tmlength)
+;; 	(convert rewrite tmtm-brackets)
+;; 	(convert latex texout)
+;;         (doc tmdoc-markup)
+;; 	(convert latex latex-tools)))
+
+(define-module (convert latex tmtex)
+  :use-module (convert tools tmpre)
+  :use-module (convert tools old-tmtable)
+  :use-module (convert tools tmlength)
+  :use-module (convert rewrite tmtm-brackets)
+  :use-module (convert latex texout)
+  :use-module (doc tmdoc-markup)
+  :use-module (convert latex latex-tools))
 
 (use-modules (ice-9 format))
+
 
 (tm-define tmtex-debug-mode? #f)
 

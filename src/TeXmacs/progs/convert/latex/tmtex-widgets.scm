@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex tmtex-widgets)
-  (:use (convert latex tmtex)
-        (utils library cursor)
-        (check check-master)))
+;; (texmacs-module (convert latex tmtex-widgets)
+;;   (:use (convert latex tmtex)
+;;         (utils library cursor)
+;;         (check check-master)))
+
+(define-module (convert latex tmtex-widgets)
+  :use-module (convert latex tmtex)
+  :use-module (utils library cursor)
+  :use-module (check check-master))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The widget for examing LaTeX errors

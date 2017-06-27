@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : apidoc.scm
@@ -19,10 +21,17 @@
 ;; An empty "what" parameter means to list all items of the specified type.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
-(texmacs-module (doc apidoc)
-  (:use (kernel gui gui-markup) 
-        (doc apidoc-markup) (doc apidoc-funcs) (doc apidoc-collect)))
+
+;; (texmacs-module (doc apidoc)
+;;   (:use (kernel gui gui-markup)
+;;         (doc apidoc-markup) (doc apidoc-funcs) (doc apidoc-collect)))
+
+(define-module (doc apidoc)
+  :use-module (kernel gui gui-markup)
+  :use-module (doc apidoc-markup)
+  :use-module (doc apidoc-funcs)
+  :use-module (doc apidoc-collect))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Internal

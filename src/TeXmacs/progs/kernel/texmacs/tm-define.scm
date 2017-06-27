@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -13,13 +14,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (kernel texmacs tm-define)
-  :use-module (texmacs-core))
-(use-modules (kernel boot abbrevs)
-             (kernel boot ahash-table)
-             (kernel boot srfi)
-             (kernel boot debug)
-             (kernel library base)
-             (kernel library list))
+  :use-module (kernel boot abbrevs)
+  :use-module (kernel boot ahash-table)
+  :use-module (kernel boot srfi)
+  :use-module (kernel boot debug)
+  :use-module (kernel library base)
+  :use-module (kernel library list))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Contextual overloading
@@ -238,7 +239,7 @@
             ,(begin* body)
             ,(apply* 'former head)))))
 
-(define-public-macro (tm-define-overloaded head . body)
+(define-macro (tm-define-overloaded head . body)
   (let* ((var (ca*r head))
          (nbody (tm-add-condition var head body))
          (nval (lambda* head nbody)))
@@ -275,6 +276,7 @@
            (ahash-set! tm-defined-name ,var ',var)
 	   (ahash-set! tm-defined-module ',var (list (module-name temp-module)))
            ,@(map property-rewrite cur-props)))))
+(export-syntax tm-define-overloaded)
 
 (define-public (tm-define-sub head body)
   (if (and (pair? (car body)) (keyword? (caar body)))
@@ -284,10 +286,11 @@
 	((hash-ref define-option-table (caar body)) (cdar body) decl))
       (cons 'tm-define-overloaded (cons head body))))
 
-(define-public-macro (tm-define head . body)
+(define-macro (tm-define head . body)
   (set! cur-conds '())
   (set! cur-props '())
   (tm-define-sub head body))
+(export-syntax tm-define)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Overloaded macros with properties
@@ -298,7 +301,7 @@
       (cons (tm-macroify (car head)) (cdr head))
       (string->symbol (string-append (symbol->string head) "$impl"))))
 
-(define-public-macro (tm-define-macro head . body)
+(define-macro (tm-define-macro head . body)
   (with macro-head (tm-macroify head)
     ;;(display* (ca*r head) "\n")
     ;;(display* "   " `(tm-define ,macro-head ,@body) "\n")
@@ -308,9 +311,11 @@
        (tm-define ,macro-head ,@body)
        (set! temp-module ,(current-module))
        (set-current-module texmacs-user)
-       (define-public-macro ,head
+       (define-macro ,head
          ,(apply* (ca*r macro-head) head))
+       (export-syntax ,head)
        (set-current-module temp-module))))
+(export-syntax tm-define-macro)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Associating extra properties to existing function symbols
@@ -322,14 +327,16 @@
       (let ((decl (tm-property-sub head (cdr body))))
 	((hash-ref define-option-table (caar body)) (cdar body) decl))))
 
-(define-public-macro (tm-property head . body)
+(define-macro (tm-property head . body)
   (set! cur-conds '())
   (set! cur-props '())
   (tm-property-sub head body))
+(export-syntax tm-property)
 
-(define-public-macro (tm-property-overloaded head . body)
+(define-macro (tm-property-overloaded head . body)
   `(begin
      ,@(map property-rewrite cur-props)))
+(export-syntax tm-property-overloaded)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lazy function declations
@@ -357,10 +364,11 @@
                                               (symbol->string name))))
            (apply r args))))))
 
-(define-public-macro (lazy-define module . names)
+(define-macro (lazy-define module . names)
   (receive (opts real-names) (list-break names not-define-option?)
     `(begin
        ,@(map (lambda (name) (lazy-define-one module opts name)) names))))
+(export-syntax lazy-define)
 
 (define-public (lazy-define-force name)
   (if (procedure? name) (set! name (procedure-name name)))

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (security gpg gpg-wallet)
-  (:use (security gpg gpg-base)))
+;; (texmacs-module (security gpg gpg-wallet)
+;;   (:use (security gpg gpg-base)))
+
+(define-module (security gpg gpg-wallet)
+  :use-module (security gpg gpg-base))
+
 
 ;(display "TeXmacs] Loading GnuPG wallet\n")
 

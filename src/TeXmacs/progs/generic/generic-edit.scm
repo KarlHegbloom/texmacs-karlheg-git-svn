@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic generic-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-	(utils edit variants)
-        (bibtex bib-complete)
-	(source macro-search)))
+;; (texmacs-module (generic generic-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;; 	(utils edit variants)
+;;         (bibtex bib-complete)
+;; 	(source macro-search)))
+
+(define-module (generic generic-edit)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (utils edit variants)
+  :use-module (bibtex bib-complete)
+  :use-module (source macro-search))
+
 
 (tm-define (generic-context? t) #t) ;; overridden in, e.g., graphics mode
 

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math math-drd)
-  (:use (utils edit variants)))
+;; (texmacs-module (math math-drd)
+;;   (:use (utils edit variants)))
+
+(define-module (math math-drd)
+  :use-module (utils edit variants))
+
 
 (define-group variant-tag
   (fraction-tag) (vertical-script-tag)

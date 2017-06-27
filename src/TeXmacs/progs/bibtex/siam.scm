@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (bibtex siam)
-  (:use (bibtex bib-utils) (bibtex plain)))
+;; (texmacs-module (bibtex siam)
+;;   (:use (bibtex bib-utils) (bibtex plain)))
+
+(define-module (bibtex siam)
+  :use-module (bibtex bib-utils)
+  :use-module (bibtex plain))
+
 
 (bib-define-style "siam" "plain")
 

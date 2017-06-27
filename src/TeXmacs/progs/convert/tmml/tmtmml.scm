@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,15 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert tmml tmtmml)
-  (:use (convert tmml tmmlout)
-	(convert tmml tmmltm)
-	))
+;; (texmacs-module (convert tmml tmtmml)
+;;   (:use (convert tmml tmmlout)
+;; 	(convert tmml tmmltm)
+;; 	))
+
+(define-module (convert tmml tmtmml)
+  :use-module (convert tmml tmmlout)
+  :use-module (convert tmml tmmltm))
+
 
 (define (tmtmml-file x)
   (define (tmtmml-keep? x)

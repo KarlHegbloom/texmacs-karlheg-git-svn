@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert html htmltm-test)
-  (:use (convert html htmltm) (convert tools xmltm)
-	(convert tools sxml) (convert tools sxhtml)))
+;; (texmacs-module (convert html htmltm-test)
+;;   (:use (convert html htmltm) (convert tools xmltm)
+;; 	(convert tools sxml) (convert tools sxhtml)))
+
+(define-module (convert html htmltm-test)
+  :use-module (convert html htmltm)
+  :use-module (convert tools xmltm)
+  :use-module (convert tools sxml)
+  :use-module (convert tools sxhtml))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Markup

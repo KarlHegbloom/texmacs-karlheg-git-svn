@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (security wallet wallet-menu)
-  (:use (security wallet wallet-base)))
+;; (texmacs-module (security wallet wallet-menu)
+;;   (:use (security wallet wallet-base)))
 
-(when (os-macos?) 
+(define-module (security wallet wallet-menu)
+  :use-module (security wallet wallet-base))
+
+
+(when (os-macos?)
   (use-modules (security keychain macos-security)))
 
 (when (or (os-mingw?) (os-win32?))

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (database db-edit)
-  (:use (database db-version)
-        (generic generic-edit)
-        (generic generic-kbd)
-        (utils edit variants)))
+;; (texmacs-module (database db-edit)
+;;   (:use (database db-version)
+;;         (generic generic-edit)
+;;         (generic generic-kbd)
+;;         (utils edit variants)))
+
+(define-module (database db-edit)
+  :use-module (database db-version)
+  :use-module (generic generic-edit)
+  :use-module (generic generic-kbd)
+  :use-module (utils edit variants))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; DRD properties and useful predicates

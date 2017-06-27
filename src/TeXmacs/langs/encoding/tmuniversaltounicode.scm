@@ -1,4 +1,5 @@
 ;;; coding: utf-8
+;;; ☮ ☯ ☭ ☺
 ;; Conversion between TeXmacs universal symbols and Unicode
 
 ;; (C) 2002-2003  Felix Breuer, David Allouche, Joris van der Hoeven

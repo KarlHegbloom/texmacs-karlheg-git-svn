@@ -1,4 +1,6 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MODULE      : apidoc-collect.scm
@@ -13,7 +15,8 @@
 ;;
 ;; Given a page from the documentation, we parse it and all its children and
 ;; store every "explain" tag into a cache in the users $TEXMACS_HOMEPATH
-;; directory. 
+;; directory.
+;;
 ;; We use this to provide documentation for scheme symbols and texmacs macros.
 ;; Multiple languages can be stored for each tag, allowing for localization
 ;; as well as a fallback language.
@@ -32,7 +35,10 @@
 ;;    (i.e. linked with <branch>) anywhere in the manuals.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (doc apidoc-collect))
+;; (texmacs-module (doc apidoc-collect))
+
+(define-module (doc apidoc-collect))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Internal variables and generic one-use routines.

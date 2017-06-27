@@ -1,4 +1,4 @@
-;;; coding: utf-8
+;;; coding: raw -*- coding-system: raw-text -*-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,10 +12,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (text text-kbd)
-  (:use (generic generic-kbd)
-	(utils edit auto-close)
-	(text text-edit)))
+(define-module (text text-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (utils edit auto-close)
+  :use-module (text text-edit))
+
+
+;;; (To texmacs-dev: correct me if I'm wrong in the following comment please. I
+;;; am offline today as I write this. What I'm wondering is what coding will
+;;; Guile 2.2 need to read this in as? What will it see inside the quotation
+;;; marks?
+
+;;; The right hand side (rhs) values below that will display in Emacs as \nnn
+;;; when the coding system is set to raw-text are TeX Cork T1 character to
+;;; glyph encoding. That is, the number behind the \ is the T1 character that
+;;; maps to the glyph that is displayed when that character is inserted into
+;;; the document.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Special symbols in text mode

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (math math-kbd)
-  (:use (generic generic-kbd)
-        (utils edit auto-close)
-        (generic format-edit)
-        (math math-edit)
-        (table table-edit)))
+(define-module (math math-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (utils edit auto-close)
+  :use-module (generic format-edit)
+  :use-module (math math-edit)
+  :use-module (table table-edit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hacks to work around the problem that MacOS reserves Alt-based shortcuts

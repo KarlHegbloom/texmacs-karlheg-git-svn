@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -14,9 +15,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (convert latex latex-tools)
-  (:use (convert latex latex-drd)
-	(convert latex texout)))
+;; (texmacs-module (convert latex latex-tools)
+;;   (:use (convert latex latex-drd)
+;; 	(convert latex texout)))
+
+(define-module (convert latex latex-tools)
+  :use-module (convert latex latex-drd)
+  :use-module (convert latex texout))
+
 
 (tm-define tmtex-cjk-document? #f)
 (tm-define tmtex-use-catcodes? #f)

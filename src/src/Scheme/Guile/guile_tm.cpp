@@ -523,7 +523,9 @@ cmp_blackbox (SCM t1, SCM t2) {
  * Initialization
  ******************************************************************************/
 
-
+// TODO: Port from to-be-deprecated smob interface to the new Foreign Objects
+//       interface. See: info "(guile)Smobs"
+//
 #ifdef SCM_NEWSMOB
 void
 initialize_smobs () {
@@ -550,46 +552,108 @@ initialize_smobs () {
 
 tmscm object_stack;
 
-static void
-initialize_core_module(void *unused) {
-  scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
-  scm_c_export("texmacs-version", NULL);
-  eval_scheme_file_in_load_path("texmacs-core");
-}
+// static void
+// initialize_core_module(void *unused) {
+//   scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
+//   scm_c_export("texmacs-version", NULL);
+//   eval_scheme_file_in_load_path("texmacs-core");
+// }
 
 void
 initialize_scheme () {
   const char* init_prg =
+    // I will remove (or change to not assume knowledge of email forum
+    // discussions pertaining to this) the following comment later, but for now
+    // it's here for the benefit of others in the TeXmacs devel team...
+    //
+    // "(display \"guile_tm.cpp:initialize_scheme: Executing init_prg\")\n"
+    // "(newline)\n"
+    // "(display \"In module: \")\n"
+    // "(display (module-name (current-module)))\n"
+    // "(newline)\n"
+    // "(newline)\n"
+    // "\n"
+    //
+    // When enabled, the above showed me that it was in the (guile-user)
+    // module.  In the Guile 1.8 version of TeXmacs, texmacs-user resolves to
+    // the guile-user module also. Since everything worked fine then, it seems
+    // like it ought to also work great when we put all of the definitions into
+    // that module for Guile 2.2. This arrangement, or having separate modules
+    // for texmacs-glue and texmacs-core may seem good for organization
+    // reasons, but really it just makes the system have to take longer for
+    // each lookup... since when the symbol is not defined in the current
+    // module's obarray, it looks at the obarrays of each module in the
+    // module-uses list... recursively. An obarray lookup is O(1), but when it
+    // must look in multiple obarrays in order to find a symbol, it adds
+    // valuable cycles to the amount of time taken each and every time a symbol
+    // is looked up. Since Guile 2.2's ".go" files are ELF, with PLT, then
+    // perhaps that only has to happen the first time a symbol from another
+    // module is looked up; but why not just save the time and have it not have
+    // to look that far in order to find things that are used in every single
+    // TeXmacs module?
+    //
+    // So, reading the code in ice-9/boot-9.scm, and using that as the model
+    // for boostrapping TeXmacs, let's put everything into the base (guile)
+    // module, rather than (texmacs-glue) and (texmacs-core) or even
+    // (guile-user).
+    //
+    "(set-current-module (resolve-module '(guile)))\n"
+    "\n"
+    // "(assert-load-verbosity #t)" // comment off later, after initial devel phase?
+    // "\n"
+    // TODO: Move to standard #:kwd reader syntax?
     "(read-set! keywords 'prefix)\n"
     "(read-enable 'positions)\n"
-    ";;;(debug-enable 'debug)\n"
-    ";;;(debug-enable 'backtrace)\n"
+    ";;; (read-enable 'r7rs-symbols)\n"
+    ";;; (read-enable 'square-brackets)\n"
+    ";;; (read-enable 'r6rs-hex-escapes)\n"
+    ";;; (print-enable 'r7rs-symbols)\n"
+    "(debug-enable 'backtrace)\n"
     "\n"
     "(define (display-to-string obj)\n"
-    "  (call-with-output-string\n"
-    "    (lambda (port) (display obj port))))\n"
-    "(define (object->string obj)\n"
-    "  (call-with-output-string\n"
-    "    (lambda (port) (write obj port))))\n"
-    "(define object-stack '(()))";
-    // "(define (texmacs-version) \"" TEXMACS_VERSION "\")\n"
-    //""
+    "  (object->string obj display))\n"
+    "\n"
+    // Just to be sure, for during the initial development phases, I want to
+    // be sure that no (guile) core functions are being re-defined... and so
+    // for the beginning... we could load everything into a (texmacs-core)
+    // module, then set the current module to (guile) and (use-modules
+    // (texmacs-core)) to get the redefinition warnings... or we could
+    // simply check each and every name to ensure that it's not already
+    // defined. I think that's easy enough to do, so that's what I'm going
+    // to do it like.
+    //
+    "\n"
+    "(define object-stack '(()))\n";
 
   // spawn-server for a separate thread so it won't block GUI startup.
-  // Connect to it with:
-  //  rlwrap nc localhost 37146
+  // Connect to it with, e.g.:
+  //
+  //     rlwrap nc localhost 37146
+  //
+  // ... or, if you are using Geiser in Emacs:
+  //
+  // M-x connect-to-guile
   //
   const char* repl_prg =
-    "(cond-expand\n"
-    "  (guile-2\n"
-    "    ((@ (system repl server) spawn-server))))\n";
-    
+    "(set-current-module (resolve-module '(guile-user)))\n"
+    "(use-modules (system repl server))\n"
+    "(spawn-server)\n";
+
   scm_c_eval_string (init_prg);
-  initialize_smobs ();
-  scm_c_define_module("texmacs-glue", initialize_glue, NULL);
-  scm_c_define_module("texmacs-core", initialize_core_module, NULL);
-  scm_c_use_module("texmacs-glue");
   object_stack= scm_lookup_string ("object-stack");
 
-  scm_c_eval_string (repl_prg);
+  scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
+  // everything defined in the base (guile) module is exported by default.
+  // scm_c_export("texmacs-version", NULL);
+
+  initialize_smobs ();
+  initialize_glue (NULL);
+
+  eval_scheme_file_in_load_path("kernel/boot-texmacs");
+
+  // scm_c_define_module("texmacs-glue", initialize_glue, NULL);
+  // scm_c_define_module("texmacs-core", initialize_core_module, NULL);
+  // scm_c_use_module("texmacs-glue");
+
+  scm_c_eval_string (repl_prg); // leaves us in (guile-user) as expected.
 }

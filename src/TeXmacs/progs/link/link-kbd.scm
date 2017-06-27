@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,11 +13,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (link link-kbd)
-  (:use (generic generic-kbd)
-	(link link-edit)
-	(link link-navigate)
-	(link link-extract)))
+;; (texmacs-module (link link-kbd)
+;;   (:use (generic generic-kbd)
+;; 	(link link-edit)
+;; 	(link link-navigate)
+;; 	(link link-extract)))
+
+(define-module (link link-kbd)
+  :use-module (generic generic-kbd)
+  :use-module (link link-edit)
+  :use-module (link link-navigate)
+  :use-module (link link-extract))
+
 
 (kbd-map
   (:mode with-linking-tool?)

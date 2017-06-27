@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,12 +13,20 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (generic document-edit)
-  (:use (utils base environment)
-        (utils library length)
-        (utils library cursor)
-        (generic generic-edit)
-        (generic document-style)))
+;; (texmacs-module (generic document-edit)
+;;   (:use (utils base environment)
+;;         (utils library length)
+;;         (utils library cursor)
+;;         (generic generic-edit)
+;;         (generic document-style)))
+
+(define-module (generic document-edit)
+  :use-module (utils base environment)
+  :use-module (utils library length)
+  :use-module (utils library cursor)
+  :use-module (generic generic-edit)
+  :use-module (generic document-style))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Projects

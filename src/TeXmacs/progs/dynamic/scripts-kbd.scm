@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,9 +13,14 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic scripts-kbd)
-  (:use (math math-kbd)
-	(dynamic scripts-edit)))
+;; (texmacs-module (dynamic scripts-kbd)
+;;   (:use (math math-kbd)
+;; 	(dynamic scripts-edit)))
+
+(define-module (dynamic scripts-kbd)
+  :use-module (math math-kbd)
+  :use-module (dynamic scripts-edit))
+
 
 (kbd-map
   ("script *" (make 'script-eval))

@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,13 +13,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (dynamic scripts-edit)
-  (:use (utils library tree)
-	(utils library cursor)
-        (utils edit selections)
-	(utils plugins plugin-cmd)
-	(convert tools tmconcat)
-	(dynamic scripts-drd)))
+;; (texmacs-module (dynamic scripts-edit)
+;;   (:use (utils library tree)
+;; 	(utils library cursor)
+;;         (utils edit selections)
+;; 	(utils plugins plugin-cmd)
+;; 	(convert tools tmconcat)
+;; 	(dynamic scripts-drd)))
+
+(define-module (dynamic scripts-edit)
+  :use-module (utils library tree)
+  :use-module (utils library cursor)
+  :use-module (utils edit selections)
+  :use-module (utils plugins plugin-cmd)
+  :use-module (convert tools tmconcat)
+  :use-module (dynamic scripts-drd))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Some switches

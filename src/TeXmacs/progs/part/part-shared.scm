@@ -1,4 +1,5 @@
-;;; coding: utf-8
+;;; -*- coding: utf-8 -*-
+;;; ☮ ☯ ☭ ☺
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -12,8 +13,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(texmacs-module (part part-shared)
-  (:use (utils plugins plugin-eval)))
+;; (texmacs-module (part part-shared)
+;;   (:use (utils plugins plugin-eval)))
+
+(define-module (part part-shared)
+  :use-module (utils plugins plugin-eval))
+
 
 ;; TODO: better undo in case of several mirrors in one document
 ;; TODO: nested mirror don't work appropriately (due to unique identifier
