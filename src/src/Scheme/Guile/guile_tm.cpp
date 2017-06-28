@@ -597,7 +597,8 @@ initialize_scheme () {
     // module, rather than (texmacs-glue) and (texmacs-core) or even
     // (guile-user).
     //
-    "(set-current-module (resolve-module '(guile)))\n"
+    "(eval-when (expand load eval compile)\n"
+    "  (set-current-module (resolve-module '(guile))))\n"
     "\n"
     // "(assert-load-verbosity #t)" // comment off later, after initial devel phase?
     // "\n"
@@ -625,6 +626,24 @@ initialize_scheme () {
     "\n"
     "(define object-stack '(()))\n";
 
+  scm_c_eval_string (init_prg);
+
+  object_stack= scm_lookup_string ("object-stack");
+
+  scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
+
+  // everything defined in the base (guile) module is exported by default.
+  // scm_c_export("texmacs-version", NULL);
+
+  initialize_smobs ();
+
+  // "When there already exists a module named NAME, it is used
+  // unchanged, otherwise, an empty module is created."
+  tmscm guile_module= scm_c_define_module ("guile", initialize_glue, NULL);
+
+  eval_scheme_file_in_load_path("kernel/boot-texmacs");
+
+
   // spawn-server for a separate thread so it won't block GUI startup.
   // Connect to it with, e.g.:
   //
@@ -635,25 +654,10 @@ initialize_scheme () {
   // M-x connect-to-guile
   //
   const char* repl_prg =
-    "(set-current-module (resolve-module '(guile-user)))\n"
+    "(eval-when (expand load eval compile)\n"
+    "  (set-current-module (resolve-module '(guile-user))))\n"
     "(use-modules (system repl server))\n"
     "(spawn-server)\n";
-
-  scm_c_eval_string (init_prg);
-  object_stack= scm_lookup_string ("object-stack");
-
-  scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
-  // everything defined in the base (guile) module is exported by default.
-  // scm_c_export("texmacs-version", NULL);
-
-  initialize_smobs ();
-  initialize_glue (NULL);
-
-  eval_scheme_file_in_load_path("kernel/boot-texmacs");
-
-  // scm_c_define_module("texmacs-glue", initialize_glue, NULL);
-  // scm_c_define_module("texmacs-core", initialize_core_module, NULL);
-  // scm_c_use_module("texmacs-glue");
 
   scm_c_eval_string (repl_prg); // leaves us in (guile-user) as expected.
 }
