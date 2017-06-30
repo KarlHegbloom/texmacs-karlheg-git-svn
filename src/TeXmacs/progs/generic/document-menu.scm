@@ -827,6 +827,9 @@
   (-> "Paragraph" (link document-paragraph-menu))
   (-> "Page" (link document-page-menu))
   (-> "Metadata" (link document-metadata-menu))
+  (-> "Bibliography"
+      (when (buffer-has-biblio? (current-buffer))
+	("Local entries" (open-biblio))))
   ---
   (-> "Magnification" (link document-magnification-menu))
   (-> "Colors" (link document-colors-menu))
@@ -858,6 +861,8 @@
   ("Paragraph" (open-document-paragraph-format))
   ("Page" (open-document-page-format))
   ("Metadata" (open-document-metadata))
+  (when (buffer-has-biblio? (current-buffer))
+    ("Bibliography" (open-biblio)))
   ;;("Colors" (open-document-colors))
   ---
   (-> "Magnification" (link document-magnification-menu))
