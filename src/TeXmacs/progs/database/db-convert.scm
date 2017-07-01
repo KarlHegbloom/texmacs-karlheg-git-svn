@@ -183,6 +183,7 @@
   (noop))
 
 (tm-define (db-import-selection) (noop))
+(tm-define (db-import-this-entry) (noop))
 (tm-define (db-import-current-buffer) (noop))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
