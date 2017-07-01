@@ -317,7 +317,7 @@
 
 (define (bib-compile-sub prefix style names . bib-files)
   (set! names (list-remove-duplicates names))
-  (if (is-tm-bibtex-style? style)
+  (if (in? style (bib-standard-styles))
       (let* ((all-files `(:local ,@bib-files :default :attached))
              (l (apply bib-retrieve-entries (cons names all-files)))
              (bl (map db->bib (map cdr l)))
