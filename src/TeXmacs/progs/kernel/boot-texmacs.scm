@@ -16,119 +16,48 @@
 
 (eval-when (expand load eval compile)
   (set-current-module (resolve-module '(guile)))
-  ;;
-  (define texmacs-user (resolve-module '(guile-user))))
+  (module-use! (module-public-interface (current-module))
+               (resolve-interface '(guile-user))))
 
-
-(eval-when (expand)
-  (newline)
-  (display "DEBUG (expand): In module: ")
-  (display (module-name (current-module)))
-  (newline)
-  (newline))
-
-(eval-when (load)
-  (newline)
-  (display "DEBUG (load): In module: ")
-  (display (module-name (current-module)))
-  (newline)
-  (newline))
-
-(eval-when (eval)
-  (newline)
-  (display "DEBUG (eval): In module: ")
-  (display (module-name (current-module)))
-  (newline)
-  (newline))
-
-(eval-when (compile)
-  (newline)
-  (display "DEBUG (compile): In module: ")
-  (display (module-name (current-module)))
-  (newline)
-  (newline))
-
-
-;;; Note:  In guile_tm.cpp is (set-current-module (resolve-module '(guile)))
-;;;        That is necessary to make the cond-expand-provide work properly.
+(use-and-re-export-modules (texmacs-glue))
 
 ;; TODO: I need to figure out how to make the build system compile all of
 ;;       the texmacs .scm files into .go objects that can be shipped with
 ;;       binary packages, for .deb and MacPorts, etc.
 
 
-(define has-look-and-feel? (lambda (x) (string=? x "emacs")))
+(define-public has-look-and-feel? (lambda (x) (string=? x "emacs")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Redirect standard output
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define original-display display)
-(define original-write write)
+;;; This breaks the repl server, causing its' output to appear in the
+;;; input/output buffer, rather than in the geiser-mode repl interface
+;;; buffer, when running "texmacs --gdb" in gdb mode.
 
-(define (display . l)
-  "display one object on the standard output or a specified port."
-  (if (or (null? l) (not (null? (cdr l))))
-      (apply original-display l)
-      (tm-output (display-to-string (car l)))))
+;; (define original-display display)
+;; (define original-write write)
 
-(define (write . l)
-  "write an object to the standard output or a specified port."
-  (if (or (null? l) (not (null? (cdr l))))
-      (apply original-write l)
-      (tm-output (object->string (car l)))))
+;; (define (display . l)
+;;   "display one object on the standard output or a specified port."
+;;   (if (or (null? l) (not (null? (cdr l))))
+;;       (apply original-display l)
+;;       (tm-output (display-to-string (car l)))))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Provide functions if not defined and public macros
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;
-;;;
-;;; Because a symbol lookup from inside any module falls back on a lookup
-;;; inside the (guile) module, when use-and-re-export-modules is called from
-;;; inside the (guile) module, the public symbols from those modules become
-;;; exported from the (guile) module and thus available globally as though
-;;; defined inside of the (guile) module.
-;;;
-(define-syntax use-and-re-export-modules
-  (syntax-rules ()
-    ((_ (mod ...) ...)
-     (begin
-       (begin
-         (use-modules (mod ...))
-         (module-use! (module-public-interface (current-module))
-                      (resolve-interface '(mod ...))))
-       ...))))
-
-(export-syntax use-and-re-export-modules)
-
-(define-syntax-rule (define-public-macro (name . args) . body)
-  (begin
-    (define-macro (name . args) . body)
-    (export-syntax name)))
-
-(export-syntax define-public-macro)
-
-
-(define-syntax provide-public
-  (syntax-rules ()
-    ((_ (name . args) . body)
-     (define-public name
-       (if (defined? 'name)
-           name
-           (lambda args . body))))
-    ((_ sym val)
-     (define-public sym
-       (if (defined? 'sym) sym val)))))
-
-(export-syntax provide-public)
+;; (define (write . l)
+;;   "write an object to the standard output or a specified port."
+;;   (if (or (null? l) (not (null? (cdr l))))
+;;       (apply original-write l)
+;;       (tm-output (object->string (car l)))))
 
 
 ;;; cond-expand already has guile, guile-2, and guile-2.2 available to it.
 ;;; This gives it also our classification, guile-d, etc.
-(eval-when (compile)
-  (cond-expand-provide (resolve-module '(guile)) (list (string->symbol (scheme-dialect))))
+(eval-when (expand load eval compile)
+
+  ;; (cond-expand-provide (resolve-module '(guile))
+  ;;                      (list (string->symbol (scheme-dialect))))
   ;;
   ;; These must only be things that don't change dynamically at run-time,
   ;; as for installing a program or loading a dynamic module, or whatever.
@@ -172,22 +101,6 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Module handling
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define temp-module (current-module))
-(define temp-value #f)
-
-(define-public-macro (with-module module . body)
-  `(begin
-     (set! temp-module (current-module))
-     (save-module-excursion
-      (lambda ()
-        (set-current-module ,module)
-        ,@body))))
-
-
 (define-public (module-available? module-name)
   (catch #t
     (lambda () (resolve-interface module-name) #t)
@@ -199,51 +112,51 @@
 
 (include-from-path "kernel/boot/compat")
 ;;
-(eval-when (expand load eval compile)
-  (use-and-re-export-modules (kernel boot abbrevs))
-  (use-and-re-export-modules (kernel boot debug))
-  (use-and-re-export-modules (kernel boot srfi))
-  (use-and-re-export-modules (kernel boot ahash-table))
-  (use-and-re-export-modules (kernel boot prologue))
-  ;;
-  (use-and-re-export-modules (kernel library base))
-  (use-and-re-export-modules (kernel library list))
-  (use-and-re-export-modules (kernel library tree))
-  (use-and-re-export-modules (kernel library content))
-  (use-and-re-export-modules (kernel library patch))
-  ;;
-  (use-and-re-export-modules (kernel regexp regexp-match))
-  (use-and-re-export-modules (kernel regexp regexp-select))
-  ;;
-  (use-and-re-export-modules (kernel logic logic-rules))
-  (use-and-re-export-modules (kernel logic logic-query))
-  (use-and-re-export-modules (kernel logic logic-data))
-  ;;
-  (use-and-re-export-modules (kernel texmacs tm-define))
-  (use-and-re-export-modules (kernel texmacs tm-preferences))
-  (use-and-re-export-modules (kernel texmacs tm-modes))
-  (use-and-re-export-modules (kernel texmacs tm-plugins))
-  (use-and-re-export-modules (kernel texmacs tm-secure))
-  (use-and-re-export-modules (kernel texmacs tm-convert))
-  (use-and-re-export-modules (kernel texmacs tm-dialogue))
-  (use-and-re-export-modules (kernel texmacs tm-language))
-  (use-and-re-export-modules (kernel texmacs tm-file-system))
-  (use-and-re-export-modules (kernel texmacs tm-states))
-  ;;
-  (use-and-re-export-modules (kernel gui gui-markup))
-  (use-and-re-export-modules (kernel gui menu-define))
-  (use-and-re-export-modules (kernel gui menu-widget))
-  (use-and-re-export-modules (kernel gui kbd-define))
-  (use-and-re-export-modules (kernel gui kbd-handlers))
-  (use-and-re-export-modules (kernel gui menu-test))
-  ;;
-  (use-and-re-export-modules (kernel old-gui old-gui-widget))
-  (use-and-re-export-modules (kernel old-gui old-gui-factory))
-  (use-and-re-export-modules (kernel old-gui old-gui-form))
-  (use-and-re-export-modules (kernel old-gui old-gui-test)))
+(use-and-re-export-modules (kernel boot abbrevs))
+(use-and-re-export-modules (kernel boot debug))
+(use-and-re-export-modules (kernel boot srfi))
+(use-and-re-export-modules (kernel boot ahash-table))
+(use-and-re-export-modules (kernel boot prologue))
+;;
+(use-and-re-export-modules (kernel library base))
+(use-and-re-export-modules (kernel library list))
+(use-and-re-export-modules (kernel library tree))
+(use-and-re-export-modules (kernel library content))
+(use-and-re-export-modules (kernel library patch))
+;;
+(use-and-re-export-modules (kernel regexp regexp-match))
+(use-and-re-export-modules (kernel regexp regexp-select))
+;;
+(use-and-re-export-modules (kernel logic logic-rules))
+(use-and-re-export-modules (kernel logic logic-query))
+(use-and-re-export-modules (kernel logic logic-data))
+;;
+(use-and-re-export-modules (kernel texmacs tm-define))
+(use-and-re-export-modules (kernel texmacs tm-preferences))
+(use-and-re-export-modules (kernel texmacs tm-modes))
+(use-and-re-export-modules (kernel texmacs tm-plugins))
+(use-and-re-export-modules (kernel texmacs tm-secure))
+(use-and-re-export-modules (kernel texmacs tm-convert))
+(use-and-re-export-modules (kernel texmacs tm-dialogue))
+(use-and-re-export-modules (kernel texmacs tm-language))
+(use-and-re-export-modules (kernel texmacs tm-file-system))
+(use-and-re-export-modules (kernel texmacs tm-states))
+;;
+(use-and-re-export-modules (kernel gui gui-markup))
+(use-and-re-export-modules (kernel gui menu-define))
+(use-and-re-export-modules (kernel gui menu-widget))
+(use-and-re-export-modules (kernel gui kbd-define))
+(use-and-re-export-modules (kernel gui kbd-handlers))
+(use-and-re-export-modules (kernel gui menu-test))
+;;
+(use-and-re-export-modules (kernel old-gui old-gui-widget))
+(use-and-re-export-modules (kernel old-gui old-gui-factory))
+(use-and-re-export-modules (kernel old-gui old-gui-form))
+(use-and-re-export-modules (kernel old-gui old-gui-test))
 
-;; (define boot-texmacs-loaded? #t)
-(display "kernel/boot-texmacs loaded.\n")
-
+;;
+;; End with setting the current module to (guile-user) just
+;; in case it doesn't already do that by default here.
+;;
 (eval-when (expand load eval compile)
   (set-current-module (resolve-module '(guile-user))))

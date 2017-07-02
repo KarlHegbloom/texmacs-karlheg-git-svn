@@ -561,6 +561,12 @@ tmscm object_stack;
 
 void
 initialize_scheme () {
+
+  // For now, TeXmacs is not multi-threaded, nor designed to be thread-safe.
+  // I am not sure if it needs this in here or not.
+  // If so, then it needs to call scm_run_finalizers() every so often.
+  // scm_set_automatic_finalization_enabled (0);
+
   const char* init_prg =
     // I will remove (or change to not assume knowledge of email forum
     // discussions pertaining to this) the following comment later, but for now
@@ -600,8 +606,8 @@ initialize_scheme () {
     "(eval-when (expand load eval compile)\n"
     "  (set-current-module (resolve-module '(guile))))\n"
     "\n"
-    // "(assert-load-verbosity #t)" // comment off later, after initial devel phase?
-    // "\n"
+    "(assert-load-verbosity #t)\n" // comment off later, after initial devel phase?
+    "\n"
     // TODO: Move to standard #:kwd reader syntax?
     "(read-set! keywords 'prefix)\n"
     "(read-enable 'positions)\n"
@@ -624,7 +630,56 @@ initialize_scheme () {
     // to do it like.
     //
     "\n"
-    "(define object-stack '(()))\n";
+    "(define object-stack '(()))\n"
+    "(define texmacs-user (resolve-module '(guile-user)))\n"
+    "\n"
+    // ;;;;;;
+    // ;;;
+    // ;;; Because a symbol lookup from inside any module falls back on a lookup
+    // ;;; inside the (guile) module, when use-and-re-export-modules is called from
+    // ;;; inside thise (guile) module, the public symbols from those modules become
+    // ;;; exported from // TODO: he (guile) module and thus available globally as though
+    // ;;; defined inside of the (guile) module.
+    // ;;;
+    "(define-syntax use-and-re-export-modules\n"
+    "  (syntax-rules ()\n"
+    "    ((_ (mod ...) ...)\n"
+    "     (eval-when (expand load eval compile)\n"
+    "       (begin\n"
+    "         (use-modules (mod ...))\n"
+    "         (module-use! (module-public-interface (current-module))\n"
+    "                      (resolve-interface '(mod ...))))\n"
+    "       ...))))\n"
+    "\n"
+    "(export-syntax use-and-re-export-modules)\n"
+    "\n"
+    "(define-syntax-rule (define-public-macro (name . args) . body)\n"
+    "  (begin\n"
+    "    (define-macro (name . args) . body)\n"
+    "    (export-syntax name)))\n"
+    "\n"
+    "(export-syntax define-public-macro)\n"
+    "\n"
+    "\n"
+    "(define-syntax provide-public\n"
+    "  (syntax-rules ()\n"
+    "    ((_ (name . args) . body)\n"
+    "     (define-public name\n"
+    "       (if (defined? 'name)\n"
+    "           name\n"
+    "           (lambda args . body))))\n"
+    "    ((_ sym val)\n"
+    "     (define-public sym\n"
+    "       (if (defined? 'sym) sym val)))))\n"
+    "\n"
+    "(export-syntax provide-public)\n"
+    "\n"
+    "(define-syntax-rule (with-module (mod ...) body ...)\n"
+    "  (save-module-excursion\n"
+    "   (lambda ()\n"
+    "     (set-current-module (resolve-module '(mod ...)))\n"
+    "     body ...)))\n"
+    "(export-syntax with-module)\n";
 
   scm_c_eval_string (init_prg);
 
@@ -637,27 +692,28 @@ initialize_scheme () {
 
   initialize_smobs ();
 
-  // "When there already exists a module named NAME, it is used
-  // unchanged, otherwise, an empty module is created."
-  tmscm guile_module= scm_c_define_module ("guile", initialize_glue, NULL);
+  scm_c_define_module ("texmacs-glue", initialize_glue, NULL);
 
   eval_scheme_file_in_load_path("kernel/boot-texmacs");
 
-
-  // spawn-server for a separate thread so it won't block GUI startup.
-  // Connect to it with, e.g.:
+  // This gets run after the above attempt to eval boot-texmacs, regardless
+  // of whether it was entirely successful or not. It is helpful during
+  // development.
   //
-  //     rlwrap nc localhost 37146
-  //
-  // ... or, if you are using Geiser in Emacs:
-  //
-  // M-x connect-to-guile
-  //
-  const char* repl_prg =
+  const char* repl_prg=
+    // spawn-server for a separate thread so it won't block GUI startup.
+    // Connect to it with, e.g.:
+    //
+    //     rlwrap nc localhost 37146
+    //
+    // ... or, if you are using Geiser in Emacs:
+    //
+    // M-x connect-to-guile
+    //
     "(eval-when (expand load eval compile)\n"
     "  (set-current-module (resolve-module '(guile-user))))\n"
     "(use-modules (system repl server))\n"
     "(spawn-server)\n";
 
-  scm_c_eval_string (repl_prg); // leaves us in (guile-user) as expected.
+  scm_c_eval_string (repl_prg);
 }

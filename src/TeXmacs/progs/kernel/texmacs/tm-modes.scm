@@ -42,7 +42,9 @@
            (deps* (map list (map texmacs-mode-pred deps)))
            (l (if (== action #t) deps* (cons action deps*)))
            (test (if (null? l) #t (if (null? (cdr l)) (car l) (cons 'and l))))
-           (defn `(define-public (,pred) ,test))
+           ;;(defn `(define-public (,pred) ,test))
+           (defn `(begin (module-define! ,(current-module) ,pred ,test)
+                         (module-export! ,(current-module) '(,pred))))
            (rules (map (lambda (dep) (list dep mode)) deps))
            (logic-cmd `(logic-rules ,@rules))
            (arch1 `(set-symbol-procedure! ',mode ,pred))
@@ -52,13 +54,11 @@
           (list 'begin defn arch1 arch2)
           (list 'begin defn arch1 arch2 logic-cmd)))))
 
-(define-macro (texmacs-modes . l)
+(define-public-macro (texmacs-modes . l)
   `(begin
-     (set! temp-module ,(current-module))
-     (set-current-module texmacs-user)
-     ,@(map texmacs-mode l)
-     (set-current-module temp-module)))
-(export-syntax texmacs-modes)
+     (with-module texmacs-user
+       ,@(map texmacs-mode l))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Checking modes
@@ -263,7 +263,7 @@
          (lazy-initialize-do (cdr l) id))
         (else (cons (car l) (lazy-initialize-do (cdr l) id)))))
 
-(define-macro (lazy-initialize module pred?)
+(define-public-macro (lazy-initialize module pred?)
   `(with id lazy-initialize-id
      (set! lazy-initialize-id (+ id 1))
      (lazy-initialize-impl id
@@ -276,7 +276,6 @@
        (set! lazy-initialize-pending
              (lazy-initialize-do lazy-initialize-pending id))
        (import-from ,module))))
-(export-syntax lazy-initialize)
 
 (define-public (lazy-initialize-force)
   (set! lazy-initialize-pending

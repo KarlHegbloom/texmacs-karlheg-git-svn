@@ -43,11 +43,10 @@
 ;;    (
 ;;    )
 ;;   (else
-    (define-macro (define-preferences . l)
+    (define-public-macro (define-preferences . l)
       (append '(begin)
               (map-in-order define-preference l)
               (map-in-order define-preference-call-back l)))
-    (export-syntax define-preferences)
 ;;)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
