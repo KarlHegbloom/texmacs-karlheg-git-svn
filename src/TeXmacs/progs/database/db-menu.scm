@@ -305,7 +305,7 @@
               (let* ((short-name `(verbatim ,(url->system (url-tail name))))
                      (long-name `(verbatim ,(url->system name))))
                 ((balloon (eval short-name) (eval long-name))
-                 (db-import-file name))))
+                 (db-export-file name))))
             ---
             ("Other" (db-export-select)))))
   ---
