@@ -149,6 +149,7 @@ extern string PAGE_FNOTE_SEP;
 extern string PAGE_FNOTE_BARLEN;
 extern string PAGE_FNOTE_BARSEP;
 extern string PAGE_FLOAT_SEP;
+extern string PAGE_FLOAT_ENABLE;
 extern string PAGE_MNOTE_SEP;
 extern string PAGE_MNOTE_WIDTH;
 
