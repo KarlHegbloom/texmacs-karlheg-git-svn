@@ -6,7 +6,9 @@
 ;; MODULE      : boot-texmacs.scm
 ;; DESCRIPTION : some global variables, public macros, on-entry, on-exit and
 ;;               initialization of the TeXmacs module system
-;; COPYRIGHT   : (C) 1999,2017  Joris van der Hoeven
+;; COPYRIGHT   : (C) 1999  Joris van der Hoeven
+;;             : (C) 2016  Darcy Shen
+;;             : (C) 2017  Karl Martin Hegbloom
 ;;
 ;; This software falls under the GNU general public license version 3 or later.
 ;; It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
@@ -14,19 +16,155 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;;;;;;
+;;;
+;;; TODO: I need to figure out how to make the build system compile all of
+;;;       the texmacs .scm files into .go objects that can be shipped with
+;;;       binary packages, for .deb and MacPorts, etc.
+;;;
+;;; For now, during development, I'm running TeXmacs under M=x gdb as:
+;;;
+;;;   ./texmacs --gdb
+;;;
+;;; ... and am then using M-x connect-to-guile to get a Geiser mode Guile REPL
+;;; connected to the repl server thread of the now running TeXmacs instance.
+;;;
+;;; In the gud-mode input/output buffer, which is what you see when you run
+;;; TeXmacs from the shell command line, messages are printed regarding
+;;; compilation of the various .scm files brought in during bootstrapping.
+;;;
+;;;;;;
+
+
+;;;;;;
+;;;
+;;; This file is executed by initialize_scheme() in guile_tm.cpp via
+;;; eval_scheme_file_in_load_path("kernel/boot-texmacs"). It does not define
+;;; it's own module. It is meant to be loaded into the base (guile) module,
+;;; just as Guile's own boot-9.scm is loaded there during its' startup.
+;;;
 (eval-when (expand load eval compile)
   (set-current-module (resolve-module '(guile)))
   (module-use! (module-public-interface (current-module))
                (resolve-interface '(guile-user))))
+;;;
+;;; The above will make all exports from (guile-user) also appear in the
+;;; (guile) module... without causing a non-terminating recursion loop! I
+;;; think that the case of a module using another one that also uses it,
+;;; creating a sort of dependency loop... is a common occurance, and so the
+;;; lookup mechanism very likely is designed with that in mind, and so no
+;;; non-terminating recursion loop will occur.
+;;;
 
-(use-and-re-export-modules (texmacs-glue))
-
-;; TODO: I need to figure out how to make the build system compile all of
-;;       the texmacs .scm files into .go objects that can be shipped with
-;;       binary packages, for .deb and MacPorts, etc.
 
 
-(define-public has-look-and-feel? (lambda (x) (string=? x "emacs")))
+;;;;;;
+;;;
+;;; Because a symbol lookup from inside any module falls back on a lookup
+;;; inside the (guile) module, when use-and-re-export-modules is called from
+;;; inside thise (guile) module, the public symbols from those modules become
+;;; exported from the (guile) module and thus available globally as though
+;;; defined inside of the (guile) module.
+;;;
+(define-syntax use-and-re-export-modules
+  (syntax-rules ()
+    ((_ (mod ...) ...)
+     (eval-when (expand load eval compile)
+       (begin
+         (use-modules (mod ...))
+         (module-use! (module-public-interface (current-module))
+                      (resolve-interface '(mod ...))))
+       ...))))
+
+(export-syntax use-and-re-export-modules)
+
+
+
+(define-syntax-rule (define-public-macro (name . args) . body)
+  (begin
+    (define-macro (name . args) . body)
+    (export-syntax name)))
+
+(export-syntax define-public-macro)
+
+
+
+(define-syntax provide-public
+  (syntax-rules ()
+    ((_ (name . args) . body)
+     (define-public name
+       (if (defined? 'name)
+           name
+           (lambda args . body))))
+    ((_ sym val)
+     (define-public sym
+       (if (defined? 'sym) sym val)))))
+
+(export-syntax provide-public)
+
+
+
+(define-syntax-rule (with-module (mod ...) body ...)
+  (save-module-excursion
+   (lambda ()
+     (set-current-module (resolve-module '(mod ...)))
+     body ...)))
+
+(export-syntax with-module)
+
+
+
+;;;;;;
+;;;
+;;; These are used by kernel/gui/menu-define, kernel/gui/kbd-define,
+;;; kernel/texmacs/tm-define, version/version-tmfs, and database/bib-manage.
+;;;
+(define-public (module-available? module-name)
+  (false-if-exception
+    (resolve-interface module-name)))
+
+(define-public (module-provide module-name)
+  (unless (module-available? module-name)
+    (reload-module module-name)))
+
+
+
+;;;;;;
+;;;
+;;; From: http://okmij.org/ftp/Scheme/macro-trace.txt
+;;;
+;;;
+(define-syntax mtrace
+  (syntax-rules ()
+    ((mtrace x)
+     (begin
+       (display "Trace: ") (write 'x) (newline)
+       x))))
+
+(export-syntax mtrace)
+
+;;; Example:  Given:
+;;;
+;;; (define-syntax test
+;;;   (syntax-rules ()
+;;;     ((test name a1 ...)
+;;;      (define (name a1 ...) (apply * (list a1 ...))))))
+;;;
+;;; Rewrite as follows:
+;;;
+;;; (define-syntax test
+;;;   (syntax-rules ()
+;;;     ((test name a1 ...)
+;;;      (mtrace
+;;;       (define (name a1 ...) (apply * (list a1 ...)))))))
+;;;
+;;; scheme@(guile-user)> (test h a b c)
+;;; Trace: (define (h a b c) (apply * (list a b c)))
+;;; scheme@(guile-user)> (h 1 3 5)
+;;; $11 = 15
+;;;
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Redirect standard output
@@ -52,12 +190,14 @@
 ;;       (tm-output (object->string (car l)))))
 
 
-;;; cond-expand already has guile, guile-2, and guile-2.2 available to it.
-;;; This gives it also our classification, guile-d, etc.
-(eval-when (expand load eval compile)
 
-  ;; (cond-expand-provide (resolve-module '(guile))
-  ;;                      (list (string->symbol (scheme-dialect))))
+(use-and-re-export-modules (texmacs-glue))
+
+;;;;;;
+;;;
+;;; cond-expand already has guile, guile-2, and guile-2.2 available to it.
+;;;
+(eval-when (expand load eval compile)
   ;;
   ;; These must only be things that don't change dynamically at run-time,
   ;; as for installing a program or loading a dynamic module, or whatever.
@@ -85,7 +225,12 @@
   (when (x-gui?)
     (cond-expand-provide (resolve-module '(guile)) '(x-gui))))
 
-;; ? (use-modules (ice-9 rdelim) (ice-9 pretty-print))
+
+
+(define-public (has-look-and-feel? x)
+  (string=? x "emacs"))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; On-entry and on-exit macros
@@ -101,15 +246,10 @@
 
 
 
-(define-public (module-available? module-name)
-  (catch #t
-    (lambda () (resolve-interface module-name) #t)
-    (lambda (key . args) #f)))
-
-(define-public (module-provide m)
-  (if (not (module-available? m)) (reload-module m)))
-
-
+;;;;;;
+;;;
+;;; Pull in the rest of the TeXmacs "kernel".
+;;;
 (include-from-path "kernel/boot/compat")
 ;;
 (use-and-re-export-modules (kernel boot abbrevs))
@@ -154,9 +294,12 @@
 (use-and-re-export-modules (kernel old-gui old-gui-form))
 (use-and-re-export-modules (kernel old-gui old-gui-test))
 
-;;
-;; End with setting the current module to (guile-user) just
-;; in case it doesn't already do that by default here.
-;;
+
+
+;;;;;;
+;;;
+;;; End with setting the current module to (guile-user), which is the module
+;;; held by @var{texmacs-user}.
+;;;
 (eval-when (expand load eval compile)
   (set-current-module (resolve-module '(guile-user))))

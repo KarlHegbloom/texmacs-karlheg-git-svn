@@ -620,72 +620,15 @@ initialize_scheme () {
     "(define (display-to-string obj)\n"
     "  (object->string obj display))\n"
     "\n"
-    // Just to be sure, for during the initial development phases, I want to
-    // be sure that no (guile) core functions are being re-defined... and so
-    // for the beginning... we could load everything into a (texmacs-core)
-    // module, then set the current module to (guile) and (use-modules
-    // (texmacs-core)) to get the redefinition warnings... or we could
-    // simply check each and every name to ensure that it's not already
-    // defined. I think that's easy enough to do, so that's what I'm going
-    // to do it like.
-    //
-    "\n"
     "(define object-stack '(()))\n"
     "(define texmacs-user (resolve-module '(guile-user)))\n"
-    "\n"
-    // ;;;;;;
-    // ;;;
-    // ;;; Because a symbol lookup from inside any module falls back on a lookup
-    // ;;; inside the (guile) module, when use-and-re-export-modules is called from
-    // ;;; inside thise (guile) module, the public symbols from those modules become
-    // ;;; exported from // TODO: he (guile) module and thus available globally as though
-    // ;;; defined inside of the (guile) module.
-    // ;;;
-    "(define-syntax use-and-re-export-modules\n"
-    "  (syntax-rules ()\n"
-    "    ((_ (mod ...) ...)\n"
-    "     (eval-when (expand load eval compile)\n"
-    "       (begin\n"
-    "         (use-modules (mod ...))\n"
-    "         (module-use! (module-public-interface (current-module))\n"
-    "                      (resolve-interface '(mod ...))))\n"
-    "       ...))))\n"
-    "\n"
-    "(export-syntax use-and-re-export-modules)\n"
-    "\n"
-    "(define-syntax-rule (define-public-macro (name . args) . body)\n"
-    "  (begin\n"
-    "    (define-macro (name . args) . body)\n"
-    "    (export-syntax name)))\n"
-    "\n"
-    "(export-syntax define-public-macro)\n"
-    "\n"
-    "\n"
-    "(define-syntax provide-public\n"
-    "  (syntax-rules ()\n"
-    "    ((_ (name . args) . body)\n"
-    "     (define-public name\n"
-    "       (if (defined? 'name)\n"
-    "           name\n"
-    "           (lambda args . body))))\n"
-    "    ((_ sym val)\n"
-    "     (define-public sym\n"
-    "       (if (defined? 'sym) sym val)))))\n"
-    "\n"
-    "(export-syntax provide-public)\n"
-    "\n"
-    "(define-syntax-rule (with-module (mod ...) body ...)\n"
-    "  (save-module-excursion\n"
-    "   (lambda ()\n"
-    "     (set-current-module (resolve-module '(mod ...)))\n"
-    "     body ...)))\n"
-    "(export-syntax with-module)\n";
+    "(define texmacs-version \"" TEXMACS_VERSION "\")\n";
 
   scm_c_eval_string (init_prg);
 
   object_stack= scm_lookup_string ("object-stack");
 
-  scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
+  // scm_c_define("texmacs-version", scm_from_utf8_string(TEXMACS_VERSION));
 
   // everything defined in the base (guile) module is exported by default.
   // scm_c_export("texmacs-version", NULL);
@@ -694,11 +637,10 @@ initialize_scheme () {
 
   scm_c_define_module ("texmacs-glue", initialize_glue, NULL);
 
-  eval_scheme_file_in_load_path("kernel/boot-texmacs");
-
-  // This gets run after the above attempt to eval boot-texmacs, regardless
-  // of whether it was entirely successful or not. It is helpful during
-  // development.
+  // This gets run just before the attempt to eval kernel/boot-texmacs. It is
+  // helpful during development, and might be commented out or removed later,
+  // or perhaps, once tm-define and the preferences system is bootstrapped, it
+  // could become an option upon startup?
   //
   const char* repl_prg=
     // spawn-server for a separate thread so it won't block GUI startup.
@@ -716,4 +658,6 @@ initialize_scheme () {
     "(spawn-server)\n";
 
   scm_c_eval_string (repl_prg);
+
+  TeXmacs_eval_file_in_load_path ("kernel/boot-texmacs");
 }
