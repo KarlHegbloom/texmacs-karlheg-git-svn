@@ -190,6 +190,25 @@
 ;;       (tm-output (object->string (car l)))))
 
 
+;;;;;;
+;;;
+;;; tm-define returns a goops object instance... It's class is a subclass of
+;;; <applicable>...
+;;;
+;;;   See: (kernel texmacs tm-define)
+;;;
+(use-and-re-export-modules (oop goops))
+
+;;;;;;
+;;;
+;;; Now add 'merge-generics to the default-duplicate-binding-handler list.
+;;;
+(eval-when (expand load eval compile)
+  (default-duplicate-binding-handler
+    (cons (cons 'merge-accessors
+                (cons 'merge-generics
+                      (default-duplicate-binding-handler))))))
+
 
 (use-and-re-export-modules (texmacs-glue))
 

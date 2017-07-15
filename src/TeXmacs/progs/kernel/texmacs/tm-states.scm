@@ -32,13 +32,16 @@
 (define (state-cprops sr)
   (caddr sr))
 
+;;; (current-module) or texmacs-user ?
 (define (slotlist-load l)
  ;(display* "load=" l "\n")
   (for (e l)
      (eval
         `(begin
 	   (if (not (defined? ',(car e)))
-	       (define-public ,(car e) #f))
+               (begin
+                 (module-define! (current-module) ,(car e) #f)
+                 (module-export! (current-module) ,(car e))))
 	   (set! ,(car e)
 		 ,(with val (cadr e)
 		     (if (and (pair? val) (eq? (car val) 'quote))
@@ -49,7 +52,10 @@
  ;(display* "load[props]=" l "\n")
   (for (e l)
      (if (not (defined? `,(car e)))
-	 (eval `(define-public ,(car e) #f))))
+         (eval
+          `(begin
+             (module-define! (current-module) ,(car e) #f)
+             (module-export! (current-module) ,(car e))))))
   (if b
       (for (f funcs)
 	 (f))))
@@ -129,7 +135,7 @@
   (if ref
       (set-car! (cdr ref) val)))
 
-(define-macro (define-state name . slotlists)
+(define-public-macro (define-state name . slotlists)
 ;; slotlists === ((slots ((<NAME-SLOT1> <INIT1>) ... (<NAME-SLOTN> <INITN>)))
 ;;                (props ((<NAME-PROP1> <PROP1>) ... (<NAME-PROPN> <PROPN>))))
   (let* ((theslots (copy-tree slotlists))
@@ -144,30 +150,25 @@
 				  `(lambda () (set! ,(car x) ,(cadr x)))))
 			   ',props))
 	  (set! ,name (state-create (append '(,slots ,props) `(,cprops))))))))
-(export-syntax define-state)
 
-(define-macro (with-state sr . body)
+(define-public-macro (with-state sr . body)
  `(begin
      (state-load ,sr)
      (with res (begin . ,body)
        (state-save ,sr)
        res)))
-(export-syntax with-state)
 
-(define-macro (with-state-by-name name . body)
+(define-public-macro (with-state-by-name name . body)
  `(with sr ,name
      (with-state sr . ,body)))
-(export-syntax with-state-by-name)
 
-(define-macro (with-state-slots sr . body)
+(define-public-macro (with-state-slots sr . body)
  `(begin
      (state-load ,sr #f)
      (with res (begin . ,body)
        (state-save ,sr)
        res)))
-(export-syntax with-state-slots)
 
-(define-macro (with-state-slots-by-name name . body)
+(define-public-macro (with-state-slots-by-name name . body)
  `(with sr ,name
      (with-state-slots sr . ,body)))
-(export-syntax with-state-slots-by-name)

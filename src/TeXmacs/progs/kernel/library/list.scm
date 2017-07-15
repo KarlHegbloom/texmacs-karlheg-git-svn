@@ -16,6 +16,8 @@
 (define-module (kernel library list)
   :use-module (kernel boot abbrevs))
 
+;;; Todo: (srfi srfi-1) is a List Library. What is the overlap?
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructors
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

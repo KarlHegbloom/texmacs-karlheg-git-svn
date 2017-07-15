@@ -13,8 +13,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; I'm wrapping things that don't work in guile-2.2 with cond-expand, but I'm not trying to ensure backward compatibility right
-;; now. ~karlheg
+;; I'm wrapping things that don't work in guile-2.2 with cond-expand, but I'm
+;; not trying to ensure backward compatibility right now. ~karlheg
 
 (display "TeXmacs] starting\n")
 (display "In module: ")

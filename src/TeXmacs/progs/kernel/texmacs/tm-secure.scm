@@ -25,10 +25,9 @@
 ;; Primitive secure functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-macro (define-secure-symbols . l)
+(define-public-macro (define-secure-symbols . l)
   (for-each (lambda (x) (property-set! x :secure #t '())) l)
   '(noop))
-(export-syntax define-secure-symbols)
 
 (define-secure-symbols
   boolean? null? symbol? string? pair? list?

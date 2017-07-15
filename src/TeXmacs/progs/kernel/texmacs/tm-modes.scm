@@ -43,8 +43,10 @@
            (l (if (== action #t) deps* (cons action deps*)))
            (test (if (null? l) #t (if (null? (cdr l)) (car l) (cons 'and l))))
            ;;(defn `(define-public (,pred) ,test))
-           (defn `(begin (module-define! ,(current-module) ,pred ,test)
-                         (module-export! ,(current-module) '(,pred))))
+           ;; (defn `(begin (module-define! ,(current-module) ,pred ,test)
+           ;;               (module-export! ,(current-module) '(,pred))))
+           (defn `(begin (module-define! texmacs-user ,pred ,test)
+                         (module-export! texmacs-user '(,pred))))
            (rules (map (lambda (dep) (list dep mode)) deps))
            (logic-cmd `(logic-rules ,@rules))
            (arch1 `(set-symbol-procedure! ',mode ,pred))
@@ -270,12 +272,12 @@
        (lambda ()
          ,pred?)
        (lambda ()
-         (import-from ,module)))
+         (use-and-re-export-modules ,module)))
      (delayed
        (:idle 5000)
        (set! lazy-initialize-pending
              (lazy-initialize-do lazy-initialize-pending id))
-       (import-from ,module))))
+       (use-and-re-export-modules ,module))))
 
 (define-public (lazy-initialize-force)
   (set! lazy-initialize-pending

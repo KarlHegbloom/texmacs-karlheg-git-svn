@@ -144,11 +144,10 @@
    `(ahash-set! preference-decode-table
                 (cons ,which ,(cadr x)) ,(car x)))
 
-(define-macro (define-preference-names which . l)
+(define-public-macro (define-preference-names which . l)
   `(begin
      ,@(map (lambda (x) (set-preference-encode which x)) l)
      ,@(map (lambda (x) (set-preference-decode which x)) l)))
-(export-syntax define-preference-names)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Look and feel

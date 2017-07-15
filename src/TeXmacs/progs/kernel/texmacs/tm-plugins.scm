@@ -496,7 +496,7 @@
       (list (car cmd) (list 'unquote `(lambda () ,(cadr cmd))))
       cmd))
 
-(define-macro (plugin-configure name2 . options)
+(define-public-macro (plugin-configure name2 . options)
   "Declare and configure plug-in with name @name2 according to @options"
   (let* ((name (if (string? name2) name2 (symbol->string name2)))
          (supports-name? (string->symbol (string-append "supports-" name "?")))
@@ -505,13 +505,13 @@
     `(begin
        (texmacs-modes (,in-name (== (get-env "prog-language") ,name)))
        (texmacs-modes (,name-scripts (== (get-env "prog-scripts") ,name)))
-       (define (,supports-name?)
-         (or (ahash-ref plugin-data-table ,name)
-             (remote-connection-defined? ,name)))
+       (module-define! (current-module) ,supports-name?
+         (lambda ()
+           (or (ahash-ref plugin-data-table ,name)
+               (remote-connection-defined? ,name))))
        (if reconfigure-flag? (ahash-set! plugin-data-table ,name #t))
        (plugin-configure-cmds ,name
 	 ,(list 'quasiquote (map plugin-configure-sub options))))))
-(export-syntax plugin-configure)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization of plugins

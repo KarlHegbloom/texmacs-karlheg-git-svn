@@ -15,7 +15,7 @@
   (eval . (setenv "DEB_BUILD_OPTIONS" (string-join (list "parallel=8 nostrip "
                                                          (or (getenv "DEB_BUILD_OPTIONS") "")))))
   (indent-tabs-mode . nil)
-  (fill-column . 132)
+  (fill-column . 78)
   (org-startup-truncated . t)
   (org-enforce-todo-dependencies . t)
   (org-enforce-todo-checkbox-dependencies . t)
