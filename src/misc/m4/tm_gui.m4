@@ -50,9 +50,12 @@ AC_DEFUN([TM_GUI],[
   esac
 
   # Qt Plugins list
-  PLUGINS_LIST="imageformats,accessible"
+  #PLUGINS_LIST="imageformats,accessible"
+  PLUGINS_LIST="imageformats,accessible,inputmethods"
+  #PLUGINS_LIST="imageformats,accessible,accessiblebridge,inputmethods,styles,systemtrayicon"
   if test "$QT5_AVAILABLE" = yes; then
-    PLUGINS_LIST="imageformats"
+    # PLUGINS_LIST="imageformats"
+    PLUGINS_LIST="imageformats,printsupport,styles,platforminputcontexts,platforms,platformthemes,xcbglintegrations"
   fi
   #define([PLUGINS_LIST],[imageformats,accessible])
   QT_PLUGINS_LIST="$PLUGINS_LIST"
