@@ -1512,7 +1512,10 @@ Optional Features:
   --enable-console        enable windows console
   --disable-qt            replace Qt by X11 interface
   --enable-QtPlugins[=list]
-                          defaults plugins: imageformats, and possibly more
+                          default qt4 plugins:
+                          imageformats,accessible,accessiblebridge,inputmethods
+                          default qt5 plugins:
+                          generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations
   --enable-qtpipes        replace UNIX pipes by Qt pipes
   --enable-cocoa          replace X11 by Cocoa interface
   --enable-pdf-renderer=yes
@@ -18876,11 +18879,15 @@ $as_echo_n "checking for Qt... " >&6; }
 qtHaveModule(core):              QT += core
 qtHaveModule(dbus):              QT += dbus
 qtHaveModule(gui):               QT += gui
+qtHaveModule(help):              QT += help
 qtHaveModule(network):           QT += network
+qtHaveModule(platformheaders):   QT += platformheaders
 qtHaveModule(printsupport):      QT += printsupport
+qtHaveModule(svg):               QT += svg
+qtHaveModule(webchannel):        QT += webchannel
+qtHaveModule(webkit):            QT += webkit
 qtHaveModule(widgets):           QT += widgets
 qtHaveModule(x11extras):         QT += x11extras
-qtHaveModule(xml):               QT += xml
 percent.target = %
 percent.commands = @echo -n "\$(\$(@))\ "
 QMAKE_EXTRA_TARGETS += percent
@@ -21047,14 +21054,10 @@ $as_echo "enabling X11 port" >&6; }
   esac
 
   # Qt Plugins list
-  #PLUGINS_LIST="imageformats,accessible"
-  PLUGINS_LIST="imageformats,accessible,inputmethods"
-  #PLUGINS_LIST="imageformats,accessible,accessiblebridge,inputmethods,styles,systemtrayicon"
+  PLUGINS_LIST="imageformats,accessible,accessiblebridge,inputmethods"
   if test "$QT5_AVAILABLE" = yes; then
-    # PLUGINS_LIST="imageformats"
-    PLUGINS_LIST="imageformats,printsupport,styles,platforminputcontexts,platforms,platformthemes,xcbglintegrations"
+     PLUGINS_LIST="generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations"
   fi
-  #define([PLUGINS_LIST],[imageformats,accessible])
   QT_PLUGINS_LIST="$PLUGINS_LIST"
   # Check whether --enable-QtPlugins was given.
 if test "${enable_QtPlugins+set}" = set; then :

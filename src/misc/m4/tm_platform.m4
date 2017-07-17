@@ -67,8 +67,7 @@ AC_DEFUN([TM_PLATFORM],[
     i*86-*-linux* | x86_64-*-linux*)
       AC_MSG_RESULT(final adjustments for an Intel or AMD GNU/Linux host)
       CONFIG_OS_SUFFIX="i386-pc-linux-gnu"
-      # -fPIC is required for Qt5 on Ubuntu 17.04 (adding -fPIE breaks it)
-      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations -fPIC"
+      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
       CONFIG_QTPIPES="yes"
     ;;
     i*86-*-freebsd* | x86_64-*-freebsd*)
