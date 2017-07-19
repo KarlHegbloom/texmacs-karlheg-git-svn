@@ -24,6 +24,9 @@
 ;; Several subroutines for the evaluation of Maxima expressions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (maxima-spaces? t)
+  (and (string? t) (in? t (list "" " " "  " "   " "    "))))
+
 (define (maxima-prompt? t)
   (or (match? t '(text (with "font-family" "tt" "color" "red" :*)))
       (match? t '(with "font-family" "tt" "color" "red" :*))
@@ -45,6 +48,8 @@
 	 (maxima-output-simplify (cAr t)))
 	((func? t 'with)
 	 (rcons (cDr t) (maxima-output-simplify (cAr t))))
+        ((and (func? t 'concat) (pair? (cdr t)) (maxima-spaces? (cadr t)))
+         (maxima-output-simplify (cons (car t) (cddr t))))
 	((func? t 'concat)
 	 (apply tmconcat (map maxima-output-simplify (cdr t))))
 	(else (plugin-output-std-simplify "maxima" t))))
