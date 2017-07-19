@@ -640,24 +640,9 @@ initialize_scheme () {
   // This gets run just before the attempt to eval kernel/boot-texmacs. It is
   // helpful during development, and might be commented out or removed later,
   // or perhaps, once tm-define and the preferences system is bootstrapped, it
-  // could become an option upon startup?
+  // could become an option upon startup, or only run when in developer mode?
   //
-  const char* repl_prg=
-    // spawn-server for a separate thread so it won't block GUI startup.
-    // Connect to it with, e.g.:
-    //
-    //     rlwrap nc localhost 37146
-    //
-    // ... or, if you are using Geiser in Emacs:
-    //
-    // M-x connect-to-guile
-    //
-    "(eval-when (expand load eval compile)\n"
-    "  (set-current-module (resolve-module '(guile-user))))\n"
-    "(use-modules (system repl server))\n"
-    "(spawn-server)\n";
-
-  scm_c_eval_string (repl_prg);
+  TeXmacs_eval_file_in_load_path ("kernel/boot-repl");
 
   TeXmacs_eval_file_in_load_path ("kernel/boot-texmacs");
 }

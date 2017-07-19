@@ -25,20 +25,27 @@
   #:use-module (oop goops)
   #:use-module (system base compile))
 
+
 
+;;; This will all be converted to using syntax-case...
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; <tm-def>
 ;;;
 ;;;   A contextually overloadable function defined with the tm-define form is
-;;;   an instance of a subclass of <applicable-struct>. It is sort of like a
+;;;   an instance of a subclass of (<object> <applicable>) [making it similar
+;;;   to <applicable-struct>, but not sharing the specialized initialize
+;;;   method chain (UTSL, oop/goops.scm). The <tm-def> is sort of like a
 ;;;   <method>, but at least for now, it's not hooked into the MOP
-;;;   generic-function dispatch mechanism...
+;;;   generic-function dispatch mechanism... the tm-define dispatch mechanism
+;;;   is defined within this module.
 ;;;
-;;;   In it's @slot{procedure} slot is a syntax expander generated function
-;;;   that holds, lexically bound within itself, a sort of "this" reference so
-;;;   that it can ... well if the function is defined after the (make
+;;;   In the <tm-def>'s @slot{procedure} slot is a syntax expander generated
+;;;   function that holds, lexically bound within itself, a sort of "this"
+;;;   reference so that it can ????? XXXXX ????    
+;;;
+;;;   ... well if the function is defined after the (make
 ;;;   <tm-defined-applicable> ...) and then the slot is set to that function,
 ;;;   it will require a reference to the instance it is assigned to... but if
 ;;;   that function is generated within the context of the ... blah blah
@@ -48,10 +55,21 @@
 ;;;;;;
 ;;;
 ;;; All tm-define'd overloadable functions will be instantiated in and
-;;; exported from the (kernel texmacs tm-define) module.
+;;; exported from the (kernel texmacs tm-define definitions) module.
 ;;;
-(eval-when (expand load eval)
-  (define the-tm-def-module (resolve-module '(kernel texmacs tm-define))))
+(eval-when (expand load eval compile)
+
+  (save-module-excursion
+   (define-module (kernel texmacs tm-define definitions)
+     #:use-modules (kernel texmacs tm-define)))
+
+  (with-module (guile)
+    (use-and-re-export-modules (kernel texmacs tm-define definitions)))
+
+  (define the-tm-def-module
+    (resolve-module '(kernel texmacs tm-define definitions)))
+
+  ) ; eval-when
 
 
 ;;; tmp notes:
@@ -64,12 +82,63 @@
 
 ;;;
 
-(define-class <tm-def> (<object> <applicable>)
-  #:metaclass <applicable-struct-class>
-  procedure
-  (secure #:init-form #f)
-  options-table
-  (tm-defined #:init-value ()))
+(eval-when (expand load eval compile)
+
+  (define-class-with-accessors-keywords <tm-def> (<object> <applicable>)
+    #:metaclass <applicable-struct-class>
+    procedure
+    ;;
+    (tm-defined #:init-value ()
+                #:init-keyword #:tm-def-tm-defined
+                )
+    ;;
+    (tm-def-mode #:init-value #f
+                 #:init-keyword #:tm-def-mode
+                 #:slot-set! (lambda (tm-def opt decl)
+                               ???
+                               )
+                 )
+    (tm-def-require #:init-value #f
+                    #:init-keyword #:tm-def-require
+                    )
+    (tm-def-type #:init-value #f
+                 #:init-keyword #:tm-def-type
+                 )
+    (tm-def-synopsis #:init-value #f
+                     #:init-keyword #:tm-def-synopsis
+                     )
+    (tm-def-returns #:init-value #f
+                    #:init-keyword #:tm-def-returns
+                    )
+    (tm-def-note #:init-value #f
+                 #:init-keyword #:tm-def-note
+                 )
+    (tm-def-argument #:init-value #f
+                     #:init-keyword #:tm-def-argument
+                     )
+    (tm-def-default #:init-value #f
+                    #:init-keyword #:tm-def-default
+                    )
+    (tm-def-proposals #:init-value #f
+                      #:init-keyword #:tm-def-proposals
+                      )
+    (tm-def-secure #:init-value #f
+                   #:init-keyword #:tm-def-secure
+                   )
+    (tm-def-check-mark #:init-value #f
+                       #:init-keyword #:tm-def-check-mark
+                       )
+    (tm-def-interactive #:init-value #f
+                        #:init-keyword #:tm-def-interactive
+                        )
+    (tm-def-balloon #:init-value #f
+                    #:init-keyword #:tm-def-balloon
+                    )
+    )
+
+  ) ; eval-when
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -90,15 +159,6 @@
 
 
 
-(define *this-<tm-def> (make-parameter #f))
-
-(define-syntax this-<tm-def> (identifier-syntax (*this-<tm-def>)))
-
-(export-syntax this-<tm-def>)
-
-;;; (slot-set! *this-<tm-def> 'tm-defined 
-
-
 (define (strip-tm-def-kw-prefix kw)
   (let ((kwstr (symbol->string (keyword->symbol kw))))
     (symbol->keyword
@@ -108,65 +168,60 @@
           kwstr)))))
 
 
-;; This initialize method is probably extraneous since the slot-set! can be
-;; done after the (make <tm-def>)
-;;
-(define-method (initialize (tm-def <tm-def>) initargs)
-  (next-method)
-  (let ((options-ht (make-ahash-table)))
-    ;; Because there are already keywords for some of the standard goops
-    ;; functionality, (i.e., #:default) just to be sure, each keyword here is
-    ;; prefixed with #:tm-def- to avoid name clashes.
-    (let loop ((tm-def-option-keys '(#:tm-def-mode     #:tm-def-require    #:tm-def-type
-                                     #:tm-def-synopsis #:tm-def-returns    #:tm-def-note
-                                     #:tm-def-argument #:tm-def-default    #:tm-def-proposals
-                                     #:tm-def-secure   #:tm-def-check-mark #:tm-def-interactive
-                                     #:tm-def-balloon)))
-      (unless (null? tm-def-option-keys)
-        (let ((kw (strip-tm-def-kw-prefix (car tm-def-option-keys))))
-          (and-with arg (get-keyword kw initargs #f)
-            (ahash-set! options-ht kw arg)))
-        (loop (cdr tm-def-option-keys))))
-    (slot-set! tm-def 'options-table options-ht)))
+;;;
+;;; Before I write more of this, I will be reviewing boot-9 and psyntax
+;;; sources because I know there are a lot of nifty syntax tricks that will be
+;;; similar to what tm-define will require internally. i.e., define-inlinable,
+;;; and the syntax transformer also must define variables in other
+;;; modules... also see the use of syntax-parameterize there.
+;;;
 
-
-  ;; (let ((formals (get-keyword #:tm-def-formals '()))
-  ;;       (body (get-keyword #:tm-def-body '(noop))))
-  ;; (slot-set! tm-def 'procedure
-  ;;            (tm-def-procedure tm-def
-  ;;                              (get-keyword #:tm-def-formals '())
-  ;;                              (get-keyword #:tm-def-body '(noop)))))
-
-
-(define (tm-def-procedure tm-def formals body)
-  (let ((tm-def tm-def))
-    (syntax-case body ()
-      ((body0 ...)
-       (with-syntax ((formals formals)
-                     (tm-def  tm-def))
-         #'(parameterize ((*this-<tm-def> tm-def))
-             (lambda formals body0 ...)))))))
+;;;
 
 ;; this is something like what will be inside of tm-define I think... it has
 ;; not been run yet. I am pushing to git to show what I've done so far.
 ;;
-(define-syntax syntax-inside-tm-define-developing-it-here-move-there-later
+;; The tm-define below will be rolled into this one...
+;;
+(define-syntax tm-define
   (lambda (x)
+
+    (define (keyword-like? stx)
+      (let ((dat (syntax->datum stx)))
+        (and (symbol? dat)
+             (eqv? (string-ref (symbol->string dat) 0) #\:))))
+
+    (define (->keyword sym)
+      (symbol->keyword (string->symbol (substring (symbol->string sym) 1))))
+
     (syntax-case x ()
       ((_ (name arg ...) body0 body1 ...)
        (and (and-map symbol? (syntax->datum #'(name arg ...)))
-            (not (module-defined? the-tm-def-module (syntax->datum #'name))))
-       (let ((this-new-tm-def (make <tm-def>))
-             (compiled-proc (compile (syntax->datum #'(lambda (arg ...) body0 body1 ...)))))
+            (not (module-defined? the-tm-def-module (syntax->datum #'name))))          )
+       (let* ((this-new-tm-def (make <tm-def>))
+              (compiled-proc (compile
+                              (syntax->datum
+                               (let-syntax ((parsed-body
+                                             (lambda (x)
+                                               (syntax-case x ()
+                                                 ((_ (kw kwarg) body1 ...)
+                                                  (keyword? kw)
+                                                  (ahash-set! (slot-ref this-new-tm-def
+                                                                        'options-table)
+                                                              kw kwarg)
+                                                  #'(parsed-body body1 ...))
+                                                 ((_ body1 ...)
+                                                  #'(body1 ...))))))
+                                 (lambda (arg ...) (parsed-body body0 body1 ...)))))))
          (with-syntax ((this-new-tm-def this-new-tm-def)
                        )
            #'(let ((this-tm-def this-new-tm-def))
                (module-define! the-tm-def-module name this-tm-def)
                (slot-set! this-tm-def 'procedure
-                          (lambda args
+                          (lambda (arg ...)
                             (let ((defs (slot-ref this-tm-def 'tm-defined '())))
                               (unless (null? defs)
-                                (apply (car defs) args)))))
+                                ((car defs) arg ...)))))
                (slot-set! this-tm-def 'tm-defined
                           (cons compiled-proc (slot-ref this-tm-def 'tm-defined)))
                ))))
@@ -180,14 +235,16 @@
            #'(let ((this-tm-def this-tm-def-to-overload))
                (slot-set! this-tm-def 'tm-defined
                       (cons compiled-proc (slot-ref this-tm-def 'tm-defined)))))))
-      )))
+      ))
+
+(export-syntax tm-define)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Contextual overloading
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(eval-when (expand load eval)
+(eval-when (expand load eval compile)
 
   (define-public (ctx-add-condition l kind opt)
     (display* "tm-define:ctx-add-condition " l ", " kind ", " opt "\n")
@@ -198,7 +255,7 @@
     (cons (cons conds data) (or ctx '())))
 
   (define-public (ctx-find ctx conds)
-    (display* ";TODO: m-define:ctx-find " ctx ", " conds "\n")
+    (display* "tm-define:ctx-find " ctx ", " conds "\n")
     (cond ((or (not ctx) (null? ctx)) #f)
           ((== (caar ctx) conds) (cdar ctx))
           (else (ctx-find (cdr ctx) conds))))
@@ -228,7 +285,7 @@
 ;;; Global variables and subroutines
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(eval-when (expand load eval)
+(eval-when (expand load eval compile)
 
   (define-public tm-defined-table (make-ahash-table))
   (define-public tm-defined-name (make-ahash-table))
@@ -241,20 +298,33 @@
   (define cur-props '())
 
   (define-public (ca*r x) (if (pair? x) (ca*r (car x)) x))
+  ;;
+  ;; scheme@(guile-user)> (ca*r '((a b) c d))
+  ;; $9 = a
+  ;; scheme@(guile-user)> (ca*r '(((a b) c) d))
+  ;; $10 = a
+
   (define-public (ca*adr x) (ca*r (cadr x)))
+  ;;
+  ;; scheme@(guile-user)> (ca*adr '((a b) c d))
+  ;; $11 = c
+  ;; scheme@(guile-user)> (ca*adr '(((a b) c) d))
+  ;; $12 = d
 
   (define (lambda* head body)
+    "Confuses novice programmers to cause many minutes of delay."
     (if (pair? head)
         (lambda* (car head) `((lambda ,(cdr head) ,@body)))
         (car body)))
 
   (define (listify args)
+    "Turns and improper list into a proper list,
+i.e., (listify '(a b . c)) => (a b c)"
     (if (pair? args)
         (cons (car args) (listify (cdr args)))
         (list args)))
 
   (define (apply* fun head)
-    (display* "tm-define.scm:apply* " fun " " head "\n")
     (cond ((list? head)
            `(,(apply* fun (car head)) ,@(cdr head)))
           ((pair? head)
@@ -285,6 +355,20 @@
 ;;; These hand around and save scheme lists produced by quasiquote. Those
 ;;; forms are not evaluated now, but instead are stored for later evaluation,
 ;;; i.e., (#:require (and in-math? ...))
+;;;
+;;; Ok, this is Karl trying to grok the program... The value of "former" is
+;;; lexically bound... my program that printed key and value via a
+;;; hash-table-for-each lost that information. There's more going on than mere
+;;; scheme lists being built and stored. Those are closures; they have a
+;;; scheme form and an evaluation environment in which to resolve the values
+;;; of those symbols; but in the first one, "former" is not bound, in the
+;;; second one it's bound to the list holding only the first one, in the third
+;;; one it's bound to the list holding the second and first, etc., so
+;;; "former"'s value is different inside each one, or this wouldn't work
+;;; right.
+;;;
+;;; This comment will sort of like "self"-destruct after a few WIP's, right?
+;;; MI.
 ;;;
 ;;;;;;
 
@@ -418,6 +502,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Overloaded functions with properties
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Here's a hint regarding the "unhandled constant" error that is printed
+;;; during TeXmacs booting while I still haven't figured it out quite right...
+;;;
+;;; scheme@(guile-user)> ca*r
+;;; $13 = #<procedure ca*r (x)>
+;;; scheme@(guile-user)> (compile ca*r)
+;;; ;;; loading /usr/share/guile/2.2/language/value/spec.scm
+;;; ERROR: In procedure scm-error:
+;;; ERROR: unhandled constant #<procedure ca*r (x)>
+;;;
+(d;;; scheme@(guile-user)> (set! ca*r (compile ca*r))
+;;; ERROR: In procedure scm-error:
+;;; ERROR: unhandled constant #<procedure ca*r (x)>
+
 
 (eval-when (expand load eval)
 
@@ -564,268 +663,269 @@
 ;;;  The way a tm-define-macro works, with it's $impl suffix...
 ;;;
 ;;{{{ Long example, "clipboard-cut" from tm-zotero.scm
-;;;
-;;; (clipboard-cut .
-;;;  ((lambda (which)
-;;;     (if (and (in-tm-zotero-style?)
-;;;              (is-during-tm-zotero-clipboard-cut?))
-;;;       (noop)
-;;;       (former which)))
-;;;   (lambda (which)
-;;;     (if (let ((st (selection-tree)))
-;;;           (and (in-tm-zotero-style?)
-;;;                (not (is-during-tm-zotero-clipboard-cut?))
-;;;                (inside-zcite? (cursor-tree))
-;;;                (inside-inactive? (cursor-tree))
-;;;                (not (has-zfield? st))
-;;;                (has-zsubCite? st)))
-;;;       (with-fluids
-;;;         ((fluid/is-during-tm-zotero-clipboard-cut? #t))
-;;;         (let* ((selection-t (selection-tree))
-;;;                (sel-zsubCite-ls
-;;;                  (tm-search selection-t is-zsubCite?))
-;;;                (zfield
-;;;                  (tree-search-upwards
-;;;                    (path->tree (cDr (selection-get-start)))
-;;;                    '(zcite)))
-;;;                (zfieldID (zfield-zfieldID zfield))
-;;;                (zfield-new-ID (generate-unique-zfieldID))
-;;;                (zfield-copy (tree-copy zfield))
-;;;                (zfield-copy-ID (generate-unique-zfieldID))
-;;;                (zsubCite-t-ls
-;;;                  (tm-search
-;;;                    (zfield-Text-t zfield-copy)
-;;;                    is-zsubCite?))
-;;;                (documentID (get-documentID))
-;;;                (dd (get-<document-data> documentID))
-;;;                (zfd-ls (document-zfield-zfd-ls dd))
-;;;                (zfd-key (string-append documentID zfieldID))
-;;;                (zfd (hash-ref
-;;;                       documentID+zfieldID-><zfield-data>-ht
-;;;                       zfd-key
-;;;                       #f))
-;;;                (layout-prefix
-;;;                  (or (zotero-style-citation-layout-prefix) ""))
-;;;                (layout-delimiter
-;;;                  (or (zotero-style-citation-layout-delimiter) ""))
-;;;                (layout-suffix
-;;;                  (or (zotero-style-citation-layout-suffix) ""))
-;;;                (suppress?
-;;;                  (and zfd
-;;;                       (zfd-Code-code-properties-suppress-trailing-punctuation
-;;;                         zfd)))
-;;;                (is-note? (zfield-IsNote? zfield))
-;;;                (formattedCitation
-;;;                  (and zfd
-;;;                       (zfd-Code-code-properties-formattedCitation zfd)))
-;;;                (formattedCitation
-;;;                  (if (string? formattedCitation)
-;;;                    formattedCitation
-;;;                    ""))
-;;;                (formattedCitation
-;;;                  (if (string-prefix? "{\\rtf " formattedCitation)
-;;;                    (substring
-;;;                      formattedCitation
-;;;                      6
-;;;                      (1- (string-length formattedCitation)))))
-;;;                (formattedCitation
-;;;                  (if (string-prefix? layout-prefix formattedCitation)
-;;;                    (substring
-;;;                      formattedCitation
-;;;                      (string-length layout-prefix)
-;;;                      (string-length formattedCitation))
-;;;                    formattedCitation))
-;;;                (formattedCitation
-;;;                  (if (string-suffix? layout-suffix formattedCitation)
-;;;                    (substring
-;;;                      formattedCitation
-;;;                      0
-;;;                      (- (string-length formattedCitation)
-;;;                         (string-length layout-suffix)))
-;;;                    formattedCitation))
-;;;                (formattedSubCite-ls
-;;;                  (split-string-by-substr
-;;;                    formattedCitation
-;;;                    layout-delimiter))
-;;;                (code-citationItems-ls
-;;;                  (or (and zfd (zfd-Code-code-citationItems-ls zfd))
-;;;                      '()))
-;;;                (zsubCite->*-alist
-;;;                  (if (and (== (length zsubCite-t-ls)
-;;;                               (length formattedSubCite-ls))
-;;;                           (== (length zsubCite-t-ls)
-;;;                               (length code-citationItems-ls)))
-;;;                    (map (lambda (a b c) (list a b c))
-;;;                         zsubCite-t-ls
-;;;                         formattedSubCite-ls
-;;;                         code-citationItems-ls)
-;;;                    '()))
-;;;                (keep-alist
-;;;                  (list-filter
-;;;                    zsubCite->*-alist
-;;;                    (lambda (elt)
-;;;                      (not (member (car elt) sel-zsubCite-ls)))))
-;;;                (cut-alist
-;;;                  (list-filter
-;;;                    zsubCite->*-alist
-;;;                    (lambda (elt) (member (car elt) sel-zsubCite-ls))))
-;;;                (b (buffer-new))
-;;;                (copy-zfd #f))
-;;;           (selection-cancel)
-;;;           (when zfd
-;;;                 (buffer-set-body b zfield-copy)
-;;;                 (buffer-pretend-autosaved b)
-;;;                 (buffer-pretend-saved b)
-;;;                 (unintern-ztHrefFromCiteToBib-for-cut
-;;;                   documentID
-;;;                   zfield)
-;;;                 (set! (zfield-zfieldID zfield-copy)
-;;;                   zfield-copy-ID)
-;;;                 (set! copy-zfd
-;;;                   (make-instance
-;;;                     <zfield-data>
-;;;                     #:zfd-tree
-;;;                     zfield-copy))
-;;;                 (set! (zfd-Code-code-citationID zfd)
-;;;                   (tm-zotero-random-string))
-;;;                 (set! (zfd-Code-code-citationID copy-zfd)
-;;;                   (tm-zotero-random-string))
-;;;                 (set! (zfd-Code-code-properties-formattedCitation zfd)
-;;;                   (string-append
-;;;                     "{\\rtf "
-;;;                     (string-join
-;;;                       (map cadr keep-alist)
-;;;                       layout-delimiter)
-;;;                     (if suppress? "" layout-suffix)
-;;;                     "}"))
-;;;                 (set! (zfd-Code-code-properties-formattedCitation
-;;;                         copy-zfd)
-;;;                   (string-append
-;;;                     "{\\rtf "
-;;;                     (string-join
-;;;                       (map cadr cut-alist)
-;;;                       layout-delimiter)
-;;;                     (if suppress? "" layout-suffix)
-;;;                     "}"))
-;;;                 (set! (zfield-Text-t zfield)
-;;;                   (tm-zotero-UTF-8-str_text->texmacs
-;;;                     (zfd-Code-code-properties-formattedCitation zfd)
-;;;                     is-note?
-;;;                     #f))
-;;;                 (set! (zfield-Text-t zfield-copy)
-;;;                   (tm-zotero-UTF-8-str_text->texmacs
-;;;                     (zfd-Code-code-properties-formattedCitation
-;;;                       copy-zfd)
-;;;                     is-note?
-;;;                     #f))
-;;;                 (set! (zfd-Code-code-citationItems-ls zfd)
-;;;                   (map caddr keep-alist))
-;;;                 (set! (zfd-Code-code-citationItems-ls copy-zfd)
-;;;                   (map caddr cut-alist))
-;;;                 (set! (zfd-Code-code-properties-plainCitation zfd)
-;;;                   (zfield-Text zfield))
-;;;                 (set! (zfd-Code-code-properties-plainCitation copy-zfd)
-;;;                   (zfield-Text zfield-copy))
-;;;                 (set! (zfield-Code-is-modified?-flag zfield)
-;;;                   "false")
-;;;                 (set! (zfield-Code-is-modified?-flag zfield-copy)
-;;;                   "false")
-;;;                 (clipboard-set which zfield-copy)
-;;;                 (clear-tree-pointer copy-zfd)
-;;;                 (if (null? keep-alist)
-;;;                   (begin
-;;;                     (hash-remove!
-;;;                       documentID+zfieldID-><zfield-data>-ht
-;;;                       zfd-key)
-;;;                     (set! (document-zfield-zfd-ls dd)
-;;;                       (list-filter
-;;;                         zfd-ls
-;;;                         (lambda (elt) (not (eq? elt zfd)))))
-;;;                     (tree-assign! zfield "")
-;;;                     (and-with
-;;;                       inactive
-;;;                       (tree-search-upwards zfield (quote inactive))
-;;;                       (tree-assign! inactive "")))
-;;;                   (begin
-;;;                     (enqueue-delayed-integration-commands
-;;;                       documentID
-;;;                       (list zfield)
-;;;                       tm-zotero-affirmCitation)))
-;;;                 (buffer-pretend-autosaved b)
-;;;                 (buffer-pretend-saved b)
-;;;                 (buffer-close b))))
-;;;       (former which)))
-;;;   (lambda (which)
-;;;     (if (and (in-tm-zotero-style?)
-;;;              (not (is-during-tm-zotero-clipboard-cut?))
-;;;              (has-zfield? (selection-tree)))
-;;;       (with-fluids
-;;;         ((fluid/is-during-tm-zotero-clipboard-cut? #t))
-;;;         (let* ((selection-t (selection-tree))
-;;;                (zfields (tm-search selection-t is-zfield?))
-;;;                (documentID (get-documentID))
-;;;                (dd (get-<document-data> documentID))
-;;;                (zfd-ls (document-zfield-zfd-ls dd))
-;;;                (zb-zfd-ls (document-zbibliography-zfd-ls dd))
-;;;                (new-zfield-zfd (document-new-zfield-zfd dd)))
-;;;           (map (lambda (zfield)
-;;;                  (let* ((zfieldID (zfield-zfieldID zfield))
-;;;                         (zfd-key (string-append documentID zfieldID))
-;;;                         (zfd (hash-ref
-;;;                                documentID+zfieldID-><zfield-data>-ht
-;;;                                zfd-key)))
-;;;                    (cond ((and zfd (not (eq? zfd new-zfield-zfd)))
-;;;                           (hash-remove!
-;;;                             documentID+zfieldID-><zfield-data>-ht
-;;;                             zfd-key)
-;;;                           (set! (document-zfield-zfd-ls dd)
-;;;                             (list-filter
-;;;                               zfd-ls
-;;;                               (lambda (elt) (not (eq? elt zfd)))))
-;;;                           (when (is-zbibliography? zfield)
-;;;                                 (set! (document-zbibliography-zfd-ls dd)
-;;;                                   (list-filter
-;;;                                     zb-zfd-ls
-;;;                                     (lambda (elt) (not (eq? elt zfd))))))
-;;;                           (clear-tree-pointer zfd)
-;;;                           (unintern-ztHrefFromCiteToBib-for-cut
-;;;                             documentID
-;;;                             zfield))
-;;;                          (zfd
-;;;                           (let ((tp (tree-pointer zfd)))
-;;;                             (tm-zotero-format-error
-;;;                               "_BOLD__RED_clipboard-cut_RESET_: _RED_Cutting new zfield!_RESET_ _BOLD__RED_Fixme:_RESET_ Probably protocol breakdown; Restart Firefox and TeXmacs.")
-;;;                             (tree-assign!
-;;;                               zfield
-;;;                               (stree->tree
-;;;                                 '(strong "{?? New Citation ??}")))
-;;;                             (clear-tree-pointer zfd)
-;;;                             (set! (document-new-zfield-zfd dd) #f))))))
-;;;                zfields)
-;;;           (cpp-clipboard-cut "none")
-;;;           (when (not (== which "none"))
-;;;                 (clipboard-set which selection-t))))
-;;;       (former which)))
-;;;   (lambda l
-;;;     (if (in-sem-math?)
-;;;       (with cmd
-;;;             (lambda () (apply former l))
-;;;             (wrap-remove cmd #f))
-;;;       (apply former (cons* l))))
-;;;   (lambda (which)
-;;;     (if (and (inside? (quote slideshow)) (slide-range))
-;;;       (with (i1 i2)
-;;;             (slide-range)
-;;;             (with t
-;;;                   (tree-innermost slideshow-context?)
-;;;                   (clipboard-set which (selection-tree))
-;;;                   (tree-remove (tree-ref t 0) i1 (+ (- i2 i1) 1))
-;;;                   (if (>= i1 (tree-arity (tree-ref t 0)))
-;;;                     (tree-go-to t 0 (- i1 1) #:end)
-;;;                     (tree-go-to t 0 i1 #:start))))
-;;;       (former which)))
-;;;   (lambda (cb) (cpp-clipboard-cut cb)))
-;;;  )
+#!
+(clipboard-cut .
+ ((lambda (which)
+    (if (and (in-tm-zotero-style?)
+             (is-during-tm-zotero-clipboard-cut?))
+      (noop)
+      (former which)))
+  (lambda (which)
+    (if (let ((st (selection-tree)))
+          (and (in-tm-zotero-style?)
+               (not (is-during-tm-zotero-clipboard-cut?))
+               (inside-zcite? (cursor-tree))
+               (inside-inactive? (cursor-tree))
+               (not (has-zfield? st))
+               (has-zsubCite? st)))
+      (with-fluids
+        ((fluid/is-during-tm-zotero-clipboard-cut? #t))
+        (let* ((selection-t (selection-tree))
+               (sel-zsubCite-ls
+                 (tm-search selection-t is-zsubCite?))
+               (zfield
+                 (tree-search-upwards
+                   (path->tree (cDr (selection-get-start)))
+                   '(zcite)))
+               (zfieldID (zfield-zfieldID zfield))
+               (zfield-new-ID (generate-unique-zfieldID))
+               (zfield-copy (tree-copy zfield))
+               (zfield-copy-ID (generate-unique-zfieldID))
+               (zsubCite-t-ls
+                 (tm-search
+                   (zfield-Text-t zfield-copy)
+                   is-zsubCite?))
+               (documentID (get-documentID))
+               (dd (get-<document-data> documentID))
+               (zfd-ls (document-zfield-zfd-ls dd))
+               (zfd-key (string-append documentID zfieldID))
+               (zfd (hash-ref
+                      documentID+zfieldID-><zfield-data>-ht
+                      zfd-key
+                      #f))
+               (layout-prefix
+                 (or (zotero-style-citation-layout-prefix) ""))
+               (layout-delimiter
+                 (or (zotero-style-citation-layout-delimiter) ""))
+               (layout-suffix
+                 (or (zotero-style-citation-layout-suffix) ""))
+               (suppress?
+                 (and zfd
+                      (zfd-Code-code-properties-suppress-trailing-punctuation
+                        zfd)))
+               (is-note? (zfield-IsNote? zfield))
+               (formattedCitation
+                 (and zfd
+                      (zfd-Code-code-properties-formattedCitation zfd)))
+               (formattedCitation
+                 (if (string? formattedCitation)
+                   formattedCitation
+                   ""))
+               (formattedCitation
+                 (if (string-prefix? "{\\rtf " formattedCitation)
+                   (substring
+                     formattedCitation
+                     6
+                     (1- (string-length formattedCitation)))))
+               (formattedCitation
+                 (if (string-prefix? layout-prefix formattedCitation)
+                   (substring
+                     formattedCitation
+                     (string-length layout-prefix)
+                     (string-length formattedCitation))
+                   formattedCitation))
+               (formattedCitation
+                 (if (string-suffix? layout-suffix formattedCitation)
+                   (substring
+                     formattedCitation
+                     0
+                     (- (string-length formattedCitation)
+                        (string-length layout-suffix)))
+                   formattedCitation))
+               (formattedSubCite-ls
+                 (split-string-by-substr
+                   formattedCitation
+                   layout-delimiter))
+               (code-citationItems-ls
+                 (or (and zfd (zfd-Code-code-citationItems-ls zfd))
+                     '()))
+               (zsubCite->*-alist
+                 (if (and (== (length zsubCite-t-ls)
+                              (length formattedSubCite-ls))
+                          (== (length zsubCite-t-ls)
+                              (length code-citationItems-ls)))
+                   (map (lambda (a b c) (list a b c))
+                        zsubCite-t-ls
+                        formattedSubCite-ls
+                        code-citationItems-ls)
+                   '()))
+               (keep-alist
+                 (list-filter
+                   zsubCite->*-alist
+                   (lambda (elt)
+                     (not (member (car elt) sel-zsubCite-ls)))))
+               (cut-alist
+                 (list-filter
+                   zsubCite->*-alist
+                   (lambda (elt) (member (car elt) sel-zsubCite-ls))))
+               (b (buffer-new))
+               (copy-zfd #f))
+          (selection-cancel)
+          (when zfd
+                (buffer-set-body b zfield-copy)
+                (buffer-pretend-autosaved b)
+                (buffer-pretend-saved b)
+                (unintern-ztHrefFromCiteToBib-for-cut
+                  documentID
+                  zfield)
+                (set! (zfield-zfieldID zfield-copy)
+                  zfield-copy-ID)
+                (set! copy-zfd
+                  (make-instance
+                    <zfield-data>
+                    #:zfd-tree
+                    zfield-copy))
+                (set! (zfd-Code-code-citationID zfd)
+                  (tm-zotero-random-string))
+                (set! (zfd-Code-code-citationID copy-zfd)
+                  (tm-zotero-random-string))
+                (set! (zfd-Code-code-properties-formattedCitation zfd)
+                  (string-append
+                    "{\\rtf "
+                    (string-join
+                      (map cadr keep-alist)
+                      layout-delimiter)
+                    (if suppress? "" layout-suffix)
+                    "}"))
+                (set! (zfd-Code-code-properties-formattedCitation
+                        copy-zfd)
+                  (string-append
+                    "{\\rtf "
+                    (string-join
+                      (map cadr cut-alist)
+                      layout-delimiter)
+                    (if suppress? "" layout-suffix)
+                    "}"))
+                (set! (zfield-Text-t zfield)
+                  (tm-zotero-UTF-8-str_text->texmacs
+                    (zfd-Code-code-properties-formattedCitation zfd)
+                    is-note?
+                    #f))
+                (set! (zfield-Text-t zfield-copy)
+                  (tm-zotero-UTF-8-str_text->texmacs
+                    (zfd-Code-code-properties-formattedCitation
+                      copy-zfd)
+                    is-note?
+                    #f))
+                (set! (zfd-Code-code-citationItems-ls zfd)
+                  (map caddr keep-alist))
+                (set! (zfd-Code-code-citationItems-ls copy-zfd)
+                  (map caddr cut-alist))
+                (set! (zfd-Code-code-properties-plainCitation zfd)
+                  (zfield-Text zfield))
+                (set! (zfd-Code-code-properties-plainCitation copy-zfd)
+                  (zfield-Text zfield-copy))
+                (set! (zfield-Code-is-modified?-flag zfield)
+                  "false")
+                (set! (zfield-Code-is-modified?-flag zfield-copy)
+                  "false")
+                (clipboard-set which zfield-copy)
+                (clear-tree-pointer copy-zfd)
+                (if (null? keep-alist)
+                  (begin
+                    (hash-remove!
+                      documentID+zfieldID-><zfield-data>-ht
+                      zfd-key)
+                    (set! (document-zfield-zfd-ls dd)
+                      (list-filter
+                        zfd-ls
+                        (lambda (elt) (not (eq? elt zfd)))))
+                    (tree-assign! zfield "")
+                    (and-with
+                      inactive
+                      (tree-search-upwards zfield (quote inactive))
+                      (tree-assign! inactive "")))
+                  (begin
+                    (enqueue-delayed-integration-commands
+                      documentID
+                      (list zfield)
+                      tm-zotero-affirmCitation)))
+                (buffer-pretend-autosaved b)
+                (buffer-pretend-saved b)
+                (buffer-close b))))
+      (former which)))
+  (lambda (which)
+    (if (and (in-tm-zotero-style?)
+             (not (is-during-tm-zotero-clipboard-cut?))
+             (has-zfield? (selection-tree)))
+      (with-fluids
+        ((fluid/is-during-tm-zotero-clipboard-cut? #t))
+        (let* ((selection-t (selection-tree))
+               (zfields (tm-search selection-t is-zfield?))
+               (documentID (get-documentID))
+               (dd (get-<document-data> documentID))
+               (zfd-ls (document-zfield-zfd-ls dd))
+               (zb-zfd-ls (document-zbibliography-zfd-ls dd))
+               (new-zfield-zfd (document-new-zfield-zfd dd)))
+          (map (lambda (zfield)
+                 (let* ((zfieldID (zfield-zfieldID zfield))
+                        (zfd-key (string-append documentID zfieldID))
+                        (zfd (hash-ref
+                               documentID+zfieldID-><zfield-data>-ht
+                               zfd-key)))
+                   (cond ((and zfd (not (eq? zfd new-zfield-zfd)))
+                          (hash-remove!
+                            documentID+zfieldID-><zfield-data>-ht
+                            zfd-key)
+                          (set! (document-zfield-zfd-ls dd)
+                            (list-filter
+                              zfd-ls
+                              (lambda (elt) (not (eq? elt zfd)))))
+                          (when (is-zbibliography? zfield)
+                                (set! (document-zbibliography-zfd-ls dd)
+                                  (list-filter
+                                    zb-zfd-ls
+                                    (lambda (elt) (not (eq? elt zfd))))))
+                          (clear-tree-pointer zfd)
+                          (unintern-ztHrefFromCiteToBib-for-cut
+                            documentID
+                            zfield))
+                         (zfd
+                          (let ((tp (tree-pointer zfd)))
+                            (tm-zotero-format-error
+                              "_BOLD__RED_clipboard-cut_RESET_: _RED_Cutting new zfield!_RESET_ _BOLD__RED_Fixme:_RESET_ Probably protocol breakdown; Restart Firefox and TeXmacs.")
+                            (tree-assign!
+                              zfield
+                              (stree->tree
+                                '(strong "{?? New Citation ??}")))
+                            (clear-tree-pointer zfd)
+                            (set! (document-new-zfield-zfd dd) #f))))))
+               zfields)
+          (cpp-clipboard-cut "none")
+          (when (not (== which "none"))
+                (clipboard-set which selection-t))))
+      (former which)))
+  (lambda l
+    (if (in-sem-math?)
+      (with cmd
+            (lambda () (apply former l))
+            (wrap-remove cmd #f))
+      (apply former (cons* l))))
+  (lambda (which)
+    (if (and (inside? (quote slideshow)) (slide-range))
+      (with (i1 i2)
+            (slide-range)
+            (with t
+                  (tree-innermost slideshow-context?)
+                  (clipboard-set which (selection-tree))
+                  (tree-remove (tree-ref t 0) i1 (+ (- i2 i1) 1))
+                  (if (>= i1 (tree-arity (tree-ref t 0)))
+                    (tree-go-to t 0 (- i1 1) #:end)
+                    (tree-go-to t 0 i1 #:start))))
+      (former which)))
+  (lambda (cb) (cpp-clipboard-cut cb)))
+ )
+!#
 ;;}}}
 ;;;
 ;;; Another good source for ideas and knowledge is in (ice-9 eval); in
@@ -923,7 +1023,7 @@
 ;;; Overloaded macros with properties
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(eval-when (expand load eval)
+(eval-when (expand load eval compile)
 
   (define-public (tm-macroify head)
     (if (pair? head)
@@ -950,7 +1050,7 @@
 ;;; Associating extra properties to existing function symbols
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(eval-when (expand load eval)
+(eval-when (expand load eval compile)
 
   (define-public (tm-property-sub head body)
     (if (null? body)

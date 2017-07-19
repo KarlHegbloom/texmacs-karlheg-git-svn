@@ -95,6 +95,9 @@
     (:menu-item-list)))
   (:menu-item-list (:repeat :menu-item)))
 
+;|; r7rs symbol syntax makes that all green above; I think that the reader
+  ;  options must be set to not read them! Otherwise, maybe ||| ?
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Menu utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
