@@ -6,7 +6,8 @@
 #  Guile_LIBRARIES - link these to use Guile
 #  Guile_VERSION_STRING - version of Guile
 
-FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config)
+# I know there exists a guile-config (ubuntu) and a guile18-config (macports). The rest I am guessing.
+FIND_PROGRAM(GUILECONFIG_EXECUTABLE NAMES guile-config guile18-config guile2-config guile20-config guile22-config)
 
 # if guile-config has been found
 IF(GUILECONFIG_EXECUTABLE)
