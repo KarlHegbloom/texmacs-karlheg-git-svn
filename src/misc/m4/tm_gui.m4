@@ -57,8 +57,9 @@ AC_DEFUN([TM_GUI],[
   QT_PLUGINS_LIST="$PLUGINS_LIST"
   AC_ARG_ENABLE(QtPlugins,
 	 AS_HELP_STRING([--enable-QtPlugins@<:@=list@:>@],
-		  [default qt4 plugins: imageformats,accessible,accessiblebridge,inputmethods
-default qt5 plugins: generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations]),
+		  [Used only for MacOS bundles and Windows packages.
+default qt4 plugins: imageformats,accessible,accessiblebridge,inputmethods
+default qt5 plugins: generic,imageformats,platforminputcontexts,platforms,printsupport]),
     [QT_PLUGINS_LIST=$enableval],[QT_PLUGINS_LIST="$PLUGINS_LIST"])
   case $QT_PLUGINS_LIST in
   yes) QT_PLUGINS_LIST="$PLUGINS_LIST";;

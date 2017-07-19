@@ -1512,10 +1512,11 @@ Optional Features:
   --enable-console        enable windows console
   --disable-qt            replace Qt by X11 interface
   --enable-QtPlugins[=list]
+                          Used only for MacOS bundles and Windows packages.
                           default qt4 plugins:
                           imageformats,accessible,accessiblebridge,inputmethods
                           default qt5 plugins:
-                          generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations
+                          generic,imageformats,platforminputcontexts,platforms,printsupport
   --enable-qtpipes        replace UNIX pipes by Qt pipes
   --enable-cocoa          replace X11 by Cocoa interface
   --enable-pdf-renderer=yes
@@ -16365,8 +16366,7 @@ $as_echo "no" >&6; }
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: final adjustments for an Intel or AMD GNU/Linux host" >&5
 $as_echo "final adjustments for an Intel or AMD GNU/Linux host" >&6; }
       CONFIG_OS_SUFFIX="i386-pc-linux-gnu"
-      # -fPIC is required for Qt5 on Ubuntu 17.04 (adding -fPIE breaks it)
-      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations -fPIC"
+      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
       CONFIG_QTPIPES="yes"
     ;;
     i*86-*-freebsd* | x86_64-*-freebsd*)
