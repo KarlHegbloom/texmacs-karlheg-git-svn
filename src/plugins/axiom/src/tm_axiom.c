@@ -299,6 +299,7 @@ int main()
       dup2(p1[1],1); close(p1[1]); close(p1[0]);
       dup2(p2[0],0); close(p2[0]); close(p2[1]);
       execlp("AXIOMsys","AXIOMsys","-noclef",NULL);
+      execlp("axiom","axiom","-noclef",NULL);
       fatal("exec AXIOMsys");
     default: /* parent */
       close(p1[1]); close(p2[0]);

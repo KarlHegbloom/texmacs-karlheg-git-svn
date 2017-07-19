@@ -11,15 +11,18 @@ export DH_VERBOSE=1
 
 export DH_ALWAYS_EXCLUDE=.git
 
-DEB_CONFIGURE_OPTIONS :=
-	'--enable-QtPlugins=generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations,styles,iconengines,platformthemes' \
-	'--enable-optimize="-O3 -fexpensive-optimizations -fPIC"'
+DEB_CONFIGURE_OPTIONS := \
+	'--enable-optimize="-O3 -ggdb -fexpensive-optimizations -fPIC"' \
+        '--disable-fastalloc'
 
+#	'--enable-QtPlugins=generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations,styles,iconengines,platformthemes' \
 #	'--enable-QtPlugins=generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations,styles,iconengines,platformthemes,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration'
-
 
 %:
 	dh --parallel $@
 
 override_dh_auto_configure:
 	dh_auto_configure -- $(DEB_CONFIGURE_OPTIONS)
+
+override_dh_strip:
+	:

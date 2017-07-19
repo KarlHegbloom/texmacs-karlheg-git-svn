@@ -1,7 +1,8 @@
 Source: texmacs
 Section: editors
 Priority: optional
-Maintainer: Denis RAUX <denis.raux@lix.polytechnique.fr>
+X-Maintainer: Denis RAUX <denis.raux@lix.polytechnique.fr>
+Maintainer: Karl M. Hegbloom <karl.hegbloom@gmail.com>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
 Homepage: http://www.texmacs.org
