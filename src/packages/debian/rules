@@ -6,13 +6,17 @@
 # dh-make output file, you may use that output file without restriction.
 # This special exception was added by Craig Small in version 0.37 of dh-make.
 
+export PKGREV         = -guile-1.8$(shell ./packages/get-pkgrev)
+export PKG_MAINTAINER = User Built Package <user@nowhere.net>
+export PKG_DATE       := $(shell date '+%a, %d %b %Y %H:%M:%S %z')
+
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
 export DH_ALWAYS_EXCLUDE=.git
 
 DEB_CONFIGURE_OPTIONS := \
-	'--enable-optimize="-O3 -ggdb -fexpensive-optimizations -fPIC"' \
+	'--enable-optimize=-O3 -ggdb -fexpensive-optimizations -fPIC' \
         '--disable-fastalloc'
 
 #	'--enable-QtPlugins=generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations,styles,iconengines,platformthemes' \
