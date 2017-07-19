@@ -15,6 +15,29 @@
 ;; in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; This file is loaded by src/Scheme/Guile/guile_tm.cpp:initialize_scheme()
+;;; via eval_scheme_file_in_load_path("kernel/boot-texmacs"). It does not
+;;; define it's own module. It is meant to be loaded into the base (guile)
+;;; module, just as Guile's own boot-9.scm is loaded there during its'
+;;; startup.
+;;;
+(eval-when (expand load eval compile)
+  (set-current-module (resolve-module '(guile)))
+  (use-modules (guile-user))
+  (module-use! (module-public-interface (current-module))
+               (resolve-interface '(guile-user))))
+;;;
+;;; The above will make all exports from (guile-user) also appear in the
+;;; (guile) module... without causing a non-terminating recursion loop!
+;;;
+;;; [I think that the case of a module using another one that also uses it,
+;;;  creating a sort of dependency loop... is a common occurance, and so the
+;;;  lookup mechanism very likely is designed with that in mind, and so no
+;;;  non-terminating recursion loop will occur.]
+;;;
+;;;;;;
+
 
 
 ;;;;;;
@@ -37,27 +60,6 @@
 ;;;;;;
 
 
-;;;;;;
-;;;
-;;; This file is executed by initialize_scheme() in guile_tm.cpp via
-;;; eval_scheme_file_in_load_path("kernel/boot-texmacs"). It does not define
-;;; it's own module. It is meant to be loaded into the base (guile) module,
-;;; just as Guile's own boot-9.scm is loaded there during its' startup.
-;;;
-(eval-when (expand load eval compile)
-  (set-current-module (resolve-module '(guile)))
-  (module-use! (module-public-interface (current-module))
-               (resolve-interface '(guile-user))))
-;;;
-;;; The above will make all exports from (guile-user) also appear in the
-;;; (guile) module... without causing a non-terminating recursion loop! I
-;;; think that the case of a module using another one that also uses it,
-;;; creating a sort of dependency loop... is a common occurance, and so the
-;;; lookup mechanism very likely is designed with that in mind, and so no
-;;; non-terminating recursion loop will occur.
-;;;
-
-
 
 ;;;;;;
 ;;;
@@ -78,6 +80,76 @@
        ...))))
 
 (export-syntax use-and-re-export-modules)
+
+;;;;;;
+;;;
+;;; Demonstration:
+;;;
+;;; GNU Guile 2.2.2
+;;; Copyright (C) 1995-2017 Free Software Foundation, Inc.
+;;;
+;;; Guile comes with ABSOLUTELY NO WARRANTY; for details type `,show w'.
+;;; This program is free software, and you are welcome to redistribute it
+;;; under certain conditions; type `,show c' for details.
+;;;
+;;; Enter `,help' for help.
+;;; scheme@(guile-user)> ,m guile
+;;;
+;;;   At this point, I used Geiser mode's C-x C-e to send the definition of
+;;;   the above syntax to the * Guile REPL * buffer... Then:
+;;;
+;;; scheme@(guile)> (define-module (kernel blah something))
+;;; $2 = #<directory (kernel blah something) 55c428bb78c0>
+;;;
+;;;   Note that this kind of module is not defined "inside of" another
+;;;   module. It is defined inside of Guile's global state. (There are nested
+;;;   namespaces, but this isn't that.)
+;;;
+;;; scheme@(kernel blah something)> (define-public (blah blah) blah)
+;;; scheme@(kernel blah something)> ,m guile
+;;; scheme@(guile)> (use-and-re-export-modules (kernel blah something))
+;;; scheme@(guile)> ,use
+;;; (ice-9 ports)
+;;; (value-history)
+;;; (kernel blah something)
+;;; scheme@(guile)> ,m guile-user
+;;; scheme@(guile-user)> ,use
+;;; (guile)
+;;; (system base compile)
+;;; (ice-9 r5rs)
+;;; (ice-9 session)
+;;; (ice-9 regex)
+;;; (ice-9 threads)
+;;; (geiser emacs)
+;;; (value-history)
+;;; scheme@(guile-user)> (blah 'blah)
+;;; $3 = blah
+;;; scheme@(guile-user)> ,b
+;;; scheme@(guile-user)> ,m guile
+;;; scheme@(guile)> (use-and-re-export-modules (guile-user))
+;;; scheme@(guile)> ,use
+;;; (ice-9 ports)
+;;; (value-history)
+;;; (kernel blah something)
+;;; (guile-user)
+;;; scheme@(guile)> ,m guile-user
+;;; scheme@(guile-user)> ,b
+;;; scheme@(guile-user)> (define-public (foo fee) fee)
+;;; scheme@(guile-user)> ,b
+;;; foo                     #<variable 55c428ba91c0 value: #<procedure foo (fee)>>
+;;; scheme@(guile-user)> ,m guile
+;;; scheme@(guile)> (foo 'fee)
+;;; $4 = fee
+;;; scheme@(guile)> ,m kernel blah something
+;;; scheme@(kernel blah something)> ,b
+;;; blah                    #<variable 55c429092890 value: #<procedure blah (blah)>>
+;;; scheme@(kernel blah something)> (foo 'fee)
+;;; $5 = fee
+;;; scheme@(kernel blah something)> ,use
+;;; (guile)
+;;; (value-history)
+;;;
+;;;;;;
 
 
 
@@ -190,6 +262,8 @@
 ;;       (tm-output (object->string (car l)))))
 
 
+(use-and-re-export-modules (ice-9 eval-string))
+
 ;;;;;;
 ;;;
 ;;; tm-define returns a goops object instance... It's class is a subclass of
@@ -210,6 +284,11 @@
                       (default-duplicate-binding-handler))))))
 
 
+;;;;;;
+;;;
+;;; The (texmacs-glue) module is where the scheme functions exported from the
+;;; C++ code are placed by src/Scheme/Glue/*.cpp
+;;;
 (use-and-re-export-modules (texmacs-glue))
 
 ;;;;;;
@@ -320,5 +399,8 @@
 ;;; End with setting the current module to (guile-user), which is the module
 ;;; held by @var{texmacs-user}.
 ;;;
-(eval-when (expand load eval compile)
-  (set-current-module (resolve-module '(guile-user))))
+(set-current-module (resolve-module '(guile-user)))
+
+;; Remain in the `(guile)' module at compilation-time so that the
+;; `-Wunused-toplevel' warning works as expected.
+(eval-when (compile) (set-current-module the-root-module))
