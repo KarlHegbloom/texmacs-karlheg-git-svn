@@ -48,8 +48,8 @@ SET(TeXmacs_Include_Dirs
     ./Typeset/Bridge
     ./Typeset/Concat
     ./Typeset/Page
-    ${TEXMACS_SOURCE_DIR}/TeXmacs/include 
-    ${TEXMACS_BINARY_DIR}/src/System/ 
+    ${TEXMACS_SOURCE_DIR}/TeXmacs/include
+    ${TEXMACS_BINARY_DIR}/src/System/
 )
 
 
@@ -58,7 +58,7 @@ SET(TeXmacs_Include_Dirs
 ### --------------------------------------------------------------------
 
 
-SET(TeXmacs_Base_SRCS 
+SET(TeXmacs_Base_SRCS
     ./Data/Convert/BibTeX/conservative_bib.cpp
     ./Data/Convert/BibTeX/parsebib.cpp
     ./Data/Convert/Coq/parse_vernac.cpp
@@ -164,6 +164,7 @@ SET(TeXmacs_Base_SRCS
     ./Graphics/Fonts/font_database.cpp
     ./Graphics/Fonts/font_guess.cpp
     ./Graphics/Fonts/font_protrusion.cpp
+    ./Graphics/Fonts/font_scripts.cpp
     ./Graphics/Fonts/font_select.cpp
     ./Graphics/Fonts/font_translate.cpp
     ./Graphics/Fonts/math_font.cpp
@@ -367,6 +368,11 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Database/db_index.cpp
     ./Plugins/Database/db_query.cpp
     ./Plugins/Database/db_sort.cpp
+    ./Plugins/Freetype/adjust_bonum.cpp
+    ./Plugins/Freetype/adjust_pagella.cpp
+    ./Plugins/Freetype/adjust_schola.cpp
+    ./Plugins/Freetype/adjust_stix.cpp
+    ./Plugins/Freetype/adjust_termes.cpp
     ./Plugins/Freetype/free_type.cpp
     ./Plugins/Freetype/rubber_assemble_font.cpp
     ./Plugins/Freetype/rubber_stix_font.cpp
@@ -383,6 +389,7 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Imlib2/imlib2.cpp
     ./Plugins/Ispell/ispell.cpp
     ./Plugins/LaTeX_Preview/latex_preview.cpp
+    ./Plugins/Metafont/adjust_cmr.cpp
     ./Plugins/Metafont/load_pk.cpp
     ./Plugins/Metafont/load_tex.cpp
     ./Plugins/Metafont/load_tfm.cpp

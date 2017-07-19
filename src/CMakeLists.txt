@@ -539,7 +539,9 @@ endif(TEXMACS_GUI STREQUAL "Qt")
 if(TEXMACS_GUI STREQUAL "Qt5")
 
   find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
- 
+  find_package(Qt5 5.2.0 COMPONENTS Svg X11Extras)
+  # find_package(Qt5 5.2.0 COMPONENTS QtHelp UiPlugin UiTools WebEngine WebEngineCore WebEngineWidgets)
+
   if(Qt5_FOUND)
     if(WIN32)
      set(GUI_TYPE WIN32)
@@ -560,7 +562,7 @@ if(TEXMACS_GUI STREQUAL "Qt5")
 elseif(TEXMACS_GUI STREQUAL "Qt4")
 
   find_package(Qt4 4.8.7 COMPONENTS QtCore QtGui REQUIRED)
- 
+
   if(QT4_FOUND)
     if(WIN32)
      set(GUI_TYPE WIN32)
@@ -576,7 +578,7 @@ elseif(TEXMACS_GUI STREQUAL "Qt4")
   else(QT4_FOUND)
     message(ERROR "Qt4 is required to compile the Qt4 GUI")
   endif(QT4_FOUND)
-  
+
 
 elseif(TEXMACS_GUI STREQUAL "Aqua")
 
@@ -593,9 +595,9 @@ elseif(TEXMACS_GUI STREQUAL "Aqua")
     message(STATUS "Enabling Cocoa GUI")
 
   else (APPLE)
-  
+
     message( ERROR "Aqua GUI is not supported on this system")
-    
+
   endif (APPLE)
 
 
@@ -605,7 +607,7 @@ else(TEXMACS_GUI STREQUAL "Qt")
 
   set(CONFIG_X11 "X11 Widkit Ghostscript")
   set(CONFIG_GUI "X11")
-  
+
   message(STATUS "Enabling X11 GUI interface")
 
 endif(TEXMACS_GUI STREQUAL "Qt5")
@@ -709,10 +711,10 @@ IF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
   SET(BUNDLE_DEBUG_EXTENSION)
   IF (DEBUG)
     SET(BUNDLE_DEBUG_EXTENSION "_debug")
-  ENDIF (DEBUG)  
+  ENDIF (DEBUG)
   SET(APP_BUNDLE_NAME ${TeXmacs_binary_name}${BUNDLE_DEBUG_EXTENSION}".app")
   ADD_CUSTOM_TARGET ( bundle
-            mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS 
+            mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
     COMMAND mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
     COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/Info.plist ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
     COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/TeXmacs ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
@@ -732,7 +734,7 @@ include(GNUInstallDirs)
 
 install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs
               ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps
-              misc/scripts/tm_gs 
+              misc/scripts/tm_gs
         DESTINATION bin
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
