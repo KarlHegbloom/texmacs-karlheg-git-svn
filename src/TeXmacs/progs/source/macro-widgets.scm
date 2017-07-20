@@ -17,6 +17,14 @@
 	))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Global variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(tm-define macro-current-macro  "")
+(tm-define macro-current-filter "")
+(tm-define macro-current-mode "Text")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutines for macro editing widgets
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -32,6 +40,7 @@
           (else t))))
 
 (define (set-macro-mode u mode)
+  (set! macro-current-mode mode)
   (and-with t (macro-retrieve u)
     (with t* (macro-retrieve* u)
       (cond ((== mode "Source")
@@ -89,8 +98,10 @@
   (let* ((mac (if (tm-func? (tm-ref def 1) 'macro)
 		  `(edit-macro ,l ,@(tm-children (tm-ref def 1)))
 		  `(edit-tag ,l ,(tm-ref def 1))))
+         (mac* (if (!= macro-current-mode "Source") mac
+                   `(,@(cDr mac) (inactive* ,(cAr mac)))))
 	 (pre (buffer-get-preamble (buffer-tree)))
-	 (doc `(document (hide-preamble ,pre) ,mac)))
+	 (doc `(document (hide-preamble ,pre) ,mac*)))
     doc))
 
 (define (build-macro-document l)
@@ -193,9 +204,6 @@
 ;; Editing a macro chosen from the list of all defined macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(tm-define macro-current-macro  "")
-(tm-define macro-current-filter "")
-
 (tm-define (macros-editor-select u macro filter)
   (set! macro-current-macro  macro)
   (set! macro-current-filter filter)
@@ -235,14 +243,14 @@
             (refreshable "macros-editor-documentation"
               (texmacs-output
                `(document
-                  (paragraph-box "480px" ,(macros-editor-current-help)))
+                  (mini-paragraph "480px" ,(macros-editor-current-help)))
                '(style "tmdoc"))))
           (glue #t #f 0 0))))
     ======
     (hlist
       (enum (set-macro-mode u answer)
             '("Text" "Source")
-            "Text" "6em")
+            macro-current-mode "6em")
       >>
       (explicit-buttons
         ("Apply" (macro-apply u))
