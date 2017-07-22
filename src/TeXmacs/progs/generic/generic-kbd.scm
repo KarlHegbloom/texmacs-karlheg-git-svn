@@ -255,6 +255,7 @@
   ("emacs g" (selection-cancel))
   ("emacs j" (insert-return))
   ("emacs k" (kill-paragraph))
+  ("emacs l" (refresh-window))
   ("emacs m" (insert-return))
   ("emacs n" (kbd-down))
   ("emacs p" (kbd-up))
@@ -491,6 +492,7 @@
 
   ;; further shortcuts for Gnome look and feel
   ("gnome g" (selection-cancel))
+  ("gnome l" (refresh-window))
   ("gnome F" (interactive-search))
 
   ("altcmd g" (clipboard-clear "primary"))
@@ -554,6 +556,7 @@
 
   ;; further shortcuts for KDE look and feel
   ("kde g" (selection-cancel))
+  ("kde l" (refresh-window))
   ("kde F" (interactive-search))
 
   ("altcmd g" (clipboard-clear "primary"))
@@ -643,6 +646,7 @@
   ;("C-e" (kbd-end-line))   ; conflict with ("text e" (make-tmlist 'enumerate))
   ("C-g" (selection-cancel))
   ("C-k" (kill-paragraph))
+  ("C-l" (refresh-window))
   ("C-y" (yank-paragraph))
   ("C-q" (make 'symbol))
   ("C-!" (make-label))
@@ -767,6 +771,7 @@
 
   ;; further shortcuts for Windows look and feel
   ("windows g" (selection-cancel))
+  ("windows l" (refresh-window))
 
   ("altcmd g" (clipboard-clear "primary"))
   ("altcmd q" (make 'symbol))
