@@ -1,0 +1,4 @@
+* This is a branch of git svn clone of svn://svn.savannah.gnu.org/texmacs/trunk/
+  (Repository UUID: 64cb5145-927a-446d-8aed-2fb7b4773692)
+
+This is where I will work to keep it able to build for me on Ubuntu Linux.
