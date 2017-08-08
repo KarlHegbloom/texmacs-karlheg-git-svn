@@ -2,9 +2,10 @@
 ;;; For more information see (info "(emacs) Directory Variables")
 
 ((nil
-  (cmake-ide-project-dir . "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/src")
-  (cmake-ide-build-dir . "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/src/obj-x86_64-linux-gnu")
-  (cmake-project-default-build-dir-name . "obj-x86_64-linux-gnu/")
+  (whitespace-cleanup-mode . t)
+  ;;(cmake-ide-project-dir . "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/src")
+  ;;(cmake-ide-build-dir . "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/src/obj-x86_64-linux-gnu")
+  ;;(cmake-project-default-build-dir-name . "obj-x86_64-linux-gnu/")
   (org-default-notes-file . "/home/karlheg/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org")
   (org-refile-targets
    ("/home/karlheg/src/Juris-M/zotero-texmacs-integration/zotero-texmacs-integration_Notes.org" :maxlevel . 7)
