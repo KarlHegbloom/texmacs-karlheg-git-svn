@@ -68,7 +68,7 @@ default qt5 plugins: generic,imageformats,platforminputcontexts,platforms,prints
 
   [[[ $enable_qt == no ]]] &&  unset QT_PLUGINS_LIST
   for p in ${QT_PLUGINS_LIST//,/ }
-  do [[ -d $QT_PLUGINS_PATH/$p ]] || AC_MSG_ERROR(QT plugins not found!)
+  do [[ -d $QT_PLUGINS_PATH/$p ]] || AC_MSG_ERROR(QT plugins <$p> not found! Use enable-QtPlugins option to select them)
   done
 
   # Qt Pipes
