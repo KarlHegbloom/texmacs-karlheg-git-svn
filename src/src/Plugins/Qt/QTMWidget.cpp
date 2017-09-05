@@ -13,6 +13,7 @@
 #include "qt_gui.hpp"
 #include "qt_utilities.hpp"
 #include "qt_simple_widget.hpp"
+#include "QTMStyle.hpp" // qt_zoom
 #include "converter.hpp"
 
 #include "config.h"
@@ -412,25 +413,25 @@ static void setRoundedMask (QWidget *widget)
 #endif
 
 
-#if 0 
+#if 1
 // OLD INPUT METHOD PREVIEW
 void
 QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
   if (! imwidget) {   
     imwidget = new QLabel (this);
     imwidget->setWindowFlags (Qt::Tool | Qt::FramelessWindowHint);
-  //  imwidget->setAttribute (Qt::WA_TranslucentBackground);
-//    imwidget->setAutoFillBackground (false);
-       imwidget->setAutoFillBackground (true);
+    // imwidget->setAttribute (Qt::WA_TranslucentBackground);
+    // imwidget->setAutoFillBackground (false);
+    imwidget->setAutoFillBackground (true);
     imwidget->setWindowOpacity (0.5);
     imwidget->setFocusPolicy (Qt::NoFocus);
     QPalette pal = imwidget->palette();
-//    pal.setColor (QPalette::Window, QColor (0,0,255,80));
+    // pal.setColor (QPalette::Window, QColor (0,0,255,80));
     pal.setColor (QPalette::Window, QColor (0,0,255,255));
     pal.setColor (QPalette::WindowText, Qt::white);
     imwidget->setPalette (pal);
     QFont f = imwidget->font();
-    f.setPointSize (qt_zoom (30));
+    f.setPointSize (qt_zoom (15));
     imwidget->setFont (f);
     imwidget->setMargin (5);
   }
@@ -490,7 +491,7 @@ QVariant
 QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
   switch (query) {
     case Qt::ImMicroFocus :
-      return QVariant (QRect (cursor_pos + QPoint (10,10),QSize (20,40)));
+      return QVariant (QRect (cursor_pos + QPoint (10,10), QSize (20,40)));
     default:
       return QVariant();
   }
