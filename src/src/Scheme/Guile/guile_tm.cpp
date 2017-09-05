@@ -33,7 +33,7 @@ static void (*old_call_back) (int, char**)= NULL;
 static void
 new_call_back (void *closure, int argc, char** argv) {
   (void) closure;
-  
+
   old_call_back (argc, argv);
 }
 #endif
@@ -637,12 +637,12 @@ initialize_scheme () {
 
   scm_c_define_module ("texmacs-glue", initialize_glue, NULL);
 
-  // This gets run just before the attempt to eval kernel/boot-texmacs. It is
+  TeXmacs_eval_file_in_load_path ("kernel/boot-texmacs");
+
+  // This gets run just after the attempt to eval kernel/boot-texmacs. It is
   // helpful during development, and might be commented out or removed later,
   // or perhaps, once tm-define and the preferences system is bootstrapped, it
   // could become an option upon startup, or only run when in developer mode?
   //
   TeXmacs_eval_file_in_load_path ("kernel/boot-repl");
-
-  TeXmacs_eval_file_in_load_path ("kernel/boot-texmacs");
 }

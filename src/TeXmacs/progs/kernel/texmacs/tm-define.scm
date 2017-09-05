@@ -22,8 +22,9 @@
   #:use-module (kernel library base)
   #:use-module (kernel library list)
   ;;
-  #:use-module (oop goops)
-  #:use-module (system base compile))
+  #:use-module (oop goops simple)
+  ;; #:use-module (system base compile)
+  )
 
 
 
@@ -60,14 +61,18 @@
 (eval-when (expand load eval compile)
 
   (save-module-excursion
-   (define-module (kernel texmacs tm-define definitions)
-     #:use-modules (kernel texmacs tm-define)))
-
-  (with-module (guile)
-    (use-and-re-export-modules (kernel texmacs tm-define definitions)))
-
-  (define the-tm-def-module
-    (resolve-module '(kernel texmacs tm-define definitions)))
+   (lambda ()
+     (define-module (kernel texmacs tm-define definitions)
+       #:use-modules (kernel texmacs tm-define))
+     (set-current-module (resolve-module '(guile)))
+     (use-modules (kernel texmacs tm-define definitions))
+     (let* ((cm (module-public-interface (current-module)))
+            (mu (module-uses cm))
+            (dm (resolve-interface '(kernel texmacs tm-define definitions))))
+       (unless (memq dm mu)
+         (set-module-uses! cm (cons dm mu))))))
+  (define-public the-tm-defs-module
+    (resolve-interface '(kernel texmacs tm-define definitions)))
 
   ) ; eval-when
 
@@ -80,12 +85,13 @@
 ;;;  modules has it pulled in via use-and-re-export-modules so that every
 ;;;  tm-defined function is available globally.
 
+;;;;;;
 ;;;
-
+;;; This must be available during syntax expansion, for tm-define.
+;;;
 (eval-when (expand load eval compile)
 
   (define-class-with-accessors-keywords <tm-def> (<object> <applicable>)
-    #:metaclass <applicable-struct-class>
     procedure
     ;;
     (tm-defined #:init-value ()
@@ -134,8 +140,8 @@
     (tm-def-balloon #:init-value #f
                     #:init-keyword #:tm-def-balloon
                     )
-    )
-
+    #:metaclass <applicable-struct-class>)
+  (export <tm-def>)
   ) ; eval-when
 
 
@@ -168,6 +174,8 @@
           kwstr)))))
 
 
+
+
 ;;;
 ;;; Before I write more of this, I will be reviewing boot-9 and psyntax
 ;;; sources because I know there are a lot of nifty syntax tricks that will be
@@ -197,7 +205,7 @@
     (syntax-case x ()
       ((_ (name arg ...) body0 body1 ...)
        (and (and-map symbol? (syntax->datum #'(name arg ...)))
-            (not (module-defined? the-tm-def-module (syntax->datum #'name))))          )
+            (not (module-defined? the-tm-defs-module (syntax->datum #'name))))          )
        (let* ((this-new-tm-def (make <tm-def>))
               (compiled-proc (compile
                               (syntax->datum
@@ -216,7 +224,7 @@
          (with-syntax ((this-new-tm-def this-new-tm-def)
                        )
            #'(let ((this-tm-def this-new-tm-def))
-               (module-define! the-tm-def-module name this-tm-def)
+               (module-define! the-tm-defs-module name this-tm-def)
                (slot-set! this-tm-def 'procedure
                           (lambda (arg ...)
                             (let ((defs (slot-ref this-tm-def 'tm-defined '())))
@@ -227,8 +235,8 @@
                ))))
       ((_ (name arg ...) body0 body1)
        (and (and-map symbol? (syntax->datum #'(name arg ...)))
-            (module-defined? the-tm-def-module (syntax->datum #'name)))
-       (let ((this-tm-def-to-overload (module-ref the-tm-def-module name))
+            (module-defined? the-tm-defs-module (syntax->datum #'name)))
+       (let ((this-tm-def-to-overload (module-ref the-tm-defs-module name))
              (compiled-proc (compile (syntax->datum #'(lambda (arg ...) body0 body1 ...)))))
          (with-syntax ((this-tm-def-to-overload this-tm-def-to-overload)
                        )
@@ -394,7 +402,13 @@ i.e., (listify '(a b . c)) => (a b c)"
 	  (else (ctx-add-condition! 3 `(lambda args (match? args ',opt)))))
     decl)
 
-
+  ;; Because of the lambda, the predicate-option? in define-option-match will
+  ;; be #t, and so it will always result in the first branch of the cond above
+  ;; to be taken. It looks like somebody had plans for the tm-define'd
+  ;; function to be able to use match? on their argument to determine which
+  ;; one is run, but that's not fully in place. I wonder who wrote it and what
+  ;; the plan was?
+  ;;
   (define (define-option-require opt decl)
     (define-option-match
       `(lambda ,(cdadr decl) ,(car opt))
@@ -412,6 +426,8 @@ i.e., (listify '(a b . c)) => (a b c)"
 
 (eval-when (expand load eval)
 
+  ;; I think that (car l) is the arity, so anything with arity >= 2 is dropped
+  ;; from the list.
   (define (filter-conds l)
     "Remove conditions which depend on arguments from list"
     (cond ((null? l) l)
@@ -513,7 +529,7 @@ i.e., (listify '(a b . c)) => (a b c)"
 ;;; ERROR: In procedure scm-error:
 ;;; ERROR: unhandled constant #<procedure ca*r (x)>
 ;;;
-(d;;; scheme@(guile-user)> (set! ca*r (compile ca*r))
+;;; scheme@(guile-user)> (set! ca*r (compile ca*r))
 ;;; ERROR: In procedure scm-error:
 ;;; ERROR: unhandled constant #<procedure ca*r (x)>
 

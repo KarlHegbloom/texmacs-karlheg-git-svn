@@ -7,7 +7,6 @@
 
 (define-module (kernel texmacs tm-define)
   #:use-module (kernel texmacs tm-define definitions)
-  #:use-module (oop goops)
   #:use-module (oop goops simple))
 
 
@@ -63,7 +62,7 @@
 (define-syntax inline-make-new-<tm-defined>-with-base-<%tm-def>
   (lambda (x)
     (syntax-case x ()
-      ((_ name #:tm-def-formals (formals) #:tm-def-require (require) #:tm-def-body (body) . rest)
+      ((_ name (#:tm-def-formals (formals ...) #:tm-def-require (require) #:tm-def-body (body)))
        ;; former is not defined for the first <%tm-def> item.
        (with-syntax ((name-<%tm-def> (datum->syntax
                                       x
@@ -73,33 +72,44 @@
                      (maybe-if
                       (lambda (x)
                         (syntax-case x ()
-                          ((_ (formals) (require) . body)
-                           (not (eqv? '() (syntax->datum #'require)))
-                           #'(if require (begin body)))
-                          ((_ (formals) (require) . body)
-                           (eqv? '() (syntax->datum #'require))
-                           #'(begin body))))))
-         #'(let* ((name-<%tm-def> (lambda (formals)
-                                      (maybe-if (formals) (require) body)))
+                          ((_ (formals ...) (require) body)
+                           (not (eqv? '(()) (syntax->datum #'require)))
+                           #'(if require body))
+                          ((_ (formals ...) (require) body)
+                           (eqv? '(()) (syntax->datum #'require))
+                           #'body)))))
+         #'(let* ((name-<%tm-def> (lambda (formals ...)
+                                      (maybe-if (formals ...) (require) body)))
                   (tm-def (make-instance <%tm-def>
-                                         #:tm-def-formals formals
-                                         #:tm-def-require require
+                                         #:tm-def-formals (formals ...)
+                                         #:tm-def-require (require)
                                          #:tm-def-procedure tm-def-procedure))
                   (new-tm-defined (make-instance <tm-defined>
                                                  #:tm-def-tm-defs (list tm-def)
                                                  rest))
                   (procedure (let ((this-tm-defined new-tm-defined))
-                               (lambda (formals)
+                               (lambda (formals ...)
                                  ((car (slot-ref this-tm-defined 'tm-defs))
-                                  formals)))))
+                                  formals ...)))))
              (slot-set! new-tm-defined 'procedure procedure)
+             (display "inline-make-new-<tm-defined>-with-base-<%tm-def>: formals:")
+             (write #'(formals ...))
+             (newline)
+             (display "                                                  require:")
+             (write require)
+             (newline)
+             (display "                                                  ")
+             (display (symbol-string 'name-<%tm-def>))
+             (display ":")
+             (write name-<%tm-def>)
+             (newline)
              new-tm-defined))))))
 
 
 (define-syntax inline-make-new-<%tm-def>
   (lambda (x)
     (syntax-case x ()
-      ((_ #:tm-def-formals (formals) #:tm-def-require (require) #:tm-def-body (body) . rest)
+      ((_ (#:tm-def-formals (formals ...) #:tm-def-require (require) #:tm-def-body (body)))
        ;; former is defined for the overloading <%tm-def> items.
        (with-syntax ((name-<%tm-def> (datum->syntax
                                       x
@@ -109,21 +119,32 @@
                      (maybe-if
                       (lambda (x)
                         (syntax-case x ()
-                          ((_ (formals) (require) . body)
-                           (not (eqv? '() (syntax->datum #'require)))
+                          ((_ (formals ...) (require) body)
+                           (not (eqv? '(()) (syntax->datum #'require)))
                            #'(if require
-                                 (begin body)
-                                 (former formals)))
-                          ((_ (formals) (require) . body)
-                           (eqv? '() (syntax->datum #'require))
-                           #'(begin body))))))
-         #'(let* ((name-<%tm-def> (lambda (formals)
-                                    (maybe-if (formals) (require) body)))
+                                 body
+                                 (former formals ...)))
+                          ((_ (formals ...) (require) body)
+                           (eqv? '(()) (syntax->datum #'require))
+                           #'body)))))
+         #'(let* ((name-<%tm-def> (lambda (formals ...)
+                                    (maybe-if (formals ...) (require) body)))
                   (new-tm-def (make-instance <%tm-def>
-                                             #:tm-def-formals (formals)
+                                             #:tm-def-formals (formals ...)
                                              #:tm-def-require (require)
                                              #:tm-def-procedure name-<%tm-def>)))
              ;; Todo: process @arg{rest} and modify this-tm-defined ?
+             (display "inline-make-new-<%tm-def>: formals:")
+             (write (slot-ref new-tm-def 'formals))
+             (newline)
+             (display "                           require:")
+             (write (slot-ref newline 'require))
+             (newline)
+             (display "                           ")
+             (display (symbol->string 'name-<%tm-def>))
+             (display ":")
+             (write name-<%tm-def>)
+             (newline)
              new-tm-def))))))
 
 
@@ -155,105 +176,164 @@
     (define (->keyword sym)
       (symbol->keyword (string->symbol (substring (symbol->string sym) 1))))
 
-    (define (parse args
+    (define (parse parse-body
                    formals require body
                    type synopsis returns note argument default
                    proposals secure check-mark interactive balloon)
       ;;
-      (syntax-case args ()
-        (()
-         (let ((formals     #`(#:tm-def-formals '(#,formals)))
-               (require     (if (or (null? require)
-                                    (< 2 (length (syntax->datum #'require))))
-                                #`(#:tm-def-require '(#,require))
-                                #`(#:tm-def-require '(#,(and require)))))
-               (body        #`(#:tm-def-body '(#,body)))
+      (newline)
+      (display "parse:")
+      (newline)
+      (display "       parse-body is:")
+      (write parse-body)
+      (newline)
+      (display "       formals is:")
+      (write formals)
+      (newline)
+      (display "       require is:")
+      (write require)
+      (newline)
+      (display "       body is:")
+      (write body)
+      (newline)
+      ;;
+      (syntax-case parse-body ()
+        ((#:PARSE-FINISHED)
+         (let ((formals     #`(#:tm-def-formals (#,@formals)))
+               (require     (if (null? (syntax->datum require))
+                                #'(#:tm-def-require (()))
+                                #`(#:tm-def-require ((and #,@require)))))
+               (body        #`(#:tm-def-body ((begin #,@body))))
                ;;
-               (type        (if (null? type)        '() #`(#:tm-def-type        '(#,type))))
-               (synopsis    (if (null? synopsis)    '() #`(#:tm-def-synopsis    '(#,synopsis))))
-               (returns     (if (null? returns)     '() #`(#:tm-def-returns     '(#,returns))))
-               (note        (if (null? note)        '() #`(#:tm-def-note        '(#,note))))
-               (argument    (if (null? argument)    '() #`(#:tm-def-argument    '(#,argument))))
-               (default     (if (null? default)     '() #`(#:tm-def-default     '(#,default))))
+               (type        (if (null? (syntax->datum type))        #'() #`(#:tm-def-type        (#,@type))))
+               (synopsis    (if (null? (syntax->datum synopsis))    #'() #`(#:tm-def-synopsis    (#,@synopsis))))
+               (returns     (if (null? (syntax->datum returns))     #'() #`(#:tm-def-returns     (#,@returns))))
+               (note        (if (null? (syntax->datum note))        #'() #`(#:tm-def-note        (#,@note))))
+               (argument    (if (null? (syntax->datum argument))    #'() #`(#:tm-def-argument    (#,@argument))))
+               (default     (if (null? (syntax->datum default))     #'() #`(#:tm-def-default     (#,@default))))
                ;;
-               (proposals   (if (null? proposals)   '() #`(#:tm-def-proposals   '(#,proposals))))
-               (secure      (if (null? secure)      '() #`(#:tm-def-secure      '(#,secure))))
-               (check-mark  (if (null? check-mark)  '() #`(#:tm-def-check-mark  '(#,check-mark))))
-               (interactive (if (null? interactive) '() #`(#:tm-def-interactive '(#,interactive))))
-               (balloon     (if (null? balloon)     '() #`(#:tm-def-balloon     '(#,balloon)))))
+               (proposals   (if (null? (syntax->datum proposals))   #'() #`(#:tm-def-proposals   (#,@proposals))))
+               (secure      (if (null? (syntax->datum secure))      #'() #`(#:tm-def-secure      (#,@secure))))
+               (check-mark  (if (null? (syntax->datum check-mark))  #'() #`(#:tm-def-check-mark  (#,@check-mark))))
+               (interactive (if (null? (syntax->datum interactive)) #'() #`(#:tm-def-interactive (#,@interactive))))
+               (balloon     (if (null? (syntax->datum balloon))     #'() #`(#:tm-def-balloon     (#,@balloon)))))
            #`(#,@formals #,@require #,@body
               #,@type #,@synopsis #,@returns #,@note #,@argument #,@default
               #,@proposals #,@secure #,@check-mark #,@interactive #,@balloon)))
-        ;; The user wanted #:foo but wrote :foo. Fix it.
-        (((sym . forms) . args)
-         (keyword-like? #'sym) ; keyword-like? => #t implies keyword? => #f
-         (parse #`((#,(->keyword (syntax->datum #'sym)) . forms) . args)
+        ((((sym forms ...) rest-parse-body ...))
+         (parse #'((sym forms ...) rest-parse-body ...)
                 formals require body
                 type synopsis returns note argument default
                 proposals secure check-mark interactive balloon))
-        (((kw . forms) . args)
-         (not (keyword? (syntax->datum #'kw))) ; end of (#:kw args)
-         (parse #'() formals require #'((kw . forms) . args) ; body
+        ;; The user wanted #:foo but wrote :foo. Fix it.
+        (((sym forms ...) rest-parse-body ...)
+         (keyword-like? #'sym) ; keyword-like? => #t implies symbol? => #f and
+                               ; keyword? => #f
+         (begin
+           (display "           keyword-like?  ")
+           (write #'sym)
+           (newline)
+           (parse #`((#,(->keyword (syntax->datum #'sym)) forms ...) rest-parse-body ...)
+                  formals require body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon)))
+        (((sym) rest-parse-body ...)
+         (keyword-like? #'sym) ; keyword-like? => #t implies symbol? => #f and
+                               ; keyword? => #f
+         (begin
+           (display "           keyword-like?  ")
+           (write #'sym)
+           (newline)
+           (parse #`((#,(->keyword (syntax->datum #'sym))) rest-parse-body ...)
+                  formals require body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon)))
+        (((#:mode predicate-fn) rest-parse-body ...)
+         (not (identifier? #'predicate-fn))
+         #'(syntax-violation 'tm-define "(#:mode predicate-fn?) expected" parse-body))
+        ((((#:mode predicate-fn) rest-parse-body ...))
+         (begin
+           (display "           #:mode ")
+           (write #'predicate-fn)
+           (newline)
+           (parse #'(rest-parse-body ...) formals #`(#,@require (predicate-fn)) body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon)))
+        (((#:require forms ...) rest-parse-body ...)
+         (begin
+           (display "           #:require ")
+           (write #'(forms ...))
+           (newline)
+           (parse #'(rest-parse-body ...) formals #`(#,@require forms ...) body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon)))
+        (((#:type forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                #`(#,@type forms ...) synopsis returns note argument default
+                proposals secure check-mark interactive balloon))
+        (((#:synopsis forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                type #`(#,@synopsis forms ...) returns note argument default
+                proposals secure check-mark interactive balloon))
+        (((#:returns forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                type synopsis #`(#,@returns forms ...) note argument default
+                proposals secure check-mark interactive balloon))
+        (((#:note forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                type synopsis returns #`(#,@note forms ...) argument default
+                proposals secure check-mark interactive balloon))
+        (((#:argument forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                type synopsis returns note #`(#,@argument forms ...) default
+                proposals secure check-mark interactive balloon))
+        (((#:default forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                type synopsis returns note argument #`(#,@default forms ...)
+                proposals secure check-mark interactive balloon))
+        (((#:proposals forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
                 type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-        (((#:mode . forms) . args)
-         (not (identifier? #'forms))
-         (syntax-violation 'tm-define "(#:mode predicate-fn?) expected" args))
-        (((#:mode predicate-fn) . args)
-         (parse #'args formals #`(#,@require (predicate-fn)) body
+                #`(#,@proposals forms ...) secure check-mark interactive balloon))
+        (((#:secure) rest-parse-body ...)
+         (begin
+           (display "           #:secure ")
+           (newline)
+           (parse #'(rest-parse-body ...) formals require body
+                  type synopsis returns note argument default
+                  proposals #'(#t) check-mark interactive balloon)))
+        (((#:secure forms ...) rest-parse-body ...)
+         (begin
+           (display "           #:secure forms ")
+           (write #'(forms ...))
+           (newline)
+           (parse #'(rest-parse-body ...) formals require body
+                  type synopsis returns note argument default
+                  proposals #'(#t) check-mark interactive balloon)))
+        (((#:check-mark forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
                 type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-        (((#:require . forms) . args)
-         (parse #'args formals #`(#,@require forms) body
+                proposals secure #`(#,@check-mark (forms ...)) interactive balloon))
+        (((#:interactive forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
                 type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-        (((#:type . forms) . args)
-         (parse #'args formals require body
-                #`(#,@type forms) synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-        (((#:synopsis . forms) . args)
-         (parse #'args formals require body
-                type #`(#,@synopsis forms) returns note argument default
-                proposals secure check-mark interactive balloon))
-        (((#:returns . forms) . args)
-         (parse #'args formals require body
-                type synopsis #`(#,@returns forms) note argument default
-                proposals secure check-mark interactive balloon))
-        (((#:note . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms #`(#,@note forms) argument default
-                proposals secure check-mark interactive balloon))
-        (((#:argument . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms #`(#,@argument forms) default
-                proposals secure check-mark interactive balloon))
-        (((#:default . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms argument #`(#,@default forms)
-                proposals secure check-mark interactive balloon))
-        (((#:proposals . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms argument default
-                #`(#,@proposals forms) secure check-mark interactive balloon))
-        (((#:secure . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms argument default
-                proposals #'(#t) check-mark interactive balloon))
-        (((#:check-mark . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms argument default
-                proposals secure #`(#,@check-mark (forms)) interactive balloon))
-        (((#:interactive . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms argument default
-                proposals secure check-mark #`(#,@interactive forms) balloon))
-        (((#:balloon . forms) . args)
-         (parse #'args formals require body
-                type synopsis forms forms argument default
-                proposals secure check-mark interactive #`(#,@balloon forms)))))
+                proposals secure check-mark #`(#,@interactive forms ...) balloon))
+        (((#:balloon forms ...) rest-parse-body ...)
+         (parse #'(rest-parse-body ...) formals require body
+                type synopsis returns note argument default
+                proposals secure check-mark interactive #`(#,@balloon forms ...)))
+        (((kw forms ...) rest-parse-body ...)
+         (not (keyword? (syntax->datum #'kw))) ; end of (#:kw rest-parse-body)
+         (begin
+           (display "   parse finished!  ")
+           (write #'kw)
+           (newline)
+           (parse #'(#:PARSE-FINISHED) formals require #'((kw forms ...) rest-parse-body ...) ; body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon)))))
 
     (syntax-case x ()
-      ((_ (name arg0 arg1 ...) . body)
+      ((_ (name arg ...) . body)
        (and (identifier? #'name)
             (not (module-defined? the-tm-defs-module (syntax->datum #'name))))
        (begin
@@ -274,27 +354,27 @@
                        ;; (the-tm-defs-module
                        ;;  #'(resolve-module
                        ;;     '(kernel texmacs tm-define definitions)))
-                       ((parsed-body ...)
-                        (parse #'(body ...) ; args
-                               #'(arg0 arg1 ...) ; formals
-                               '() ; require
-                               '() ; body
-                               '() ; type
-                               '() ; synopsis
-                               '() ; returns
-                               '() ; note
-                               '() ; argument
-                               '() ; default
-                               '() ; proposals
-                               '() ; secure
-                               '() ; check-mark
-                               '() ; interactive
-                               '() ; balloon
+                       (parsed-body
+                        (parse #'(body) ; args
+                               #'(arg ...) ; formals
+                               #'() ; require
+                               #'() ; body
+                               #'() ; type
+                               #'() ; synopsis
+                               #'() ; returns
+                               #'() ; note
+                               #'() ; argument
+                               #'() ; default
+                               #'() ; proposals
+                               #'() ; secure
+                               #'() ; check-mark
+                               #'() ; interactive
+                               #'() ; balloon
                                )))
            #'(letrec ((the-tm-defs-module the-tm-defs-module)
                       (tm-defined
                        (inline-make-new-<tm-defined>-with-base-<%tm-def>
-                        name parsed-body ...)))
+                        name parsed-body)))
                (module-define! the-tm-defs-module
                                'name-<tm-defined>
                                tm-defined)
@@ -307,7 +387,7 @@
                                      name-<tm-defined>))))
                (module-export! the-tm-defs-module '(name))
                tm-defined))))
-      ((_ (name arg0 arg1 ...) . body)
+      ((_ (name arg ...) . body)
        (and (identifier? #'name)
             (module-defined? the-tm-defs-module (syntax->datum #'name)))
        (begin
@@ -323,22 +403,22 @@
                        ;; (the-tm-defs-module
                        ;;  #'(resolve-module
                        ;;     '(kernel texmacs tm-define definitions)))
-                       ((parsed-body ...)
-                        (parse #'(body ...) ; args
-                               #'(arg0 arg1 ...) ; formals
-                               '() ; require
-                               '() ; body
-                               '() ; type
-                               '() ; synopsis
-                               '() ; returns
-                               '() ; note
-                               '() ; argument
-                               '() ; default
-                               '() ; proposals
-                               '() ; secure
-                               '() ; check-mark
-                               '() ; interactive
-                               '() ; balloon
+                       (parsed-body
+                        (parse #'(body) ; args
+                               #'(arg ...) ; formals
+                               #'() ; require
+                               #'() ; body
+                               #'() ; type
+                               #'() ; synopsis
+                               #'() ; returns
+                               #'() ; note
+                               #'() ; argument
+                               #'() ; default
+                               #'() ; proposals
+                               #'() ; secure
+                               #'() ; check-mark
+                               #'() ; interactive
+                               #'() ; balloon
                                )))
            (with-syntax ((tm-defined
                           #'(@@ (kernel texmacs tm-define definitions)
@@ -348,9 +428,12 @@
                  (syntax-parameterize ((former (syntax-rules ()
                                                  ((former vals (... ...))
                                                   (|% former| vals (... ...))))))
-                   (slot-set! this-tm-defined 'tm-defs
-                              (cons (inline-make-new-<%tm-def> name parsed-body ...)
-                                    (slot-ref this-tm-defined 'tm-defs)))
-                   this-tm-defined)))))))))
+                   (display "           name is:")
+                   (write name)
+                   (newline)
+                   (let ((new-<%tm-def> (inline-make-new-<%tm-def> name parsed-body)))
+                     (slot-set! this-tm-defined 'tm-defs
+                                (cons new-<%tm-def> (slot-ref this-tm-defined 'tm-defs)))
+                     this-tm-defined))))))))))
 
 (export-syntax tm-define)
