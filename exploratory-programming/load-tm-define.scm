@@ -1,8 +1,15 @@
+;;; -*- scheme -*-
+;;;
+(assert-load-verbosity #t)
+;; (read-enable  'r7rs-symbols)
+;; (print-enable 'r7rs-symbols)
+(read-enable 'square-brackets)
+(read-enable 'keywords #f)
+(read-enable 'positions)
 
 (eval-when (compile eval load)
-  (set! %load-path
-        (cons "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/exploratory-programming"
-              %load-path))
+  (add-to-load-path
+   "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/exploratory-programming")
 
   (set-current-module (resolve-module '(guile)))
 
