@@ -22,7 +22,7 @@
 #define TYPE   5
 
 #define LEN 256
-/* #define LOG "/tmp/tm_axiom.log" */
+#define LOG "/tmp/tm_axiom.log"
 
 char buf[LEN];
 char mathbuf[4096];
@@ -33,22 +33,22 @@ char Type[]="Type: ";
 FILE *axin,*axout;
 
 #ifdef LOG
-FILE *log;
+FILE *tm_axiom_log;
 int details=0;
 
 void lline(void)
 { switch (code)
-  { case NORMAL: fputs("NORMAL",log); break;
-    case LONG:   fputs("LONG  ",log); break;
-    case END:    fputs("END   ",log); break;
-    case PROMPT: fputs("PROMPT",log); break;
-    case MATH:   fputs("MATH  ",log); break;
-    case TYPE:   fputs("TYPE  ",log); break;
+  { case NORMAL: fputs("NORMAL",tm_axiom_log); break;
+    case LONG:   fputs("LONG  ",tm_axiom_log); break;
+    case END:    fputs("END   ",tm_axiom_log); break;
+    case PROMPT: fputs("PROMPT",tm_axiom_log); break;
+    case MATH:   fputs("MATH  ",tm_axiom_log); break;
+    case TYPE:   fputs("TYPE  ",tm_axiom_log); break;
   }
-  fprintf(log," %3d: ",len);
-  fputs(buf,log);
-  if ((code==PROMPT)||(code==MATH)) fputs("\n",log);
-  fflush(log);
+  fprintf(tm_axiom_log," %3d: ",len);
+  fputs(buf,tm_axiom_log);
+  if ((code==PROMPT)||(code==MATH)) fputs("\n",tm_axiom_log);
+  fflush(tm_axiom_log);
 }
 #endif
 
@@ -58,9 +58,9 @@ int ch(void)
   { c=getc(axout);
 #ifdef LOG
     if (details)
-    { fprintf(log,"%02x",c);
-      if (c>=' ') fprintf(log," [%c]",c);
-      fprintf(log,"\n"); fflush(log);
+    { fprintf(tm_axiom_log,"%02x",c);
+      if (c>=' ') fprintf(tm_axiom_log," [%c]",c);
+      fprintf(tm_axiom_log,"\n"); fflush(tm_axiom_log);
     }
 #endif
     if (c!='\r') return c;
@@ -214,7 +214,7 @@ void tex_to_latex(char buf[])
 void session(void)
 { int c,delims=0;
 #ifdef LOG
-  log=fopen(LOG,"w");
+  tm_axiom_log=fopen(LOG,"w");
 #endif
   /* Write initial lines up to (but not including)
      the line with the first prompt
@@ -228,27 +228,27 @@ void session(void)
   /* force-feeding */
   fputs(")set messages prompt plain\n",axin); fflush(axin);
 #ifdef LOG
-  fputs("SENT )set messages prompt plain\n",log); fflush(log);
+  fputs("SENT )set messages prompt plain\n",tm_axiom_log); fflush(tm_axiom_log);
 #endif
   must_be_prompt("0");
   fputs(")set messages autoload off\n",axin); fflush(axin);
 #ifdef LOG
-  fputs("SENT )set messages autoload off\n",log); fflush(log);
+  fputs("SENT )set messages autoload off\n",tm_axiom_log); fflush(tm_axiom_log);
 #endif
   must_be_prompt("1");
   fputs(")set quit unprotected\n",axin); fflush(axin);
 #ifdef LOG
-  fputs("SENT )set quit unprotected\n",log); fflush(log);
+  fputs("SENT )set quit unprotected\n",tm_axiom_log); fflush(tm_axiom_log);
 #endif
   must_be_prompt("2");
   fputs(")set output tex on\n",axin); fflush(axin);
 #ifdef LOG
-  fputs("SENT )set output tex on\n",log); fflush(log);
+  fputs("SENT )set output tex on\n",tm_axiom_log); fflush(tm_axiom_log);
 #endif
   must_be_prompt("3");
   fputs(")set output algebra off\n",axin); fflush(axin);
 #ifdef LOG
-  fputs("SENT )set output algebra off\n",log); fflush(log);
+  fputs("SENT )set output algebra off\n",tm_axiom_log); fflush(tm_axiom_log);
 #endif
   must_be_prompt("4");
   /* Main prompt-read-write loop */
