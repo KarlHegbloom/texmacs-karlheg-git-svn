@@ -258,6 +258,7 @@
       (write body)
       (newline)
       ;;
+      ;;(with-ellipsis :::
       (syntax-case parse-body ()
         ((#:parse-finished)
          (let ((formals     #`(#:<%tm-def>-formals (#,@formals)))
@@ -287,148 +288,148 @@
                )
            #`(#,@formals #,@require #,@body
               #,@type #,@synopsis #,@returns #,@note #,@argument #,@default
-              #,@proposals #,@secure #,@check-mark #,@interactive #,@balloon)))
-        )
-      ((((sym forms ...) rest0 rest1 ...))
-       (begin
-         (display "          (unwrap syntax)")
-         (newline)
-         (parse #'((sym forms ...) rest0 rest1 ...)
-                formals require body
-                type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-       )
-      ;; The user wanted #:foo but wrote :foo. Fix it.
-      (((sym forms ...) rest0 rest1 ...)
-       (keyword-like? #'sym)            ; keyword-like? => #t implies symbol? => #f and
-                                        ; keyword? => #f
-       (begin
-         (display "           keyword-like?  ")
-         (write #'sym)
-         (newline)
-         (parse #`((#,(->keyword (syntax->datum #'sym)) forms ...) rest0 rest1 ...)
-                formals require body
-                type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-       )
-      (((sym) rest0 rest1 ...)
-       (keyword-like? #'sym)            ; keyword-like? => #t implies symbol? => #f and
-                                        ; keyword? => #f
-       (begin
-         (display "           keyword-like?  ")
-         (write #'sym)
-         (newline)
-         (parse #`((#,(->keyword (syntax->datum #'sym))) rest0 rest1 ...)
-                formals require body
-                type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-       )
-      (((#:mode predicate-fn) rest0 rest1 ...)
-       (not (identifier? #'predicate-fn))
-       #'(syntax-violation 'tm-define "(#:mode predicate-fn?) expected" parse-body)
-       )
-      ((((#:mode predicate-fn) rest0 rest1 ...))
-       (begin
-         (display "           #:mode ")
-         (write #'predicate-fn)
-         (newline)
-         (parse #'(rest0 rest1 ...) formals #`(#,@require (predicate-fn)) body
-                type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-       )
-      (((#:require forms ...) rest0 rest1 ...)
-       (begin
-         (display "           #:require ")
-         (write #'(forms ...))
-         (newline)
-         (parse #'(rest0 rest1 ...) formals #`(#,@require forms ...) body
-                type synopsis returns note argument default
-                proposals secure check-mark interactive balloon))
-       )
-      (((#:type forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              #`(#,@type forms ...) synopsis returns note argument default
-              proposals secure check-mark interactive balloon)
-       )
-      (((#:synopsis forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type #`(#,@synopsis forms ...) returns note argument default
-              proposals secure check-mark interactive balloon)
-       )
-      (((#:returns forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis #`(#,@returns forms ...) note argument default
-              proposals secure check-mark interactive balloon)
-       )
-      (((#:note forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns #`(#,@note forms ...) argument default
-              proposals secure check-mark interactive balloon)
-       )
-      (((#:argument forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns note #`(#,@argument forms ...) default
-              proposals secure check-mark interactive balloon)
-       )
-      (((#:default forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns note argument #`(#,@default forms ...)
-              proposals secure check-mark interactive balloon)
-       )
-      (((#:proposals forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns note argument default
-              #`(#,@proposals forms ...) secure check-mark interactive balloon)
-       )
-      (((#:secure) rest0 rest1 ...)
-       (begin
-         (display "           #:secure ")
-         (newline)
+              #,@proposals #,@secure #,@check-mark #,@interactive #,@balloon))
+         )
+        ((((sym forms ...) rest0 rest1 ...))
+         (begin
+           (display "          (unwrap syntax)")
+           (newline)
+           (parse #'((sym forms ...) rest0 rest1 ...)
+                  formals require body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon))
+         )
+        ;; The user wanted #:foo but wrote :foo. Fix it.
+        (((sym forms ...) rest0 rest1 ...)
+         (keyword-like? #'sym)            ; keyword-like? => #t implies symbol? => #f and
+                                          ; keyword? => #f
+         (begin
+           (display "           keyword-like?  ")
+           (write #'sym)
+           (newline)
+           (parse #`((#,(->keyword (syntax->datum #'sym)) forms ...) rest0 rest1 ...)
+                  formals require body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon))
+         )
+        (((sym) rest0 rest1 ...)
+         (keyword-like? #'sym)            ; keyword-like? => #t implies symbol? => #f and
+                                          ; keyword? => #f
+         (begin
+           (display "           keyword-like?  ")
+           (write #'sym)
+           (newline)
+           (parse #`((#,(->keyword (syntax->datum #'sym))) rest0 rest1 ...)
+                  formals require body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon))
+         )
+        (((#:mode predicate-fn) rest0 rest1 ...)
+         (not (identifier? #'predicate-fn))
+         #'(syntax-violation 'tm-define "(#:mode predicate-fn?) expected" parse-body)
+         )
+        ((((#:mode predicate-fn) rest0 rest1 ...))
+         (begin
+           (display "           #:mode ")
+           (write #'predicate-fn)
+           (newline)
+           (parse #'(rest0 rest1 ...) formals #`(#,@require (predicate-fn)) body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon))
+         )
+        (((#:require forms ...) rest0 rest1 ...)
+         (begin
+           (display "           #:require ")
+           (write #'(forms ...))
+           (newline)
+           (parse #'(rest0 rest1 ...) formals #`(#,@require forms ...) body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon))
+         )
+        (((#:type forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
+                #`(#,@type forms ...) synopsis returns note argument default
+                proposals secure check-mark interactive balloon)
+         )
+        (((#:synopsis forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
+                type #`(#,@synopsis forms ...) returns note argument default
+                proposals secure check-mark interactive balloon)
+         )
+        (((#:returns forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
+                type synopsis #`(#,@returns forms ...) note argument default
+                proposals secure check-mark interactive balloon)
+         )
+        (((#:note forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
+                type synopsis returns #`(#,@note forms ...) argument default
+                proposals secure check-mark interactive balloon)
+         )
+        (((#:argument forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
+                type synopsis returns note #`(#,@argument forms ...) default
+                proposals secure check-mark interactive balloon)
+         )
+        (((#:default forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
+                type synopsis returns note argument #`(#,@default forms ...)
+                proposals secure check-mark interactive balloon)
+         )
+        (((#:proposals forms ...) rest0 rest1 ...)
          (parse #'(rest0 rest1 ...) formals require body
                 type synopsis returns note argument default
-                proposals #'(#t) check-mark interactive balloon))
-       )
-      (((#:secure forms ...) rest0 rest1 ...)
-       (begin
-         (display "           #:secure forms ")
-         (write #'(forms ...))
-         (newline)
+                #`(#,@proposals forms ...) secure check-mark interactive balloon)
+         )
+        (((#:secure) rest0 rest1 ...)
+         (begin
+           (display "           #:secure ")
+           (newline)
+           (parse #'(rest0 rest1 ...) formals require body
+                  type synopsis returns note argument default
+                  proposals #'(#t) check-mark interactive balloon))
+         )
+        (((#:secure forms ...) rest0 rest1 ...)
+         (begin
+           (display "           #:secure forms ")
+           (write #'(forms ...))
+           (newline)
+           (parse #'(rest0 rest1 ...) formals require body
+                  type synopsis returns note argument default
+                  proposals #'(#t) check-mark interactive balloon))
+         )
+        (((#:check-mark forms ...) rest0 rest1 ...)
          (parse #'(rest0 rest1 ...) formals require body
                 type synopsis returns note argument default
-                proposals #'(#t) check-mark interactive balloon))
-       )
-      (((#:check-mark forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns note argument default
-              proposals secure #`(#,@check-mark (forms ...)) interactive balloon)
-       )
-      (((#:interactive forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns note argument default
-              proposals secure check-mark #`(#,@interactive forms ...) balloon)
-       )
-      (((#:balloon forms ...) rest0 rest1 ...)
-       (parse #'(rest0 rest1 ...) formals require body
-              type synopsis returns note argument default
-              proposals secure check-mark interactive #`(#,@balloon forms ...))
-       )
-      (((kw forms ...) rest0 rest1 ...)
-       (not (keyword? (syntax->datum #'kw))) ; end of (#:kw rest-parse-body)
-       (begin
-         (display "   parse finished!  Non-kw symbol found, is: ")
-         (write #'kw)
-         (newline)
-         (parse #'(#:parse-finished) formals require #'((kw forms ...) rest0 rest1 ...) ; body
+                proposals secure #`(#,@check-mark (forms ...)) interactive balloon)
+         )
+        (((#:interactive forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
                 type synopsis returns note argument default
-                proposals secure check-mark interactive balloon)))
-      ((forms ...)
-       (begin
-         (display "   parse finished! Forms found: ")
-         (write #'(forms ...))
-         (newline)
-         (parse #'(#:parse-finished) formals require #'(forms ...) ; body
+                proposals secure check-mark #`(#,@interactive forms ...) balloon)
+         )
+        (((#:balloon forms ...) rest0 rest1 ...)
+         (parse #'(rest0 rest1 ...) formals require body
                 type synopsis returns note argument default
-                proposals secure check-mark interactive balloon)))
+                proposals secure check-mark interactive #`(#,@balloon forms ...))
+         )
+        (((kw forms ...) rest0 rest1 ...)
+         (not (keyword? (syntax->datum #'kw))) ; end of (#:kw rest-parse-body)
+         (begin
+           (display "   parse finished!  Non-kw symbol found, is: ")
+           (write #'kw)
+           (newline)
+           (parse #'(#:parse-finished) formals require #'((kw forms ...) rest0 rest1 ...) ; body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon)))
+        ((forms ...)
+         (begin
+           (display "   parse finished! Forms found: ")
+           (write #'(forms ...))
+           (newline)
+           (parse #'(#:parse-finished) formals require #'(forms ...) ; body
+                  type synopsis returns note argument default
+                  proposals secure check-mark interactive balloon))))
       )
 
 
