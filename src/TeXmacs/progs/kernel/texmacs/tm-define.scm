@@ -18,21 +18,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-public (ctx-add-condition l kind opt)
-  ;;(display* "add condition " l ", " opt "\n")
+  ;; (display* "add condition " l ", " opt "\n")
   (append l (list opt)))
 
 (define-public (ctx-insert ctx data conds)
-  ;;(display* "insert " ctx ", " data ", " conds "\n")
+  ;; (display* "insert " ctx ", " data ", " conds "\n")
   (cons (cons conds data) (or ctx '())))
 
 (define-public (ctx-find ctx conds)
-  ;;(display* "find " ctx ", " conds "\n")
+  ;; (display* "find " ctx ", " conds "\n")
   (cond ((or (not ctx) (null? ctx)) #f)
         ((== (caar ctx) conds) (cdar ctx))
         (else (ctx-find (cdr ctx) conds))))
 
 (define-public (ctx-remove ctx conds)
-  ;;(display* "remove " ctx ", " conds "\n")
+  ;; (display* "remove " ctx ", " conds "\n")
   (cond ((or (not ctx) (null? ctx)) '())
         ((== (caar ctx) conds) (ctx-remove (cdr ctx) conds))
         (else (cons (car ctx) (ctx-remove (cdr ctx) conds)))))
@@ -43,7 +43,7 @@
            (and-apply (cdr l) args))))
 
 (define-public (ctx-resolve ctx args)
-  ;;(display* "resolve " ctx ", " args "\n")
+  ;; (display* "resolve " ctx ", " args "\n")
   (cond ((or (not ctx) (null? ctx)) #f)
         ((and-apply (caar ctx) args) (cdar ctx))
         (else (ctx-resolve (cdr ctx) args))))
@@ -132,12 +132,16 @@
 
 (define (filter-conds l)
   "Remove conditions which depend on arguments from list"
+  ;; (display* "filter-conds " l "\n")
   (cond ((null? l) l)
 	((>= (car l) 2) (filter-conds (cddr l)))
 	(else (cons (car l) (cons (cadr l) (filter-conds (cddr l)))))))
 
 (define-public (property-set! var prop what conds*)
   "Associate a property to a function symbol under conditions"
+  ;; (display* "property-set! " var " " prop " " what " " conds* "\n")
+  ;; (when (not (null? conds*))
+  ;;   (display* "  conds* not null?\n"))
   (let* ((key (cons var prop))
 	 (conds (filter-conds conds*)))
     (ahash-set! cur-props-table key
@@ -145,6 +149,7 @@
 
 (define-public (property var prop)
   "Retrieve a property of a function symbol"
+  ;; (display* "retrieve property " var " " prop "\n")
   (if (procedure? var) (set! var (procedure-name var)))
   (let* ((key (cons var prop)))
     (ctx-resolve (ahash-ref cur-props-table key) #f)))
@@ -153,14 +158,19 @@
   `(property-set! ,@l (list ,@cur-conds)))
 
 (define ((define-property which) opt decl)
+  ;; (display* "(define-property " which ") " opt " " decl "\n")
   (set! cur-props (cons `(',(ca*adr decl) ,which ',opt) cur-props))
+  ;; (display* "cur-props " cur-props "\n")
   decl)
 
 (define ((define-property* which) opt decl)
+  ;; (display* "(define-property* " which ") " opt " " decl "\n")
   (set! cur-props (cons `(',(ca*adr decl) ,which (list ,@opt)) cur-props))
+  ;; (display* "cur-props " cur-props "\n")
   decl)
 
 (define (compute-arguments decl)
+  ;; (display* "compute-arguments " decl "\n")
   (cond ((pair? (cadr decl)) (cdadr decl))
 	((and (pair? (caddr decl)) (== (caaddr decl) 'lambda))
 	 (cadr (caddr decl)))
@@ -168,8 +178,9 @@
 	 (texmacs-error "compute-arguments" "Bad argument documentation"))))
 
 (define (define-option-argument opt decl)
+  ;; (display* "define-option-argument " opt " " decl "\n")
   (let* ((var (ca*adr decl))
-	 (args (compute-arguments decl))
+         (args (compute-arguments decl))
 	 (arg (list :argument (car opt))))
     (set! cur-props (cons `(',var :arguments ',args) cur-props))
     (set! cur-props (cons `(',var ',arg ',(cdr opt)) cur-props))
@@ -236,8 +247,8 @@
         `(let ((former ,var))
            ;;(if (== (length (ahash-ref tm-defined-table ',var)) 1)
            ;;    (display* "Overloaded " ',var "\n"))
-           ;;(display* "Overloaded " ',var "\n")
-           ;;(display* "   " ',nval "\n")
+           ;; (display* "Overloaded " ',var "\n")
+           ;; (display* "  nval " ',nval "\n")
            (set! temp-module ,(current-module))
            (set! temp-value ,nval)
            (set-current-module texmacs-user)
@@ -251,11 +262,11 @@
 			     (ahash-ref tm-defined-module ',var)))
            ,@(map property-rewrite cur-props))
         `(begin
-           (when (nnull? cur-conds)
-             (display* "warning: conditional master routine " ',var "\n")
-             (display* "   " ',nval "\n"))
-           ;;(display* "Defined " ',var "\n")
-           ;;(if (nnull? cur-conds) (display* "   " ',nval "\n"))
+           ;; (when (nnull? cur-conds)
+           ;;   (display* "warning: conditional master routine " ',var "\n")
+           ;;   (display* "   " ',nval "\n"))
+           ;; (display* "Defined " ',var "\n")
+           ;; (if (nnull? cur-conds) (display* "   " ',nval "\n"))
            (set! temp-module ,(current-module))
            (set! temp-value ,nval)
            (set-current-module texmacs-user)
@@ -277,6 +288,7 @@
 (define-public-macro (tm-define head . body)
   (set! cur-conds '())
   (set! cur-props '())
+  ;; (display* "tm-define " head " " body "\n")
   (tm-define-sub head body))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -315,6 +327,7 @@
 (define-public-macro (tm-property head . body)
   (set! cur-conds '())
   (set! cur-props '())
+  ;; (display* "tm-property " head " " body "\n")
   (tm-property-sub head body))
 
 (define-public-macro (tm-property-overloaded head . body)
