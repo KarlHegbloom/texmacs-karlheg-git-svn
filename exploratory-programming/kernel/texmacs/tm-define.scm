@@ -10,11 +10,20 @@
   #:use-module (oop goops simple))
 
 
-(define-public the-tm-defs-module
-  (resolve-module '(kernel texmacs tm-define definitions)))
+(define-syntax the-tm-defs-module
+  (identifier-syntax
+   (resolve-module '(kernel texmacs tm-define definitions))))
 
 
 (define-public (in-text?) #t)
+
+
+(define (display* . l)
+  (for-each display l))
+
+(define (write* . l)
+  (for-each write l))
+
 
 ;;;;;;;
 ;;;
@@ -64,79 +73,114 @@
 
 (export-syntax former)
 
-(define-syntax lambda-maybe-if
-  (lambda (x)
+(define-syntax build-<%tm-def>-procedure
+  (lambda (syntax-x)
+    (display "build-<%tm-def>-procedure:")
+    (write* (syntax->datum syntax-x))
+    (newline)
+    (newline)
     (with-ellipsis :::
-      (syntax-case x ()
-        ((_ (ign) (fmls :::) (#:no-require) bod :::)
+      (syntax-case syntax-x ()
+        ((_ (ign) (fmls :::) (#:no-require) (bod :::))
          (begin
-           (display "  lambda-maybe-if: #:no-require")
+           (display "                #:no-require:")
            (newline)
-           #t)
-         #'(lambda (fmls :::) (begin bod :::))
-         )
-        ((_ (#:has-former) (fmls :::) (req :::) bod :::)
-         (begin
-           (display "  lambda-maybe-if:#:has-former:req:")
-           (write #'(req :::))
+           (display "                fmls:")
+           (write* (syntax->datum #'(fmls :::)))
+           (newline)
+           (display "                bod:")
+           (write* (syntax->datum #'(begin bod :::)))
            (newline)
            #t)
          #'(lambda (fmls :::)
-             (if (begin req :::)
+             (begin bod :::))
+         )
+        ((_ (#:has-former) (fmls :::) (req) (bod :::))
+         (begin
+           (display "                #:has-former:")
+           (newline)
+           (display "                fmls:")
+           (write* (syntax->datum #'(fmls :::)))
+           (newline)
+           (display "                req:")
+           (write* (syntax->datum #'req))
+           (newline)
+           (display "                bod:")
+           (write* (syntax->datum #'(begin bod :::)))
+           (newline)
+           #t)
+         #'(lambda (fmls :::)
+             (if req
                  (begin bod :::)
                  (former fmls :::)))
          )
-        ((_ (#:no-former) (fmls :::) (req :::) bod :::)
+        ((_ (#:no-former) (fmls :::) (req) (bod :::))
          (begin
-           (display "  lambda-maybe-if:#:no-former:req:")
-           (write #'(req :::))
+           (display "                #:no-former:")
+           (newline)
+           (display "                fmls:")
+           (write* (syntax->datum #'(fmls :::)))
+           (newline)
+           (display "                req:")
+           (write* (syntax->datum #'req))
+           (newline)
+           (display "                bod:")
+           (write* (syntax->datum #'(begin bod :::)))
            (newline)
            #t)
          ;; base <%tm-def> has no former
-         #'(lambda (fmls :::)
-             (if (begin req :::)
+         #`(lambda (fmls :::)
+             (if req
                  (begin bod :::))))))))
+
+
+(define (syntax-symbol-append ctx sym-prefix syntax-name sym-suffix)
+  (datum->syntax
+   ctx
+   (cond
+     ((and sym-prefix sym-suffix)
+      (symbol-append sym-prefix (syntax->datum syntax-name) sym-suffix))
+     (sym-prefix
+      (symbol-append sym-prefix (syntax->datum syntax-name)))
+     (sym-suffix
+      (symbol-append (syntax->datum syntax-name) sym-suffix)))))
+
 
 
 (define-syntax _%_make-new-<tm-defined>-with-base-<%tm-def>
   (lambda (x)
+    (display "_%_make-new-<tm-defined>-with-base-<%tm-def>:")
+    (write* x)
+    (newline)
     (with-ellipsis !!!
       (syntax-case x ()
-        ((_ name #:<%tm-def>-formals (formals !!!) #:<%tm-def>-require (require !!!) #:<%tm-def>-body (body !!!) rest !!!)
+        ((_ name #:<%tm-def>-formals (formals !!!) #:<%tm-def>-require (require) #:<%tm-def>-body (body !!!) rest !!!)
          ;; former is not defined for the first <%tm-def> item.
-         (with-syntax ((name-<tm-defined> (datum->syntax
-                                           x
-                                           (symbol-append
-                                            (syntax->datum #'name)
-                                            '-<tm-defined>)))
-                       (name-<tm-defined>-procedure (datum->syntax
-                                                     x
-                                                     (symbol-append
-                                                      (syntax->datum #'name)
-                                                      '-<tm-defined>-procedure)))
-                       (name-<%tm-def> (datum->syntax
-                                        x
-                                        (symbol-append
-                                         (syntax->datum #'name)
-                                         '-<%tm-def>)))
-                       (name-<%tm-def>-procedure (datum->syntax
-                                                  x
-                                                  (symbol-append
-                                                   (syntax->datum #'name)
-                                                   '-<%tm-def>-procedure)))
+         (with-syntax ((name-<tm-defined>           (syntax-symbol-append
+                                                     x #f #'name '-<tm-defined>))
+                       (name-<tm-defined>-procedure (syntax-symbol-append
+                                                     x #f #'name '-<tm-defined>-procedure))
+                       (name-<%tm-def>              (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>))
+                       (name-<%tm-def>-procedure    (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>-procedure))
                        )
-           #'(let* ((name-<%tm-def>-procedure (lambda-maybe-if (#:no-former)
-                                                               (formals !!!)
-                                                               (require !!!)
-                                                               body !!!))
+           ;; call lambda-maybe-if at macro expansion time.
+           #'(let* ((name-<%tm-def>-procedure (build-<%tm-def>-procedure (#:no-former)
+                                                                         (formals !!!)
+                                                                         (require)
+                                                                         (body !!!)))
+                    (dummy (display* "  after build-<%tm-def>-procedure\n"))
                     (name-<%tm-def> (make-instance <%tm-def>
-                                                   #:<%tm-def>-formals (formals !!!)
-                                                   #:<%tm-def>-require (require !!!)
+                                                   #:<%tm-def>-formals   '(formals !!!)
+                                                   #:<%tm-def>-require   'require
                                                    #:<%tm-def>-procedure name-<%tm-def>-procedure
                                                    rest !!!))
+                    (dummy (display* "  after make-instance <%tm-def>\n"))
                     (name-<tm-defined> (make-instance <tm-defined>
                                                       #:<tm-defined>-<%tm-def>s (list name-<%tm-def>)
                                                       rest !!!))
+                    (dummy (display* "  after make-instance <tm-defined>\n"))
                     (name-<tm-defined>-procedure
                      (let ((this-<tm-defined> name-<tm-defined>))
                        ;; closure over this-<tm-defined>
@@ -145,67 +189,37 @@
                          ;; tm-def, probably latest defined one...
                          ((car (slot-ref this-<tm-defined> '<%tm-def>s))
                           formals !!!))))
+                    (dummy (display* "  after define name-<tm-defined>-procedure\n\n"))
                     )
                (slot-set! name-<tm-defined> 'procedure name-<tm-defined>-procedure)
-               ;;
-               (display "inline-make-new-<tm-defined>-with-base-<%tm-def>: formals:")
-               (write #'(formals !!!))
-               (newline)
-               (display "                                                  require:")
-               (write #'(require !!!))
-               (newline)
-               (display "                                                  ")
-               (display (symbol->string 'name-<tm-defined>))
-               (display ":")
-               (write name-<tm-defined>)
-               (newline)
-               (display "                                                  ")
-               (display (symbol->string 'name-<%tm-def>))
-               (display ":")
-               (write name-<%tm-def>)
-               (newline)
-               ;;
                name-<tm-defined>)))))))
 
 
 (define-syntax _%_make-new-<%tm-def>
   (lambda (x)
+    (display "_%_make-new-<%tm-def>:")
+    (write x)
+    (newline)
     (with-ellipsis !!!
       (syntax-case x ()
-        ((_ name #:<%tm-def>-formals (formals !!!) #:<%tm-def>-require (require !!!) #:<%tm-def>-body (body !!!) rest !!!)
+        ((_ name #:<%tm-def>-formals (formals !!!) #:<%tm-def>-require (require) #:<%tm-def>-body (body !!!) rest !!!)
          ;; former is defined for the overloading <%tm-def> items.
-         (with-syntax ((name-<%tm-def> (datum->syntax
-                                        x
-                                        (symbol-append
-                                         (syntax->datum #'name)
-                                         '-<%tm-def>)))
-                       (name-<%tm-def>-procedure (datum->syntax
-                                                  x
-                                                  (symbol-append
-                                                   (syntax->datum #'name)
-                                                   '-<%tm-def>-procedure)))
+         (with-syntax ((name-<%tm-def>              (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>))
+                       (name-<%tm-def>-procedure    (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>-procedure))
                        )
-           #'(let* ((name-<%tm-def>-procedure (lambda-maybe-if (#:has-former) (formals !!!)
-                                                               (require !!!) body !!!))
+           ;; call lambda-maybe-if once during macro expansion
+           #'(let* ((name-<%tm-def>-procedure (build-<%tm-def>-procedure (#:has-former)
+                                                               (formals !!!)
+                                                               (require)
+                                                               (body    !!!)))
                     (name-<%tm-def> (make-instance <%tm-def>
-                                                   #:<%tm-def>-formals (formals !!!)
-                                                   #:<%tm-def>-require (require !!!)
+                                                   #:<%tm-def>-formals   '(formals !!!)
+                                                   #:<%tm-def>-require   'require
                                                    #:<%tm-def>-procedure name-<%tm-def>-procedure
                                                    rest !!!)))
                ;; Todo: process @arg{rest} and modify this-tm-defined ?
-               ;;
-               (display "inline-make-new-<%tm-def>: formals:")
-               (write #'(formals !!!))
-               (newline)
-               (display "                           require:")
-               (write #'(require !!!))
-               (newline)
-               (display "                           ")
-               (display (symbol->string 'name-<%tm-def>))
-               (display ":")
-               (write name-<%tm-def>)
-               (newline)
-               ;;
                name-<%tm-def>)))))))
 
 
@@ -224,6 +238,7 @@
               (id
                (identifier? #'id)
                #'e))))))))
+
 
 
 (define-syntax tm-define
@@ -245,32 +260,43 @@
       (newline)
       (display "parse:")
       (newline)
-      (display "       parse-body is:")
+      (display "      parse-body is:")
       (write parse-body)
       (newline)
-      (display "       formals is:")
+      (display "                    :")
+      (write (syntax->datum parse-body))
+      (newline)
+      (display "      formals is:")
       (write formals)
       (newline)
-      (display "       require is:")
+      (display "                 :")
+      (write (syntax->datum formals))
+      (newline)
+      (display "      require is:")
       (write require)
       (newline)
-      (display "       body is:")
+      (display "                 :")
+      (write (syntax->datum require))
+      (newline)
+      (display "      body is:")
       (write body)
+      (newline)
+      (display "              :")
+      (write (syntax->datum body))
       (newline)
       ;;
       ;;(with-ellipsis :::
       (syntax-case parse-body ()
         ((#:parse-finished)
          (let ((formals     #`(#:<%tm-def>-formals (#,@formals)))
-               (require     (if (null? (syntax->datum require))
-                                #'(#:<%tm-def>-require (#:no-require))
-                                (syntax-case require ()
-                                  (((req0) (req1) ...)
-                                   #'(#:<%tm-def>-require (and (req0) (req1) ...))
-                                   )
-                                  ((req)
-                                   #'(#:<%tm-def>-require (req)))))
-                            )
+               (require     (let ((require-datum (syntax->datum require)))
+                             (cond
+                              ((null? require-datum)
+                               #'(#:<%tm-def>-require (#:no-require)))
+                              ((> 1 (length require-datum))
+                               #`(#:<%tm-def>-require (and #,@require)))
+                              (else
+                                #`(#:<%tm-def>-require (#,@require))))))
                (body        #`(#:<%tm-def>-body (#,@body)))
                ;;
                (type        (if (null? (syntax->datum type))        #'() #`(#:<tm-defined>-type        (#,@type))))
@@ -286,13 +312,17 @@
                (interactive (if (null? (syntax->datum interactive)) #'() #`(#:<tm-defined>-interactive (#,@interactive))))
                (balloon     (if (null? (syntax->datum balloon))     #'() #`(#:<tm-defined>-balloon     (#,@balloon))))
                )
-           #`(#,@formals #,@require #,@body
-              #,@type #,@synopsis #,@returns #,@note #,@argument #,@default
-              #,@proposals #,@secure #,@check-mark #,@interactive #,@balloon))
-         )
+           (begin
+             (display "#:parse-finished:")
+             (newline)
+             (newline)
+             #`(#,@formals #,@require #,@body
+                #,@type #,@synopsis #,@returns #,@note #,@argument #,@default
+                #,@proposals #,@secure #,@check-mark #,@interactive #,@balloon)))
+           )
         ((((sym forms ...) rest0 rest1 ...))
          (begin
-           (display "          (unwrap syntax)")
+           (display "      (unwrap syntax)")
            (newline)
            (parse #'((sym forms ...) rest0 rest1 ...)
                   formals require body
@@ -304,7 +334,7 @@
          (keyword-like? #'sym)            ; keyword-like? => #t implies symbol? => #f and
                                           ; keyword? => #f
          (begin
-           (display "           keyword-like?  ")
+           (display "      keyword-like?  ")
            (write #'sym)
            (newline)
            (parse #`((#,(->keyword (syntax->datum #'sym)) forms ...) rest0 rest1 ...)
@@ -316,7 +346,7 @@
          (keyword-like? #'sym)            ; keyword-like? => #t implies symbol? => #f and
                                           ; keyword? => #f
          (begin
-           (display "           keyword-like?  ")
+           (display "      keyword-like?  ")
            (write #'sym)
            (newline)
            (parse #`((#,(->keyword (syntax->datum #'sym))) rest0 rest1 ...)
@@ -326,11 +356,11 @@
          )
         (((#:mode predicate-fn) rest0 rest1 ...)
          (not (identifier? #'predicate-fn))
-         #'(syntax-violation 'tm-define "(#:mode predicate-fn?) expected" parse-body)
+         #'(syntax-violation 'tm-define "(#:mode predicate-fn) expected" parse-body)
          )
-        ((((#:mode predicate-fn) rest0 rest1 ...))
+        (((#:mode predicate-fn) rest0 rest1 ...)
          (begin
-           (display "           #:mode ")
+           (display "      #:mode ")
            (write #'predicate-fn)
            (newline)
            (parse #'(rest0 rest1 ...) formals #`(#,@require (predicate-fn)) body
@@ -339,7 +369,7 @@
          )
         (((#:require forms ...) rest0 rest1 ...)
          (begin
-           (display "           #:require ")
+           (display "      #:require ")
            (write #'(forms ...))
            (newline)
            (parse #'(rest0 rest1 ...) formals #`(#,@require forms ...) body
@@ -383,7 +413,7 @@
          )
         (((#:secure) rest0 rest1 ...)
          (begin
-           (display "           #:secure ")
+           (display "      #:secure")
            (newline)
            (parse #'(rest0 rest1 ...) formals require body
                   type synopsis returns note argument default
@@ -391,7 +421,7 @@
          )
         (((#:secure forms ...) rest0 rest1 ...)
          (begin
-           (display "           #:secure forms ")
+           (display "      #:secure forms:")
            (write #'(forms ...))
            (newline)
            (parse #'(rest0 rest1 ...) formals require body
@@ -414,17 +444,11 @@
                 proposals secure check-mark interactive #`(#,@balloon forms ...))
          )
         (((kw forms ...) rest0 rest1 ...)
-         (not (keyword? (syntax->datum #'kw))) ; end of (#:kw rest-parse-body)
-         (begin
-           (display "   parse finished!  Non-kw symbol found, is: ")
-           (write #'kw)
-           (newline)
-           (parse #'(#:parse-finished) formals require #'((kw forms ...) rest0 rest1 ...) ; body
-                  type synopsis returns note argument default
-                  proposals secure check-mark interactive balloon)))
+         (keyword? (syntax->datum #'kw))
+         #'(syntax-violation 'tm-define "Unknown keyword " kw))
         ((forms ...)
          (begin
-           (display "   parse finished! Forms found: ")
+           (display "parse finished! Forms found: ")
            (write #'(forms ...))
            (newline)
            (parse #'(#:parse-finished) formals require #'(forms ...) ; body
@@ -438,44 +462,41 @@
        (and (identifier? #'name)
             (not (module-defined? the-tm-defs-module (syntax->datum #'name))))
        (begin
-         (display "new tm-define: " )
+         (display "new tm-define:")
          (display (syntax->datum #'name))
          (display "\n")
-         (with-syntax ((name-<tm-defined> (datum->syntax
-                                           x
-                                           (symbol-append
-                                            (syntax->datum #'name)
-                                            '-<tm-defined>)))
-                       (name-<tm-defined>-procedure (datum->syntax
-                                                     x
-                                                     (symbol-append
-                                                      (syntax->datum #'name)
-                                                      '-<tm-defined>-procedure)))
-                       (name-<tm-defined>-module (datum->syntax
-                                                  x
-                                                  (symbol-append
-                                                   (syntax->datum #'name)
-                                                   '-<tm-defined>-module)))
+         (with-syntax ((name-<tm-defined>           (syntax-symbol-append
+                                                     x #f #'name '-<tm-defined>))
+                       (name-<tm-defined>-procedure (syntax-symbol-append
+                                                     x #f #'name '-<tm-defined>-procedure))
+                       (name-<%tm-def>              (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>))
+                       (name-<%tm-def>-procedure    (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>-procedure))
                        (name #'name))
-           #`(letrec ((the-tm-defs-module the-tm-defs-module)
-                      (name-<tm-defined>
-                       (_%_make-new-<tm-defined>-with-base-<%tm-def>
-                        name #,@(parse #'(body ...) ; args
-                                       #'(arg ...) ; formals
-                                       #'() ; require
-                                       #'() ; body
-                                       #'() ; type
-                                       #'() ; synopsis
-                                       #'() ; returns
-                                       #'() ; note
-                                       #'() ; argument
-                                       #'() ; default
-                                       #'() ; proposals
-                                       #'() ; secure
-                                       #'() ; check-mark
-                                       #'() ; interactive
-                                       #'() ; balloon
-                                       ))))
+           #`(letrec* ((name-<tm-defined>
+                        (_%_make-new-<tm-defined>-with-base-<%tm-def>
+                         name #,@(parse #'(body ...) ; args
+                                        #'(arg ...) ; formals
+                                        #'() ; require
+                                        #'() ; body
+                                        #'() ; type
+                                        #'() ; synopsis
+                                        #'() ; returns
+                                        #'() ; note
+                                        #'() ; argument
+                                        #'() ; default
+                                        #'() ; proposals
+                                        #'() ; secure
+                                        #'() ; check-mark
+                                        #'() ; interactive
+                                        #'() ; balloon
+                                        ))))
+               (display (symbol->string 'name-<tm-defined>))
+               (display ":")
+               (write name-<tm-defined>)
+               (newline)
+               (newline)
                (module-define! the-tm-defs-module
                                'name-<tm-defined>
                                name-<tm-defined>)
@@ -496,44 +517,34 @@
          (display "overloading: " )
          (display (syntax->datum #'name))
          (display "\n")
-         (with-syntax ((name-<tm-defined> (datum->syntax
-                                           x
-                                           (symbol-append
-                                            (syntax->datum #'name)
-                                            '-<tm-defined>)))
-                       (name-<%tm-def> (datum->syntax
-                                        x
-                                        (symbol-append
-                                         (syntax->datum #'name)
-                                         '-<%tm-def>)))
+         (with-syntax ((name-<tm-defined>           (syntax-symbol-append
+                                                     x #f #'name '-<tm-defined>))
+                       (name-<%tm-def>              (syntax-symbol-append
+                                                     x #f #'name '-<%tm-def>))
                        (name #'name))
            #`(letrec* ((this-tm-defined (@@ (kernel texmacs tm-define definitions) name-<tm-defined>))
                        (_%_former (car (slot-ref this-tm-defined '<%tm-def>s))))
                (syntax-parameterize ((former (syntax-rules ()
                                                ((former vals (... ...))
                                                 (_%_former vals (... ...))))))
-                 (display "           name is:")
-                 (write name)
-                 (newline)
                  (let ((name-<%tm-def>
                         (_%_make-new-<%tm-def>
-                         name
-                         #,@(parse #'(body ...) ; args
-                                   #'(arg ...) ; formals
-                                   #'() ; require
-                                   #'() ; body
-                                   #'() ; type
-                                   #'() ; synopsis
-                                   #'() ; returns
-                                   #'() ; note
-                                   #'() ; argument
-                                   #'() ; default
-                                   #'() ; proposals
-                                   #'() ; secure
-                                   #'() ; check-mark
-                                   #'() ; interactive
-                                   #'() ; balloon
-                                   ))))
+                         name #,@(parse #'(body ...) ; args
+                                        #'(arg ...) ; formals
+                                        #'() ; require
+                                        #'() ; body
+                                        #'() ; type
+                                        #'() ; synopsis
+                                        #'() ; returns
+                                        #'() ; note
+                                        #'() ; argument
+                                        #'() ; default
+                                        #'() ; proposals
+                                        #'() ; secure
+                                        #'() ; check-mark
+                                        #'() ; interactive
+                                        #'() ; balloon
+                                        ))))
                    (slot-set! this-tm-defined '<%tm-def>s
                               (cons name-<%tm-def> (slot-ref this-tm-defined '<%tm-def>s)))
                    this-tm-defined)))))))))

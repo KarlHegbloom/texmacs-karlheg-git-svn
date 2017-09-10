@@ -40,3 +40,10 @@
   (use-modules (oop goops))
   )
 
+;; (tm-define (blah x y)
+;;   (display* '(blah x " " y "\n")))
+
+;; (tm-define (blah x y)
+;;   (#:require (in-text?))
+;;   (display* '(blah-in-text x " " y "\n")))
+
