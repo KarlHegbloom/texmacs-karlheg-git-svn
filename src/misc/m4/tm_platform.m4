@@ -27,7 +27,6 @@ AC_DEFUN([TM_PLATFORM],[
   CONFIG_BSHARED="-Wl,-Bdynamic"
   CONFIG_BFLAGS=""
   CONFIG_BPATH="-Wl,-rpath,"
-  CONFIG_LDRT=""
   CONFIG_WORD_LENGTH="4"
   CONFIG_WORD_LENGTH_INC="3"
   CONFIG_WORD_MASK="0xfffffffc"
@@ -86,8 +85,8 @@ AC_DEFUN([TM_PLATFORM],[
       CONFIG_QTPIPES="yes"
       CONFIG_OS_COMPAT="Windows"
       CPPFLAGS="$CPPFLAGS -I/usr/local/include -I."
-      CONFIG_LDRT="-L/mingw/lib -lmingw32 -lmingwex -lpoppler-qt4"
       GUILE_LDFLAGS="-lmingwex $GUILE_LDFLAGS -lintl" #added mingwex to mask the internal guile readdir function
+      AC_DEFINE([OS_MINGW],[(defined (__MINGW__) || defined (__MINGW32__))],[OS type])
     ;;
     *-*-cygwin)
       AC_MSG_RESULT(final adjustments for cygwin host)
@@ -249,7 +248,6 @@ AC_DEFUN([TM_PLATFORM],[
   AC_SUBST(CONFIG_LDRT)
   AC_SUBST(CONFIG_HOST_OS)
   AC_SUBST(CONFIG_HOST_VENDOR)
-  AC_SUBST(CONFIG_HOST_CPU)
   AC_SUBST(CONFIG_USER)
   AC_SUBST(CONFIG_DATE)
   AC_SUBST(CONFIG_ARCHS)
