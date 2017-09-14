@@ -608,8 +608,9 @@ initialize_scheme () {
     "\n"
     "(assert-load-verbosity #t)\n" // comment off later, after initial devel phase?
     "\n"
-    // TODO: Move to standard #:kwd reader syntax?
-    "(read-set! keywords 'prefix)\n"
+    // TESTING: Move to standard #:kwd reader syntax?
+    //"(read-set! keywords 'prefix)\n"
+    "(read-set! keywords #f)\n"
     "(read-enable 'positions)\n"
     ";;; (read-enable 'r7rs-symbols)\n"
     ";;; (read-enable 'square-brackets)\n"

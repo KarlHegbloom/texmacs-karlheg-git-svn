@@ -13,6 +13,11 @@
 
   (set-current-module (resolve-module '(guile)))
 
+  (use-modules (oop goops))
+  (use-modules (oop goops simple))
+  (default-duplicate-binding-handler
+    '(merge-generics replace warn-override-core warn last))
+
   (define-syntax use-and-re-export-modules
     (syntax-rules ()
       ((_ (mod ...) ...)
@@ -37,7 +42,9 @@
 
 (eval-when (compile eval load)
   (set-current-module (resolve-module '(guile-user)))
+  (use-modules (oop goops simple))
   (use-modules (oop goops))
+  (use-modules (test-tm-define tests))
   )
 
 ;; (tm-define (blah x y)
@@ -46,4 +53,3 @@
 ;; (tm-define (blah x y)
 ;;   (#:require (in-text?))
 ;;   (display* '(blah-in-text x " " y "\n")))
-

@@ -24,14 +24,14 @@
 ;; Style constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-public widget-style-mini 1)
-(define-public widget-style-monospaced 2)
-(define-public widget-style-grey 4)
-(define-public widget-style-pressed 8)
-(define-public widget-style-inert 16)
-(define-public widget-style-button 32)
-(define-public widget-style-centered 64)
-(define-public widget-style-bold 128)
+(define-public widget-style-mini         1)
+(define-public widget-style-monospaced   2)
+(define-public widget-style-grey         4)
+(define-public widget-style-pressed      8)
+(define-public widget-style-inert       16)
+(define-public widget-style-button      32)
+(define-public widget-style-centered    64)
+(define-public widget-style-bold       128)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Control structures
@@ -52,7 +52,7 @@
   `(cons* 'list ($list ,@l)))
 
 (tm-define-macro ($if pred? . l)
-  (:synopsis "When primitive for content generation")
+  (:synopsis "If primitive for content generation")
   (cond ((== (length l) 1)
          `(cons* 'list (if ,pred? ($list ,(car l)) '())))
         ((== (length l) 2)
@@ -85,7 +85,7 @@
   `(cons* 'list (cond ,@(cond$sub l))))
 
 (tm-define-macro ($let decls . l)
-  (:synopsis "Let* primitive for content generation")
+  (:synopsis "Let primitive for content generation")
   `(let ,decls
      (cons* 'list ($list ,@l))))
 
@@ -267,7 +267,7 @@
   `(list ,text (lambda () ,@cmds)))
 
 (tm-define-macro ($check text check pred?)
-  (:synopsis "Make button")
+  (:synopsis "Make check button")
   (if developer-mode?
     (ahash-set! all-translations text #t))
   `(list 'check ,text ,check (lambda () ,pred?)))
