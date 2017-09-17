@@ -7,16 +7,31 @@
 (read-enable 'keywords #f)
 (read-enable 'positions)
 
+
 (eval-when (compile eval load)
-  (add-to-load-path
-   "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/exploratory-programming")
 
   (set-current-module (resolve-module '(guile)))
 
-  (use-modules (oop goops))
-  (use-modules (oop goops simple))
   (default-duplicate-binding-handler
-    '(merge-generics replace warn-override-core warn last))
+    '(merge-generics merge-accessors replace warn-override-core warn last))
+
+  (use-modules (oop goops))
+
+  (add-hook! module-defined-hook
+             (lambda (module)
+               (set-module-duplicates-handlers!
+                module
+                (lookup-duplicates-handlers
+                 '(merge-generics merge-accessors
+                   replace warn-override-core warn last)))))
+
+  (add-to-load-path
+   "/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-2.2/exploratory-programming")
+
+  ;;
+  ;; Simple module interface syntax; could be extended to accept the syntax
+  ;; from use-modules for resolving an interface specification...
+  ;;
 
   (define-syntax use-and-re-export-modules
     (syntax-rules ()
@@ -30,26 +45,71 @@
 
   (export-syntax use-and-re-export-modules)
 
-  (use-and-re-export-modules (kernel texmacs tm-define))
 
-  (use-modules (kernel texmacs tm-define definitions))
+  (define-syntax use-and-re-export-modules-prepended
+    (syntax-rules ()
+      ((_ (mod ...) ...)
+       (eval-when (expand load eval compile)
+         (let* ((cm (current-module))
+                (cm-public-interface
+                 (module-public-interface cm)))
+           (begin
+             (begin
+               (use-modules (mod ...)) ; generics merging
+               (set-module-uses! cm
+                                 (cons (resolve-interface '(mod ...))
+                                       (filter (lambda (m)
+                                                 (not (equal? '(mod ...)
+                                                              (module-name m))))
+                                               (module-uses cm))))
+               (set-module-uses! cm-public-interface
+                                 (cons (resolve-interface '(mod ...))
+                                       (filter (lambda (m)
+                                                 (not (equal? '(mod ...)
+                                                              (module-name m))))
+                                               (module-uses cm-public-interface)))))
+             ...)
+           (hash-clear! (module-import-obarray cm))
+           (module-modified cm)
+           (hash-clear! (module-import-obarray cm-public-interface))
+           (module-modified cm-public-interface))))))
 
-  (let* ((cm (module-public-interface (current-module)))
-         (mu (module-uses cm))
-         (dm (resolve-interface '(kernel texmacs tm-define definitions))))
-    (unless (memq dm mu)
-      (set-module-uses! cm (cons dm mu)))))
+  (export-syntax use-and-re-export-modules-prepended)
 
-(eval-when (compile eval load)
-  (set-current-module (resolve-module '(guile-user)))
-  (use-modules (oop goops simple))
-  (use-modules (oop goops))
-  (use-modules (test-tm-define tests))
+
+  (use-and-re-export-modules-prepended (oop goops))
+
+  ;;
+  ;; This ensures that the car of the guile module's public interface's module
+  ;; uses list is the (kernel texmacs tm-define definitions) module's public
+  ;; interface, and its' cadr is the (kernel texmacs tm-define) module's public
+  ;; interface.
+  ;;
+  (use-and-re-export-modules-prepended (kernel texmacs tm-define))
+  (use-and-re-export-modules-prepended (kernel texmacs tm-define definitions))
+
   )
 
-;; (tm-define (blah x y)
-;;   (display* '(blah x " " y "\n")))
 
-;; (tm-define (blah x y)
-;;   (#:require (in-text?))
-;;   (display* '(blah-in-text x " " y "\n")))
+
+(eval-when (compile eval load)
+
+  (set-current-module (resolve-module '(guile-user)))
+
+  (default-duplicate-binding-handler
+    '(merge-generics merge-accessors replace warn-override-core warn last))
+
+  (use-modules (oop goops))
+
+  (define-method (write o)
+    (write o (current-output-port)))
+
+  (define-method (display o)
+    (display o (current-output-port)))
+
+  (use-modules (kernel texmacs tm-define))
+
+  (use-modules (test-tm-define tests))
+
+  )
+

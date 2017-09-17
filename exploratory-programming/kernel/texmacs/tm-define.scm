@@ -13,11 +13,21 @@
 ;;;
 
 (define-module (kernel texmacs tm-define)
+  ;;
   #:use-module (kernel texmacs tm-define definitions)
-  #:use-module (oop goops simple)
+  #:use-module (oop goops)
   ;;
   #:use-module (ice-9 pretty-print)
-  #:use-module (ice-9 format))
+  #:use-module (ice-9 format)
+  ;;
+  #:duplicates (merge-generics merge-accessors replace warn-override-core warn last))
+
+
+;;
+;; module-defined-hook ought to take care of this:
+;;
+;; (default-duplicate-binding-handler
+;;     '(merge-generics merge-accessors replace warn-override-core warn last))
 
 
 (define-syntax the-tm-defs-module
@@ -33,16 +43,14 @@
 ;;; Normally defined inside of TeXmacs... But I like (ice-9 format) better
 ;;; anyway.
 ;;;
-(define (display* . l)
+(define-public (display* . l)
   (for-each display l))
 
-(define (write* . l)
+(define-public (write* . l)
   (for-each write l))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Because of the way that Guile 2.2 looks up the value of a symbol, the
 ;;; TeXmacs guile module namespaces shall be arranged such that the (kernel
@@ -144,20 +152,13 @@
 (export <%tm-def>)
 
 
-(define-method (display (object <%tm-def>))
-  (display object (current-output-port)))
-
-(export display)
-
-
-(define-method (display (object <%tm-def>) (port <file-output-port>))
-  (format port "#<<%tm-def>~s\n  procedure:~s\n  require:~s\n  >"
-          (slot-ref object 'formals)
-          (slot-ref object 'procedure)
-          (slot-ref object 'require)))
-
-(export display)
-
+(define-method (write (o <%tm-def>) file)
+  (format file
+    "#<<%tm-def>~@{~@?~}>"
+    " ~x" (object-address o)
+    " procedure ~s" (slot-ref o 'procedure)
+    " formals ~s"   (slot-ref o 'formals)
+    " require ~s"   (slot-ref o 'require)))
 
 
 (define-class <tm-defined> (<object> <applicable>)
@@ -187,29 +188,24 @@
 (export <tm-defined>)
 
 
-(define-method (display (object <tm-defined>))
-  (display object (current-output-port)))
-
-(export display)
-
-
-(define-method (display (object <tm-defined>) (port <file-output-port>))
-  (format port "#<<tm-defined>~s\n  procedure:~s\n  type:~s\n  synopsis:~s\n  returns:~s\n  note:~s\n  argument:~s\n  default:~s\n  proposals:~s\n  secure:~s\n  check-mark:~s\n  interactive:~s\n  balloon:~s\n  >"
-          (slot-ref object 'formals)
-          (slot-ref object 'procedure)
-          (slot-ref object 'type)
-          (slot-ref object 'synopsis)
-          (slot-ref object 'returns)
-          (slot-ref object 'note)
-          (slot-ref object 'argument)
-          (slot-ref object 'default)
-          (slot-ref object 'proposals)
-          (slot-ref object 'secure)
-          (slot-ref object 'check-mark)
-          (slot-ref object 'interactive)
-          (slot-ref object 'balloon)))
-
-(export display)
+(define-method (write (o <tm-defined>) file)
+  (format file
+    "#<<tm-defined>~@{~@?~}>"
+    " ~x" (object-address o)
+    " procedure ~s"   (slot-ref o 'procedure)
+    " formals ~s  "   (slot-ref o 'formals)
+    " <%tm-def>s ~s"  (slot-ref o '<%tm-def>s)
+    " type ~s"        (slot-ref o 'type)
+    " synopsis ~s"    (slot-ref o 'synopsis)
+    " returns ~s"     (slot-ref o 'returns)
+    " note ~s"        (slot-ref o 'note)
+    " argument ~s"    (slot-ref o 'argument)
+    " default ~s"     (slot-ref o 'default)
+    " proposals ~s"   (slot-ref o 'proposals)
+    " secure ~s"      (slot-ref o 'secure)
+    " check-mark ~s"  (slot-ref o 'check-mark)
+    " interactive ~s" (slot-ref o 'interactive)
+    " balloon ~s"     (slot-ref o 'balloon)))
 
 
 ;;;;;;
@@ -231,6 +227,7 @@
 ;;;
 (define-method (property-set! (var <tm-defined>) prop what . conds*)
   (slot-set! var (keyword->symbol prop) what))
+
 (define-method (property-set! (var <%tm-def>) prop what . conds*)
   (slot-set! var (keyword->symbol prop) what))
 
@@ -245,17 +242,33 @@
 ;;;
 (define-method (property (var <tm-defined>) prop)
   (slot-ref var (keyword->symbol prop)))
+
 (define-method (property (var <%tm-def>) prop)
   (slot-ref var (keyword->symbol prop)))
 
 (export property)
 
 
+
 (define-syntax-parameter former
   (lambda (x)
     (syntax-violation 'former "former used outside of an overloading tm-define" x)))
 
-(export-syntax former)
+(export former)
+
+
+
+(define (syntax-symbol-append ctx sym-prefix syntax-name sym-suffix)
+  (datum->syntax
+   ctx
+   (cond
+     ((and sym-prefix sym-suffix)
+      (symbol-append sym-prefix (syntax->datum syntax-name) sym-suffix))
+     (sym-prefix
+      (symbol-append sym-prefix (syntax->datum syntax-name)))
+     (sym-suffix
+      (symbol-append (syntax->datum syntax-name) sym-suffix)))))
+
 
 
 (define-syntax build-<%tm-def>-procedure
@@ -272,17 +285,6 @@
          #`(lambda (fmls :::)
              (if req (begin bod :::))))))))
 
-
-(define (syntax-symbol-append ctx sym-prefix syntax-name sym-suffix)
-  (datum->syntax
-   ctx
-   (cond
-     ((and sym-prefix sym-suffix)
-      (symbol-append sym-prefix (syntax->datum syntax-name) sym-suffix))
-     (sym-prefix
-      (symbol-append sym-prefix (syntax->datum syntax-name)))
-     (sym-suffix
-      (symbol-append (syntax->datum syntax-name) sym-suffix)))))
 
 
 
@@ -352,6 +354,7 @@
                     )
                (slot-set! name-<tm-defined> 'procedure name-<tm-defined>-procedure)
                name-<tm-defined>)))))))
+
 
 
 (define-syntax _%_make-new-<%tm-def>
