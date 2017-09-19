@@ -234,7 +234,7 @@ SET(TeXmacs_Base_SRCS
     ./System/Boot/init_texmacs.cpp
     ./System/Boot/init_upgrade.cpp
     ./System/Boot/preferences.cpp
-    ./System/Classes/timer.cpp
+    ./System/Classes/tm_timer.cpp
     ./System/Classes/url.cpp
     ./System/Files/file.cpp
     ./System/Files/image_files.cpp
