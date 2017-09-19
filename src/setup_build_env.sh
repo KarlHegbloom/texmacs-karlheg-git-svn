@@ -17,14 +17,14 @@ fi
 # restart of texmacs will pick up the changed scm. Modifications to C++ or whatever can be picked up quickly by a rebuild,
 # especially with ccache in use, speeding builds tremendously.
 #
-export TEXMACS_PATH="/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/TeXmacs"
-export TEXMACS_BIN_PATH="/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/debian/texmacs/usr/lib/texmacs/TeXmacs"
+#export TEXMACS_PATH="/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/TeXmacs"
+#export TEXMACS_BIN_PATH="/home/karlheg/src/TeXmacs/texmacs-git-svn-guile-1.8/src/debian/texmacs/usr/lib/texmacs/TeXmacs"
 
 
-## export GUILE_CFLAGS="`pkg-config --static --cflags guile-1.8`"
-## export GUILE_LDFLAGS="`pkg-config --static --libs guile-1.8`"
-## export GUILE_DATA_PATH="`pkg-config --variable=datadir guile-1.8`"
-## export GUILE_VERSION="`pkg-config --modversion guile-1.8`"
+export GUILE_CFLAGS="`pkg-config --static --cflags guile-1.8`"
+export GUILE_LDFLAGS="`pkg-config --static --libs guile-1.8`"
+export GUILE_DATA_PATH="`pkg-config --variable=datadir guile-1.8`"
+export GUILE_VERSION="`pkg-config --modversion guile-1.8`"
 
 #export CCACHE_PREFIX=/usr/bin/distcc
 #export DISTCC_HOSTS="localhost/8 192.168.1.64/4"
