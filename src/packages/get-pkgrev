@@ -1,0 +1,58 @@
+#!/bin/sh
+
+# Expects to be run with PWD being the top of the build source directory.
+
+PKGREV=""
+
+GITDIR=""
+#
+# Some people checked out TeXmacs via svn at one layer deeper than I did, so 
+# look in both places.
+#
+for d in ../.git .git; do
+    if [ -e "$d" ] && ! [ -L "$d" ] && ! [ -d "$d" ]; then
+        GITDIR=$(cat "$d")
+        break
+    elif [ -d "$d" ]; then
+        GITDIR="$d"
+        break
+    fi
+done
+
+is_git_svn="n"
+SVNDIR=""
+SVNREV=""
+
+if [ -n "$GITDIR" ] && [ -d "$GITDIR/svn" ]; then
+    is_git_svn="y"
+    SVNREV=$(git rev-list --max-count=100 --pretty=medium HEAD@{0} | \
+        sed -rne "/git-svn-id:/ {s,.*://.*@([^ ]+).*,\\1,p ;/./ q 0}")
+else
+    for d in ../.svn .svn; do
+        if [ -d "$d" ]; then
+            SVNDIR="$d"
+            break
+        fi
+    done
+fi
+
+if [ -z "$SVNREV" ]; then
+    SVNREV=$(svnversion -n .)
+fi
+
+if [ -z "$SVNREV" ] && [ -f "SVNREV" ]; then
+    SVNREV=$(cat SVNREV)
+fi
+
+if [ -n "$SVNREV" ]; then
+    PKGREV="~svn-$SVNREV"
+fi
+
+if [ -n "$GITDIR" ]; then
+    ncommits=$(git log --oneline | wc -l)
+    treeish=$(git log -n 1 --oneline | cut -f1 -d' ')
+    PKGREV="$PKGREV~git-n$ncommits-$treeish"
+fi
+
+echo $PKGREV
+exit 0
