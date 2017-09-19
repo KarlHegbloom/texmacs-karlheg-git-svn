@@ -15,7 +15,7 @@
             (setenv "PATH" (string-join (list "/usr/lib/ccache:" (getenv "PATH"))))))
   (eval . (setenv "DEB_BUILD_OPTIONS" (string-join (list "parallel=8 nostrip "
                                                          (or (getenv "DEB_BUILD_OPTIONS") "")))))
-  (eval . (setenv "GUILE_AUTO_COMPILE" "fresh"))
+  ;; (eval . (setenv "GUILE_AUTO_COMPILE" "fresh"))
   (indent-tabs-mode . nil)
   (fill-column . 78)
   (org-startup-truncated . t)
