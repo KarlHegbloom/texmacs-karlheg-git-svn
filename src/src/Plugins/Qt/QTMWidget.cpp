@@ -413,7 +413,7 @@ static void setRoundedMask (QWidget *widget)
 #endif
 
 
-#if 1
+#if 0
 // OLD INPUT METHOD PREVIEW
 void
 QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
@@ -502,14 +502,14 @@ QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
 // NEW INPUT METHOD PREVIEW
 void
 QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
-  
+
   QString const & preedit_string = event->preeditString();
   QString const & commit_string = event->commitString();
-  
+
   if (!commit_string.isEmpty()) {
     if (DEBUG_QT)
       debug_qt << "IM committing :" << commit_string.toUtf8().data() << LF;
-    
+
     int key = 0;
 #if 1
     for (int i = 0; i < commit_string.size(); ++i) {
@@ -521,14 +521,14 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
     keyPressEvent (&ev);
 #endif
   }
-  
+
   if (DEBUG_QT)
     debug_qt << "IM preediting :" << preedit_string.toUtf8().data() << LF;
-  
+
   string r = "pre-edit:";
   if (!preedit_string.isEmpty())
   {
-    
+
     // find cursor position in the preedit string
     QList<QInputMethodEvent::Attribute>  const & attrs = event->attributes();
     //    int pos = preedit_string.count();
@@ -539,12 +539,12 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
         pos = attrs[i].start;
         visible_cur = (attrs[i].length != 0);
       }
-    
+
     // find selection in the preedit string
     int sel_start = 0;
     int sel_length = 0;
     if (pos <  preedit_string.count()) {
-      for (int i=0; i< attrs.count(); i++) 
+      for (int i=0; i< attrs.count(); i++)
         if ((attrs[i].type == QInputMethodEvent::TextFormat) &&
             (attrs[i].start <= pos) &&
             (pos < attrs[i].start + attrs[i].length)) {
@@ -557,15 +557,15 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
       sel_length = 0;
     }
     (void) sel_start; (void) sel_length;
-    
+
     r = r * as_string (pos) * ":" * from_qstring (preedit_string);
   }
-  if (!is_nil (tmwid))
-    the_gui->process_keypress (tm_widget(), r, texmacs_time());
+  // if (!is_nil (tmwid))
+  //   the_gui->process_keypress (tm_widget(), r, texmacs_time());
   event->accept();
-}  
+}
 
-QVariant 
+QVariant
 QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
   switch (query) {
     case Qt::ImMicroFocus :
