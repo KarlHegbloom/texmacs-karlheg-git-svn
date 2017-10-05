@@ -37,7 +37,10 @@
 
 /* Guile version */
 #cmakedefine GUILE_D 1
+
 #cmakedefine SCM_SIZET @SCM_SIZET@
+
+#cmakedefine GUILE_NUM 0
 
 
 /* Define to 1 if the system has the type `FILE'. */
@@ -105,6 +108,10 @@
 
 #cmakedefine MACOSX_EXTENSIONS 1
 
+#cmakedefine OS_MACOS 1
+
+#cmakedefine PDFHUMMUS_NO_TIFF 1
+
 /* Disable fast memory allocator */
 #cmakedefine NO_FAST_ALLOC 1
 
@@ -130,9 +137,11 @@
 
 #cmakedefine PDF_RENDERER 1
 
+#cmakedefine QTTEXMACS 1
+
 #cmakedefine QTPIPES 1
 
-#cmakedefine SIZEOF_VOID_P @SIZEOF_VOID_P@ 
+#cmakedefine SIZEOF_VOID_P @SIZEOF_VOID_P@
 
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine STDC_HEADERS 1
@@ -141,7 +150,7 @@
 #cmakedefine HAVE_LT_MODULE_OPEN 1
 
 #cmakedefine HAVE_DLFCN_H 1
-#cmakedefine TM_DYNAMIC_LINKING @TM_DYNAMIC_LINKING@
+#cmakedefine TM_DYNAMIC_LINKING 1
 
 /* Use axel library */
 #cmakedefine USE_AXEL 1

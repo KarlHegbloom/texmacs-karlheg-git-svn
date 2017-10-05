@@ -25,6 +25,8 @@
 
 cmake_minimum_required(VERSION 3.5)
 
+set(CMAKE_CXX_STANDARD 11)
+
 if(NOT CMAKE_BUILD_TYPE)
  set(CMAKE_BUILD_TYPE Debug CACHE STRING
    "Choose the type of build, options are:
@@ -34,7 +36,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 
 ### --------------------------------------------------------------------
-### Project name 
+### Project name
 ### --------------------------------------------------------------------
 
 project(TEXMACS CXX C) # check for C/C++ compiler
@@ -60,7 +62,7 @@ endif(Guile_VERSION_STRING VERSION_LESS 2.0)
 
 message(STATUS "Getting revision control metadata for PKGREV")
 
-set(PKG_MAINTAINER "Karl M. Hegbloom <karl.hegbloom@gmail.com>"
+set(PKG_MAINTAINER "Me <me@localhost>"
   CACHE STRING "Fullname <email@host.name> for debian/Changelog, etc.")
 
 
@@ -163,6 +165,7 @@ endif("${PKG_DATE}" STREQUAL "")
 
 message(STATUS "--  ${PKG_MAINTAINER}  ${PKG_DATE}")
 
+set(CMAKE_MODULE_PATH ${TEXMACS_SOURCE_DIR}/cmake)
 
 ### --------------------------------------------------------------------
 ### Include standard modules
@@ -175,6 +178,8 @@ include(CheckTypeSize)
 include(FindPkgConfig)
 include(CheckCSourceCompiles)
 include(CMakeDependentOption)
+include(FindX11)
+
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
@@ -245,6 +250,10 @@ IF (NOT ${HAVE_DLOPEN})
   ENDIF (${HAVE_DLOPEN})
 ENDIF (NOT ${HAVE_DLOPEN})
 
+
+IF (${HAVE_DLOPEN})
+  #SET(TM_DYNAMIC_LINKING 1) # dynamic linking works
+ENDIF (${HAVE_DLOPEN})
 
 ### --------------------------------------------------------------------
 ### Handle different systems case by case
@@ -397,19 +406,17 @@ set(PACKAGE_URL 1)
 set(PACKAGE_VERSION 1)
 
 ### --------------------------------------------------------------------
-### Memory allocation options
+### Options
 ### --------------------------------------------------------------------
 
-#if(${DISABLE_FASTALLOC})
-#  set(NO_FAST_ALLOC 1)
-#endif(${DISABLE_FASTALLOC})
+
 
 
 ### --------------------------------------------------------------------
 ### Experimental options
 ### --------------------------------------------------------------------
 
-#  SET(EXPERIMENTAL 1)
+option(EXPERIMENTAL "Enable experimental options" OFF)
 
 ### --------------------------------------------------------------------
 ###  Test for Libraries
@@ -491,7 +498,7 @@ endif(_guile_str_size_test)
 # For old versions of Guile.
 message(STATUS "Checking whether ... arguments behave correctly.")
 
-check_c_source_compiles(  
+check_c_source_compiles(
 " #include <guile/gh.h>
   #include <libguile.h>
   typedef SCM (*FN)(...);
@@ -514,23 +521,27 @@ endif(_guile_dots_test)
 
 set(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
 
-
 if(NOT TEXMACS_GUI)
   set(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, Qt5, Qt4, X11, Aqua)")
 endif(NOT TEXMACS_GUI)
 
+# TODO: Determine what is the actual minimum Qt5 version?
+set(TM_QT5_MIN_VERSION 5.2.0)
+set(TM_QT4_MIN_VERSION 4.8.7)
+
 
 if(TEXMACS_GUI STREQUAL "Qt")
-  find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport)
+  find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS Core Gui Widgets PrintSupport)
   if(Qt5_FOUND)
     set(TEXMACS_GUI "Qt5")
   else(Qt5_FOUND)
-    find_package(Qt4 4.8.7 COMPONENTS QtCore QtGui)
+    find_package(Qt4 ${TM_QT4_MIN_VERSION} COMPONENTS QtCore QtGui)
     if(QT4_FOUND)
       set(TEXMACS_GUI "Qt4")
     else(QT4_FOUND)
       message(ERROR "Neither Qt5 nor Qt4 found.")
-      set(TEXMACS_GUI "X11")
+      # TODO: Detect appropriate default for OS environment? Should stop at the above error anyway.
+      # set(TEXMACS_GUI "X11")
     endif(QT4_FOUND)
   endif(Qt5_FOUND)
 endif(TEXMACS_GUI STREQUAL "Qt")
@@ -538,30 +549,54 @@ endif(TEXMACS_GUI STREQUAL "Qt")
 
 if(TEXMACS_GUI STREQUAL "Qt5")
 
-  find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
-  find_package(Qt5 5.2.0 COMPONENTS Svg X11Extras)
-  # find_package(Qt5 5.2.0 COMPONENTS QtHelp UiPlugin UiTools WebEngine WebEngineCore WebEngineWidgets)
+  find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
 
   if(Qt5_FOUND)
+    # TODO: Test this...
+    set(QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+    # SET(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
+
+    set(Qt5Svg_INCLUDE_DIRS )
+    set(Qt5X11Extras_INCLUDE_DIRS )
+    find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS Svg X11Extras) # not REQUIRED; can it even use these?
+    # find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS QtHelp UiPlugin UiTools WebEngine WebEngineCore WebEngineWidgets)
+
+    if(Qt5Svg_FOUND)
+      set(QT_LIBRARIES ${QT_LIBRARIES} ${Qt5Svg_LIBRARIES})
+    endif(QT5Svg_FOUND)
+    if(Qt5X11Extras_FOUND)
+      set(QT_LIBRARIES ${QT_LIBRARIES} ${Qt5X11Extras_LIBRARIES})
+    endif(Qt5X11Extras_FOUND)
+
     if(WIN32)
-     set(GUI_TYPE WIN32)
+      set(GUI_TYPE WIN32)
     endif(WIN32)
 
-    #include(${QT_USE_FILE})
+    include_directories(
+      ${Qt5Core_INCLUDE_DIRS}
+      ${Qt5Gui_INCLUDE_DIRS}
+      ${Qt5Widgets_INCLUDE_DIRS}
+      ${Qt5PrintSupport_INCLUDE_DIRS}
+      ${Qt5Svg_INCLUDE_DIRS}
+      ${Qt5X11Extras_INCLUDE_DIRS}
+      )
+    # include(${QT_USE_FILE})
     add_definitions("-DQTTEXMACS")
-    set(NO_FAST_ALLOC 1)
+    set(QTTEXMACS 1)
+    # TODO? Is this needed? SET(NO_FAST_ALLOC 1)
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
-    set(QTPIPES 1)
-    message(STATUS "Enabling Qt5 GUI")
-  else(Qt5_FOUND)
-    message(ERROR "Qt5 is required to compile the Qt5 GUI")
-  endif(Qt5_FOUND)
+    set(CONFIG_GUI_IS_QT ON)
+    # set(QTPIPES 1)
+    message(STATUS "Enabling Qt GUI")
 
+  else(Qt5_FOUND)
+    message(ERROR "Doh! Qt5 is required to compile the Qt5 GUI")
+  endif(Qt5_FOUND)
 
 elseif(TEXMACS_GUI STREQUAL "Qt4")
 
-  find_package(Qt4 4.8.7 COMPONENTS QtCore QtGui REQUIRED)
+  find_package(Qt4 ${TM_QT4_MIN_VERSION} COMPONENTS QtCore QtGui REQUIRED)
 
   if(QT4_FOUND)
     if(WIN32)
@@ -573,6 +608,7 @@ elseif(TEXMACS_GUI STREQUAL "Qt4")
     set(NO_FAST_ALLOC 1)
     set(CONFIG_GUI "QT")
     set(CONFIG_QT "Qt")
+    set(CONFIG_GUI_IS_QT ON)
     set(QTPIPES 1)
     message(STATUS "Enabling Qt4 GUI")
   else(QT4_FOUND)
@@ -613,6 +649,25 @@ else(TEXMACS_GUI STREQUAL "Qt")
 endif(TEXMACS_GUI STREQUAL "Qt5")
 
 
+### --------------------------------------------------------------------
+### Memory allocation options
+### --------------------------------------------------------------------
+
+cmake_dependent_option(DISABLE_FASTALLOC
+  "Compile with NO_FAST_ALLOC on"
+  OFF
+  "CONFIG_GUI_IS_QT" ON)
+
+if(${DISABLE_FASTALLOC})
+  set(NO_FAST_ALLOC 1)
+endif(${DISABLE_FASTALLOC})
+
+
+
+### --------------------------------------------------------------------
+### Documentation options
+### --------------------------------------------------------------------
+
 include(Doxygen)
 
 
@@ -635,26 +690,47 @@ include(Doxygen)
 ### --------------------------------------------------------------------
 set(DEBUG_ASSERT 1)
 
+set(USE_GS 1)
+
 # GS_EXE is not really used by the C++ code, which looks in the PATH
 # which is right, since build-configuration time isn't really when to
 # look for it anyway.
 #find_program(GS_EXE gs gswin32c PATHS ENV PATH)
 #message(STATUS "  GS_EXE is ${GS_EXE}")
 
-set(USE_GS 1)
 # These next two are unused by any C++ or Scheme code:
 # set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:) # Unused
 # set(GS_LIB ../share/ghostscript/9.06/lib:) # Unused
 
+# ? set(GUILE_NUM 1)
+
 set(PDF_RENDERER 1)
 
+# ?? set(SIZEOF_VOID_P 8)
 set(STDC_HEADERS 1)
 set(USE_STACK_TRACE 1)
+
+option(QTPIPES "use Qt pipes" ON)
+
+option(USE_SQLITE3 "Use SQLite3" ON)
+if (USE_SQLITE3)
+  option(LINKED_SQLITE3 "Use Linked SQLite3" ON)
+endif (USE_SQLITE3)
+
+option(PDFHUMMUS_NO_TIFF "Disable TIFF in PDF Hummus" ON)
+
+if (APPLE)
+  set(MACOSX_EXTENSIONS 1)
+  set(OS_MACOS 1)
+endif (APPLE)
+
+set(CMAKE_CXX_FLAGS "-Wno-deprecated-register -include config.h")
 
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_SOURCE_DIR}/src/System/config.h)
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
 # see: src/System/Misc/sys_utils.cpp:set_env()
+# TODO: maybe this should be determined at configuration time, right?
 set(CONFIG_STD_SETENV "#define STD_SETENV")
 
 set(tm_orig ${TEXMACS_SOURCE_DIR})
@@ -727,6 +803,7 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### Installation
 ### --------------------------------------------------------------------
 
+# TODO: Check for MacOS compatibility; please think of MacPorts.
 include(GNUInstallDirs)
 
 ### bin/
@@ -766,8 +843,8 @@ install(FILES TeXmacs/misc/pixmaps/TeXmacs.xpm DESTINATION share/pixmaps)
 set(TOOLS "texmacs" "fig2ps")
 set(MAN_SECTION "1")
 foreach(TOOL ${TOOLS})
-  set(TOOL_MANFILE "${TEXMACS_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION}")
-  set(TOOL_MANFILE_GZ "${TEXMACS_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz")
+set(TOOL_MANFILE "${CMAKE_CURRENT_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION}")
+set(TOOL_MANFILE_GZ "${CMAKE_CURRENT_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz")
   add_custom_command(
     OUTPUT "${TOOL_MANFILE_GZ}"
     COMMAND gzip -c "${TOOL_MANFILE}" > "${TOOL_MANFILE_GZ}"
