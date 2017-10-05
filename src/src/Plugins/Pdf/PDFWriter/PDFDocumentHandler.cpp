@@ -47,6 +47,7 @@
 #include "IResourceWritingTask.h"
 #include "IFormEndWritingTask.h"
 #include "PDFPageInput.h"
+#include "IndirectObjectsReferenceRegistry.h"
 
 using namespace PDFHummus;
 
@@ -118,12 +119,13 @@ private:
 
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(	const std::string& inPDFFilePath,
+																				const PDFParsingOptions& inParsingOptions,
 																				const PDFPageRange& inPageRange,
 																				IPageEmbedInFormCommand* inPageEmbedCommand,
 																				const double* inTransformationMatrix,
 																				const ObjectIDTypeList& inCopyAdditionalObjects)
 {
-	if(StartFileCopyingContext(inPDFFilePath) != PDFHummus::eSuccess)
+	if(StartFileCopyingContext(inPDFFilePath, inParsingOptions) != PDFHummus::eSuccess)
 	{
 		return EStatusCodeAndObjectIDTypeList(PDFHummus::eFailure,ObjectIDTypeList());
 	}
@@ -232,23 +234,25 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(	const std::string& inPDFFilePath,
+																				const PDFParsingOptions& inParsingOptions,
 																				const PDFPageRange& inPageRange,
 																				EPDFPageBox inPageBoxToUseAsFormBox,
 																				const double* inTransformationMatrix,
 																				const ObjectIDTypeList& inCopyAdditionalObjects)
 {
 	PageEmbedInFormWithPageBox embedCommand(inPageBoxToUseAsFormBox);
-	return CreateFormXObjectsFromPDF(inPDFFilePath,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
+	return CreateFormXObjectsFromPDF(inPDFFilePath,inParsingOptions,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(	const std::string& inPDFFilePath,
+																				const PDFParsingOptions& inParsingOptions,
 																				const PDFPageRange& inPageRange,
 																				const PDFRectangle& inCropBox,
 																				const double* inTransformationMatrix,
 																				const ObjectIDTypeList& inCopyAdditionalObjects)
 {
 	PageEmbedInFormWithCropBox embedCommand(inCropBox);
-	return CreateFormXObjectsFromPDF(inPDFFilePath,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
+	return CreateFormXObjectsFromPDF(inPDFFilePath, inParsingOptions,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
 }
 
 PDFFormXObject* PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long inPageIndex,
@@ -433,7 +437,7 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(IByteWriter* inTa
 	}
 	else
 	{
-		TRACE_LOG1("PDFDocumentHandler::WritePageContentToSingleStream, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel[pageContent->GetType()]);
+		TRACE_LOG1("PDFDocumentHandler::WritePageContentToSingleStream, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel(pageContent->GetType()));
 		status = PDFHummus::eFailure;
 	}
 	
@@ -572,258 +576,34 @@ EStatusCode PDFDocumentHandler::CopyInDirectObject(ObjectIDType inSourceObjectID
 	// Once done. loop what you registered, using CopyInDirectObject in the same manner. This should maintain that each object is written separately
 	EStatusCode status;
 	ObjectIDTypeList newObjectsToWrite;
+	OutWritingPolicy writingPolicy(this, newObjectsToWrite);
 
 	RefCountPtr<PDFObject> sourceObject = mParser->ParseNewObject(inSourceObjectID);
 	if(!sourceObject)
 	{
-		TRACE_LOG1("PDFDocumentHandler::CopyInDirectObject, object not found. %ld",inSourceObjectID);
-		return PDFHummus::eFailure;
+		XrefEntryInput* xrefEntry = mParser->GetXrefEntry(inSourceObjectID);
+		if (xrefEntry->mType == eXrefEntryDelete) {
+			// if the object is deleted, replace with a deleted object
+			mObjectsContext->GetInDirectObjectsRegistry().DeleteObject(inTargetObjectID);
+			return PDFHummus::eSuccess;
+		}
+		else {
+			// fail
+			TRACE_LOG1("PDFDocumentHandler::CopyInDirectObject, object not found. %ld", inSourceObjectID);
+			return PDFHummus::eFailure;
+		}
 	}
 
 	mObjectsContext->StartNewIndirectObject(inTargetObjectID);
-	status = WriteObjectByType(sourceObject.GetPtr(),eTokenSeparatorEndLine,newObjectsToWrite);
+	status = WriteObjectByType(sourceObject.GetPtr(),eTokenSeparatorEndLine, &writingPolicy);
 	if(PDFHummus::eSuccess == status)
 	{
-		mObjectsContext->EndIndirectObject();
+		if (sourceObject->GetType() != PDFObject::ePDFObjectStream) // write indirect object end for non streams only...cause they take care of writing their own
+			mObjectsContext->EndIndirectObject();
 		return WriteNewObjects(newObjectsToWrite,ioCopiedObjects);
 	}
 	else
 		return status;
-}
-
-EStatusCode PDFDocumentHandler::WriteObjectByType(PDFObject* inObject,ETokenSeparator inSeparator,ObjectIDTypeList& outSourceObjectsToAdd)
-{
-	EStatusCode status = PDFHummus::eSuccess;
-
-	switch(inObject->GetType())
-	{
-		case PDFObject::ePDFObjectBoolean:
-		{
-			mObjectsContext->WriteBoolean(((PDFBoolean*)inObject)->GetValue(),inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectLiteralString:
-		{
-			mObjectsContext->WriteLiteralString(((PDFLiteralString*)inObject)->GetValue(),inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectHexString:
-		{
-			mObjectsContext->WriteHexString(((PDFHexString*)inObject)->GetValue(),inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectNull:
-		{
-			mObjectsContext->WriteNull(eTokenSeparatorEndLine);
-			break;
-		}
-		case PDFObject::ePDFObjectName:
-		{
-			mObjectsContext->WriteName(((PDFName*)inObject)->GetValue(),inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectInteger:
-		{
-			mObjectsContext->WriteInteger(((PDFInteger*)inObject)->GetValue(),inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectReal:
-		{
-			mObjectsContext->WriteDouble(((PDFReal*)inObject)->GetValue(),inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectSymbol:
-		{
-			mObjectsContext->WriteKeyword(((PDFSymbol*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectIndirectObjectReference:
-		{
-			ObjectIDType sourceObjectID = ((PDFIndirectObjectReference*)inObject)->mObjectID;
-			ObjectIDTypeToObjectIDTypeMap::iterator	itObjects = mSourceToTarget.find(sourceObjectID);
-			if(itObjects == mSourceToTarget.end())
-			{
-				ObjectIDType newObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-				itObjects = mSourceToTarget.insert(ObjectIDTypeToObjectIDTypeMap::value_type(sourceObjectID,newObjectID)).first;
-				outSourceObjectsToAdd.push_back(sourceObjectID);
-			}
-			mObjectsContext->WriteNewIndirectObjectReference(itObjects->second,inSeparator);
-			break;
-		}
-		case PDFObject::ePDFObjectArray:
-		{
-			status = WriteArrayObject((PDFArray*)inObject,inSeparator,outSourceObjectsToAdd);
-			break;
-		}
-		case PDFObject::ePDFObjectDictionary:
-		{
-			status = WriteDictionaryObject((PDFDictionary*)inObject,outSourceObjectsToAdd);
-			break;
-		}
-		case PDFObject::ePDFObjectStream:
-		{
-			status = WriteStreamObject((PDFStreamInput*)inObject,outSourceObjectsToAdd);
-			break;
-		}
-	}
-	return status;
-}
-
-
-EStatusCode PDFDocumentHandler::WriteArrayObject(PDFArray* inArray,ETokenSeparator inSeparator,ObjectIDTypeList& outSourceObjectsToAdd)
-{
-	SingleValueContainerIterator<PDFObjectVector> it(inArray->GetIterator());
-
-	EStatusCode status = PDFHummus::eSuccess;
-	
-	mObjectsContext->StartArray();
-
-	while(it.MoveNext() && PDFHummus::eSuccess == status)
-		status = WriteObjectByType(it.GetItem(),eTokenSeparatorSpace,outSourceObjectsToAdd);
-
-	if(PDFHummus::eSuccess == status)
-		mObjectsContext->EndArray(inSeparator);
-
-	return status;
-}
-
-
-
-EStatusCode PDFDocumentHandler::WriteDictionaryObject(PDFDictionary* inDictionary,ObjectIDTypeList& outSourceObjectsToAdd)
-{
-	MapIterator<PDFNameToPDFObjectMap> it(inDictionary->GetIterator());
-	EStatusCode status = PDFHummus::eSuccess;
-	DictionaryContext* dictionary = mObjectsContext->StartDictionary();
-
-	while(it.MoveNext() && PDFHummus::eSuccess == status)
-	{
-		status = dictionary->WriteKey(it.GetKey()->GetValue());
-		if(PDFHummus::eSuccess == status)
-			status = WriteObjectByType(it.GetValue(),dictionary,outSourceObjectsToAdd);
-	}
-	
-	if(PDFHummus::eSuccess == status)
-	{
-		return mObjectsContext->EndDictionary(dictionary);
-	}
-	else
-		return PDFHummus::eSuccess;
-}
-
-EStatusCode PDFDocumentHandler::WriteObjectByType(PDFObject* inObject,DictionaryContext* inDictionaryContext,ObjectIDTypeList& outSourceObjectsToAdd)
-{
-	EStatusCode status = PDFHummus::eSuccess;
-
-	switch(inObject->GetType())
-	{
-		case PDFObject::ePDFObjectBoolean:
-		{
-			inDictionaryContext->WriteBooleanValue(((PDFBoolean*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectLiteralString:
-		{
-			inDictionaryContext->WriteLiteralStringValue(((PDFLiteralString*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectHexString:
-		{
-			inDictionaryContext->WriteHexStringValue(((PDFHexString*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectNull:
-		{
-			inDictionaryContext->WriteNullValue();
-			break;
-		}
-		case PDFObject::ePDFObjectName:
-		{
-			inDictionaryContext->WriteNameValue(((PDFName*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectInteger:
-		{
-			inDictionaryContext->WriteIntegerValue(((PDFInteger*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectReal:
-		{
-			inDictionaryContext->WriteDoubleValue(((PDFReal*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectSymbol:
-		{
-			// not sure this is supposed to happen...but then...it is probably not supposed to happen at any times...
-			inDictionaryContext->WriteKeywordValue(((PDFSymbol*)inObject)->GetValue());
-			break;
-		}
-		case PDFObject::ePDFObjectIndirectObjectReference:
-		{
-			ObjectIDType sourceObjectID = ((PDFIndirectObjectReference*)inObject)->mObjectID;
-			ObjectIDTypeToObjectIDTypeMap::iterator	itObjects = mSourceToTarget.find(sourceObjectID);
-			if(itObjects == mSourceToTarget.end())
-			{
-				ObjectIDType newObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-				itObjects = mSourceToTarget.insert(ObjectIDTypeToObjectIDTypeMap::value_type(sourceObjectID,newObjectID)).first;
-				outSourceObjectsToAdd.push_back(sourceObjectID);
-			}
-			inDictionaryContext->WriteNewObjectReferenceValue(itObjects->second);
-			break;
-		}
-		case PDFObject::ePDFObjectArray:
-		{
-			status = WriteArrayObject((PDFArray*)inObject,eTokenSeparatorEndLine,outSourceObjectsToAdd);
-			break;
-		}
-		case PDFObject::ePDFObjectDictionary:
-		{
-			status = WriteDictionaryObject((PDFDictionary*)inObject,outSourceObjectsToAdd);
-			break;
-		}
-		case PDFObject::ePDFObjectStream:
-		{
-			// k. that's not supposed to happen
-			TRACE_LOG("PDFDocumentHandler::WriteObjectByType, got that wrong sir. ain't gonna write a stream in a dictionary. must be a ref. we got exception here");
-			break;
-		}
-	}
-	return status;
-}
-
-EStatusCode PDFDocumentHandler::WriteStreamObject(PDFStreamInput* inStream,ObjectIDTypeList& outSourceObjectsToAdd)
-{
-	// i'm going to copy the stream directly, cause i don't need all this transcoding and such. if we ever do, i'll write a proper
-	// PDFStream implementation.
-	RefCountPtr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
-
-	if(WriteDictionaryObject(streamDictionary.GetPtr(),outSourceObjectsToAdd) != PDFHummus::eSuccess)
-	{
-		TRACE_LOG("PDFDocumentHandler::WriteStreamObject, failed to write stream dictionary");
-		return PDFHummus::eFailure;
-	}
-
-	mObjectsContext->WriteKeyword("stream");
-
-
-	PDFObjectCastPtr<PDFInteger> lengthObject(mParser->QueryDictionaryObject(streamDictionary.GetPtr(),"Length"));	
-
-	if(!lengthObject)
-	{
-		TRACE_LOG("PDFDocumentHandler::WriteStreamObject, stream does not have length, failing");
-		return PDFHummus::eFailure;
-	}
-
-	mPDFStream->SetPosition(inStream->GetStreamContentStart());
-
-	OutputStreamTraits traits(mObjectsContext->StartFreeContext());
-	EStatusCode status = traits.CopyToOutputStream(mPDFStream,(LongBufferSizeType)lengthObject->GetValue());	
-	if(PDFHummus::eSuccess == status)
-	{
-		mObjectsContext->EndFreeContext();
-		mObjectsContext->EndLine(); // this one just to make sure
-		mObjectsContext->WriteKeyword("endstream");
-	}
-	return status;
 }
 
 EStatusCode PDFDocumentHandler::OnResourcesWrite(
@@ -844,21 +624,23 @@ EStatusCode PDFDocumentHandler::OnResourcesWrite(
 
 	MapIterator<PDFNameToPDFObjectMap> it(resources->GetIterator());
 	EStatusCode status = PDFHummus::eSuccess;
+	OutWritingPolicy writingPolicy(this, dummyObjectList);
 
 	while(it.MoveNext() && PDFHummus::eSuccess == status)
 	{
 		status = inPageResourcesDictionaryContext->WriteKey(it.GetKey()->GetValue());
 		if(PDFHummus::eSuccess == status)
-			status = WriteObjectByType(it.GetValue(),inPageResourcesDictionaryContext,dummyObjectList);
+			status = WriteObjectByType(it.GetValue(),eTokenSeparatorEndLine, &writingPolicy);
 	}
 	return status;
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDF(const std::string& inPDFFilePath,
+																		const PDFParsingOptions& inParsingOptions,
 																		const PDFPageRange& inPageRange,
 																		const ObjectIDTypeList& inCopyAdditionalObjects)
 {
-	if(StartFileCopyingContext(inPDFFilePath) != PDFHummus::eSuccess)
+	if(StartFileCopyingContext(inPDFFilePath, inParsingOptions) != PDFHummus::eSuccess)
 		return EStatusCodeAndObjectIDTypeList(PDFHummus::eFailure,ObjectIDTypeList());
 
 	return AppendPDFPagesFromPDFInContext(inPageRange,inCopyAdditionalObjects);
@@ -994,10 +776,19 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
  
 		PDFPageInput pageInput(mParser,pageObject);
 		newPage.SetMediaBox(pageInput.GetMediaBox());
+		PDFRectangle cropBox = pageInput.GetCropBox();
+		if(cropBox != pageInput.GetMediaBox())
+			newPage.SetCropBox(pageInput.GetCropBox());
+		if(cropBox != pageInput.GetBleedBox())
+			newPage.SetBleedBox(pageInput.GetBleedBox());
+		if(cropBox != pageInput.GetArtBox())
+			newPage.SetArtBox(pageInput.GetArtBox());
+		if(cropBox != pageInput.GetTrimBox())
+			newPage.SetTrimBox(pageInput.GetTrimBox());
 		newPage.SetRotate(pageInput.GetRotate());
 
 		// copy the page content to the target page content
-		if(CopyPageContentToTargetPage(&newPage,pageObject.GetPtr()) != PDFHummus::eSuccess)
+		if(CopyPageContentToTargetPagePassthrough(&newPage,pageObject.GetPtr()) != PDFHummus::eSuccess)
 			break;
 
 		// resources dictionary is gonna be empty at this point...so we can use our own code to write the dictionary, by extending.
@@ -1028,7 +819,55 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
 	return result;	
 }
 
-EStatusCode PDFDocumentHandler::CopyPageContentToTargetPage(PDFPage* inPage,PDFDictionary* inPageObject)
+EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage* inPage, PDFDictionary* inPageObject) 
+{
+	EStatusCode status = PDFHummus::eSuccess;
+
+	RefCountPtr<PDFObject> pageContent(mParser->QueryDictionaryObject(inPageObject, "Contents"));
+
+	// for empty page, do nothing
+	if (!pageContent)
+		return status;
+
+	if (pageContent->GetType() == PDFObject::ePDFObjectStream)
+	{
+		PDFObjectCastPtr<PDFIndirectObjectReference> streamReference = inPageObject->QueryDirectObject("Contents");
+		EStatusCodeAndObjectIDType copyObjectStatus = CopyObject(streamReference->mObjectID);
+		status = copyObjectStatus.first;
+		if (PDFHummus::eSuccess == status) {
+			inPage->AddContentStreamReference(copyObjectStatus.second);
+		}
+	}
+	else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
+	{
+		SingleValueContainerIterator<PDFObjectVector> it = ((PDFArray*)pageContent.GetPtr())->GetIterator();
+		PDFObjectCastPtr<PDFIndirectObjectReference> refItem;
+		while (it.MoveNext() && status == PDFHummus::eSuccess)
+		{
+			refItem = it.GetItem();
+			if (!refItem)
+			{
+				status = PDFHummus::eFailure;
+				TRACE_LOG("PDFDocumentHandler::CopyPageContentToTargetPagePassthrough, content stream array contains non-refs");
+				break;
+			}
+			EStatusCodeAndObjectIDType copyObjectStatus = CopyObject(refItem->mObjectID);
+			status = copyObjectStatus.first;
+			if (PDFHummus::eSuccess == status) {
+				inPage->AddContentStreamReference(copyObjectStatus.second);
+			}
+		}
+	}
+	else
+	{
+		TRACE_LOG1("PDFDocumentHandler::CopyPageContentToTargetPagePassthrough, error copying page content, expected either array or stream, getting %s", PDFObject::scPDFObjectTypeLabel(pageContent->GetType()));
+		status = PDFHummus::eFailure;
+	}
+
+	return status;
+}
+
+EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage* inPage,PDFDictionary* inPageObject)
 {
 	EStatusCode status = PDFHummus::eSuccess;
     
@@ -1053,14 +892,14 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPage(PDFPage* inPage,PDFD
 			if(!refItem)
 			{
 				status = PDFHummus::eFailure;
-				TRACE_LOG("PDFDocumentHandler::CopyPageContentToTargetPage, content stream array contains non-refs");
+				TRACE_LOG("PDFDocumentHandler::CopyPageContentToTargetPageRecoded, content stream array contains non-refs");
 				break;
 			}
 			PDFObjectCastPtr<PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
 			if(!contentStream)
 			{
 				status = PDFHummus::eFailure;
-				TRACE_LOG("PDFDocumentHandler::CopyPageContentToTargetPage, content stream array contains references to non streams");
+				TRACE_LOG("PDFDocumentHandler::CopyPageContentToTargetPageRecoded, content stream array contains references to non streams");
 				break;
 			}
 			status = WritePDFStreamInputToContentContext(pageContentContext,contentStream.GetPtr());
@@ -1068,7 +907,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPage(PDFPage* inPage,PDFD
 	}
 	else
 	{
-		TRACE_LOG1("PDFDocumentHandler::CopyPageContentToTargetPage, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel[pageContent->GetType()]);
+		TRACE_LOG1("PDFDocumentHandler::CopyPageContentToTargetPageRecoded, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel(pageContent->GetType()));
 		status = PDFHummus::eFailure;
 	}
 	
@@ -1106,7 +945,7 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(PageContentC
 
 }
 
-EStatusCode PDFDocumentHandler::StartFileCopyingContext(const std::string& inPDFFilePath)
+EStatusCode PDFDocumentHandler::StartFileCopyingContext(const std::string& inPDFFilePath, const PDFParsingOptions& inOptions)
 {
 	if(mPDFFile.OpenFile(inPDFFilePath) != PDFHummus::eSuccess)
 	{
@@ -1114,7 +953,7 @@ EStatusCode PDFDocumentHandler::StartFileCopyingContext(const std::string& inPDF
 		return PDFHummus::eFailure;
 	}
 
-	return StartCopyingContext(mPDFFile.GetInputStream());
+	return StartCopyingContext(mPDFFile.GetInputStream(), inOptions);
 }
 
 EStatusCode PDFDocumentHandler::StartCopyingContext(PDFParser* inPDFParser)
@@ -1131,7 +970,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(PDFParser* inPDFParser)
         
 		if(mParser->IsEncrypted() && !mParser->IsEncryptionSupported())
 		{
-			TRACE_LOG("PDFDocumentHandler::StartCopyingContext, Document contains an encryption dictionary. Library does not support embedding of encrypted PDF");
+			TRACE_LOG("PDFDocumentHandler::StartCopyingContext, Document contains an unsupported encryption. Library does not support embedding of encrypted PDF that cant be decrypted");
 			status = PDFHummus::eFailure;
 			break;
 		}
@@ -1141,7 +980,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(PDFParser* inPDFParser)
 	return status;    
 }
 
-EStatusCode PDFDocumentHandler::StartCopyingContext(IByteReaderWithPosition* inPDFStream)
+EStatusCode PDFDocumentHandler::StartCopyingContext(IByteReaderWithPosition* inPDFStream, const PDFParsingOptions& inOptions)
 {
 	EStatusCode status;
 
@@ -1152,7 +991,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(IByteReaderWithPosition* inP
 		mPDFStream = inPDFStream;
         mParserOwned = true;
 
-		status = mParser->StartPDFParsing(inPDFStream);
+		status = mParser->StartPDFParsing(inPDFStream, inOptions);
 		if(status != PDFHummus::eSuccess)
 		{
 			TRACE_LOG("PDFDocumentHandler::StartCopyingContext, failure occured while parsing PDF file.");
@@ -1161,7 +1000,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(IByteReaderWithPosition* inP
 
 		if(mParser->IsEncrypted() && !mParser->IsEncryptionSupported())
 		{
-			TRACE_LOG("PDFDocumentHandler::StartCopyingContext, Document contains an encryption dictionary. Library does not support embedding of encrypted PDF");
+			TRACE_LOG("PDFDocumentHandler::StartCopyingContext, Cant decrypt document. make sure to provide appropriate password for this document in order to copy from it");
 			status = PDFHummus::eFailure;
 			break;
 		}
@@ -1338,10 +1177,11 @@ void PDFDocumentHandler::RemoveDocumentContextExtender(IDocumentContextExtender*
 
 EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage* inPage,
 													const std::string& inPDFFilePath,
+													const PDFParsingOptions& inParsingOptions,
 													const PDFPageRange& inPageRange,
 													const ObjectIDTypeList& inCopyAdditionalObjects)
 {
-	if(StartFileCopyingContext(inPDFFilePath) != PDFHummus::eSuccess)
+	if(StartFileCopyingContext(inPDFFilePath, inParsingOptions) != PDFHummus::eSuccess)
 		return PDFHummus::eFailure;
 
 	return MergePDFPagesToPageInContext(inPage,inPageRange,inCopyAdditionalObjects);
@@ -1698,12 +1538,14 @@ EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(PDFObject* inOb
 {
 	EStatusCode status;
 	ObjectIDTypeList newObjectsToWrite;
+	OutWritingPolicy writingPolicy(this, newObjectsToWrite);
 
 	mObjectsContext->StartNewIndirectObject(inTargetObjectID);
-	status = WriteObjectByType(inObject,eTokenSeparatorEndLine,newObjectsToWrite);
+	status = WriteObjectByType(inObject,eTokenSeparatorEndLine, &writingPolicy);
 	if(PDFHummus::eSuccess == status)
 	{
-		mObjectsContext->EndIndirectObject();
+		if(inObject->GetType() != PDFObject::ePDFObjectStream) // write indirect object end for non streams only...cause they take care of writing their own
+			mObjectsContext->EndIndirectObject();
 		return WriteNewObjects(newObjectsToWrite);
 	}
 	else
@@ -1752,7 +1594,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage* inTargetPa
 	}
 	else
 	{
-		TRACE_LOG1("PDFDocumentHandler::MergePageContentToTargetPage, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel[pageContent->GetType()]);
+		TRACE_LOG1("PDFDocumentHandler::MergePageContentToTargetPage, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel(pageContent->GetType()));
 		status = PDFHummus::eFailure;
 	}
 
@@ -1904,43 +1746,47 @@ EStatusCode PDFDocumentHandler::MergePDFPageToPage(PDFPage* inTargetPage,unsigne
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(IByteReaderWithPosition* inPDFStream,
+																			const PDFParsingOptions& inParsingOptions,
 																			 const PDFPageRange& inPageRange,
 																			 EPDFPageBox inPageBoxToUseAsFormBox,
 																			 const double* inTransformationMatrix,
 																			 const ObjectIDTypeList& inCopyAdditionalObjects)
 {
 	PageEmbedInFormWithPageBox embedCommand(inPageBoxToUseAsFormBox);
-	return CreateFormXObjectsFromPDF(inPDFStream,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
+	return CreateFormXObjectsFromPDF(inPDFStream,inParsingOptions,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
 
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(IByteReaderWithPosition* inPDFStream,
+																			const PDFParsingOptions& inParsingOptions,
 																			const PDFPageRange& inPageRange,
 																			const PDFRectangle& inCropBox,
 																			const double* inTransformationMatrix,
 																			const ObjectIDTypeList& inCopyAdditionalObjects)
 {
 	PageEmbedInFormWithCropBox embedCommand(inCropBox);
-	return CreateFormXObjectsFromPDF(inPDFStream,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
+	return CreateFormXObjectsFromPDF(inPDFStream,inParsingOptions,inPageRange,&embedCommand,inTransformationMatrix,inCopyAdditionalObjects);
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(	IByteReaderWithPosition* inPDFStream,
-																				const PDFPageRange& inPageRange,
+																				const PDFParsingOptions& inParsingOptions,
+																					const PDFPageRange& inPageRange,
 																				IPageEmbedInFormCommand* inPageEmbedCommand,
 																				const double* inTransformationMatrix,
 																				const ObjectIDTypeList& inCopyAdditionalObjects)
 {
-	if(StartStreamCopyingContext(inPDFStream) != PDFHummus::eSuccess)
+	if(StartStreamCopyingContext(inPDFStream, inParsingOptions) != PDFHummus::eSuccess)
 		return EStatusCodeAndObjectIDTypeList(PDFHummus::eFailure,ObjectIDTypeList());
 
 	return CreateFormXObjectsFromPDFInContext(inPageRange,inPageEmbedCommand,inTransformationMatrix,inCopyAdditionalObjects);
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDF(IByteReaderWithPosition* inPDFStream,
+																		 const PDFParsingOptions& inParsingOptions,
 																		 const PDFPageRange& inPageRange,
 																		 const ObjectIDTypeList& inCopyAdditionalObjects)
 {
-	if(StartStreamCopyingContext(inPDFStream) != PDFHummus::eSuccess)
+	if(StartStreamCopyingContext(inPDFStream, inParsingOptions) != PDFHummus::eSuccess)
 		return EStatusCodeAndObjectIDTypeList(PDFHummus::eFailure,ObjectIDTypeList());
 
 	return AppendPDFPagesFromPDFInContext(inPageRange,inCopyAdditionalObjects);
@@ -1948,18 +1794,19 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDF(IByteRe
 
 EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage* inPage,
 													IByteReaderWithPosition* inPDFStream,
+													const PDFParsingOptions& inParsingOptions,
 													const PDFPageRange& inPageRange,
 													const ObjectIDTypeList& inCopyAdditionalObjects)
 {
-	if(StartStreamCopyingContext(inPDFStream) != PDFHummus::eSuccess)
+	if(StartStreamCopyingContext(inPDFStream, inParsingOptions) != PDFHummus::eSuccess)
 		return PDFHummus::eFailure;
 
 	return MergePDFPagesToPageInContext(inPage,inPageRange,inCopyAdditionalObjects);
 }
 
-EStatusCode PDFDocumentHandler::StartStreamCopyingContext(IByteReaderWithPosition* inPDFStream)
+EStatusCode PDFDocumentHandler::StartStreamCopyingContext(IByteReaderWithPosition* inPDFStream, const PDFParsingOptions& inOptions)
 {
-	return StartCopyingContext(inPDFStream);
+	return StartCopyingContext(inPDFStream,inOptions);
 }
 
 PDFHummus::EStatusCode PDFDocumentHandler::StartParserCopyingContext(PDFParser* inPDFParser)
@@ -1971,8 +1818,9 @@ PDFHummus::EStatusCode PDFDocumentHandler::StartParserCopyingContext(PDFParser* 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CopyDirectObjectWithDeepCopy(PDFObject* inObject)
 {
 	ObjectIDTypeList notCopiedReferencedObjects;
+	OutWritingPolicy writingPolicy(this, notCopiedReferencedObjects);
 
-	EStatusCode status = WriteObjectByType(inObject,eTokenSeparatorEndLine,notCopiedReferencedObjects);
+	EStatusCode status = WriteObjectByType(inObject,eTokenSeparatorEndLine, &writingPolicy);
 
 	return EStatusCodeAndObjectIDTypeList(status,notCopiedReferencedObjects);
 }
@@ -2006,10 +1854,28 @@ IByteReaderWithPosition* PDFDocumentHandler::GetSourceDocumentStream()
 // for modification scenarios, no need for deep copying. the following implement this path
 EStatusCode PDFDocumentHandler::CopyDirectObjectAsIs(PDFObject* inObject)
 {
-	return WriteObjectByType(inObject,eTokenSeparatorEndLine);    
+	InWritingPolicy writingPolicy(this);
+	return WriteObjectByType(inObject,eTokenSeparatorEndLine,&writingPolicy);
 }
 
-EStatusCode PDFDocumentHandler::WriteObjectByType(PDFObject* inObject,ETokenSeparator inSeparator)
+void InWritingPolicy::WriteReference(PDFIndirectObjectReference* inReference, ETokenSeparator inSeparator) {
+	mDocumentHandler->mObjectsContext->WriteIndirectObjectReference(inReference->mObjectID, inReference->mVersion, inSeparator);
+}
+
+void OutWritingPolicy::WriteReference(PDFIndirectObjectReference* inReference, ETokenSeparator inSeparator) {
+	ObjectIDType sourceObjectID = inReference->mObjectID;
+	ObjectIDTypeToObjectIDTypeMap::iterator	itObjects = mDocumentHandler->mSourceToTarget.find(sourceObjectID);
+	if (itObjects == mDocumentHandler->mSourceToTarget.end())
+	{
+		ObjectIDType newObjectID = mDocumentHandler->mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+		itObjects = mDocumentHandler->mSourceToTarget.insert(ObjectIDTypeToObjectIDTypeMap::value_type(sourceObjectID, newObjectID)).first;
+		mSourceObjectsToAdd.push_back(sourceObjectID);
+	}
+	mDocumentHandler->mObjectsContext->WriteNewIndirectObjectReference(itObjects->second, inSeparator);
+}
+
+
+EStatusCode PDFDocumentHandler::WriteObjectByType(PDFObject* inObject,ETokenSeparator inSeparator, IObjectWritePolicy* inWritePolicy)
 {
 	EStatusCode status = PDFHummus::eSuccess;
     
@@ -2057,30 +1923,29 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(PDFObject* inObject,ETokenSepa
 		}
 		case PDFObject::ePDFObjectIndirectObjectReference:
 		{
-			mObjectsContext->WriteIndirectObjectReference(((PDFIndirectObjectReference*)inObject)->mObjectID,
-                                                          ((PDFIndirectObjectReference*)inObject)->mVersion);
+			inWritePolicy->WriteReference((PDFIndirectObjectReference*)inObject, inSeparator);
 			break;
 		}
 		case PDFObject::ePDFObjectArray:
 		{
-			status = WriteArrayObject((PDFArray*)inObject,inSeparator);
+			status = WriteArrayObject((PDFArray*)inObject,inSeparator, inWritePolicy);
 			break;
 		}
 		case PDFObject::ePDFObjectDictionary:
 		{
-			status = WriteDictionaryObject((PDFDictionary*)inObject);
+			status = WriteDictionaryObject((PDFDictionary*)inObject, inWritePolicy);
 			break;
 		}
 		case PDFObject::ePDFObjectStream:
 		{
-			status = WriteStreamObject((PDFStreamInput*)inObject);
+			status = WriteStreamObject((PDFStreamInput*)inObject, inWritePolicy);
 			break;
 		}
 	}
 	return status;
 }
 
-EStatusCode PDFDocumentHandler::WriteArrayObject(PDFArray* inArray,ETokenSeparator inSeparator)
+EStatusCode PDFDocumentHandler::WriteArrayObject(PDFArray* inArray,ETokenSeparator inSeparator, IObjectWritePolicy* inWritePolicy)
 {
 	SingleValueContainerIterator<PDFObjectVector> it(inArray->GetIterator());
     
@@ -2089,7 +1954,7 @@ EStatusCode PDFDocumentHandler::WriteArrayObject(PDFArray* inArray,ETokenSeparat
 	mObjectsContext->StartArray();
     
 	while(it.MoveNext() && PDFHummus::eSuccess == status)
-		status = WriteObjectByType(it.GetItem(),eTokenSeparatorSpace);
+		status = WriteObjectByType(it.GetItem(),eTokenSeparatorSpace, inWritePolicy);
     
 	if(PDFHummus::eSuccess == status)
 		mObjectsContext->EndArray(inSeparator);
@@ -2097,7 +1962,7 @@ EStatusCode PDFDocumentHandler::WriteArrayObject(PDFArray* inArray,ETokenSeparat
 	return status;
 }
 
-EStatusCode PDFDocumentHandler::WriteDictionaryObject(PDFDictionary* inDictionary)
+EStatusCode PDFDocumentHandler::WriteDictionaryObject(PDFDictionary* inDictionary, IObjectWritePolicy* inWritePolicy)
 {
 	MapIterator<PDFNameToPDFObjectMap> it(inDictionary->GetIterator());
 	EStatusCode status = PDFHummus::eSuccess;
@@ -2107,7 +1972,7 @@ EStatusCode PDFDocumentHandler::WriteDictionaryObject(PDFDictionary* inDictionar
 	{
 		status = dictionary->WriteKey(it.GetKey()->GetValue());
 		if(PDFHummus::eSuccess == status)
-			status = WriteObjectByType(it.GetValue(),eTokenSeparatorEndLine);
+			status = WriteObjectByType(it.GetValue(),eTokenSeparatorEndLine, inWritePolicy);
 	}
 	
 	if(PDFHummus::eSuccess == status)
@@ -2118,39 +1983,48 @@ EStatusCode PDFDocumentHandler::WriteDictionaryObject(PDFDictionary* inDictionar
 		return PDFHummus::eSuccess;
 }
 
-EStatusCode PDFDocumentHandler::WriteStreamObject(PDFStreamInput* inStream)
+EStatusCode PDFDocumentHandler::WriteStreamObject(PDFStreamInput* inStream, IObjectWritePolicy* inWritePolicy)
 {
-	// i'm going to copy the stream directly, cause i don't need all this transcoding and such. if we ever do, i'll write a proper
-	// PDFStream implementation.
+	/*
+	1. Create stream dictionary, copy all elements of input stream but Length (which may be the same...but due to internals may not)
+	2. Create PDFStream with this dictionary and use its output stream to write the result
+	*/
 	RefCountPtr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
-    
-	if(WriteDictionaryObject(streamDictionary.GetPtr()) != PDFHummus::eSuccess)
+	DictionaryContext* newStreamDictionary = mObjectsContext->StartDictionary();
+
+	MapIterator<PDFNameToPDFObjectMap> it(streamDictionary->GetIterator());
+	EStatusCode status = PDFHummus::eSuccess;
+	while (it.MoveNext() && PDFHummus::eSuccess == status)
+	{
+		if (it.GetKey()->GetValue() != "Length") {
+			status = newStreamDictionary->WriteKey(it.GetKey()->GetValue());
+			if (PDFHummus::eSuccess == status)
+				status = WriteObjectByType(it.GetValue(), eTokenSeparatorEndLine, inWritePolicy);
+		}
+	}
+
+	if (status != PDFHummus::eSuccess)
 	{
 		TRACE_LOG("PDFDocumentHandler::WriteStreamObject, failed to write stream dictionary");
 		return PDFHummus::eFailure;
 	}
-    
-	mObjectsContext->WriteKeyword("stream");
-    
-    
-	PDFObjectCastPtr<PDFInteger> lengthObject(mParser->QueryDictionaryObject(streamDictionary.GetPtr(),"Length"));	
-    
-	if(!lengthObject)
+
+	PDFStream* newStream = mObjectsContext->StartUnfilteredPDFStream(newStreamDictionary);
+	OutputStreamTraits outputTraits(newStream->GetWriteStream());
+	IByteReader* streamReader = mParser->StartReadingFromStreamForPlainCopying(inStream);
+
+	status = outputTraits.CopyToOutputStream(streamReader);
+	if (status != PDFHummus::eSuccess)
 	{
-		TRACE_LOG("PDFDocumentHandler::WriteStreamObject, stream does not have length, failing");
+		TRACE_LOG("PDFDocumentHandler::WriteStreamObject, failed to copy stream");
+		delete newStream;
+		delete streamReader;
 		return PDFHummus::eFailure;
 	}
-    
-	mPDFStream->SetPosition(inStream->GetStreamContentStart());
-    
-	OutputStreamTraits traits(mObjectsContext->StartFreeContext());
-	EStatusCode status = traits.CopyToOutputStream(mPDFStream,(LongBufferSizeType)lengthObject->GetValue());	
-	if(PDFHummus::eSuccess == status)
-	{
-		mObjectsContext->EndFreeContext();
-		mObjectsContext->EndLine(); // this one just to make sure
-		mObjectsContext->WriteKeyword("endstream");
-	}
+
+	mObjectsContext->EndPDFStream(newStream);
+	delete newStream;
+	delete streamReader;
 	return status;
 }
 
@@ -2510,7 +2384,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject* 
 	}
 	else
 	{
-		TRACE_LOG1("PDFDocumentHandler::MergePageContentToTargetXObject, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel[pageContent->GetType()]);
+		TRACE_LOG1("PDFDocumentHandler::MergePageContentToTargetXObject, error copying page content, expected either array or stream, getting %s",PDFObject::scPDFObjectTypeLabel(pageContent->GetType()));
 		status = PDFHummus::eFailure;
 	}
 

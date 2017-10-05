@@ -34,12 +34,14 @@
 #include "PDFBoolean.h"
 #include "PDFInteger.h"
 #include "PDFPageInput.h"
+#include "PDFDocumentCopyingContext.h"
 
 using namespace PDFHummus;
 
-const LogConfiguration LogConfiguration::DefaultLogConfiguration(false,false,"PDFWriterLog.txt");
-
-const PDFCreationSettings PDFCreationSettings::DefaultPDFCreationSettings(true,true);
+const LogConfiguration& LogConfiguration::DefaultLogConfiguration(){
+	static LogConfiguration default_log_configuration(false, false, "PDFWriterLog.txt");
+	return default_log_configuration;
+}
 
 PDFWriter::PDFWriter(void)
 {
@@ -48,11 +50,14 @@ PDFWriter::PDFWriter(void)
 	// the first decision (level) about the PDF can be the result of parsing
 	mDocumentContext.SetObjectsContext(&mObjectsContext);
     mIsModified = false;
-	mEmbedFonts = true;
 }
 
 PDFWriter::~PDFWriter(void)
 {
+}
+
+EPDFVersion thisOrDefaultVersion(EPDFVersion inPDFVersion) {
+	return ePDFVersionUndefined == inPDFVersion ? ePDFVersion14 : inPDFVersion;
 }
 
 EStatusCode PDFWriter::StartPDF(
@@ -70,9 +75,18 @@ EStatusCode PDFWriter::StartPDF(
 
 	mObjectsContext.SetOutputStream(mOutputFile.GetOutputStream());
 	mDocumentContext.SetOutputFileInformation(&mOutputFile);    
-    mIsModified = false;
+
+	if (inPDFCreationSettings.DocumentEncryptionOptions.ShouldEncrypt) {
+		mDocumentContext.SetupEncryption(inPDFCreationSettings.DocumentEncryptionOptions, thisOrDefaultVersion(inPDFVersion));
+		if (!mDocumentContext.SupportsEncryption()) {
+			mOutputFile.CloseFile(); // close the file, to keep things clean
+			return eFailure;
+		}
+	}
+
+	mIsModified = false;
 	
-	return mDocumentContext.WriteHeader(inPDFVersion);
+	return mDocumentContext.WriteHeader(thisOrDefaultVersion(inPDFVersion));
 }
 
 EStatusCode PDFWriter::EndPDF()
@@ -82,9 +96,9 @@ EStatusCode PDFWriter::EndPDF()
 	do
 	{
         if(mIsModified)
-            status = mDocumentContext.FinalizeModifiedPDF(&mModifiedFileParser,mModifiedFileVersion,mEmbedFonts);
+            status = mDocumentContext.FinalizeModifiedPDF(&mModifiedFileParser,mModifiedFileVersion);
         else    
-            status = mDocumentContext.FinalizeNewPDF(mEmbedFonts);
+            status = mDocumentContext.FinalizeNewPDF();
 		if(status != eSuccess)
 		{
 			TRACE_LOG("PDFWriter::EndPDF, Could not end PDF");
@@ -151,15 +165,15 @@ EStatusCode PDFWriter::WritePageAndRelease(PDFPage* inPage)
 void PDFWriter::SetupLog(const LogConfiguration& inLogConfiguration)
 {
 	if(inLogConfiguration.LogStream)
-		Trace::DefaultTrace.SetLogSettings(inLogConfiguration.LogStream,inLogConfiguration.ShouldLog);
+		Trace::DefaultTrace().SetLogSettings(inLogConfiguration.LogStream,inLogConfiguration.ShouldLog);
 	else
-		Trace::DefaultTrace.SetLogSettings(inLogConfiguration.LogFileLocation,inLogConfiguration.ShouldLog,inLogConfiguration.StartWithBOM);
+		Trace::DefaultTrace().SetLogSettings(inLogConfiguration.LogFileLocation,inLogConfiguration.ShouldLog,inLogConfiguration.StartWithBOM);
 }
 
 void PDFWriter::SetupCreationSettings(const PDFCreationSettings& inPDFCreationSettings)
 {
 	mObjectsContext.SetCompressStreams(inPDFCreationSettings.CompressStreams);
-	mEmbedFonts = inPDFCreationSettings.EmbedFonts;
+	mDocumentContext.SetEmbedFonts(inPDFCreationSettings.EmbedFonts);
 }
 
 void PDFWriter::ReleaseLog()
@@ -253,6 +267,31 @@ PDFFormXObject* PDFWriter::CreateFormXObjectFromTIFFStream(IByteReaderWithPositi
 
 #endif
 
+#ifndef PDFHUMMUS_NO_PNG
+PDFFormXObject* PDFWriter::CreateFormXObjectFromPNGFile(const std::string& inPNGFilePath) {
+	return CreateFormXObjectFromPNGFile(inPNGFilePath, mObjectsContext.GetInDirectObjectsRegistry().AllocateNewObjectID());
+}
+
+PDFFormXObject* PDFWriter::CreateFormXObjectFromPNGFile(const std::string& inPNGFilePath, ObjectIDType inFormXObjectId) {
+	InputFile inputFile;
+	if (inputFile.OpenFile(inPNGFilePath) != eSuccess) {
+		return NULL;
+	}
+
+	return CreateFormXObjectFromPNGStream(inputFile.GetInputStream(), inFormXObjectId);
+}
+
+
+PDFFormXObject* PDFWriter::CreateFormXObjectFromPNGStream(IByteReaderWithPosition* inPNGStream) {
+	return CreateFormXObjectFromPNGStream(inPNGStream , mObjectsContext.GetInDirectObjectsRegistry().AllocateNewObjectID());
+}
+
+PDFFormXObject* PDFWriter::CreateFormXObjectFromPNGStream(IByteReaderWithPosition* inPNGStream, ObjectIDType inFormXObjectId) {
+	return mDocumentContext.CreateFormXObjectFromPNGStream(inPNGStream, inFormXObjectId);
+}
+
+#endif
+
 PDFImageXObject* PDFWriter::CreateImageXObjectFromJPGFile(const std::string& inJPGFilePath,ObjectIDType inImageXObjectID)
 {
 	return mDocumentContext.CreateImageXObjectFromJPGFile(inJPGFilePath,inImageXObjectID); 
@@ -278,9 +317,11 @@ EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(const std::s
 																	  const PDFPageRange& inPageRange,
 																	  EPDFPageBox inPageBoxToUseAsFormBox,
 																	  const double* inTransformationMatrix,
-																	  const ObjectIDTypeList& inCopyAdditionalObjects)
+																	  const ObjectIDTypeList& inCopyAdditionalObjects,
+																	  const PDFParsingOptions& inParsingOptions)
 {
 	return mDocumentContext.CreateFormXObjectsFromPDF(inPDFFilePath,
+														inParsingOptions,
 														inPageRange,
 														inPageBoxToUseAsFormBox,
 														inTransformationMatrix,
@@ -291,9 +332,11 @@ EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(const std::s
 																	 const PDFPageRange& inPageRange,
 																	 const PDFRectangle& inCropBox,
 																	 const double* inTransformationMatrix,
-																	 const ObjectIDTypeList& inCopyAdditionalObjects)
+																	 const ObjectIDTypeList& inCopyAdditionalObjects,
+																	const PDFParsingOptions& inParsingOptions)
 {
 	return mDocumentContext.CreateFormXObjectsFromPDF(inPDFFilePath,
+														inParsingOptions,
 														inPageRange,
 														inCropBox,
 														inTransformationMatrix,
@@ -302,9 +345,11 @@ EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(const std::s
 
 EStatusCodeAndObjectIDTypeList PDFWriter::AppendPDFPagesFromPDF(const std::string& inPDFFilePath,
 																const PDFPageRange& inPageRange,
-																const ObjectIDTypeList& inCopyAdditionalObjects)
+																const ObjectIDTypeList& inCopyAdditionalObjects,
+																const PDFParsingOptions& inParsingOptions)
 {
 	return mDocumentContext.AppendPDFPagesFromPDF(inPDFFilePath,
+														inParsingOptions,
 														inPageRange,
 														inCopyAdditionalObjects);
 }
@@ -342,8 +387,6 @@ EStatusCode PDFWriter::Shutdown(const std::string& inStateFilePath)
         pdfWriterDictionary->WriteKey("mIsModified");
         pdfWriterDictionary->WriteBooleanValue(mIsModified);
 
-		pdfWriterDictionary->WriteKey("mEmbedFonts");
-		pdfWriterDictionary->WriteBooleanValue(mEmbedFonts);
 
         if(mIsModified)
         {
@@ -441,10 +484,6 @@ EStatusCode PDFWriter::SetupState(const std::string& inStateFilePath)
             mModifiedFileVersion = (EPDFVersion)(isModifiedFileVersionObject->GetValue());
         }
 
-		PDFObjectCastPtr<PDFBoolean> embedFontsObject(pdfWriterDictionary->QueryDirectObject("mEmbedFonts"));
-		mEmbedFonts = embedFontsObject->GetValue();
-
-
 		PDFObjectCastPtr<PDFIndirectObjectReference> objectsContextObject(pdfWriterDictionary->QueryDirectObject("mObjectsContext"));
 		status = mObjectsContext.ReadState(reader.GetObjectsReader(),objectsContextObject->mObjectID);
 		if(status!= eSuccess)
@@ -481,9 +520,9 @@ EStatusCode PDFWriter::ContinuePDFForStream(IByteWriterWithPosition* inOutputStr
 }
 
 
-PDFDocumentCopyingContext* PDFWriter::CreatePDFCopyingContext(const std::string& inPDFFilePath)
+PDFDocumentCopyingContext* PDFWriter::CreatePDFCopyingContext(const std::string& inPDFFilePath, const PDFParsingOptions& inOptions)
 {
-	return mDocumentContext.CreatePDFCopyingContext(inPDFFilePath);
+	return mDocumentContext.CreatePDFCopyingContext(inPDFFilePath, inOptions);
 }
 
 EStatusCode PDFWriter::AttachURLLinktoCurrentPage(const std::string& inURL,const PDFRectangle& inLinkClickArea)
@@ -494,10 +533,12 @@ EStatusCode PDFWriter::AttachURLLinktoCurrentPage(const std::string& inURL,const
 EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage* inPage,
 								const std::string& inPDFFilePath,
 								const PDFPageRange& inPageRange,
-								const ObjectIDTypeList& inCopyAdditionalObjects)
+								const ObjectIDTypeList& inCopyAdditionalObjects,
+								const PDFParsingOptions& inParsingOptions)
 {
 	return mDocumentContext.MergePDFPagesToPage(inPage,
 												inPDFFilePath,
+												inParsingOptions,
 												inPageRange,
 												inCopyAdditionalObjects);
 }
@@ -510,20 +551,25 @@ EStatusCode PDFWriter::StartPDFForStream(IByteWriterWithPosition* inOutputStream
 {
 	SetupLog(inLogConfiguration);
 	SetupCreationSettings(inPDFCreationSettings);
+	if (inPDFCreationSettings.DocumentEncryptionOptions.ShouldEncrypt) {
+		mDocumentContext.SetupEncryption(inPDFCreationSettings.DocumentEncryptionOptions, thisOrDefaultVersion(inPDFVersion));
+		if (!mDocumentContext.SupportsEncryption())
+			return eFailure;
+	}
 
 	mObjectsContext.SetOutputStream(inOutputStream);
     mIsModified = false;
 	
-	return mDocumentContext.WriteHeader(inPDFVersion);
+	return mDocumentContext.WriteHeader(thisOrDefaultVersion(inPDFVersion));
 }
 EStatusCode PDFWriter::EndPDFForStream()
 {
     EStatusCode status;
     
     if(mIsModified)
-        status = mDocumentContext.FinalizeModifiedPDF(&mModifiedFileParser,mModifiedFileVersion,mEmbedFonts);
+        status = mDocumentContext.FinalizeModifiedPDF(&mModifiedFileParser,mModifiedFileVersion);
     else    
-        status = mDocumentContext.FinalizeNewPDF(mEmbedFonts);
+        status = mDocumentContext.FinalizeNewPDF();
     mModifiedFileParser.ResetParser();
 	Cleanup();
 	return status;
@@ -554,38 +600,42 @@ EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(IByteReaderW
 																	const PDFPageRange& inPageRange,
 																	EPDFPageBox inPageBoxToUseAsFormBox,
 																	const double* inTransformationMatrix,
-																	const ObjectIDTypeList& inCopyAdditionalObjects)
+																	const ObjectIDTypeList& inCopyAdditionalObjects,
+																	const PDFParsingOptions& inParsingOptions)
 {
-	return mDocumentContext.CreateFormXObjectsFromPDF(inPDFStream,inPageRange,inPageBoxToUseAsFormBox,inTransformationMatrix,inCopyAdditionalObjects);
+	return mDocumentContext.CreateFormXObjectsFromPDF(inPDFStream,inParsingOptions,inPageRange,inPageBoxToUseAsFormBox,inTransformationMatrix,inCopyAdditionalObjects);
 }
 
 EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(IByteReaderWithPosition* inPDFStream,
 																	const PDFPageRange& inPageRange,
 																	const PDFRectangle& inCropBox,
 																	const double* inTransformationMatrix,
-																	const ObjectIDTypeList& inCopyAdditionalObjects)
+																	const ObjectIDTypeList& inCopyAdditionalObjects,
+																	const PDFParsingOptions& inParsingOptions)
 {
-	return mDocumentContext.CreateFormXObjectsFromPDF(inPDFStream,inPageRange,inCropBox,inTransformationMatrix,inCopyAdditionalObjects);
+	return mDocumentContext.CreateFormXObjectsFromPDF(inPDFStream,inParsingOptions,inPageRange,inCropBox,inTransformationMatrix,inCopyAdditionalObjects);
 }
 
 EStatusCodeAndObjectIDTypeList PDFWriter::AppendPDFPagesFromPDF(IByteReaderWithPosition* inPDFStream,
 																const PDFPageRange& inPageRange,
-																const ObjectIDTypeList& inCopyAdditionalObjects)
+																const ObjectIDTypeList& inCopyAdditionalObjects,
+																const PDFParsingOptions& inParsingOptions)
 {
-	return mDocumentContext.AppendPDFPagesFromPDF(inPDFStream,inPageRange,inCopyAdditionalObjects);
+	return mDocumentContext.AppendPDFPagesFromPDF(inPDFStream,inParsingOptions,inPageRange,inCopyAdditionalObjects);
 }
 
 EStatusCode PDFWriter::MergePDFPagesToPage(	PDFPage* inPage,
 											IByteReaderWithPosition* inPDFStream,
 											const PDFPageRange& inPageRange,
-											const ObjectIDTypeList& inCopyAdditionalObjects)
+											const ObjectIDTypeList& inCopyAdditionalObjects,
+											const PDFParsingOptions& inParsingOptions)
 {
-	return mDocumentContext.MergePDFPagesToPage(inPage,inPDFStream,inPageRange,inCopyAdditionalObjects);
+	return mDocumentContext.MergePDFPagesToPage(inPage,inPDFStream, inParsingOptions,inPageRange,inCopyAdditionalObjects);
 }
 
-PDFDocumentCopyingContext* PDFWriter::CreatePDFCopyingContext(IByteReaderWithPosition* inPDFStream)
+PDFDocumentCopyingContext* PDFWriter::CreatePDFCopyingContext(IByteReaderWithPosition* inPDFStream, const PDFParsingOptions& inOptions)
 {
-	return mDocumentContext.CreatePDFCopyingContext(inPDFStream);	
+	return mDocumentContext.CreatePDFCopyingContext(inPDFStream,inOptions);	
 }
 
 EStatusCode PDFWriter::ModifyPDF(const std::string& inModifiedFile,
@@ -607,7 +657,8 @@ EStatusCode PDFWriter::ModifyPDF(const std::string& inModifiedFile,
             status = mOutputFile.OpenFile(inModifiedFile,true);
             if(status != eSuccess)
                 break;
-        }
+			mObjectsContext.SetOutputStream(mOutputFile.GetOutputStream());
+		}
         else
         {
             status = mOutputFile.OpenFile(inOptionalAlternativeOutputFile);
@@ -624,14 +675,17 @@ EStatusCode PDFWriter::ModifyPDF(const std::string& inModifiedFile,
             status = traits.CopyToOutputStream(modifiedFileInput.GetInputStream());
             if(status != eSuccess)
                 break;
+
+			// add an extra newline after eof, just in case the original file didn't have it
+			mObjectsContext.SetOutputStream(mOutputFile.GetOutputStream());
+			mObjectsContext.WriteTokenSeparator(eTokenSeparatorEndLine);
         }
         
-        mObjectsContext.SetOutputStream(mOutputFile.GetOutputStream());
         mDocumentContext.SetOutputFileInformation(&mOutputFile);
         
         // do setup for modification 
         mIsModified = true;
-        status = SetupStateFromModifiedFile(inModifiedFile,inPDFVersion);
+        status = SetupStateFromModifiedFile(inModifiedFile, thisOrDefaultVersion(inPDFVersion), inPDFCreationSettings);
     } 
     while (false);
            
@@ -663,17 +717,26 @@ EStatusCode PDFWriter::ModifyPDFForStream(
         
     mIsModified = true;
         
-    return SetupStateFromModifiedStream(inModifiedSourceStream,inPDFVersion);  
+    return SetupStateFromModifiedStream(inModifiedSourceStream, thisOrDefaultVersion(inPDFVersion), inPDFCreationSettings);
 }
 
 EStatusCode PDFWriter::SetupStateFromModifiedStream(IByteReaderWithPosition* inModifiedSourceStream,
-                                                    EPDFVersion inPDFVersion)
+                                                    EPDFVersion inPDFVersion,
+													const PDFCreationSettings& inPDFCreationSettings)
 {
     EStatusCode status;
+	PDFParsingOptions parsingOptions;
     
+	// this bit here is actually interesting. in order to modify an already encrypted document
+	// and add more content to it, i just need the user password. not the owner one.
+	// in fact, passing the owner password here will create the wrong encryption key.
+	// interesting.
+	if (inPDFCreationSettings.DocumentEncryptionOptions.ShouldEncrypt)
+		parsingOptions.Password = inPDFCreationSettings.DocumentEncryptionOptions.UserPassword;
+
     do 
     {
-        status = mModifiedFileParser.StartPDFParsing(inModifiedSourceStream);
+        status = mModifiedFileParser.StartPDFParsing(inModifiedSourceStream, parsingOptions);
         if(status != eSuccess)
             break;    
         
@@ -683,15 +746,22 @@ EStatusCode PDFWriter::SetupStateFromModifiedStream(IByteReaderWithPosition* inM
         if(status != eSuccess)
             break;
         
-        mModifiedFileVersion = inPDFVersion;
-        
+		if (mModifiedFileParser.IsEncrypted() && mModifiedFileParser.IsEncryptionSupported()) {
+			mDocumentContext.SetupEncryption(&mModifiedFileParser);
+			if (!mDocumentContext.SupportsEncryption()) {
+				status = eFailure;
+				break;
+			}
+		}
+
+        mModifiedFileVersion = thisOrDefaultVersion(inPDFVersion);
     } 
     while (false);
     
     return status;
 }
 
-EStatusCode PDFWriter::SetupStateFromModifiedFile(const std::string& inModifiedFile,EPDFVersion inPDFVersion)
+EStatusCode PDFWriter::SetupStateFromModifiedFile(const std::string& inModifiedFile,EPDFVersion inPDFVersion, const PDFCreationSettings& inPDFCreationSettings)
 {
     EStatusCode status;
     
@@ -701,7 +771,7 @@ EStatusCode PDFWriter::SetupStateFromModifiedFile(const std::string& inModifiedF
         if(status != eSuccess)
             break;
         
-        status = SetupStateFromModifiedStream(mModifiedFile.GetInputStream(),inPDFVersion);
+        status = SetupStateFromModifiedStream(mModifiedFile.GetInputStream(), thisOrDefaultVersion(inPDFVersion), inPDFCreationSettings);
     }
     while(false);
     
@@ -723,9 +793,9 @@ PDFDocumentCopyingContext* PDFWriter::CreatePDFCopyingContextForModifiedFile()
 	return mDocumentContext.CreatePDFCopyingContext(&mModifiedFileParser);    
 }
 
-DoubleAndDoublePair PDFWriter::GetImageDimensions(const std::string& inImageFile,unsigned long inImageIndex)
+DoubleAndDoublePair PDFWriter::GetImageDimensions(const std::string& inImageFile,unsigned long inImageIndex, const PDFParsingOptions& inParsingOptions)
 {
-	return mDocumentContext.GetImageDimensions(inImageFile,inImageIndex);
+	return mDocumentContext.GetImageDimensions(inImageFile,inImageIndex,inParsingOptions);
 }
 
 PDFHummus::EHummusImageType PDFWriter::GetImageType(const std::string& inImageFile,unsigned long inImageIndex)
@@ -733,9 +803,107 @@ PDFHummus::EHummusImageType PDFWriter::GetImageType(const std::string& inImageFi
 	return mDocumentContext.GetImageType(inImageFile,inImageIndex);
 }
 
-unsigned long PDFWriter::GetImagePagesCount(const std::string& inImageFile)
+unsigned long PDFWriter::GetImagePagesCount(const std::string& inImageFile, const PDFParsingOptions& inOptions)
 {
-	return mDocumentContext.GetImagePagesCount(inImageFile);
+	return mDocumentContext.GetImagePagesCount(inImageFile,inOptions);
 }
 
+PDFHummus::EStatusCode PDFWriter::RecryptPDF(
+	const std::string& inOriginalPDFPath,
+	const std::string& inOriginalPDFPassword,
+	const std::string& inNewPDFPath,
+	const LogConfiguration& inLogConfiguration,
+	const PDFCreationSettings& inPDFCreationSettings,
+	EPDFVersion inOveridePDFVersion) {
+	
+	InputFile originalPDF;
+	OutputFile newPDF;
 
+	EStatusCode status = originalPDF.OpenFile(inOriginalPDFPath);
+	if (status != eSuccess)
+		return status;
+
+	status = newPDF.OpenFile(inNewPDFPath);
+	if (status != eSuccess)
+		return status;
+
+	return PDFWriter::RecryptPDF(
+		originalPDF.GetInputStream(),
+		inOriginalPDFPassword,
+		newPDF.GetOutputStream(),
+		inLogConfiguration,
+		inPDFCreationSettings,
+		inOveridePDFVersion
+		);
+}
+
+PDFHummus::EStatusCode PDFWriter::RecryptPDF(
+	IByteReaderWithPosition* inOriginalPDFStream,
+	const std::string& inOriginalPDFPassword,
+	IByteWriterWithPosition* inNewPDFStream,
+	const LogConfiguration& inLogConfiguration,
+	const PDFCreationSettings& inPDFCreationSettings,
+	EPDFVersion inOveridePDFVersion) {
+	PDFWriter pdfWriter;
+	EStatusCode status;
+	PDFDocumentCopyingContext* copyingContext = NULL;
+
+	/*
+	How to recrypt an encrypted or plain PDF. In other words. create a new version that's decrypted, or encrypted with new passwords.
+	*/
+
+	do
+	{
+		// open PDF copying context for the source document (before starting a new one, so i can get the origina level and set the same)
+		copyingContext = pdfWriter.CreatePDFCopyingContext(inOriginalPDFStream, PDFParsingOptions(inOriginalPDFPassword));
+		if (!copyingContext)
+		{
+			status = PDFHummus::eFailure;
+			break;
+		}
+
+
+		// open new PDF for writing
+		status = pdfWriter.StartPDFForStream(
+			inNewPDFStream,
+			(ePDFVersionUndefined == inOveridePDFVersion)  ? EPDFVersion((int)(copyingContext->GetSourceDocumentParser()->GetPDFLevel() * 10)) : inOveridePDFVersion,
+			inLogConfiguration,
+			inPDFCreationSettings
+			);
+		if (status != PDFHummus::eSuccess)
+		{
+			break;
+		}
+
+
+		// get its root object ID
+		PDFObjectCastPtr<PDFIndirectObjectReference> catalogRef(copyingContext->GetSourceDocumentParser()->GetTrailer()->QueryDirectObject("Root"));
+		if (!catalogRef)
+		{
+			status = PDFHummus::eFailure;
+			break;
+		}
+
+		// deep-copy the whole pdf through its root - return root object ID copy at new PDF
+		EStatusCodeAndObjectIDType copyCatalogResult = copyingContext->CopyObject(catalogRef->mObjectID);
+		if (copyCatalogResult.first != eSuccess)
+		{
+			status = PDFHummus::eFailure;
+			break;
+
+		}
+
+		delete copyingContext;
+		copyingContext = NULL;
+
+		// set new root object ID as this document root
+		pdfWriter.GetDocumentContext().GetTrailerInformation().SetRoot(copyCatalogResult.second);
+
+		// now just end the PDF
+		pdfWriter.EndPDF();
+	} while (false);
+
+	delete copyingContext;
+
+	return status;
+}

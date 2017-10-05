@@ -1124,8 +1124,12 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
 	{
 		for(;it!= encodedCharactersList.end();++it)
 		{
-			SAFE_SPRINTF_2(formattingBuffer,5,"%02x%02x",((*it)>>8) & 0x00ff,(*it) & 0x00ff);
-			stringStream.Write((const Byte*)formattingBuffer,4);
+			formattingBuffer[0] = ((*it) >> 8) & 0x00ff;
+			stringStream.Write((const Byte*)formattingBuffer, 1);
+			formattingBuffer[0] = (*it) & 0x00ff;
+			stringStream.Write((const Byte*)formattingBuffer, 1);
+			//SAFE_SPRINTF_2(formattingBuffer,5,"%02x%02x",((*it)>>8) & 0x00ff,(*it) & 0x00ff);
+			//stringStream.Write((const Byte*)formattingBuffer,4);
 		}
 		inTextCommand->WriteHexStringCommand(stringStream.ToString());
 	}
@@ -1439,7 +1443,7 @@ void AbstractContentContext::DrawImage(double inX,double inY,const std::string& 
 	}
 	else if(inOptions.transformationMethod == eFit)
 	{
-		DoubleAndDoublePair imageDimensions = mDocumentContext->GetImageDimensions(inImagePath,inOptions.imageIndex);
+		DoubleAndDoublePair imageDimensions = mDocumentContext->GetImageDimensions(inImagePath,inOptions.imageIndex,inOptions.pdfParsingOptions);
 
         double scaleX = 1;
         double scaleY = 1;
@@ -1475,7 +1479,7 @@ void AbstractContentContext::DrawImage(double inX,double inY,const std::string& 
     if(result.second)
     {
         // if first usage, write the image
-        ScheduleImageWrite(inImagePath,inOptions.imageIndex,result.first);
+        ScheduleImageWrite(inImagePath,inOptions.imageIndex,result.first,inOptions.pdfParsingOptions);
     }
     
     q();

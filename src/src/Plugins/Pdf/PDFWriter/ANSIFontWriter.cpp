@@ -311,8 +311,8 @@ void ANSIFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 	unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1; // cause 0 is not there
 
 	cmapWriteContext->Write((const Byte*)scCmapHeader,strlen(scCmapHeader));
-	primitiveWriter.WriteHexString(scTwoByteRangeStart);
-	primitiveWriter.WriteHexString(scTwoByteRangeEnd,eTokenSeparatorEndLine);
+	primitiveWriter.WriteEncodedHexString(scTwoByteRangeStart);
+	primitiveWriter.WriteEncodedHexString(scTwoByteRangeEnd,eTokenSeparatorEndLine);
 	cmapWriteContext->Write((const Byte*)scEndCodeSpaceRange,strlen(scEndCodeSpaceRange));
 
 	if(vectorSize < 100)
@@ -368,6 +368,13 @@ void ANSIFontWriter::WriteGlyphEntry(IByteWriter* inWriter,unsigned short inEnco
 			unicode.GetUnicodeList().push_back(*it);
 			EStatusCodeAndUShortList utf16Result = unicode.ToUTF16UShort();
 			unicode.GetUnicodeList().clear();
+
+			if (utf16Result.first == eFailure || utf16Result.second.size() == 0) {
+				TRACE_LOG1("ANSIFontWriter::WriteGlyphEntry, got invalid glyph value. saving as 0. value = ", *it);
+				utf16Result.second.clear();
+				utf16Result.second.push_back(0);
+			}
+
 
 			if(utf16Result.second.size() == 2)
 			{

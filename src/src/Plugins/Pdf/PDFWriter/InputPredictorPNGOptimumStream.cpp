@@ -16,12 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputPredictorPNGOptimumStream.h"
 
 #include "Trace.h"
 #include <stdlib.h>
+
+/*
+	Note from Gal: Note that optimum also implements the others. this is because PNG compression requires that the first byte in the line holds the algo -
+	even if the whole stream is declared as a single algo.
+*/
 
 using namespace IOBasicTypes;
 
@@ -42,22 +47,25 @@ InputPredictorPNGOptimumStream::~InputPredictorPNGOptimumStream(void)
 	delete mSourceStream;
 }
 
-InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader* inSourceStream,IOBasicTypes::LongBufferSizeType inColumns)
-{	
+InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader* inSourceStream,
+                                                               IOBasicTypes::LongBufferSizeType inColors,
+                                                               IOBasicTypes::Byte inBitsPerComponent,
+                                                               IOBasicTypes::LongBufferSizeType inColumns)
+{
 	mSourceStream = NULL;
 	mBuffer = NULL;
 	mIndex = NULL;
 	mBufferSize = 0;
 	mUpValues = NULL;
 
-	Assign(inSourceStream,inColumns);
+	Assign(inSourceStream,inColors,inBitsPerComponent,inColumns);
 }
 
 
 LongBufferSizeType InputPredictorPNGOptimumStream::Read(Byte* inBuffer,LongBufferSizeType inBufferSize)
 {
 	LongBufferSizeType readBytes = 0;
-	
+
 
 	// exhaust what's in the buffer currently
 	while(mBufferSize > (LongBufferSizeType)(mIndex - mBuffer) && readBytes < inBufferSize)
@@ -70,15 +78,17 @@ LongBufferSizeType InputPredictorPNGOptimumStream::Read(Byte* inBuffer,LongBuffe
 	while(readBytes < inBufferSize && mSourceStream->NotEnded())
 	{
 		memcpy(mUpValues,mBuffer,mBufferSize);
-
-		if(mSourceStream->Read(mBuffer,mBufferSize) != mBufferSize)
+		LongBufferSizeType readFromSource = mSourceStream->Read(mBuffer, mBufferSize);
+		if (readFromSource == 0) {
+			break; // a belated end. must be flate
+		}
+		if(readFromSource != mBufferSize)
 		{
 			TRACE_LOG("InputPredictorPNGOptimumStream::Read, problem, expected columns number read. didn't make it");
-			readBytes = 0;
 			break;
 		}
-		mFunctionType = *mIndex;
-		*mIndex = 0; // so i can use this as "left" value...we don't care about this one...it's just a tag
+		mFunctionType = *mBuffer;
+		*mBuffer = 0; // so i can use this as "left" value...we don't care about this one...it's just a tag
 		mIndex = mBuffer+1; // skip the first tag
 
 		while(mBufferSize > (LongBufferSizeType)(mIndex - mBuffer) && readBytes < inBufferSize)
@@ -104,7 +114,7 @@ void InputPredictorPNGOptimumStream::DecodeNextByte(Byte& outDecodedByte)
 			outDecodedByte = *mIndex;
 			break;
 		case 1:
-			outDecodedByte = (Byte)((char)mBuffer[mIndex-mBuffer - 1] + (char)*mIndex);
+			outDecodedByte = (Byte)((char)*(mIndex-mBytesPerPixel) + (char)*mIndex);
 			break;
 		case 2:
 			outDecodedByte = (Byte)((char)mUpValues[mIndex-mBuffer] + (char)*mIndex);
@@ -121,20 +131,24 @@ void InputPredictorPNGOptimumStream::DecodeNextByte(Byte& outDecodedByte)
 	++mIndex;
 }
 
-void InputPredictorPNGOptimumStream::Assign(IByteReader* inSourceStream,IOBasicTypes::LongBufferSizeType inColumns)
+void InputPredictorPNGOptimumStream::Assign(IByteReader* inSourceStream,
+											IOBasicTypes::LongBufferSizeType inColors,
+											IOBasicTypes::Byte inBitsPerComponent,
+											IOBasicTypes::LongBufferSizeType inColumns)
 {
 	mSourceStream = inSourceStream;
 
 	delete[] mBuffer;
 	delete[] mUpValues;
-	mBufferSize = inColumns + 1;
+	mBytesPerPixel = inColors * inBitsPerComponent / 8;
+	// Rows may contain empty bits at end
+	mBufferSize = (inColumns * inColors * inBitsPerComponent + 7) / 8 + 1;
 	mBuffer = new Byte[mBufferSize];
 	memset(mBuffer,0,mBufferSize);
 	mUpValues = new Byte[mBufferSize];
 	memset(mUpValues,0,mBufferSize); // that's less important
 	mIndex = mBuffer + mBufferSize;
 	mFunctionType = 0;
-
 }
 
 char InputPredictorPNGOptimumStream::PaethPredictor(char inLeft,char inUp,char inUpLeft)
@@ -146,8 +160,8 @@ char InputPredictorPNGOptimumStream::PaethPredictor(char inLeft,char inUp,char i
 
 	if(pLeft <= pUp && pLeft <= pUpLeft)
 	  return pLeft;
-	else if(pUp <= pUpLeft) 
+	else if(pUp <= pUpLeft)
 	  return inUp;
-	else 
+	else
 	  return inUpLeft;
 }

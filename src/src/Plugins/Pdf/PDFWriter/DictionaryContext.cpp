@@ -59,9 +59,13 @@ EStatusCode DictionaryContext::WriteKey(const std::string& inKey)
 	}
 	else
 	{
-		TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same dictionary. key reused - %s",inKey.c_str());
+		TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same dictionary. key reused - %s",inKey.substr(0, MAX_TRACE_SIZE-200).c_str());
 		return PDFHummus::eFailure;
 	}
+}
+
+bool DictionaryContext::HasKey(const std::string& inKey) {
+	return mKeys.find(inKey) != mKeys.end();
 }
 
 static const Byte scTab[1] = {'\t'};

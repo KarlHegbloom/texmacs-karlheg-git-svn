@@ -28,10 +28,11 @@
 #include "PDFDictionary.h"
 #include "IByteReaderWithPosition.h"
 #include "AdapterIByteReaderWithPositionToIReadPositionProvider.h"
+#include "DecryptionHelper.h"
+#include "PDFParsingOptions.h"
 
 #include <map>
 #include <utility>
-
 
 class PDFArray;
 class PDFStreamInput;
@@ -68,8 +69,6 @@ struct ObjectStreamHeaderEntry
 	LongFilePositionType mObjectOffset;
 };
 
-
-
 typedef std::map<ObjectIDType,ObjectStreamHeaderEntry*> ObjectIDTypeToObjectStreamHeaderEntryMap;
 
 class PDFParser
@@ -80,10 +79,14 @@ public:
 
 	// sets the stream to parse, then parses for enough information to be able
 	// to parse objects later
-	PDFHummus::EStatusCode StartPDFParsing(IByteReaderWithPosition* inSourceStream);
+	PDFHummus::EStatusCode StartPDFParsing(IByteReaderWithPosition* inSourceStream, 
+											const PDFParsingOptions& inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
 	// get a parser that can parse objects
 	PDFObjectParser& GetObjectParser();
+
+	// get decryption helper - useful to decrypt streams if not using standard operation
+	DecryptionHelper& GetDecryptionHelper();
 
 	// below become available after initial parsing [this level is from the header]
 	double GetPDFLevel();
@@ -117,11 +120,29 @@ public:
     // Note that it DOES NOT setup the reading position of the file for reading the stream,
     // so if you want to read it, you have to also move the strem position, or use StartReadingFromStream instead
 	IByteReader* CreateInputStreamReader(PDFStreamInput* inStream);
+
+	/* 
+		Create a reader that will be able to read the stream, but without defiltering it.
+		It will only decrypt it, if decryption is supported. This is ideal for copying
+	*/
+	IByteReader* CreateInputStreamReaderForPlainCopying(PDFStreamInput* inStream);
     
     // prepare parser so that you can read from the input stream object.
     // create filters and move the stream to the beginning of the stream position.
     // delete the result when done
     IByteReader* StartReadingFromStream(PDFStreamInput* inStream);
+
+	// creates a PDFObjectParser object that you can use for reading objects
+	// from the input stream. very userful for reading content streams for
+	// interpreting them
+	PDFObjectParser* StartReadingObjectsFromStream(PDFStreamInput* inStream);
+	// same, but for an array of streams, in case of page contents that are arrays. need to count as one
+	PDFObjectParser* StartReadingObjectsFromStreams(PDFArray* inArrayOfStreams);
+
+	/*
+		Same as above, but reading only decrypts, but does not defiler. ideal for copying
+	*/
+	IByteReader* StartReadingFromStreamForPlainCopying(PDFStreamInput* inStream);
 
 	// use this to explictly free used objects. quite obviously this means that you'll have to parse the file again
 	void ResetParser();
@@ -146,6 +167,7 @@ public:
     
 private:
 	PDFObjectParser mObjectParser;
+	DecryptionHelper mDecryptionHelper;
 	IByteReaderWithPosition* mStream;
 	AdapterIByteReaderWithPositionToIReadPositionProvider mCurrentPositionProvider;
 	
@@ -180,7 +202,9 @@ private:
                                                   XrefEntryInput** outExtendedTable,
                                                   ObjectIDType* outExtendedTableSize);
     XrefEntryInput* ExtendXrefTableToSize(XrefEntryInput* inXrefTable,ObjectIDType inOldSize,ObjectIDType inNewSize);
+	PDFHummus::EStatusCode ReadNextXrefEntry(Byte inBuffer[20]);
 	PDFObject*  ParseExistingInDirectObject(ObjectIDType inObjectID);
+	PDFHummus::EStatusCode SetupDecryptionHelper(const std::string& inPassword);
 	PDFHummus::EStatusCode ParsePagesObjectIDs();
 	PDFHummus::EStatusCode ParsePagesIDs(PDFDictionary* inPageNode,ObjectIDType inNodeObjectID);
 	PDFHummus::EStatusCode ParsePagesIDs(PDFDictionary* inPageNode,ObjectIDType inNodeObjectID,unsigned long& ioCurrentPageIndex);
@@ -217,7 +241,12 @@ private:
 	PDFObject* ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
 	PDFHummus::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry* inHeaderInfo,ObjectIDType inObjectsCount);
 	void MovePositionInStream(LongFilePositionType inPosition);
-	EStatusCodeAndIByteReader CreateFilterForStream(IByteReader* inStream,PDFName* inFilterName,PDFDictionary* inDecodeParams);
+	EStatusCodeAndIByteReader CreateFilterForStream(IByteReader* inStream,PDFName* inFilterName,PDFDictionary* inDecodeParams, PDFStreamInput* inPDFStream);
+
+	void NotifyIndirectObjectStart(long long inObjectID, long long inGenerationNumber);
+	void NotifyIndirectObjectEnd(PDFObject* inObject);
+
+	IByteReader* WrapWithDecryptionFilter(PDFStreamInput* inStream, IByteReader* inToWrapStream);
 
 	// Backward reading
 	bool ReadNextBufferFromEnd();
@@ -229,5 +258,4 @@ private:
 	bool GoBackTillNonToken();
 	void GoBackTillLineStart();
 	bool IsPDFWhiteSpace(IOBasicTypes::Byte inCharacter);
-
 };

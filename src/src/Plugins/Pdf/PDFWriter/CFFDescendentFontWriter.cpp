@@ -62,7 +62,7 @@ EStatusCode CFFDescendentFontWriter::WriteFont(	ObjectIDType inDecendentObjectID
 	const char* fontType = inFontInfo.GetTypeString();
 	if(strcmp(scType1,fontType) == 0)
 	{
-		TRACE_LOG1("CFFDescendentFontWriter::WriteFont, Exception. identified type1 font when writing CFF CID font, font name - %s. type 1 CIDs are not supported.",inFontName.c_str());
+		TRACE_LOG1("CFFDescendentFontWriter::WriteFont, Exception. identified type1 font when writing CFF CID font, font name - %s. type 1 CIDs are not supported.",inFontName.substr(0, MAX_TRACE_SIZE - 200).c_str());
 		return PDFHummus::eFailure;
 	}
 
@@ -73,7 +73,12 @@ EStatusCode CFFDescendentFontWriter::WriteFont(	ObjectIDType inDecendentObjectID
 		UIntVector orderedGlyphs;
 		UShortVector cidMapping;
 
-		sort(encodedGlyphs.begin(), encodedGlyphs.end(), sEncodedGlypsSort);
+		// Gal: the following sort completely ruins everything.
+		// the order of the glyphs should be maintained per the ENCODED characthers
+		// which is how the input is recieved. IMPORTANT - the order is critical
+		// for the success of the embedding, as the order determines the order of the glyphs
+		// in the subset font and so their GID which MUST match the encoded char.
+		//sort(encodedGlyphs.begin(), encodedGlyphs.end(), sEncodedGlypsSort);
 
 		for (UIntAndGlyphEncodingInfoVector::const_iterator it = encodedGlyphs.begin();
 			it != encodedGlyphs.end();

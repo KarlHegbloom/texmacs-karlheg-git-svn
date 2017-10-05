@@ -21,6 +21,9 @@
 #include "PrimitiveObjectsWriter.h"
 #include "SafeBufferMacrosDefs.h"
 #include "IByteWriter.h"
+#include <locale>
+#include <sstream>
+#include <iomanip>
 
 using namespace IOBasicTypes;
 
@@ -140,26 +143,39 @@ void PrimitiveObjectsWriter::WriteLiteralString(const std::string& inString,ETok
 
 void PrimitiveObjectsWriter::WriteDouble(double inDoubleToken,ETokenSeparator inSeparate)
 {
-	char buffer[512];
+	// make sure we get proper decimal point writing
+	std::stringstream s;
+	// use classic locale for no worries writing
+	s.imbue(std::locale::classic());
+	s<<std::fixed<<inDoubleToken;
+	std::string result = s.str();
 
-	SAFE_SPRINTF_1(buffer,512,"%f",inDoubleToken);
+	LongBufferSizeType sizeToWrite = DetermineDoubleTrimmedLength(result);
 
-	LongBufferSizeType sizeToWrite = DetermineDoubleTrimmedLength(buffer);
-
-	mStreamForWriting->Write((const IOBasicTypes::Byte *)buffer,sizeToWrite);
+	mStreamForWriting->Write((const IOBasicTypes::Byte *)(result.c_str()),sizeToWrite);
 	WriteTokenSeparator(inSeparate);
 }
 
-size_t PrimitiveObjectsWriter::DetermineDoubleTrimmedLength(const char* inBufferWithDouble)
+size_t PrimitiveObjectsWriter::DetermineDoubleTrimmedLength(const std::string& inString)
 {
-	size_t result = strlen(inBufferWithDouble);
+	size_t result = inString.length();
+
+	// check that we got decimal dot. if not...use original length. 
+	std::size_t found = inString.find(".");
+	if (found == std::string::npos)
+		return result;
+
+	// otherwise - trim trailing 0s and decimal dot
 
 	// remove all ending 0's
-	while(result > 0 && inBufferWithDouble[result-1] == '0')
+	std::string::const_reverse_iterator fromEnd = inString.rbegin();
+	while(result > 0 && *fromEnd == '0') {
+		++fromEnd;
 		--result;
+	}
 
 	// if it's actually an integer, remove also decimal point
-	if(result > 0 && inBufferWithDouble[result-1] == '.')
+	if(result > 0 && *fromEnd == '.')
 		--result;
 	return result;
 }
@@ -207,8 +223,31 @@ static const IOBasicTypes::Byte scRightAngle[1] = {'>'};
 void PrimitiveObjectsWriter::WriteHexString(const std::string& inString,ETokenSeparator inSeparate)
 {
 	mStreamForWriting->Write(scLeftAngle,1);
-	mStreamForWriting->Write((const IOBasicTypes::Byte *)inString.c_str(),inString.size());
+	IOBasicTypes::Byte buffer[3];
+	std::string::const_iterator it = inString.begin();
+	for (; it != inString.end(); ++it)
+	{
+		Byte aValue = *it;
+		SAFE_SPRINTF_1((char*)buffer, 3, "%02X", aValue);
+		mStreamForWriting->Write(buffer, 2);
+	}
+	
 	mStreamForWriting->Write(scRightAngle,1);
+	WriteTokenSeparator(inSeparate);
+}
+
+void PrimitiveObjectsWriter::WriteEncodedHexString(const std::string& inString, ETokenSeparator inSeparate)
+{
+	// string is already encoded, so no need to sprintf
+	mStreamForWriting->Write(scLeftAngle, 1);
+	std::string::const_iterator it = inString.begin();
+	for (; it != inString.end(); ++it)
+	{
+		Byte aValue = *it;
+		mStreamForWriting->Write(&aValue, 1);
+	}
+
+	mStreamForWriting->Write(scRightAngle, 1);
 	WriteTokenSeparator(inSeparate);
 }
 

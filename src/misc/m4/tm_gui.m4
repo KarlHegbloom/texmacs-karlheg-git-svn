@@ -24,14 +24,14 @@ AC_DEFUN([TM_GUI],[
   case "$enable_qt" in
       yes)
          LC_WITH_QT
-         if test x"$at_cv_qt_build" = xko; then 
+         if test x"$at_cv_qt_build" = xko; then
             AC_MSG_ERROR([cannot find Qt!])
          else
             AC_MSG_RESULT([enabling Qt port])
             CONFIG_GUI="QT"
             if test x"$CONFIG_OS" = xMACOS; then
-               # on Mac we rely on some ObjC code contained in 
-               # src/Plugins/MacOS    
+               # on Mac we rely on some ObjC code contained in
+               # src/Plugins/MacOS
                CONFIG_MACOS="MacOS"
             fi
          fi
@@ -143,7 +143,7 @@ default qt5 plugins: generic,imageformats,platforminputcontexts,platforms,prints
   AC_SUBST(CONFIG_GUI)
   AC_SUBST(CONFIG_GUI_DEFINE)
 
-  AC_SUBST(QT_FRAMEWORKS_PATH)  
+  AC_SUBST(QT_FRAMEWORKS_PATH)
   AC_SUBST(QT_PLUGINS_PATH)
   AC_SUBST(QT_PLUGINS_LIST)
 ])

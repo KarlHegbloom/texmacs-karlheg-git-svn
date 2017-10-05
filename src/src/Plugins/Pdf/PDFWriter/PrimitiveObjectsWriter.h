@@ -46,6 +46,7 @@ public:
 	void WriteUnsafeLiteralString(const std::string& inString,ETokenSeparator inSeparate = eTokenSeparatorSpace);
 	void WriteLiteralString(const std::string& inString,ETokenSeparator inSeparate = eTokenSeparatorSpace);
 	void WriteHexString(const std::string& inString,ETokenSeparator inSeparate = eTokenSeparatorSpace);
+	void WriteEncodedHexString(const std::string& inString, ETokenSeparator inSeparate = eTokenSeparatorSpace);
 	void WriteDouble(double inDoubleToken,ETokenSeparator inSeparate = eTokenSeparatorSpace);
 	void WriteBoolean(bool inBoolean,ETokenSeparator inSeparate = eTokenSeparatorSpace);
 	void WriteNull(ETokenSeparator inSeparate = eTokenSeparatorSpace);
@@ -58,5 +59,5 @@ public:
 private:
 	IByteWriter* mStreamForWriting;
 
-	size_t DetermineDoubleTrimmedLength(const char* inBufferWithDouble);
+	size_t DetermineDoubleTrimmedLength(const std::string& inString);
 };

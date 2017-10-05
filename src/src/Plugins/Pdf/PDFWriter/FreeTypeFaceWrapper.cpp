@@ -41,9 +41,10 @@ FreeTypeFaceWrapper::FreeTypeFaceWrapper(FT_Face inFace,const std::string& inFon
 	mFace = inFace;
 	mFontFilePath = inFontFilePath;
 	mFontIndex = inFontIndex;
-    SetupFormatSpecificExtender(inFontFilePath,"");
 	mDoesOwn = inDoOwn;
 	mGlyphIsLoaded = false;
+	SetupFormatSpecificExtender(inFontFilePath, "");
+	SelectDefaultEncoding();
 }
 
 FreeTypeFaceWrapper::FreeTypeFaceWrapper(FT_Face inFace,const std::string& inFontFilePath,const std::string& inPFMFilePath,long inFontIndex, bool inDoOwn)
@@ -51,13 +52,29 @@ FreeTypeFaceWrapper::FreeTypeFaceWrapper(FT_Face inFace,const std::string& inFon
     mFace = inFace;
 	mFontFilePath = inFontFilePath;
     mFontIndex = inFontIndex;
-	std::string fileExtension = GetExtension(inPFMFilePath);
-	if(fileExtension == "PFM" || fileExtension ==  "pfm") // just don't bother if it's not PFM
-		SetupFormatSpecificExtender(inFontFilePath,inPFMFilePath);
-	else
-		SetupFormatSpecificExtender(inFontFilePath,"");
 	mDoesOwn = inDoOwn;
 	mGlyphIsLoaded = false;
+	std::string fileExtension = GetExtension(inPFMFilePath);
+	if (fileExtension == "PFM" || fileExtension == "pfm") // just don't bother if it's not PFM
+		SetupFormatSpecificExtender(inFontFilePath, inPFMFilePath);
+	else
+		SetupFormatSpecificExtender(inFontFilePath, "");
+	SelectDefaultEncoding();
+}
+
+void FreeTypeFaceWrapper::SelectDefaultEncoding() {
+	mUsePUACodes = false;
+	// try unicode, if doesn't work, try symbol, if that doesnt work try apple roman if exists. and give up (should take care of plain unicodes and symbols and plain latins)
+	if (FT_Select_Charmap(mFace, FT_ENCODING_UNICODE) != 0) {
+		if(FT_Select_Charmap(mFace, FT_ENCODING_MS_SYMBOL) != 0) {
+			if (FT_Select_Charmap(mFace, FT_ENCODING_APPLE_ROMAN) != 0) {
+				TRACE_LOG("inFreeTypeFaceWrapper::SelectDefaultEncoding, warning - failed to set either unicode or symbol encoding");
+			}
+		}
+		else {
+			mUsePUACodes = true; // for symbol map input chars to pua codes
+		}
+	}
 }
 
 std::string FreeTypeFaceWrapper::NotDefGlyphName()
@@ -574,19 +591,22 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList& inUnic
 		ULongList::const_iterator it = inUnicodeCharacters.begin();
 		for(; it != inUnicodeCharacters.end(); ++it)
 		{
-      if ( mFormatParticularWrapper && mFormatParticularWrapper->HasPrivateEncoding() ) {
-			  glyphIndex = mFormatParticularWrapper->GetGlyphForUnicodeChar(*it);
-        // glyphIndex == 0 is allowed in some Type1 fonts with custom encoding
-      }
-      else
-      {
-        glyphIndex =  FT_Get_Char_Index(mFace,*it);
-        if(0 == glyphIndex)
-        {
-          TRACE_LOG1("FreeTypeFaceWrapper::GetGlyphsForUnicodeText, failed to find glyph for charachter 0x%04x",*it);
-          status = PDFHummus::eFailure;
-        }
-      }
+			if ( mFormatParticularWrapper && mFormatParticularWrapper->HasPrivateEncoding() ) {
+					glyphIndex = mFormatParticularWrapper->GetGlyphForUnicodeChar(*it);
+				// glyphIndex == 0 is allowed in some Type1 fonts with custom encoding
+			}
+			else
+			{
+				FT_ULong charCode = *it;
+				if (mUsePUACodes &&  charCode <= 0xff) // move charcode to pua are in case we should use pua and they are in plain ascii range
+					charCode = 0xF000 | charCode;
+				glyphIndex =  FT_Get_Char_Index(mFace,charCode);
+				if(0 == glyphIndex)
+				{
+					TRACE_LOG1("FreeTypeFaceWrapper::GetGlyphsForUnicodeText, failed to find glyph for charachter 0x%04x",*it);
+					status = PDFHummus::eFailure;
+				}
+			}
 			outGlyphs.push_back(glyphIndex);
 		}
 
@@ -612,7 +632,7 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongListList& in
 	return status;	
 }
 
-IWrittenFont* FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext* inObjectsContext)
+IWrittenFont* FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext* inObjectsContext, bool inFontIsToBeEmbedded)
 {
 	if(mFace)
 	{
@@ -627,7 +647,7 @@ IWrittenFont* FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext* inObj
 			if(FT_Get_CID_Is_Internally_CID_Keyed(mFace,&isCID) != 0)
 				isCID = false;	
 
-			result = new WrittenFontCFF(inObjectsContext,isCID != 0);
+			result = new WrittenFontCFF(inObjectsContext,isCID != 0, inFontIsToBeEmbedded); // CFF fonts should know if font is to be embedded, as the embedding code involves re-encoding of glyphs
 		}
 		else if(strcmp(fontFormat,scTrueType) == 0)
 		{
@@ -825,3 +845,10 @@ void FreeTypeFaceWrapper::IOutlineEnumerator::FTEnd()
 		Close();
 	mToLastValid = false;
 }
+
+
+
+
+
+
+

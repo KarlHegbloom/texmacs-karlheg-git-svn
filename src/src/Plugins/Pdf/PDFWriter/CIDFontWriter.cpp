@@ -106,18 +106,31 @@ EStatusCode CIDFontWriter::WriteFont(FreeTypeFaceWrapper& inFontInfo,
 		CalculateCharacterEncodingArray(); // put the charachter in the order of encoding, for the ToUnicode map
 
 		// ToUnicode
-		fontContext->WriteKey(scToUnicode);
-		ObjectIDType toUnicodeMapObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-		fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
-		
-		status = inObjectsContext->EndDictionary(fontContext);
-		if(status != PDFHummus::eSuccess)
-		{
-			TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
-			break;
+		if (mCharactersVector.size() > 1) {
+			// make sure there's more than just the 0 char (which would make this an array of size of one
+			fontContext->WriteKey(scToUnicode);
+			ObjectIDType toUnicodeMapObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+			fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
+
+			status = inObjectsContext->EndDictionary(fontContext);
+			if (status != PDFHummus::eSuccess)
+			{
+				TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
+				break;
+			}
+			inObjectsContext->EndIndirectObject();
+			WriteToUnicodeMap(toUnicodeMapObjectID);
 		}
-		inObjectsContext->EndIndirectObject();
-		WriteToUnicodeMap(toUnicodeMapObjectID);
+		else {
+			// else just finish font writing (a bit of an edge case here...but should take care of, for cleanliness)
+			status = inObjectsContext->EndDictionary(fontContext);
+			if (status != PDFHummus::eSuccess)
+			{
+				TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
+				break;
+			}
+			inObjectsContext->EndIndirectObject();
+		}
 
 		// Write the descendant font
 		status = inDescendentFontWriter->WriteFont(descendantFontID, fontName, *mFontInfo, mCharactersVector, mObjectsContext, inEmbedFont);
@@ -181,8 +194,8 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 	unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1; // cause 0 is not there
 
 	cmapWriteContext->Write((const Byte*)scCmapHeader,strlen(scCmapHeader));
-	primitiveWriter.WriteHexString(scFourByteRangeStart);
-	primitiveWriter.WriteHexString(scFourByteRangeEnd,eTokenSeparatorEndLine);
+	primitiveWriter.WriteEncodedHexString(scFourByteRangeStart);
+	primitiveWriter.WriteEncodedHexString(scFourByteRangeEnd,eTokenSeparatorEndLine);
 	cmapWriteContext->Write((const Byte*)scEndCodeSpaceRange,strlen(scEndCodeSpaceRange));
 
 	if(vectorSize < 100)
@@ -234,6 +247,12 @@ void CIDFontWriter::WriteGlyphEntry(IByteWriter* inWriter,unsigned short inEncod
 			unicode.GetUnicodeList().push_back(*it);
 			EStatusCodeAndUShortList utf16Result = unicode.ToUTF16UShort();
 			unicode.GetUnicodeList().clear();
+
+			if (utf16Result.first == eFailure || utf16Result.second.size() == 0) {
+				TRACE_LOG1("CIDFontWriter::WriteGlyphEntry, got invalid glyph value. saving as 0. value = ", *it);
+				utf16Result.second.clear();
+				utf16Result.second.push_back(0);
+			}
 
 			if(utf16Result.second.size() == 2)
 			{

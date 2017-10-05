@@ -25,16 +25,20 @@
 
 cmake_minimum_required(VERSION 3.5)
 
+set(CMAKE_CXX_STANDARD 11)
+
 if(NOT CMAKE_BUILD_TYPE)
  set(CMAKE_BUILD_TYPE Debug CACHE STRING
    "Choose the type of build, options are:
 None Debug Release RelWithDebInfo MinSizeRel."
      FORCE)
-endif(NOT CMAKE_BUILD_TYPE)
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
+#INCLUDE(CMakeDetermineSystem)
 
 
 ### --------------------------------------------------------------------
-### Project name 
+### Project name
 ### --------------------------------------------------------------------
 
 project(TEXMACS CXX C) # check for C/C++ compiler
@@ -153,6 +157,7 @@ message(STATUS "  PKGREV is: ${PKGREV}")
 # The string(TIMESTAMP command lacks formatting directives required to form
 # a Debian Changelog signature line.
 
+
 execute_process(COMMAND date "+%a, %d %b %Y %H:%M:%S %z"
   OUTPUT_VARIABLE PKG_DATE ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 if("${PKG_DATE}" STREQUAL "")
@@ -160,9 +165,9 @@ if("${PKG_DATE}" STREQUAL "")
 endif("${PKG_DATE}" STREQUAL "")
 
 
-
 message(STATUS "--  ${PKG_MAINTAINER}  ${PKG_DATE}")
 
+set(CMAKE_MODULE_PATH ${TEXMACS_SOURCE_DIR}/cmake)
 
 ### --------------------------------------------------------------------
 ### Include standard modules
@@ -175,6 +180,7 @@ include(CheckTypeSize)
 include(FindPkgConfig)
 include(CheckCSourceCompiles)
 include(CMakeDependentOption)
+include(FindX11)
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
@@ -245,6 +251,10 @@ IF (NOT ${HAVE_DLOPEN})
   ENDIF (${HAVE_DLOPEN})
 ENDIF (NOT ${HAVE_DLOPEN})
 
+
+IF (${HAVE_DLOPEN})
+  #SET(TM_DYNAMIC_LINKING 1) # dynamic linking works
+ENDIF (${HAVE_DLOPEN})
 
 ### --------------------------------------------------------------------
 ### Handle different systems case by case
@@ -415,12 +425,16 @@ set(PACKAGE_VERSION 1)
 ###  Test for Libraries
 ### --------------------------------------------------------------------
 
-# ? find_package(Cygwin)
-
+find_package(Guile REQUIRED)
 find_package(Iconv)
-
-### cmake_dependent_option(USE_FOO "Use Foo" ON
-###   "USE_BAR;NOT USE_ZOT" OFF)
+find_package(Freetype)
+set(LINKED_FREETYPE 1)
+set(USE_FREETYPE 1)
+find_package(ZLIB)
+find_package(JPEG)
+#FIND_PACKAGE(Cairo)
+#FIND_PACKAGE(Imlib2)
+#FIND_PACKAGE(Axel)
 
 option(LINKED_FREETYPE 1)
 
@@ -491,7 +505,7 @@ endif(_guile_str_size_test)
 # For old versions of Guile.
 message(STATUS "Checking whether ... arguments behave correctly.")
 
-check_c_source_compiles(  
+check_c_source_compiles(
 " #include <guile/gh.h>
   #include <libguile.h>
   typedef SCM (*FN)(...);
@@ -538,9 +552,31 @@ endif(TEXMACS_GUI STREQUAL "Qt")
 
 if(TEXMACS_GUI STREQUAL "Qt5")
 
-  find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
-  find_package(Qt5 5.2.0 COMPONENTS Svg X11Extras)
+  #find_package(Qt5 5.2.0 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
+  #find_package(Qt5 5.2.0 COMPONENTS Svg X11Extras)
   # find_package(Qt5 5.2.0 COMPONENTS QtHelp UiPlugin UiTools WebEngine WebEngineCore WebEngineWidgets)
+
+  FIND_PACKAGE(Qt5 5.9.1 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
+  SET(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
+
+  IF(WIN32)
+   SET(GUI_TYPE WIN32)
+  ENDIF(WIN32)
+
+  include_directories(
+    ${Qt5Core_INCLUDE_DIRS}
+    ${Qt5Gui_INCLUDE_DIRS}
+    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5PrintSupport_INCLUDE_DIRS}
+  )
+  add_definitions("-DQTTEXMACS")
+  SET(QTTEXMACS 1)
+  #SET(NO_FAST_ALLOC 1)
+  SET(CONFIG_GUI "QT")
+  SET(CONFIG_QT "Qt")
+  MESSAGE(STATUS "Enabling experimental  Qt port")
+
+ELSEIF(TEXMACS_GUI STREQUAL "Aqua")
 
   if(Qt5_FOUND)
     if(WIN32)
@@ -642,6 +678,7 @@ set(DEBUG_ASSERT 1)
 #message(STATUS "  GS_EXE is ${GS_EXE}")
 
 set(USE_GS 1)
+set(GS_EXE /usr/bin/gs)
 # These next two are unused by any C++ or Scheme code:
 # set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:) # Unused
 # set(GS_LIB ../share/ghostscript/9.06/lib:) # Unused
@@ -655,6 +692,31 @@ configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_SOURCE_
 configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
 # see: src/System/Misc/sys_utils.cpp:set_env()
+set(CONFIG_STD_SETENV "#define STD_SETENV")
+
+set(GUILE_NUM 1)
+set(PDF_RENDERER 1)
+set(SIZEOF_VOID_P 8)
+set(STDC_HEADERS 1)
+set(USE_STACK_TRACE 1)
+
+option(QTPIPES "use Qt pipes" ON)
+
+option(USE_SQLITE3 "Use SQLite3" ON)
+if (USE_SQLITE3)
+  option(LINKED_SQLITE3 "Use Linked SQLite3" ON)
+endif (USE_SQLITE3)
+
+option(PDFHUMMUS_NO_TIFF "Disable TIFF in PDF Hummus" ON)
+
+if (APPLE)
+  set(MACOSX_EXTENSIONS 1)
+  set(OS_MACOS 1)
+endif (APPLE)
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
+set(CMAKE_CXX_FLAGS "-Wno-deprecated-register -include config.h")
+
+
 set(CONFIG_STD_SETENV "#define STD_SETENV")
 
 set(tm_orig ${TEXMACS_SOURCE_DIR})
@@ -675,11 +737,14 @@ set(datarootdir ${prefix}/share)
 set(datadir ${datarootdir})
 set(tmdata ${datarootdir}/TeXmacs)
 set(tmbin ${exec_prefix}/lib/texmacs/TeXmacs)
+
 set(tmsrc ${TEXMACS_SOURCE_DIR})
+
 configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs @ONLY)
 configure_file(misc/scripts/fig2ps.in ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps @ONLY)
 
 configure_file(misc/man/texmacs.1.in ${TEXMACS_SOURCE_DIR}/misc/man/texmacs.1 @ONLY)
+
 
 file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/control)
 configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/control.in
@@ -687,6 +752,7 @@ configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/control.in
 file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/changelog)
 configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/changelog.in
   ${TEXMACS_SOURCE_DIR}/packages/debian/changelog @ONLY)
+
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
@@ -732,6 +798,7 @@ include(GNUInstallDirs)
 ### bin/
 
 
+### bin/
 install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs
               ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps
               misc/scripts/tm_gs

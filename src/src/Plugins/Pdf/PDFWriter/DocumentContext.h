@@ -20,23 +20,22 @@
 */
 #pragma once
 
-#ifndef PDFHUMMUS_NO_TIFF
-#define PDFHUMMUS_NO_TIFF
-#endif
-
 #include "EStatusCode.h"
 #include "EPDFVersion.h"
 #include "IOBasicTypes.h"
 #include "TrailerInformation.h"
 #include "CatalogInformation.h"
 #include "JPEGImageHandler.h"
-#include "TIFFImageHandler.h"
 #include "TiffUsageParameters.h"
 #include "UsedFontsRepository.h"
 #include "PDFEmbedParameterTypes.h"
 #include "PDFDocumentHandler.h"
 #include "ObjectsBasicTypes.h"
 #include "EHummusImageType.h"
+#include "PDFParsingOptions.h"
+#include "EncryptionOptions.h"
+#include "EncryptionHelper.h"
+#include "PNGImageHandler.h"
 
 #include <string>
 #include <set>
@@ -112,12 +111,19 @@ namespace PDFHummus
 
 		void SetObjectsContext(ObjectsContext* inObjectsContext);
 		void SetOutputFileInformation(OutputFile* inOutputFile);
+		void SetEmbedFonts(bool inEmbedFonts);
 		PDFHummus::EStatusCode	WriteHeader(EPDFVersion inPDFVersion);
-		PDFHummus::EStatusCode	FinalizeNewPDF(bool inEmbedFonts);
-        PDFHummus::EStatusCode	FinalizeModifiedPDF(PDFParser* inModifiedFileParser,EPDFVersion inModifiedPDFVersion,bool inEmbedFonts);
+		PDFHummus::EStatusCode	FinalizeNewPDF();
+        PDFHummus::EStatusCode	FinalizeModifiedPDF(PDFParser* inModifiedFileParser,EPDFVersion inModifiedPDFVersion);
 
 		TrailerInformation& GetTrailerInformation();
 		CatalogInformation& GetCatalogInformation();
+
+		// Encryption related (will default to no encryption of not called)
+		void SetupEncryption(const EncryptionOptions& inEncryptionOptions, EPDFVersion inPDFVersion);
+		void SetupEncryption(PDFParser* inModifiedFileParser);
+		bool SupportsEncryption();
+
 
 		// Page and Page Content Writing
 
@@ -146,10 +152,8 @@ namespace PDFHummus
 		void RegisterAnnotationReferenceForNextPageWrite(ObjectIDType inAnnotationReference);
 
 		// Form XObject creation and finalization
-		PDFFormXObject* StartFormXObject(const PDFRectangle& inBoundingBox,const double* inMatrix = NULL);
-		//// Patch for GNU TeXmacs to support transparency
-		PDFFormXObject* StartFormXObject(const PDFRectangle& inBoundingBox,ObjectIDType inFormXObjectID,const double* inMatrix = NULL,const bool transparency = false);
-		//// End patch for GNU TeXmacs to support transparency
+		PDFFormXObject* StartFormXObject(const PDFRectangle& inBoundingBox,const double* inMatrix = NULL,const bool inUseTransparencyGroup = false);
+		PDFFormXObject* StartFormXObject(const PDFRectangle& inBoundingBox,ObjectIDType inFormXObjectID,const double* inMatrix = NULL,const bool inUseTransparencyGroup = false);
 		PDFHummus::EStatusCode EndFormXObject(PDFFormXObject* inFormXObject);
 		PDFHummus::EStatusCode EndFormXObjectAndRelease(PDFFormXObject* inFormXObject);
 
@@ -196,50 +200,61 @@ namespace PDFHummus
 		// TIFF
 #ifndef PDFHUMMUS_NO_TIFF
 		PDFFormXObject* CreateFormXObjectFromTIFFFile(	const std::string& inTIFFFilePath,
-														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters);
+														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 		PDFFormXObject* CreateFormXObjectFromTIFFStream(IByteReaderWithPosition* inTIFFStream,
-														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters);
+														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 		PDFFormXObject* CreateFormXObjectFromTIFFFile(	const std::string& inTIFFFilePath,
 														ObjectIDType inFormXObjectID,
-														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters);
+														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 		PDFFormXObject* CreateFormXObjectFromTIFFStream(	IByteReaderWithPosition* inTIFFStream,
 														ObjectIDType inFormXObjectID,
-														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters);
+														const TIFFUsageParameters& inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 #endif
+#ifndef PDFHUMMUS_NO_PNG
+		// PNG
+		PDFFormXObject* CreateFormXObjectFromPNGStream(IByteReaderWithPosition* inPNGStream, ObjectIDType inFormXObjectID);
+#endif
+
 		// PDF
 		// CreateFormXObjectsFromPDF is for using input PDF pages as objects in one page or more. you can used the returned IDs to place the 
 		// created form xobjects
 		EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(const std::string& inPDFFilePath,
+																 const PDFParsingOptions& inParsingOptions,
 																 const PDFPageRange& inPageRange,
 																 EPDFPageBox inPageBoxToUseAsFormBox,
 																 const double* inTransformationMatrix = NULL,
 																 const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 
 		EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(IByteReaderWithPosition* inPDFStream,
-																 const PDFPageRange& inPageRange,
+																const PDFParsingOptions& inParsingOptions,
+																const PDFPageRange& inPageRange,
 																 EPDFPageBox inPageBoxToUseAsFormBox,
 																 const double* inTransformationMatrix = NULL,
 																 const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 		
 		// CreateFormXObjectsFromPDF is an override to allow you to determine a custom crop for the page embed
 		EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(const std::string& inPDFFilePath,
-																 const PDFPageRange& inPageRange,
+																const PDFParsingOptions& inParsingOptions,
+																const PDFPageRange& inPageRange,
 																 const PDFRectangle& inCropBox,
 																 const double* inTransformationMatrix = NULL,
 																 const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 
 		EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(IByteReaderWithPosition* inPDFStream,
-																 const PDFPageRange& inPageRange,
+																const PDFParsingOptions& inParsingOptions,
+																const PDFPageRange& inPageRange,
 																 const PDFRectangle& inCropBox,
 																 const double* inTransformationMatrix = NULL,
 																 const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 
 		// AppendPDFPagesFromPDF is for simple appending of the input PDF pages
 		EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDF(const std::string& inPDFFilePath,
+															const PDFParsingOptions& inParsingOptions,
 															const PDFPageRange& inPageRange,
 															const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 		
 		EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDF(IByteReaderWithPosition* inPDFStream,
+															const PDFParsingOptions& inParsingOptions,
 															const PDFPageRange& inPageRange,
 															const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 
@@ -247,22 +262,24 @@ namespace PDFHummus
 		// and XObject and later placing, when the intention is to use this graphic just once.
 		PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage* inPage,
 										const std::string& inPDFFilePath,
+										const PDFParsingOptions& inParsingOptions,
 										const PDFPageRange& inPageRange,
 										const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 
 		PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage* inPage,
 										IByteReaderWithPosition* inPDFStream,
+										const PDFParsingOptions& inParsingOptions,
 										const PDFPageRange& inPageRange,
 										const ObjectIDTypeList& inCopyAdditionalObjects = ObjectIDTypeList());
 
-		PDFDocumentCopyingContext* CreatePDFCopyingContext(const std::string& inPDFFilePath);
-		PDFDocumentCopyingContext* CreatePDFCopyingContext(IByteReaderWithPosition* inPDFStream);
+		PDFDocumentCopyingContext* CreatePDFCopyingContext(const std::string& inPDFFilePath, const PDFParsingOptions& inOptions);
+		PDFDocumentCopyingContext* CreatePDFCopyingContext(IByteReaderWithPosition* inPDFStream, const PDFParsingOptions& inOptions);
         PDFDocumentCopyingContext* CreatePDFCopyingContext(PDFParser* inPDFParser);
 
 		// some public image info services, for users of hummus
-		DoubleAndDoublePair GetImageDimensions(const std::string& inImageFile,unsigned long inImageIndex = 0);
+		DoubleAndDoublePair GetImageDimensions(const std::string& inImageFile,unsigned long inImageIndex = 0, const PDFParsingOptions& inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 		EHummusImageType GetImageType(const std::string& inImageFile,unsigned long inImageIndex);
-		unsigned long GetImagePagesCount(const std::string& inImageFile);
+		unsigned long GetImagePagesCount(const std::string& inImageFile, const PDFParsingOptions& inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
 
 		// Font [Text] (font index is for multi-font files. for single file fonts, pass 0)
@@ -318,7 +335,12 @@ namespace PDFHummus
 		void UnRegisterCopyingContext(PDFDocumentCopyingContext* inCopyingContext);
 
 		// internal methods for easy image writing
-		EStatusCode WriteFormForImage(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID);
+		EStatusCode WriteFormForImage(
+			const std::string& inImagePath,
+			unsigned long inImageIndex,
+			ObjectIDType inObjectID,
+			const PDFParsingOptions& inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions()
+		);
 		ObjectIDTypeAndBool RegisterImageForDrawing(const std::string& inImageFile,unsigned long inImageIndex);
 
 		// JPG images handler for retrieving JPG images information
@@ -327,6 +349,9 @@ namespace PDFHummus
 #ifndef PDFHUMMUS_NO_TIFF
         TIFFImageHandler&  GetTIFFImageHandler();
 #endif
+		
+		// get annotations, for complex scenarios where writing a page can happen outside of document context
+		ObjectIDTypeSet& GetAnnotations();
 
 	private:
 		ObjectsContext* mObjectsContext;
@@ -338,6 +363,9 @@ namespace PDFHummus
 #ifndef PDFHUMMUS_NO_TIFF
 		TIFFImageHandler mTIFFImageHandler;
 #endif
+#ifndef PDFHUMMUS_NO_PNG
+		PNGImageHandler mPNGImageHandler;
+#endif
 		PDFDocumentHandler mPDFDocumentHandler;
 		UsedFontsRepository mUsedFontsRepository;
 		ObjectIDTypeSet mAnnotations;
@@ -345,26 +373,25 @@ namespace PDFHummus
 		PDFDocumentCopyingContextSet mCopyingContexts;
         bool mModifiedDocumentIDExists;
         std::string mModifiedDocumentID;
+		std::string mNewPDFID;
 		ObjectIDType mCurrentPageTreeIDInState;
         ResourcesDictionaryAndStringToIResourceWritingTaskListMap mResourcesTasks;
         PDFFormXObjectToIFormEndWritingTaskListMap mFormEndTasks;
         PDFPageToIPageEndWritingTaskListMap mPageEndTasks;
 		PDFTiledPatternToITiledPatternEndWritingTaskListMap mTiledPatternEndTasks;
 	    StringAndULongPairToHummusImageInformationMap mImagesInformation;
+		EncryptionHelper mEncryptionHelper;
 		
 		void WriteHeaderComment(EPDFVersion inPDFVersion);
 		void Write4BinaryBytes();
 		PDFHummus::EStatusCode WriteCatalogObjectOfNewPDF();
-        PDFHummus::EStatusCode WriteCatalogObject(const ObjectReference& inPageTreeRootObjectReference);
+    PDFHummus::EStatusCode WriteCatalogObject(const ObjectReference& inPageTreeRootObjectReference,IDocumentContextExtender* inModifiedFileCopyContext = NULL);
 		PDFHummus::EStatusCode WriteTrailerDictionary();
         PDFHummus::EStatusCode WriteTrailerDictionaryValues(DictionaryContext* inDictionaryContext);
-        void WriteReferenceState(ObjectsContext* inStateWriter,
-                                 DictionaryContext* inDictionaryContext, 
-                                 const ObjectReference& inReference);
-
 		void WriteXrefReference(LongFilePositionType inXrefTablePosition);
 		void WriteFinalEOF();
 		void WriteInfoDictionary();
+		void WriteEncryptionDictionary();
 		void WritePagesTree();
 		int WritePageTree(PageTree* inPageTreeToWrite);
 		std::string GenerateMD5IDForFile();
@@ -374,7 +401,7 @@ namespace PDFHummus
                                                        const std::string& inResourceDictionaryLabel,
                                                        MapIterator<ObjectIDTypeToStringMap> inMapping);
 		bool IsIdentityMatrix(const double* inMatrix);
-		PDFHummus::EStatusCode WriteUsedFontsDefinitions(bool inEmbedFonts);
+		PDFHummus::EStatusCode WriteUsedFontsDefinitions();
 		EStatusCodeAndObjectIDType WriteAnnotationAndLinkForURL(const std::string& inURL,const PDFRectangle& inLinkClickArea);
 
 		void WriteTrailerState(ObjectsContext* inStateWriter,ObjectIDType inObjectID);
@@ -393,13 +420,13 @@ namespace PDFHummus
 		void WritePageTreeState(ObjectsContext* inStateWriter,ObjectIDType inObjectID,PageTree* inPageTree);
 		void ReadPageTreeState(PDFParser* inStateReader,PDFDictionary* inPageTreeState,PageTree* inPageTree);
         
-        PDFHummus::EStatusCode SetupTrailerFromModifiedFile(PDFParser* inModifiedFileParser);
         ObjectReference GetOriginalDocumentPageTreeRoot(PDFParser* inModifiedFileParser);
         bool DocumentHasNewPages();
         ObjectIDType WriteCombinedPageTree(PDFParser* inModifiedFileParser);
         bool IsRequiredVersionHigherThanPDFVersion(PDFParser* inModifiedFileParser,EPDFVersion inModifiedPDFVersion);
         bool DoExtendersRequireCatalogUpdate(PDFParser* inModifiedFileParser);
-        bool RequiresXrefStream(PDFParser* inModifiedFileParser);
+		void CopyEncryptionDictionary(PDFParser* inModifiedFileParser);
+		bool RequiresXrefStream(PDFParser* inModifiedFileParser);
         PDFHummus::EStatusCode WriteXrefStream(LongFilePositionType& outXrefPosition);
 		HummusImageInformation& GetImageInformationStructFor(const std::string& inImageFile,unsigned long inImageIndex);
 	};
