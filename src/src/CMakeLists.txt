@@ -34,14 +34,10 @@ SET(TeXmacs_Include_Dirs
     ./Kernel/Containers
     ./Kernel/Types
     ./Plugins
-<<<<<<< HEAD
-    ./Scheme
-=======
     ./Plugins/Pdf/LibAesgm
     ./Scheme
     ./Scheme/Guile
     ./Scheme/Scheme
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
     ./System
     ./System/Boot
     ./System/Classes
@@ -55,13 +51,8 @@ SET(TeXmacs_Include_Dirs
     ./Typeset/Bridge
     ./Typeset/Concat
     ./Typeset/Page
-<<<<<<< HEAD
     ${TEXMACS_SOURCE_DIR}/TeXmacs/include
     ${TEXMACS_BINARY_DIR}/src/System/
-=======
-    ${TEXMACS_SOURCE_DIR}/TeXmacs/include 
-    ${TEXMACS_BINARY_DIR}/src/System/ 
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
 )
 
 
@@ -70,11 +61,7 @@ SET(TeXmacs_Include_Dirs
 ### --------------------------------------------------------------------
 
 
-<<<<<<< HEAD
 SET(TeXmacs_Base_SRCS
-=======
-SET(TeXmacs_Base_SRCS 
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
     ./Data/Convert/BibTeX/conservative_bib.cpp
     ./Data/Convert/BibTeX/parsebib.cpp
     ./Data/Convert/Coq/parse_vernac.cpp
@@ -180,15 +167,9 @@ SET(TeXmacs_Base_SRCS
     ./Graphics/Fonts/font_database.cpp
     ./Graphics/Fonts/font_guess.cpp
     ./Graphics/Fonts/font_protrusion.cpp
-<<<<<<< HEAD
     ./Graphics/Fonts/font_scripts.cpp
     ./Graphics/Fonts/font_select.cpp
     ./Graphics/Fonts/font_translate.cpp
-=======
-    ./Graphics/Fonts/font_select.cpp
-    ./Graphics/Fonts/font_translate.cpp
-    ./Graphics/Fonts/font_scripts.cpp
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
     ./Graphics/Fonts/math_font.cpp
     ./Graphics/Fonts/poor_bbb.cpp
     ./Graphics/Fonts/poor_bold.cpp
@@ -273,10 +254,7 @@ SET(TeXmacs_Base_SRCS
     ./System/Language/packrat_serializer.cpp
     ./System/Language/python_language.cpp
     ./System/Language/r_language.cpp
-<<<<<<< HEAD
     ./System/Language/scala_language.cpp
-=======
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
     ./System/Language/scheme_language.cpp
     ./System/Language/scilab_language.cpp
     ./System/Language/text_language.cpp
@@ -372,10 +350,7 @@ SET(TeXmacs_Base_SRCS
     ./Typeset/Line/lazy_vstream.cpp
     ./Typeset/Line/line_breaker.cpp
     ./Typeset/Page/columns_breaker.cpp
-<<<<<<< HEAD
-=======
     ./Typeset/Page/new_breaker.cpp
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
     ./Typeset/Page/make_pages.cpp
     ./Typeset/Page/new_breaker.cpp
     ./Typeset/Page/page_breaker.cpp
@@ -401,13 +376,8 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Freetype/adjust_bonum.cpp
     ./Plugins/Freetype/adjust_pagella.cpp
     ./Plugins/Freetype/adjust_schola.cpp
-<<<<<<< HEAD
     ./Plugins/Freetype/adjust_stix.cpp
     ./Plugins/Freetype/adjust_termes.cpp
-=======
-    ./Plugins/Freetype/adjust_termes.cpp
-    ./Plugins/Freetype/adjust_stix.cpp
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
     ./Plugins/Freetype/free_type.cpp
     ./Plugins/Freetype/rubber_assemble_font.cpp
     ./Plugins/Freetype/rubber_stix_font.cpp
@@ -435,137 +405,6 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Mplayer/mplayer.cpp
     ./Plugins/Openssl/openssl.cpp
     ./Plugins/Pdf/pdf_hummus_renderer.cpp
-<<<<<<< HEAD
-    ./Plugins/Pdf/PDFWriter/TiffUsageParameters.cpp
-    ./Plugins/Pdf/PDFWriter/TiledPatternContentContext.cpp
-    ./Plugins/Pdf/PDFWriter/JPEGImageInformation.cpp
-    ./Plugins/Pdf/PDFWriter/PDFDocumentCopyingContext.cpp
-    ./Plugins/Pdf/PDFWriter/Ascii7Encoding.cpp
-    ./Plugins/Pdf/PDFWriter/PrimitiveObjectsWriter.cpp
-    ./Plugins/Pdf/PDFWriter/FontDescriptorWriter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFDocEncoding.cpp
-    ./Plugins/Pdf/PDFWriter/OpenTypeFileInput.cpp
-    ./Plugins/Pdf/PDFWriter/XObjectContentContext.cpp
-    ./Plugins/Pdf/PDFWriter/CMYKRGBColor.cpp
-    ./Plugins/Pdf/PDFWriter/IndirectObjectsReferenceRegistry.cpp
-    ./Plugins/Pdf/PDFWriter/OpenTypePrimitiveReader.cpp
-    ./Plugins/Pdf/PDFWriter/CharStringType2Tracer.cpp
-    ./Plugins/Pdf/PDFWriter/ParsedPrimitiveHelper.cpp
-    ./Plugins/Pdf/PDFWriter/InfoDictionary.cpp
-    ./Plugins/Pdf/PDFWriter/PDFParser.cpp
-    ./Plugins/Pdf/PDFWriter/UppercaseSequance.cpp
-    ./Plugins/Pdf/PDFWriter/DescendentFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/OutputFile.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorPNGSubStream.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorPNGPaethStream.cpp
-    ./Plugins/Pdf/PDFWriter/GraphicState.cpp
-    ./Plugins/Pdf/PDFWriter/PDFPageInput.cpp
-    ./Plugins/Pdf/PDFWriter/Type1Input.cpp
-    ./Plugins/Pdf/PDFWriter/PDFDictionary.cpp
-    ./Plugins/Pdf/PDFWriter/UsedFontsRepository.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorPNGAverageStream.cpp
-    ./Plugins/Pdf/PDFWriter/StandardEncoding.cpp
-    ./Plugins/Pdf/PDFWriter/CharStringType1Tracer.cpp
-    ./Plugins/Pdf/PDFWriter/PDFArray.cpp
-    ./Plugins/Pdf/PDFWriter/WrittenFontTrueType.cpp
-    ./Plugins/Pdf/PDFWriter/InputStringBufferStream.cpp
-    ./Plugins/Pdf/PDFWriter/PDFUsedFont.cpp
-    ./Plugins/Pdf/PDFWriter/InputPFBDecodeStream.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorPNGNoneStream.cpp
-    ./Plugins/Pdf/PDFWriter/PageTree.cpp
-    ./Plugins/Pdf/PDFWriter/FreeTypeType1Wrapper.cpp
-    ./Plugins/Pdf/PDFWriter/InputFlateDecodeStream.cpp
-    ./Plugins/Pdf/PDFWriter/TrueTypeDescendentFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/CFFPrimitiveReader.cpp
-    ./Plugins/Pdf/PDFWriter/PageContentContext.cpp
-    ./Plugins/Pdf/PDFWriter/TrailerInformation.cpp
-    ./Plugins/Pdf/PDFWriter/PDFLiteralString.cpp
-    ./Plugins/Pdf/PDFWriter/OutputFlateEncodeStream.cpp
-    ./Plugins/Pdf/PDFWriter/CFFFileInput.cpp
-    ./Plugins/Pdf/PDFWriter/FreeTypeWrapper.cpp
-    ./Plugins/Pdf/PDFWriter/InputLimitedStream.cpp
-    ./Plugins/Pdf/PDFWriter/PDFPage.cpp
-    ./Plugins/Pdf/PDFWriter/GraphicStateStack.cpp
-    ./Plugins/Pdf/PDFWriter/FreeTypeOpenTypeWrapper.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorPNGOptimumStream.cpp
-    ./Plugins/Pdf/PDFWriter/PDFImageXObject.cpp
-    ./Plugins/Pdf/PDFWriter/WrittenFontCFF.cpp
-    ./Plugins/Pdf/PDFWriter/PDFInteger.cpp
-    ./Plugins/Pdf/PDFWriter/AbstractWrittenFont.cpp
-    ./Plugins/Pdf/PDFWriter/InputBufferedStream.cpp
-    ./Plugins/Pdf/PDFWriter/PDFObjectParser.cpp
-    ./Plugins/Pdf/PDFWriter/TrueTypeEmbeddedFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/DocumentContext.cpp
-    ./Plugins/Pdf/PDFWriter/PDFTiledPattern.cpp
-    ./Plugins/Pdf/PDFWriter/ResourcesDictionary.cpp
-    ./Plugins/Pdf/PDFWriter/TIFFImageHandler.cpp
-    ./Plugins/Pdf/PDFWriter/PDFBoolean.cpp
-    ./Plugins/Pdf/PDFWriter/ObjectsContext.cpp
-    ./Plugins/Pdf/PDFWriter/Type1ToType2Converter.cpp
-    ./Plugins/Pdf/PDFWriter/CIDFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFObject.cpp
-    ./Plugins/Pdf/PDFWriter/AbstractContentContext.cpp
-    ./Plugins/Pdf/PDFWriter/CharStringType2Flattener.cpp
-    ./Plugins/Pdf/PDFWriter/OutputFlateDecodeStream.cpp
-    ./Plugins/Pdf/PDFWriter/CFFPrimitiveWriter.cpp
-    ./Plugins/Pdf/PDFWriter/OutputStringBufferStream.cpp
-    ./Plugins/Pdf/PDFWriter/Type2CharStringWriter.cpp
-    ./Plugins/Pdf/PDFWriter/UnicodeString.cpp
-    ./Plugins/Pdf/PDFWriter/CharStringType2Interpreter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFFormXObject.cpp
-    ./Plugins/Pdf/PDFWriter/DictionaryContext.cpp
-    ./Plugins/Pdf/PDFWriter/PDFStream.cpp
-    ./Plugins/Pdf/PDFWriter/JPEGImageHandler.cpp
-    ./Plugins/Pdf/PDFWriter/CFFEmbeddedFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorTIFFSubStream.cpp
-    ./Plugins/Pdf/PDFWriter/CFFANSIFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/InputStreamSkipperStream.cpp
-    ./Plugins/Pdf/PDFWriter/InputFile.cpp
-    ./Plugins/Pdf/PDFWriter/InputPredictorPNGUpStream.cpp
-    ./Plugins/Pdf/PDFWriter/Type1ToCFFEmbeddedFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/PSBool.cpp
-    ./Plugins/Pdf/PDFWriter/CFFDescendentFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFPageMergingHelper.cpp
-    ./Plugins/Pdf/PDFWriter/RefCountObject.cpp
-    ./Plugins/Pdf/PDFWriter/PDFRectangle.cpp
-    ./Plugins/Pdf/PDFWriter/PDFDocumentHandler.cpp
-    ./Plugins/Pdf/PDFWriter/StateWriter.cpp
-    ./Plugins/Pdf/PDFWriter/TrueTypePrimitiveWriter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFSymbol.cpp
-    ./Plugins/Pdf/PDFWriter/InputAscii85DecodeStream.cpp
-    ./Plugins/Pdf/PDFWriter/Log.cpp
-    ./Plugins/Pdf/PDFWriter/TrueTypeANSIFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFReal.cpp
-    ./Plugins/Pdf/PDFWriter/PDFHexString.cpp
-    ./Plugins/Pdf/PDFWriter/PDFWriter.cpp
-    ./Plugins/Pdf/PDFWriter/CatalogInformation.cpp
-    ./Plugins/Pdf/PDFWriter/MD5Generator.cpp
-    ./Plugins/Pdf/PDFWriter/PDFStreamInput.cpp
-    ./Plugins/Pdf/PDFWriter/PDFParserTokenizer.cpp
-    ./Plugins/Pdf/PDFWriter/JPEGImageParser.cpp
-    ./Plugins/Pdf/PDFWriter/OutputBufferedStream.cpp
-    ./Plugins/Pdf/PDFWriter/InputFileStream.cpp
-    ./Plugins/Pdf/PDFWriter/PDFIndirectObjectReference.cpp
-    ./Plugins/Pdf/PDFWriter/CharStringType1Interpreter.cpp
-    ./Plugins/Pdf/PDFWriter/PDFTextString.cpp
-    ./Plugins/Pdf/PDFWriter/PFMFileReader.cpp
-    ./Plugins/Pdf/PDFWriter/ANSIFontWriter.cpp
-    ./Plugins/Pdf/PDFWriter/StateReader.cpp
-    ./Plugins/Pdf/PDFWriter/OutputStreamTraits.cpp
-    ./Plugins/Pdf/PDFWriter/PDFName.cpp
-    ./Plugins/Pdf/PDFWriter/InputDCTDecodeStream.cpp
-    ./Plugins/Pdf/PDFWriter/PDFDate.cpp
-    ./Plugins/Pdf/PDFWriter/OutputFileStream.cpp
-    ./Plugins/Pdf/PDFWriter/InputByteArrayStream.cpp
-    ./Plugins/Pdf/PDFWriter/WinAnsiEncoding.cpp
-    ./Plugins/Pdf/PDFWriter/PDFNull.cpp
-    ./Plugins/Pdf/PDFWriter/FreeTypeFaceWrapper.cpp
-    ./Plugins/Pdf/PDFWriter/Trace.cpp
-    ./Plugins/Pdf/PDFWriter/InputCharStringDecodeStream.cpp
-    ./Plugins/Unix/unix_sys_utils.cpp
-    ./Plugins/Sqlite3/sqlite3.cpp
-    ./Plugins/Updater/tm_updater.cpp
-=======
     ./Plugins/Pdf/LibAesgm/aes_modes.c
     ./Plugins/Pdf/LibAesgm/aes_ni.c
     ./Plugins/Pdf/LibAesgm/aeskey.c
@@ -711,17 +550,23 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Pdf/PDFWriter/PDFParsingOptions.cpp
     ./Plugins/Pdf/PDFWriter/PDFCosArray.cpp
     ./Plugins/Pdf/PDFWriter/PDFNull.cpp
+    ./Plugins/Unix/unix_sys_utils.cpp
+    ./Plugins/Sqlite3/sqlite3.cpp
+    ./Plugins/Updater/tm_updater.cpp
+    ./Plugins/Updater/tm_winsparkle.cpp
+    )
+
+set(TeXmacs_MacOS_SRCS
     ./Plugins/MacOS/HIDRemote.m
     #./Plugins/MacOS/mac_app.mm
     ./Plugins/MacOS/mac_images.mm
     ./Plugins/MacOS/mac_spellservice.mm
     ./Plugins/MacOS/mac_utilities.mm
-    ./Plugins/Unix/unix_sys_utils.cpp
-    ./Plugins/Sqlite3/sqlite3.cpp
-    ./Plugins/Updater/tm_updater.cpp
-    ./Plugins/Updater/tm_winsparkle.cpp
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
-)
+    )
+
+if(APPLE)
+  set(TeXmacs_Std_Plugins_SRCS ${TeXmacs_Std_Plugins_SRCS} ${TeXmacs_MacOS_SRCS})
+endif(APPLE)
 
 ### --------------------------------------------------------------------
 ### the experimental style extension
@@ -901,17 +746,36 @@ SET(TeXmacs_Cocoa_SRCS
 
 SET(TeXmacs_All_SRCS ${TeXmacs_Base_SRCS} ${TeXmacs_Std_Plugins_SRCS})
 
-<<<<<<< HEAD
-SET(TeXmacs_Libraries -lpthread ${Guile_LIBRARIES} ${FREETYPE_LIBRARIES}
-  ${Cairo_LIBRARIES} ${IMLIB2_LIBRARIES} ${JPEG_LIBRARIES}
-  ${ZLIB_LIBRARIES} ${CONFIG_BDL})
-=======
-SET(TeXmacs_Libraries ${Guile_LIBRARIES} ${FREETYPE_LIBRARIES} ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES} -lpng -lpthread)
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
+SET(TeXmacs_Libraries -lpthread
+  ${Guile_LIBRARIES}
+  ${JPEG_LIBRARIES}
+  ${ZLIB_LIBRARIES}
+  ${CONFIG_BDL}
+  ${PNG_LIBRARIES})
 
-SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} 
+#
+# TODO: I am not sure if dlopen of these is really supported. Is it?
+#
+if (LINKED_FREETYPE)
+  set(TeXmacs_Libraries ${TeXmacs_Libraries} ${FREETYPE_LIBRARIES})
+endif (LINKED_FREETYPE)
+
+if (LINKED_CAIRO)
+  set(TeXmacs_Libraries ${TeXmacs_Libraries} ${Cairo_LIBRARIES})
+endif (LINKED_CAIRO)
+
+if (LINKED_IMLIB2)
+  set(TeXmacs_Libraries ${TeXmacs_Libraries} ${IMLIB2_LIBRARIES})
+endif (LINKED_IMLIB2)
+
+if (LINKED_SQLITE3)
+  SET(TeXmacs_Libraries ${TeXmacs_Libraries} ${sqlite3_LIBRARIES})
+endif (LINKED_SQLITE3)
+
+SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs}
   ${Guile_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${Cairo_INCLUDE_DIRS}
-  ${IMLIB2_INCLUDE_DIR}
+  ${IMLIB2_INCLUDE_DIR} ${JPEG_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS}
+  ${PNG_INCLUDE_DIRS}
 )
 
 
@@ -955,7 +819,7 @@ ELSEIF(TEXMACS_GUI STREQUAL "Aqua")
   SET(TeXmacs_All_SRCS ${TeXmacs_All_SRCS} ${TeXmacs_Cocoa_SRCS})
   SET(TeXmacs_Libraries ${TeXmacs_Libraries} ${COCOA_LIBRARY})
   SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} ${COCOA_INCLUDE_DIR})
-  
+
   MARK_AS_ADVANCED(COCOA_LIBRARY)
   MARK_AS_ADVANCED(COCOA_INCLUDE_DIR)
 
@@ -967,28 +831,21 @@ ELSE(TEXMACS_GUI STREQUAL "Qt5")
 ENDIF(TEXMACS_GUI STREQUAL "Qt5")
 
 
-<<<<<<< HEAD
-list(REMOVE_DUPLICATES TeXmacs_Libraries)
-list(REMOVE_DUPLICATES TeXmacs_Include_Dirs)
-=======
 if (APPLE)
   SET(TeXmacs_Libraries ${TeXmacs_Libraries} "-framework Carbon -framework Foundation -framework IOKit -framework Cocoa -framework AppKit -framework CoreData")
 endif (APPLE)
 
-if (LINKED_SQLITE3)
-  SET(TeXmacs_Libraries ${TeXmacs_Libraries} "-lsqlite3")
-endif (LINKED_SQLITE3)
-
->>>>>>> cd6ff17e2... cmake build system: first attempt, see #1
+list(REMOVE_DUPLICATES TeXmacs_Libraries)
+list(REMOVE_DUPLICATES TeXmacs_Include_Dirs)
 
 
 ### --------------------------------------------------------------------
 ### initialize executable target with all the infos collected so far
 ### --------------------------------------------------------------------
 
-INCLUDE_DIRECTORIES(${TeXmacs_Include_Dirs}) 
+INCLUDE_DIRECTORIES(${TeXmacs_Include_Dirs})
 
-ADD_EXECUTABLE ( ${TeXmacs_binary_name} ${GUI_TYPE} 
+ADD_EXECUTABLE ( ${TeXmacs_binary_name} ${GUI_TYPE}
   ${TeXmacs_All_SRCS}
 )
 
@@ -996,7 +853,7 @@ TARGET_LINK_LIBRARIES(${TeXmacs_binary_name} ${TeXmacs_Libraries})
 
 #--------------------------------------------------------------------------------
 #-- Set the Debug and Release names for the libraries
-SET_TARGET_PROPERTIES(${TeXmacs_binary_name} 
+SET_TARGET_PROPERTIES(${TeXmacs_binary_name}
     PROPERTIES
     DEBUG_OUTPUT_NAME ${TeXmacs_binary_name}${EXE_DEBUG_EXTENSION}
     RELEASE_OUTPUT_NAME ${TeXmacs_binary_name}

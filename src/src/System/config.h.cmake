@@ -104,8 +104,6 @@
 /* Link imlib2 library with TeXmacs */
 #cmakedefine LINKED_IMLIB2 1
 
-#cmakedefine LINKED_SQLITE3 1
-
 #cmakedefine MACOSX_EXTENSIONS 1
 
 #cmakedefine OS_MACOS 1
@@ -141,7 +139,7 @@
 
 #cmakedefine QTPIPES 1
 
-#cmakedefine SIZEOF_VOID_P @SIZEOF_VOID_P@
+#cmakedefine SIZEOF_VOID_P 8
 
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine STDC_HEADERS 1
@@ -150,7 +148,7 @@
 #cmakedefine HAVE_LT_MODULE_OPEN 1
 
 #cmakedefine HAVE_DLFCN_H 1
-#cmakedefine TM_DYNAMIC_LINKING 1
+#cmakedefine TM_DYNAMIC_LINKING dlopen
 
 /* Use axel library */
 #cmakedefine USE_AXEL 1
@@ -172,6 +170,8 @@
 #cmakedefine USE_SPARKLE 1
 
 #cmakedefine USE_SQLITE3 1
+
+#cmakedefine LINKED_SQLITE3 1
 
 #cmakedefine USE_STACK_TRACE 1
 
