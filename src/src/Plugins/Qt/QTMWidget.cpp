@@ -13,6 +13,7 @@
 #include "qt_gui.hpp"
 #include "qt_utilities.hpp"
 #include "qt_simple_widget.hpp"
+#include "QTMStyle.hpp" // qt_zoom
 #include "converter.hpp"
 
 #include "config.h"
@@ -403,7 +404,7 @@ static void setRoundedMask (QWidget *widget)
   painter.fillRect (pixmap.rect(), Qt::white);
   painter.setBrush (Qt::black);
 #if (QT_VERSION >= 0x040400)
-  painter.drawRoundedRect (pixmap.rect(),8,8, Qt::AbsoluteSize);
+  painter.drawRoundedRect (pixmap.rect(), 8, 8, Qt::AbsoluteSize);
 #else
   painter.drawRect (pixmap.rect());
 #endif
@@ -412,25 +413,25 @@ static void setRoundedMask (QWidget *widget)
 #endif
 
 
-#if 0 
+#if 0
 // OLD INPUT METHOD PREVIEW
 void
 QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
   if (! imwidget) {   
     imwidget = new QLabel (this);
     imwidget->setWindowFlags (Qt::Tool | Qt::FramelessWindowHint);
-  //  imwidget->setAttribute (Qt::WA_TranslucentBackground);
-//    imwidget->setAutoFillBackground (false);
-       imwidget->setAutoFillBackground (true);
+    // imwidget->setAttribute (Qt::WA_TranslucentBackground);
+    // imwidget->setAutoFillBackground (false);
+    imwidget->setAutoFillBackground (true);
     imwidget->setWindowOpacity (0.5);
     imwidget->setFocusPolicy (Qt::NoFocus);
     QPalette pal = imwidget->palette();
-//    pal.setColor (QPalette::Window, QColor (0,0,255,80));
+    // pal.setColor (QPalette::Window, QColor (0,0,255,80));
     pal.setColor (QPalette::Window, QColor (0,0,255,255));
     pal.setColor (QPalette::WindowText, Qt::white);
     imwidget->setPalette (pal);
     QFont f = imwidget->font();
-    f.setPointSize (qt_zoom (30));
+    f.setPointSize (qt_zoom (15));
     imwidget->setFont (f);
     imwidget->setMargin (5);
   }
@@ -490,7 +491,7 @@ QVariant
 QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
   switch (query) {
     case Qt::ImMicroFocus :
-      return QVariant (QRect (cursor_pos + QPoint (10,10),QSize (20,40)));
+      return QVariant (QRect (cursor_pos + QPoint (10,10), QSize (20,40)));
     default:
       return QVariant();
   }
@@ -501,14 +502,14 @@ QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
 // NEW INPUT METHOD PREVIEW
 void
 QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
-  
+
   QString const & preedit_string = event->preeditString();
   QString const & commit_string = event->commitString();
-  
+
   if (!commit_string.isEmpty()) {
     if (DEBUG_QT)
       debug_qt << "IM committing :" << commit_string.toUtf8().data() << LF;
-    
+
     int key = 0;
 #if 1
     for (int i = 0; i < commit_string.size(); ++i) {
@@ -520,14 +521,14 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
     keyPressEvent (&ev);
 #endif
   }
-  
+
   if (DEBUG_QT)
     debug_qt << "IM preediting :" << preedit_string.toUtf8().data() << LF;
-  
+
   string r = "pre-edit:";
   if (!preedit_string.isEmpty())
   {
-    
+
     // find cursor position in the preedit string
     QList<QInputMethodEvent::Attribute>  const & attrs = event->attributes();
     //    int pos = preedit_string.count();
@@ -538,12 +539,12 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
         pos = attrs[i].start;
         visible_cur = (attrs[i].length != 0);
       }
-    
+
     // find selection in the preedit string
     int sel_start = 0;
     int sel_length = 0;
     if (pos <  preedit_string.count()) {
-      for (int i=0; i< attrs.count(); i++) 
+      for (int i=0; i< attrs.count(); i++)
         if ((attrs[i].type == QInputMethodEvent::TextFormat) &&
             (attrs[i].start <= pos) &&
             (pos < attrs[i].start + attrs[i].length)) {
@@ -556,15 +557,15 @@ QTMWidget::inputMethodEvent (QInputMethodEvent* event) {
       sel_length = 0;
     }
     (void) sel_start; (void) sel_length;
-    
+
     r = r * as_string (pos) * ":" * from_qstring (preedit_string);
   }
-  if (!is_nil (tmwid))
-    the_gui->process_keypress (tm_widget(), r, texmacs_time());
+  // if (!is_nil (tmwid))
+  //   the_gui->process_keypress (tm_widget(), r, texmacs_time());
   event->accept();
-}  
+}
 
-QVariant 
+QVariant
 QTMWidget::inputMethodQuery (Qt::InputMethodQuery query) const {
   switch (query) {
     case Qt::ImMicroFocus :

@@ -1,0 +1,112 @@
+#!/bin/zsh
+
+setopt GLOB_STAR_SHORT
+setopt NULL_GLOB
+
+etags=(/usr/bin/etags)
+
+rxargs=('--regex={scheme}/^ *(define\(-once\)? +(?(?\([^[:space:])]+\)/\2/'
+        '--regex={scheme}/^ *(define-alternate +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^[^;]*(module-define! +.* +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(\(standard-\)?define-class +\([^[:space:])]+\)/\2/'
+        '--regex={scheme}/^ *(define-class-with-accessors +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-class-with-accessors-keywords +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-export-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-format +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-graphics +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-group +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-language +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(defmacro +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-syntax +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-syntax-rule +(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-syntax-parameter +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-menu +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-module +(\([^[:space:])]+ *\([^[:space:])]\)*\)/\1/'
+        '--regex={scheme}/^ *(define-public +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-public-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(define-widget +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(extend-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-dispatcher +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-group +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-rule +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(logic-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(menu-bind +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(plugin-input-converters +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(provide-public +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(smart-table +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(texmacs-module +(\([^[:space:])]+ *\([^[:space:])]\)*\)/\1/'
+        '--regex={scheme}/^ *(tm-call-back +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-define +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-define-macro +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-generate +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-menu +\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-property +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-property-overloaded +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-service +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tm-widget +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={scheme}/^ *(tmfs-[^[:space:]]+-handler +(?(?\([^[:space:])]+\)/\1/'
+        '--regex={c++}/ *tmscm_install_procedure *("\([^"]+\)"/\1/')
+
+file_args=(TeXmacs/**.scm
+           src/*.hpp
+           src/*.cpp
+           src/*.m
+           src/*.mm
+           src/*.h
+           src/*.c
+           src/**.hpp
+           src/**.cpp
+           src/**.m
+           src/**.mm
+           src/**.h
+           src/**.c
+           plugins/**.scm
+           plugins/**.hpp
+           plugins/**.cpp
+           plugins/**.h
+           plugins/**.c
+           ~/.TeXmacs/progs/*.scm
+           ~/.TeXmacs/progs/**.scm
+           ~/.TeXmacs/plugins/**/progs/*.scm
+           ~/.TeXmacs/plugins/**/progs/**.scm
+           ~/.TeXmacs/plugins/**/src/*.hpp
+           ~/.TeXmacs/plugins/**/src/**.hpp
+           ~/.TeXmacs/plugins/**/src/*.cpp
+           ~/.TeXmacs/plugins/**/src/**.cpp
+           ~/.TeXmacs/plugins/**/src/*.h
+           ~/.TeXmacs/plugins/**/src/**.h
+           ~/.TeXmacs/plugins/**/src/*.c
+           ~/.TeXmacs/plugins/**/src/**.c
+           /usr/share/guile/site/*.scm
+           /usr/share/guile/site/**.scm
+          )
+
+"$etags[@]"                                                     \
+    "$rxargs[@]"                                                \
+    "$file_args[@]"                                             \
+    --include=../../../Guile/guile-1.8/TAGS                     \
+    --include=../../../Guile/guile-1.8/oop/TAGS                 \
+    --include=../../../Guile/guile-1.8/libguile/TAGS            \
+    --include=../../../Guile/guile-1.8/guile-readline/TAGS      \
+    --include=../../../Guile/guile-1.8/ice-9/TAGS               \
+    --include=../../../Guile/guile-1.8/srfi/TAGS                \
+    --include=../../../Guile/guile-1.8/lang/TAGS                \
+    --include=../../../Guile/guile-1.8/emacs/TAGS               \
+    --include=../../../Guile/guile-1.8/test-suite/TAGS          \
+    --include=../../../Guile/guile-1.8/doc/TAGS                 \
+    --include=../../../Guile/bdwgc/TAGS
+
+ebrowse_src=(src/**/*.hpp
+             src/**/*.cpp
+             src/**/*.m
+             src/**/*.mm
+             src/**/*.h
+             src/**/*.c
+             plugins/**/*.hpp
+             plugins/**/*.cpp
+             plugins/**/*.h
+             plugins/**/*.c)
+
+ebrowse "$ebrowse_src[@]"

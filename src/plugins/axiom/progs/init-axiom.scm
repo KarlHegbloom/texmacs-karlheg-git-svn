@@ -12,7 +12,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (plugin-configure axiom
-  (:require (url-exists-in-path? "AXIOMsys"))
+  (:require (or (url-exists-in-path? "AXIOMsys")
+                (url-exists-in-path? "axiom")))
   (:launch "tm_axiom")
   (:session "Axiom"))
 

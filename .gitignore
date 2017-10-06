@@ -1,0 +1,7 @@
+src/packages/debian/files
+*.deb
+*.ddeb
+*.changes
+*.dsc
+src/TeXmacs/progs/tm-mode.elc
+src/debian

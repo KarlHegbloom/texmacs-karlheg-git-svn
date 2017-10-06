@@ -51,8 +51,8 @@ SET(TeXmacs_Include_Dirs
     ./Typeset/Bridge
     ./Typeset/Concat
     ./Typeset/Page
-    ${TEXMACS_SOURCE_DIR}/TeXmacs/include 
-    ${TEXMACS_BINARY_DIR}/src/System/ 
+    ${TEXMACS_SOURCE_DIR}/TeXmacs/include
+    ${TEXMACS_BINARY_DIR}/src/System/
 )
 
 
@@ -61,7 +61,7 @@ SET(TeXmacs_Include_Dirs
 ### --------------------------------------------------------------------
 
 
-SET(TeXmacs_Base_SRCS 
+SET(TeXmacs_Base_SRCS
     ./Data/Convert/BibTeX/conservative_bib.cpp
     ./Data/Convert/BibTeX/parsebib.cpp
     ./Data/Convert/Coq/parse_vernac.cpp
@@ -167,9 +167,9 @@ SET(TeXmacs_Base_SRCS
     ./Graphics/Fonts/font_database.cpp
     ./Graphics/Fonts/font_guess.cpp
     ./Graphics/Fonts/font_protrusion.cpp
+    ./Graphics/Fonts/font_scripts.cpp
     ./Graphics/Fonts/font_select.cpp
     ./Graphics/Fonts/font_translate.cpp
-    ./Graphics/Fonts/font_scripts.cpp
     ./Graphics/Fonts/math_font.cpp
     ./Graphics/Fonts/poor_bbb.cpp
     ./Graphics/Fonts/poor_bold.cpp
@@ -254,6 +254,7 @@ SET(TeXmacs_Base_SRCS
     ./System/Language/packrat_serializer.cpp
     ./System/Language/python_language.cpp
     ./System/Language/r_language.cpp
+    ./System/Language/scala_language.cpp
     ./System/Language/scheme_language.cpp
     ./System/Language/scilab_language.cpp
     ./System/Language/text_language.cpp
@@ -263,6 +264,7 @@ SET(TeXmacs_Base_SRCS
     ./System/Link/socket_notifier.cpp
     ./System/Link/pipe_link.cpp
     ./System/Link/socket_link.cpp
+    ./System/Link/socket_notifier.cpp
     ./System/Link/socket_server.cpp
     ./System/Link/texmacs_client.cpp
     ./System/Link/texmacs_server.cpp
@@ -350,6 +352,7 @@ SET(TeXmacs_Base_SRCS
     ./Typeset/Page/columns_breaker.cpp
     ./Typeset/Page/new_breaker.cpp
     ./Typeset/Page/make_pages.cpp
+    ./Typeset/Page/new_breaker.cpp
     ./Typeset/Page/page_breaker.cpp
     ./Typeset/Page/pager.cpp
     ./Typeset/Page/skeleton.cpp
@@ -373,8 +376,8 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Freetype/adjust_bonum.cpp
     ./Plugins/Freetype/adjust_pagella.cpp
     ./Plugins/Freetype/adjust_schola.cpp
-    ./Plugins/Freetype/adjust_termes.cpp
     ./Plugins/Freetype/adjust_stix.cpp
+    ./Plugins/Freetype/adjust_termes.cpp
     ./Plugins/Freetype/free_type.cpp
     ./Plugins/Freetype/rubber_assemble_font.cpp
     ./Plugins/Freetype/rubber_stix_font.cpp
@@ -547,16 +550,23 @@ SET(TeXmacs_Std_Plugins_SRCS
     ./Plugins/Pdf/PDFWriter/PDFParsingOptions.cpp
     ./Plugins/Pdf/PDFWriter/PDFCosArray.cpp
     ./Plugins/Pdf/PDFWriter/PDFNull.cpp
+    ./Plugins/Unix/unix_sys_utils.cpp
+    ./Plugins/Sqlite3/sqlite3.cpp
+    ./Plugins/Updater/tm_updater.cpp
+    ./Plugins/Updater/tm_winsparkle.cpp
+    )
+
+set(TeXmacs_MacOS_SRCS
     ./Plugins/MacOS/HIDRemote.m
     #./Plugins/MacOS/mac_app.mm
     ./Plugins/MacOS/mac_images.mm
     ./Plugins/MacOS/mac_spellservice.mm
     ./Plugins/MacOS/mac_utilities.mm
-    ./Plugins/Unix/unix_sys_utils.cpp
-    ./Plugins/Sqlite3/sqlite3.cpp
-    ./Plugins/Updater/tm_updater.cpp
-    ./Plugins/Updater/tm_winsparkle.cpp
-)
+    )
+
+if(APPLE)
+  set(TeXmacs_Std_Plugins_SRCS ${TeXmacs_Std_Plugins_SRCS} ${TeXmacs_MacOS_SRCS})
+endif(APPLE)
 
 ### --------------------------------------------------------------------
 ### the experimental style extension
@@ -736,11 +746,36 @@ SET(TeXmacs_Cocoa_SRCS
 
 SET(TeXmacs_All_SRCS ${TeXmacs_Base_SRCS} ${TeXmacs_Std_Plugins_SRCS})
 
-SET(TeXmacs_Libraries ${Guile_LIBRARIES} ${FREETYPE_LIBRARIES} ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES} -lpng -lpthread)
+SET(TeXmacs_Libraries -lpthread
+  ${Guile_LIBRARIES}
+  ${JPEG_LIBRARIES}
+  ${ZLIB_LIBRARIES}
+  ${CONFIG_BDL}
+  ${PNG_LIBRARIES})
 
-SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} 
+#
+# TODO: I am not sure if dlopen of these is really supported. Is it?
+#
+if (LINKED_FREETYPE)
+  set(TeXmacs_Libraries ${TeXmacs_Libraries} ${FREETYPE_LIBRARIES})
+endif (LINKED_FREETYPE)
+
+if (LINKED_CAIRO)
+  set(TeXmacs_Libraries ${TeXmacs_Libraries} ${Cairo_LIBRARIES})
+endif (LINKED_CAIRO)
+
+if (LINKED_IMLIB2)
+  set(TeXmacs_Libraries ${TeXmacs_Libraries} ${IMLIB2_LIBRARIES})
+endif (LINKED_IMLIB2)
+
+if (LINKED_SQLITE3)
+  SET(TeXmacs_Libraries ${TeXmacs_Libraries} ${sqlite3_LIBRARIES})
+endif (LINKED_SQLITE3)
+
+SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs}
   ${Guile_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIRS} ${Cairo_INCLUDE_DIRS}
-  ${IMLIB2_INCLUDE_DIR}
+  ${IMLIB2_INCLUDE_DIR} ${JPEG_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS}
+  ${PNG_INCLUDE_DIRS}
 )
 
 
@@ -749,7 +784,21 @@ SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs}
 ### --------------------------------------------------------------------
 
 
-IF(TEXMACS_GUI STREQUAL "Qt")
+if(TEXMACS_GUI STREQUAL "Qt5")
+
+  add_definitions(${Qt5Core_DEFINITIONS} ${Qt5Gui_DEFINITIONS} ${Qt5Widgets_DEFINITIONS} ${Qt5PrintSupport_DEFINITIONS})
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_definitions(-DQT_NO_DEBUG)
+  endif(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+  # After this call, TeXmacs_Qt_Moc_SRCS = moc_QTMWidget.cpp ...
+  QT5_WRAP_CPP(TeXmacs_Qt_Moc_SRCS ${TeXmacs_Qt_Moc_HDRS})
+
+  set(TeXmacs_All_SRCS ${TeXmacs_All_SRCS} ${TeXmacs_Qt_SRCS} ${TeXmacs_Qt_Moc_SRCS})
+  set(TeXmacs_Libraries ${TeXmacs_Libraries}  ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+  set(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+
+elseif(TEXMACS_GUI STREQUAL "Qt")
 
   ADD_DEFINITIONS(${QT_DEFINITIONS})
   IF(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -770,34 +819,33 @@ ELSEIF(TEXMACS_GUI STREQUAL "Aqua")
   SET(TeXmacs_All_SRCS ${TeXmacs_All_SRCS} ${TeXmacs_Cocoa_SRCS})
   SET(TeXmacs_Libraries ${TeXmacs_Libraries} ${COCOA_LIBRARY})
   SET(TeXmacs_Include_Dirs ${TeXmacs_Include_Dirs} ${COCOA_INCLUDE_DIR})
-  
+
   MARK_AS_ADVANCED(COCOA_LIBRARY)
   MARK_AS_ADVANCED(COCOA_INCLUDE_DIR)
 
-ELSE(TEXMACS_GUI STREQUAL "Qt")
+ELSE(TEXMACS_GUI STREQUAL "Qt5")
 
   SET(TeXmacs_All_SRCS ${TeXmacs_All_SRCS} ${TeXmacs_Widkit_SRCS} ${TeXmacs_X11_SRCS})
   SET(TeXmacs_Libraries ${TeXmacs_Libraries} ${X11_LIBRARIES})
 
-ENDIF(TEXMACS_GUI STREQUAL "Qt")
+ENDIF(TEXMACS_GUI STREQUAL "Qt5")
+
 
 if (APPLE)
   SET(TeXmacs_Libraries ${TeXmacs_Libraries} "-framework Carbon -framework Foundation -framework IOKit -framework Cocoa -framework AppKit -framework CoreData")
 endif (APPLE)
 
-if (LINKED_SQLITE3)
-  SET(TeXmacs_Libraries ${TeXmacs_Libraries} "-lsqlite3")
-endif (LINKED_SQLITE3)
-
+list(REMOVE_DUPLICATES TeXmacs_Libraries)
+list(REMOVE_DUPLICATES TeXmacs_Include_Dirs)
 
 
 ### --------------------------------------------------------------------
 ### initialize executable target with all the infos collected so far
 ### --------------------------------------------------------------------
 
-INCLUDE_DIRECTORIES(${TeXmacs_Include_Dirs}) 
+INCLUDE_DIRECTORIES(${TeXmacs_Include_Dirs})
 
-ADD_EXECUTABLE ( ${TeXmacs_binary_name} ${GUI_TYPE} 
+ADD_EXECUTABLE ( ${TeXmacs_binary_name} ${GUI_TYPE}
   ${TeXmacs_All_SRCS}
 )
 
@@ -805,7 +853,7 @@ TARGET_LINK_LIBRARIES(${TeXmacs_binary_name} ${TeXmacs_Libraries})
 
 #--------------------------------------------------------------------------------
 #-- Set the Debug and Release names for the libraries
-SET_TARGET_PROPERTIES(${TeXmacs_binary_name} 
+SET_TARGET_PROPERTIES(${TeXmacs_binary_name}
     PROPERTIES
     DEBUG_OUTPUT_NAME ${TeXmacs_binary_name}${EXE_DEBUG_EXTENSION}
     RELEASE_OUTPUT_NAME ${TeXmacs_binary_name}

@@ -53,7 +53,7 @@
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 12
+#serial 13 + additions added by Karl Hegbloom trying to fix it. :-)
 
 AU_ALIAS([BNV_HAVE_QT], [AX_HAVE_QT])
 AC_DEFUN([AX_HAVE_QT],
@@ -71,43 +71,73 @@ AC_DEFUN([AX_HAVE_QT],
     am_have_qt_pro=`mktemp`
     am_have_qt_makefile=`mktemp`
     # http://qt-project.org/doc/qt-5/qmake-variable-reference.html#qt
+    # the below list is not complete because I do not have every module installed on my laptop ~karlheg
     cat > $am_have_qt_pro << EOF
-qtHaveModule(axcontainer):       QT += axcontainer
-qtHaveModule(axserver):          QT += axserver
-qtHaveModule(concurrent):        QT += concurrent
+dnl qtHaveModule(3dcore):            QT += 3dcore
+dnl qtHaveModule(3dextras):          QT += 3dextras
+dnl qtHaveModule(3dinput):           QT += 3dinput
+dnl qtHaveModule(3dlogic):           QT += 3dlogic
+dnl qtHaveModule(3dquick):           QT += 3dquick
+dnl qtHaveModule(3dquickextras):     QT += 3dquickextras
+dnl qtHaveModule(3dquickinput):      QT += 3dquickinput
+dnl qtHaveModule(3dquickrender):     QT += 3dquickrender
+dnl qtHaveModule(3drender):          QT += 3drender
+dnl qtHaveModule(axcontainer):       QT += axcontainer
+dnl qtHaveModule(axserver):          QT += axserver
+dnl qtHaveModule(concurrent):        QT += concurrent
+dnl qtHaveModule(contacts):          QT += contacts
 qtHaveModule(core):              QT += core
 qtHaveModule(dbus):              QT += dbus
-qtHaveModule(declarative):       QT += declarative
-qtHaveModule(designer):          QT += designer
+dnl qtHaveModule(declarative):       QT += declarative
+dnl qtHaveModule(designer):          QT += designer
+dnl qtHaveModule(feedback):          QT += feedback
 qtHaveModule(gui):               QT += gui
 qtHaveModule(help):              QT += help
-qtHaveModule(multimedia):        QT += multimedia
-qtHaveModule(multimediawidgets): QT += multimediawidgets
+dnl qtHaveModule(location):          QT += location
+dnl qtHaveModule(multimedia):        QT += multimedia
+dnl qtHaveModule(multimediawidgets): QT += multimediawidgets
 qtHaveModule(network):           QT += network
-qtHaveModule(opengl):            QT += opengl
+dnl qtHaveModule(opengl):            QT += opengl
+dnl qtHaveModule(openglextensions):  QT += openglextensions
+dnl qtHaveModule(organizer):         QT += organizer
+dnl qtHaveModule(packetprotocol):    QT += packetprotocol
+qtHaveModule(platformheaders):   QT += platformheaders
+dnl qtHaveModule(positioning):       QT += positioning
 qtHaveModule(printsupport):      QT += printsupport
-qtHaveModule(qml):               QT += qml
-qtHaveModule(qmltest):           QT += qmltest
-qtHaveModule(x11extras):         QT += x11extras
-qtHaveModule(script):            QT += script
-qtHaveModule(scripttools):       QT += scripttools
-qtHaveModule(sensors):           QT += sensors
-qtHaveModule(serialport):        QT += serialport
-qtHaveModule(sql):               QT += sql
+dnl qtHaveModule(qml):               QT += qml
+dnl qtHaveModule(qmldebug):          QT += qmldebug
+dnl qtHaveModule(qmldevtools):       QT += qmldevtools
+dnl qtHaveModule(qmltest):           QT += qmltest
+dnl qtHaveModule(qprinter):          QT += qprinter
+dnl qtHaveModule(quick):             QT += quick
+dnl qtHaveModule(quickparticles):    QT += quickparticles
+dnl qtHaveModule(quicktest):         QT += quicktest
+dnl qtHaveModule(quickwidgets):      QT += quickwidgets
+dnl qtHaveModule(script):            QT += script
+dnl qtHaveModule(scripttools):       QT += scripttools
+dnl qtHaveModule(sensors):           QT += sensors
+dnl qtHaveModule(serialport):        QT += serialport
+dnl qtHaveModule(sql):               QT += sql
 qtHaveModule(svg):               QT += svg
-qtHaveModule(testlib):           QT += testlib
-qtHaveModule(uitools):           QT += uitools
+dnl qtHaveModule(test):              QT += test
+dnl qtHaveModule(testlib):           QT += testlib
+dnl qtHaveModule(uitools):           QT += uitools
+dnl qtHaveModule(versit):            QT += versit
+dnl qtHaveModule(versitorganizer):   QT += versitorganizer
+qtHaveModule(webchannel):        QT += webchannel
 qtHaveModule(webkit):            QT += webkit
-qtHaveModule(webkitwidgets):     QT += webkitwidgets
-qtHaveModule(xml):               QT += xml
-qtHaveModule(xmlpatterns):       QT += xmlpatterns
+dnl qtHaveModule(webkitwidgets):     QT += webkitwidgets
+qtHaveModule(widgets):           QT += widgets
+qtHaveModule(x11extras):         QT += x11extras
+dnl qtHaveModule(xml):               QT += xml
+dnl qtHaveModule(xmlpatterns):       QT += xmlpatterns
 percent.target = %
 percent.commands = @echo -n "\$(\$(@))\ "
 QMAKE_EXTRA_TARGETS += percent
 EOF
     qmake $am_have_qt_pro -o $am_have_qt_makefile
-    QT_CXXFLAGS=`cd $(dirname  $am_have_qt_makefile ); make -f $am_have_qt_makefile CXXFLAGS INCPATH`
-    QT_LIBS=`cd $(dirname  $am_have_qt_makefile ); make -f $am_have_qt_makefile LIBS`
+    QT_CXXFLAGS=`make -s -f $am_have_qt_makefile CXXFLAGS INCPATH`
+    QT_LIBS=`make -s -f $am_have_qt_makefile LIBS`
     rm $am_have_qt_pro $am_have_qt_makefile
 
     # Look for specific tools in $PATH

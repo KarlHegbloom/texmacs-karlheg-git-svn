@@ -24,14 +24,14 @@ AC_DEFUN([TM_GUI],[
   case "$enable_qt" in
       yes)
          LC_WITH_QT
-         if test x"$at_cv_qt_build" = xko; then 
+         if test x"$at_cv_qt_build" = xko; then
             AC_MSG_ERROR([cannot find Qt!])
          else
             AC_MSG_RESULT([enabling Qt port])
             CONFIG_GUI="QT"
             if test x"$CONFIG_OS" = xMACOS; then
-               # on Mac we rely on some ObjC code contained in 
-               # src/Plugins/MacOS    
+               # on Mac we rely on some ObjC code contained in
+               # src/Plugins/MacOS
                CONFIG_MACOS="MacOS"
             fi
          fi
@@ -50,11 +50,26 @@ AC_DEFUN([TM_GUI],[
   esac
 
   # Qt Plugins list
+  PLUGINS_LIST="imageformats,accessible,accessiblebridge,inputmethods"
   if test "$QT5_AVAILABLE" = yes; then
-    QT_PLUGINS_LIST="imageformats"
-  else
-    QT_PLUGINS_LIST="accessible,imageformats"
+     PLUGINS_LIST="generic,imageformats,platforminputcontexts,platforms,printsupport,xcbglintegrations"
   fi
+  QT_PLUGINS_LIST="$PLUGINS_LIST"
+  AC_ARG_ENABLE(QtPlugins,
+	 AS_HELP_STRING([--enable-QtPlugins@<:@=list@:>@],
+		  [Used only for MacOS bundles and Windows packages.
+default qt4 plugins: imageformats,accessible,accessiblebridge,inputmethods
+default qt5 plugins: generic,imageformats,platforminputcontexts,platforms,printsupport]),
+    [QT_PLUGINS_LIST=$enableval],[QT_PLUGINS_LIST="$PLUGINS_LIST"])
+  case $QT_PLUGINS_LIST in
+  yes) QT_PLUGINS_LIST="$PLUGINS_LIST";;
+  no) unset QT_PLUGINS_LIST
+  esac
+
+  [[[ $enable_qt == no ]]] &&  unset QT_PLUGINS_LIST
+  for p in ${QT_PLUGINS_LIST//,/ }
+  do [[ -d $QT_PLUGINS_PATH/$p ]] || AC_MSG_ERROR(QT plugins <$p> not found! Use enable-QtPlugins option to select them)
+  done
 
   # Qt Pipes
   AC_ARG_ENABLE(qtpipes,
@@ -128,7 +143,7 @@ AC_DEFUN([TM_GUI],[
   AC_SUBST(CONFIG_GUI)
   AC_SUBST(CONFIG_GUI_DEFINE)
 
-  AC_SUBST(QT_FRAMEWORKS_PATH)  
+  AC_SUBST(QT_FRAMEWORKS_PATH)
   AC_SUBST(QT_PLUGINS_PATH)
   AC_SUBST(QT_PLUGINS_LIST)
 ])

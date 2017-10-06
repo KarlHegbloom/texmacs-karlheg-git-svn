@@ -1,9 +1,22 @@
-# CMake file for TeXmacs
-# created by Massimiliano Gubinelli 
+###############################################################################
+# MODULE     : CMake file for TeXmacs
+# COPYRIGHT  : (C) 2016  Joris van der Hoeven
+###############################################################################
+# This software falls under the GNU general public license version 3 or later.
+# It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+# in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+###############################################################################
+#
+# Initialy created by Massimiliano Gubinelli
+#
+#  Modifications by Darcy Shen
+#
+#  Modifications by Karl M. Hegbloom <karl.hegbloom@gmail.com>
+#
 
-# The name of our project is "TEXMACS". CMakeLists files in this project can 
-# refer to the root source directory of the project as ${TEXMACS_SOURCE_DIR} and 
-# to the root binary directory of the project as ${TEXMACS_BINARY_DIR}. 
+# The name of our project is "TEXMACS". CMakeLists files in this project can
+# refer to the root source directory of the project as ${TEXMACS_SOURCE_DIR}
+# and to the root binary directory of the project as ${TEXMACS_BINARY_DIR}.
 
 
 ### --------------------------------------------------------------------
@@ -14,30 +27,143 @@ cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_CXX_STANDARD 11)
 
-IF(NOT CMAKE_BUILD_TYPE)
- SET(CMAKE_BUILD_TYPE Debug CACHE STRING
-     "Choose the type of build, options are: None Debug Release
-RelWithDebInfo MinSizeRel."
+if(NOT CMAKE_BUILD_TYPE)
+ set(CMAKE_BUILD_TYPE Debug CACHE STRING
+   "Choose the type of build, options are:
+None Debug Release RelWithDebInfo MinSizeRel."
      FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
-
-#INCLUDE(CMakeDetermineSystem)
+endif(NOT CMAKE_BUILD_TYPE)
 
 
 ### --------------------------------------------------------------------
-### Project name 
+### Project name
 ### --------------------------------------------------------------------
 
-PROJECT(TEXMACS CXX C) # check for C/C++ compiler
+project(TEXMACS CXX C) # check for C/C++ compiler
 
-SET(PACKAGE TeXmacs)
-SET(DEVEL_VERSION "1.99.5")
-SET(DEVEL_RELEASE "1")
-SET(STABLE_VERSION "1.99.5")
-SET(STABLE_RELEASE "1")
+set(PACKAGE TeXmacs)
 
-#INCLUDE_DIRECTORIES(${TEXMACS_SOURCE_DIR}/cmake/)
-#MESSAGE( ${TEXMACS_SOURCE_DIR}/cmake )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TEXMACS_SOURCE_DIR}/cmake)
+
+find_package(Guile REQUIRED)
+
+if(Guile_VERSION_STRING VERSION_LESS 2.0)
+  set(DEVEL_VERSION "1.99.9")
+  set(DEVEL_RELEASE "1")
+  set(STABLE_VERSION "1.99.9")
+  set(STABLE_RELEASE "1")
+else(Guile_VERSION_STRING VERSION_LESS 2.0)
+  set(DEVEL_VERSION "2.0.0")
+  set(DEVEL_RELEASE "2")
+  set(STABLE_VERSION "2.0.0")
+  set(STABLE_RELEASE "2")
+endif(Guile_VERSION_STRING VERSION_LESS 2.0)
+
+
+message(STATUS "Getting revision control metadata for PKGREV")
+
+set(PKG_MAINTAINER "Me <me@localhost>"
+  CACHE STRING "Fullname <email@host.name> for debian/Changelog, etc.")
+
+
+message(STATUS "  TEXMACS_SOURCE_DIR is: ${TEXMACS_SOURCE_DIR}")
+
+
+### Set GITDIR. Not set if not there.
+if(EXISTS "${TEXMACS_SOURCE_DIR}/.git" AND
+    NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/.git" AND
+    NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.git")
+  file(READ "${TEXMACS_SOURCE_DIR}/.git" GITDIR)
+  string(STRIP "${GITDIR}" GITDIR)
+
+elseif(EXISTS "${TEXMACS_SOURCE_DIR}/../.git" AND
+    NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/../.git" AND
+    NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/../.git")
+  file(READ "${TEXMACS_SOURCE_DIR}/.git" GITDIR)
+  string(STRIP "${GITDIR}" GITDIR)
+
+elseif(EXISTS "${TEXMACS_SOURCE_DIR}/.git")
+  set(GITDIR "${TEXMACS_SOURCE_DIR}/.git")
+
+elseif(EXISTS "${TEXMACS_SOURCE_DIR}/../.git")
+  set(GITDIR "${TEXMACS_SOURCE_DIR}/../.git")
+
+endif(EXISTS "${TEXMACS_SOURCE_DIR}/.git" AND
+  NOT IS_SYMLINK "${TEXMACS_SOURCE_DIR}/.git" AND
+  NOT IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.git")
+
+
+if(NOT "${GITDIR}" STREQUAL "")
+  message(STATUS "  GITDIR is: ${GITDIR}")
+endif(NOT "${GITDIR}" STREQUAL "")
+
+
+### Can svn work via an indirect repo directory like git can?
+if(IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.svn")
+  message(STATUS "This is a svn checkout.")
+  execute_process(COMMAND svnversion -n .
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
+    OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+elseif(NOT "${GITDIR}" STREQUAL "" AND IS_DIRECTORY "${GITDIR}/svn")
+  message(STATUS "This is a git svn clone.")
+  ## Do not use `git svn info` for this because it provides incorrect results.
+  ## Instead, parse the `git rev-list` for the information that git svn writes
+  ## into the commit log during `git svn rebase` on the svn-trunk branch,
+  ## which is then merged into the present branch.
+  ## Requires sed.
+  execute_process(COMMAND git rev-list --max-count=100 --pretty=medium HEAD@{0}
+    COMMAND sed -rne "/git-svn-id:/ {s,.*://.*@([^ ]+).*,\\1,p ;/./ q 0}"
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
+    OUTPUT_VARIABLE SVNREV ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif(IS_DIRECTORY "${TEXMACS_SOURCE_DIR}/.svn")
+
+if("${SVNREV}" STREQUAL "" OR
+    "${SVNREV}" STREQUAL "exported" OR
+    "${SVNREV}" STREQUAL "Unversioned directory")
+  ## The above failed, or this is an exported source distribution.
+  if(EXISTS "${TEXMACS_SOURCE_DIR}/SVNREV")
+    message(STATUS "Setting SVNREV from ${TEXMACS_SOURCE_DIR}/SVNREV")
+    set(SVNREV "")
+    file(READ "${TEXMACS_SOURCE_DIR}/SVNREV" SVNREV)
+    string(STRIP "${SVNREV}" SVNREV)
+  endif(EXISTS "${TEXMACS_SOURCE_DIR}/SVNREV")
+endif("${SVNREV}" STREQUAL "" OR
+  "${SVNREV}" STREQUAL "exported" OR
+  "${SVNREV}" STREQUAL "Unversioned directory")
+
+if(NOT "${SVNREV}" STREQUAL "")
+  file(WRITE "${TEXMACS_SOURCE_DIR}/SVNREV" "${SVNREV}")
+  message(STATUS "  SVNREV is: ${SVNREV}")
+  set(PKGREV ~svn-${SVNREV})
+endif(NOT "${SVNREV}" STREQUAL "")
+
+if(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
+  message(STATUS "Getting git commit count and head treeish for PKGREV")
+  ## We use the commit count to get monotonically increasing version numbers.
+  execute_process(COMMAND git log --oneline COMMAND wc -l
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
+    OUTPUT_VARIABLE GITCOMMITCOUNT ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND git log -n 1 --oneline COMMAND cut -f1 -d\ #
+    WORKING_DIRECTORY "${TEXMACS_SOURCE_DIR}"
+    OUTPUT_VARIABLE GITSHA ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  string(APPEND PKGREV "~git-n${GITCOMMITCOUNT}-${GITSHA}")
+endif(NOT "${GITDIR}" STREQUAL "" AND EXISTS "${GITDIR}")
+
+message(STATUS "  PKGREV is: ${PKGREV}")
+
+# The string(TIMESTAMP command lacks formatting directives required to form
+# a Debian Changelog signature line.
+
+execute_process(COMMAND date "+%a, %d %b %Y %H:%M:%S %z"
+  OUTPUT_VARIABLE PKG_DATE ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+if("${PKG_DATE}" STREQUAL "")
+  set(PKG_DATE "Tue, 14 Jun 2016 21:21:21 -0600")
+endif("${PKG_DATE}" STREQUAL "")
+
+
+
+message(STATUS "--  ${PKG_MAINTAINER}  ${PKG_DATE}")
 
 set(CMAKE_MODULE_PATH ${TEXMACS_SOURCE_DIR}/cmake)
 
@@ -51,74 +177,159 @@ include(CheckIncludeFile)
 include(CheckTypeSize)
 include(FindPkgConfig)
 include(CheckCSourceCompiles)
+include(CMakeDependentOption)
 include(FindX11)
 
 
 ### --------------------------------------------------------------------
 ### Check for standard functionalities
 ### --------------------------------------------------------------------
-CHECK_TYPE_SIZE(FILE HAVE_FILE)
-CHECK_TYPE_SIZE(intptr_t HAVE_INTPTR_T)
-CHECK_TYPE_SIZE(time_t HAVE_TIME_T)
-CHECK_INCLUDE_FILE(inttypes.h HAVE_INTTYPES_H)
-CHECK_INCLUDE_FILE(memory.h HAVE_MEMORY_H)
-CHECK_INCLUDE_FILE(stdlib.h HAVE_STDLIB_H)
-CHECK_INCLUDE_FILE(strings.h HAVE_STRINGS_H)
-CHECK_INCLUDE_FILE(string.h HAVE_STRING_H)
-CHECK_INCLUDE_FILE(sys/stat.h HAVE_SYS_STAT_H)
-CHECK_INCLUDE_FILE(unistd.h HAVE_UNISTD_H)
-CHECK_INCLUDE_FILE(X11/Xlib.h HAVE_X11_XLIB_H)
-CHECK_INCLUDE_FILE(X11/Xutil.h HAVE_X11_XUTIL_H)
-CHECK_INCLUDE_FILE(pty.h HAVE_PTY_H)
-CHECK_INCLUDE_FILE(util.h HAVE_UTIL_H)
-CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
 
+check_type_size(FILE     HAVE_FILE)
+check_type_size(intptr_t HAVE_INTPTR_T)
+check_type_size(time_t   HAVE_TIME_T)
+
+check_include_file(inttypes.h  HAVE_INTTYPES_H)
+check_include_file(memory.h    HAVE_MEMORY_H)
+check_include_file(stdlib.h    HAVE_STDLIB_H)
+check_include_file(strings.h   HAVE_STRINGS_H)
+check_include_file(string.h    HAVE_STRING_H)
+check_include_file(sys/stat.h  HAVE_SYS_STAT_H)
+check_include_file(unistd.h    HAVE_UNISTD_H)
+check_include_file(X11/Xlib.h  HAVE_X11_XLIB_H)
+check_include_file(X11/Xutil.h HAVE_X11_XUTIL_H)
+check_include_file(pty.h       HAVE_PTY_H)
+check_include_file(util.h      HAVE_UTIL_H)
+
+check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
+
+check_function_exists(setenv       HAVE_SETENV)
+#check_function_exists(putenv       HAVE_PUTENV)
+if(${HAVE_SETENV})
+  set(CONFIG_STD_SETENV "#define STD_SETENV")
+endif(${HAVE_SETENV})
 
 ### --------------------------------------------------------------------
 ### Check for dl library
+###
+### Checks for dlopen in standard or dl library
+### we are looking in sequence for dlopen or dld_link or shl_load in
+### standard libs or libdl or libdld
+###
+### Shouldn't we just use libtool and libltdl ?  It's what Guile uses.
 ### --------------------------------------------------------------------
 
-CHECK_FUNCTION_EXISTS(dlopen HAVE_DLOPEN)
+### future? CHECK_INCLUDE_FILE(libltdl/lt_dlloader.h HAVE_LT_DLLOADER_H)
+### future? CHECK_LIBRARY_EXISTS(ltdl lt_module_open HAVE_LT_MODULE_OPEN)
 
-IF (NOT ${HAVE_DLOPEN})
-  CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_DLOPEN)
-  IF (${HAVE_DLOPEN})
-    SET(CONFIG_BDL "-ldl")
-  ENDIF (${HAVE_DLOPEN})
-ENDIF (NOT ${HAVE_DLOPEN})
+### CMAKE_DL_LIBS "dl"
+
+CHECK_INCLUDE_FILE(dlfcn.h HAVE_DLFCN_H)
+
+CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_DLOPEN)
+IF (${HAVE_DLOPEN})
+  SET(CONFIG_BDL "-ldl")
+  # See: src/System/Link/dyn_link.cpp:39
+  SET(TM_DYNAMIC_LINKING dlopen)
+ENDIF (${HAVE_DLOPEN})
 
 IF (NOT ${HAVE_DLOPEN})
   CHECK_LIBRARY_EXISTS(dld dld_link "" HAVE_DLOPEN)
   IF (${HAVE_DLOPEN})
-    SET(CONFIG_BDL "-ldl")
+    SET(CONFIG_BDL "-ldld")
+    # See: src/System/Link/dyn_link.cpp:39
+    SET(TM_DYNAMIC_LINKING dld_link)
   ENDIF (${HAVE_DLOPEN})
 ENDIF (NOT ${HAVE_DLOPEN})
 
 IF (NOT ${HAVE_DLOPEN})
   CHECK_FUNCTION_EXISTS(shl_load HAVE_DLOPEN)
   IF (${HAVE_DLOPEN})
-    SET(CONFIG_BDL "-ldl")
+    SET(CONFIG_BDL "-ldl") # I think this is wrong link arg?
+    SET(TM_DYNAMIC_LINKING shl_load)
   ENDIF (${HAVE_DLOPEN})
 ENDIF (NOT ${HAVE_DLOPEN})
-
-
-IF (${HAVE_DLOPEN})
-  #SET(TM_DYNAMIC_LINKING 1) # dynamic linking works
-ENDIF (${HAVE_DLOPEN})
 
 ### --------------------------------------------------------------------
 ### Handle different systems case by case
 ### --------------------------------------------------------------------
+###
+### I think that there are already cmake variables for these things.
+###
+### CMAKE_CXX_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
+### CMAKE_CXX_PLATFORM_ID "Linux"
+###
+### CMAKE_C_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
+### CMAKE_C_PLATFORM_ID "Linux"
 
 SET(CONFIG_OS "GNU_LINUX")
 SET(CONFIG_OS_SUFFIX "gnu-linux")
+
+### CMAKE_CXX_FLAGS ""
+### CMAKE_CXX_FLAGS_DEBUG "-g"
+### CMAKE_CXX_FLAGS_DEBUG_INIT "-g"
+### CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG"
+### CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG"
+### CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG"
+### CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG"
+### CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG"
+### CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DNDEBUG"
+###
+### CMAKE_EXECUTABLE_RPATH_LINK_CXX_FLAG "-Wl,-rpath-link,"
+### CMAKE_EXECUTABLE_RPATH_LINK_C_FLAG "-Wl,-rpath-link,"
+### CMAKE_EXECUTABLE_RUNTIME_CXX_FLAG "-Wl,-rpath,"
+### CMAKE_EXECUTABLE_RUNTIME_CXX_FLAG_SEP ":"
+### CMAKE_EXECUTABLE_RUNTIME_C_FLAG "-Wl,-rpath,"
+### CMAKE_EXECUTABLE_RUNTIME_C_FLAG_SEP ":"
+###
+### CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS "-Wl,-Bdynamic"
+### CMAKE_EXE_LINK_DYNAMIC_C_FLAGS "-Wl,-Bdynamic"
+### CMAKE_EXE_LINK_STATIC_CXX_FLAGS "-Wl,-Bstatic"
+### CMAKE_EXE_LINK_STATIC_C_FLAGS "-Wl,-Bstatic"
+###
+### CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "-shared"
+### CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "-shared"
+### CMAKE_SHARED_LIBRARY_CXX_FLAGS "-fPIC"
+### CMAKE_SHARED_LIBRARY_C_FLAGS "-fPIC"
+### CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "-rdynamic"
+### CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "-rdynamic"
+### CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_CXX_FLAGS "-Wl,-Bdynamic"
+### CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_C_FLAGS "-Wl,-Bdynamic"
+### CMAKE_SHARED_LIBRARY_LINK_STATIC_CXX_FLAGS "-Wl,-Bstatic"
+### CMAKE_SHARED_LIBRARY_LINK_STATIC_C_FLAGS "-Wl,-Bstatic"
+### CMAKE_SHARED_LIBRARY_PREFIX "lib"
+### CMAKE_SHARED_LIBRARY_RPATH_LINK_CXX_FLAG "-Wl,-rpath-link,"
+### CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG "-Wl,-rpath-link,"
+### CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG "-Wl,-rpath,"
+### CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG_SEP ":"
+### CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG "-Wl,-rpath,"
+### CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP ":"
+### CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG "-Wl,-soname,"
+### CMAKE_SHARED_LIBRARY_SONAME_C_FLAG "-Wl,-soname,"
+### CMAKE_SHARED_LIBRARY_SUFFIX ".so"
+###
+### CMAKE_HOST_SYSTEM "Linux-4.4.0-24-lowlatency-tuxonice"
+### CMAKE_HOST_SYSTEM_NAME "Linux"
+### CMAKE_HOST_SYSTEM_PROCESSOR "x86_64"
+### CMAKE_HOST_SYSTEM_VERSION "4.4.0-24-lowlatency-tuxonice"
+### CMAKE_HOST_UNIX "1"
+###
+### CMAKE_LIBRARY_ARCHITECTURE "x86_64-linux-gnu"
+### CMAKE_LIBRARY_ARCHITECTURE_REGEX "[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*"
+### CMAKE_SYSTEM_NAME "Linux"
+### CMAKE_SYSTEM_PROCESSOR "x86_64"
+
+
+
 SET(CONFIG_CXXFLAGS "")
 SET(CONFIG_CXXTEMPLATE "")
-SET(CONFIG_STD_SETENV "#define STD_SETENV")
+
+#SET(CONFIG_STD_SETENV "#define STD_SETENV")
+
 SET(CONFIG_SO "so")
 SET(CONFIG_LIB_PATH "LD_LIBRARY_PATH")
 SET(CONFIG_CHMOD "chmod -f")
-SET(CONFIG_CXXOPTIMIZE "-O2")
+SET(CONFIG_CXXOPTIMIZE "-ggdb3 -O3 -fexpensive-optimizations -fno-rtti")
 SET(CONFIG_BSTATIC "-Wl,-Bstatic")
 SET(CONFIG_BSHARED "-Wl,-Bdynamic")
 SET(CONFIG_BFLAGS "")
@@ -128,37 +339,50 @@ SET(CONFIG_WORD_LENGTH_INC "3")
 SET(CONFIG_WORD_MASK "0xfffffffc")
 SET(CONFIG_MAX_FAST "260 // WORD_LENGTH more than power of 2")
 
-CHECK_TYPE_SIZE("void*" SIZE_OF_VOIDP)
 
-MESSAGE(STATUS "Check if we are on a 64-bits computer")
-IF (${SIZE_OF_VOIDP} EQUAL 8)
-  SET(CONFIG_WORD_LENGTH "8")
-  SET(CONFIG_WORD_LENGTH_INC "7")
-  SET(CONFIG_WORD_MASK "0xfffffffffffffff8")
-  SET(CONFIG_MAX_FAST "264 // WORD_LENGTH more than power of 2")
-ENDIF (${SIZE_OF_VOIDP} EQUAL 8)
+### CMAKE_C_SIZEOF_DATA_PTR "8"
+### CMAKE_SIZEOF_VOID_P "8"
+check_type_size("void*" SIZE_OF_VOIDP)
+# set(SIZEOF_VOID_P ${SIZE_OF_VOIDP}) # Unused
+
+message(STATUS "Check if we are on a 64-bits computer")
+if (${SIZE_OF_VOIDP} EQUAL 8)
+  ## Sets WORD_LENGTH etc., used by ./src/System/Misc/fast_alloc.[hc]pp
+  set(CONFIG_WORD_LENGTH "8")
+  set(CONFIG_WORD_LENGTH_INC "7")
+  set(CONFIG_WORD_MASK "0xfffffffffffffff8")
+  set(CONFIG_MAX_FAST "264 // WORD_LENGTH more than power of 2")
+endif (${SIZE_OF_VOIDP} EQUAL 8)
 
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  MESSAGE(STATUS "final adjustments for an Intel or AMD GNU/Linux host")
-  SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
+  MESSAGE(STATUS "Final adjustments for an Intel or AMD GNU/Linux host")
+  SET(CONFIG_CXXOPTIMIZE "-ggdb3 -O3 -fexpensive-optimizations  -fno-rtti")
+  SET(CMAKE_CXX_FLAGS "")
+  SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3")
+  SET(CMAKE_CXX_FLAGS_DEBUG_INIT "-ggdb3")
+  SET(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
+  SET(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
+  SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -fexpensive-optimizations  -fno-rtti -DNDEBUG")
+  SET(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -fexpensive-optimizations  -fno-rtti -DNDEBUG")
+  SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-ggdb3 -O3 -fexpensive-optimizations -fno-rtti")
+  SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-ggdb3 -O3 -fexpensive-optimizations -fno-rtti")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-  MESSAGE(STATUS "final adjustments for an Intel or AMD GNU/BSD host")
-  SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
+  MESSAGE(STATUS "Final adjustments for an Intel or AMD GNU/BSD host")
+  SET(CONFIG_CXXOPTIMIZE "-g3 -O3 -fexpensive-optimizations")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
-  MESSAGE(STATUS "final adjustments for an Intel or AMS Solaris host")
-  SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
-  SET(CONFIG_CXXOPTIMIZE "-O3")
+  MESSAGE(STATUS "Final adjustments for an Intel or AMS Solaris host")
+  SET(CONFIG_CXXOPTIMIZE "-g3 -O3 -fexpensive-optimizations")
   SET(CONFIG_BPATH "-Wl,-R,")
 #  SET(X11_LDFLAGS "${X_LIBS} -lXext -lX11 -lsocket")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
 
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
-  MESSAGE(STATUS "final adjustments for cygwin host")
+  MESSAGE(STATUS "Final adjustments for cygwin host")
   SET(CONFIG_OS "CYGWIN")
   SET(CONFIG_BFLAGS "-Wl,-stack,8388608")
 ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
@@ -166,6 +390,8 @@ ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "CYGWIN_NT-5.1")
 ### --------------------------------------------------------------------
 ### Package Data
 ### --------------------------------------------------------------------
+###
+### ? Shouldn't these be strings?
 
 set(PACKAGE_BUGREPORT 1)
 set(PACKAGE_NAME 1)
@@ -175,42 +401,68 @@ set(PACKAGE_URL 1)
 set(PACKAGE_VERSION 1)
 
 ### --------------------------------------------------------------------
-### Memory allocation options
+### Options
 ### --------------------------------------------------------------------
 
-#if(${DISABLE_FASTALLOC})
-#  set(NO_FAST_ALLOC 1)
-#endif(${DISABLE_FASTALLOC})
+
 
 
 ### --------------------------------------------------------------------
 ### Experimental options
 ### --------------------------------------------------------------------
 
-#  SET(EXPERIMENTAL 1)
+option(EXPERIMENTAL "Enable experimental options" OFF)
 
 ### --------------------------------------------------------------------
 ###  Test for Libraries
 ### --------------------------------------------------------------------
 
-find_package(Guile REQUIRED)
+# ? find_package(Cygwin)
+
 find_package(Iconv)
-find_package(Freetype)
-set(LINKED_FREETYPE 1)
-set(USE_FREETYPE 1)
+
+### cmake_dependent_option(USE_FOO "Use Foo" ON
+###   "USE_BAR;NOT USE_ZOT" OFF)
+
+option(LINKED_FREETYPE 1)
+find_package(Freetype REQUIRED)
+if (${FREETYPE_FOUND})
+  set(USE_FREETYPE 1)
+endif (${FREETYPE_FOUND})
+cmake_dependent_option(LINKED_FREETYPE "Link Freetype at build time." ON
+  "USE_FREETYPE;NOT HAVE_DLOPEN" ON)
+
+
 find_package(ZLIB)
 find_package(JPEG)
-#FIND_PACKAGE(Cairo)
-#FIND_PACKAGE(Imlib2)
-#FIND_PACKAGE(Axel)
+find_package(PNG)
+
+option(LINKED_CAIRO 1)
+find_package(Cairo)
+if(${CAIRO_FOUND})
+  set(USE_CAIRO 1)
+endif(${CAIRO_FOUND})
+cmake_dependent_option(LINKED_CAIRO "Link Cairo at build time." ON
+  "USE_CAIRO;NOT HAVE_DLOPEN" ON)
+
+option(LINKED_IMLIB2 1)
+find_package(Imlib2)
+if(${IMLIB2_FOUND})
+  set(USE_IMLIB2 1)
+endif(${IMLIB2_FOUND})
+cmake_dependent_option(LINKED_IMLIB2 "Link imlib2 at build time." ON
+  "USE_IMLIB2;NOT HAVE_DLOPEN" ON)
 
 
-
+### find_package(Axel) # What is/was Axel?
 
 
 ### --------------------------------------------------------------------
-###  Some Guile related adjustements
+###  Guile
 ### --------------------------------------------------------------------
+###
+
+set(SCM_SIZET scm_sizet)
 if(Guile_VERSION_STRING VERSION_LESS 1.6)
   set(CONFIG_GUILE_SERIAL "A")
   set(GUILE_A 1)
@@ -228,29 +480,34 @@ else(Guile_VERSION_STRING VERSION_LESS 1.6)
   message(ERROR "Not Guile serial A,B,C or D???")
 endif(Guile_VERSION_STRING VERSION_LESS 1.6)
 
+set(PKGREV "-guile-${Guile_VERSION_STRING}${PKGREV}")
 
-SET(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
-SET(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
-SET(CMAKE_REQUIRED_LIBRARIES ${Guile_LIBRARIES})
+set(CMAKE_REQUIRED_FLAGS "-Werror ${Guile_CFLAGS}")
+set(CMAKE_REQUIRED_INCLUDES ${Guile_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Guile_LIBRARIES})
 
-MESSAGE(STATUS "Checking the size_t of guile strings")
 
-CHECK_C_SOURCE_COMPILES(  "#include <guile/gh.h>
+# For old versions of Guile.
+message(STATUS "Checking guile string size type.")
+
+check_c_source_compiles(  "#include <guile/gh.h>
   #include <libguile.h>
   void print_string (SCM s) {
     int len_r;
     char* r= gh_scm2newstr (s, &len_r); } int main() { return 0; }
 " _guile_str_size_test)
 
-IF(_guile_str_size_test)
-  SET(guile_str_size_t int)
-ELSE(_guile_str_size_test)
-  SET(guile_str_size_t size_t)
-ENDIF(_guile_str_size_test)
+if(_guile_str_size_test)
+  set(guile_str_size_t int)
+else(_guile_str_size_test)
+  set(guile_str_size_t size_t)
+endif(_guile_str_size_test)
 
-MESSAGE(STATUS "Checking whether ... arguments behave correctly")
 
-CHECK_C_SOURCE_COMPILES(  
+# For old versions of Guile.
+message(STATUS "Checking whether ... arguments behave correctly.")
+
+check_c_source_compiles(
 " #include <guile/gh.h>
   #include <libguile.h>
   typedef SCM (*FN)(...);
@@ -259,79 +516,170 @@ CHECK_C_SOURCE_COMPILES(
   int main() { return 0; }
 " _guile_dots_test)
 
-IF(_guile_dots_test)
-  SET(DOTS_OK 1)
-ELSE(_guile_dots_test)
-  SET(DOTS_OK)
-ENDIF(_guile_dots_test)
+if(_guile_dots_test)
+  set(DOTS_OK 1)
+else(_guile_dots_test)
+  set(DOTS_OK)
+endif(_guile_dots_test)
 
-#MESSAGE(STATUS "Checking if statically linking with guile works")
-##TODO
 
 
 ### --------------------------------------------------------------------
 ### GUI selection
 ### --------------------------------------------------------------------
 
-SET(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
+set(GUI_TYPE) # nothing or WIN32, MACOSX bundles are treated independetly
 
-IF(NOT TEXMACS_GUI)
-  SET(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, X11, Aqua)")
-ENDIF(NOT TEXMACS_GUI)
+if(NOT TEXMACS_GUI)
+  set(TEXMACS_GUI "Qt" CACHE STRING "TeXmacs Gui (Qt, Qt5, Qt4, X11, Aqua)")
+endif(NOT TEXMACS_GUI)
 
-IF(TEXMACS_GUI STREQUAL "Qt")
+# TODO: Determine what is the actual minimum Qt5 version?
+set(TM_QT5_MIN_VERSION 5.2.0)
+set(TM_QT4_MIN_VERSION 4.8.7)
 
-  FIND_PACKAGE(Qt5 5.9.1 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
-  SET(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
 
-  IF(WIN32)
-   SET(GUI_TYPE WIN32)
-  ENDIF(WIN32)
+if(TEXMACS_GUI STREQUAL "Qt")
+  find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS Core Gui Widgets PrintSupport)
+  if(Qt5_FOUND)
+    set(TEXMACS_GUI "Qt5")
+  else(Qt5_FOUND)
+    find_package(Qt4 ${TM_QT4_MIN_VERSION} COMPONENTS QtCore QtGui)
+    if(QT4_FOUND)
+      set(TEXMACS_GUI "Qt4")
+    else(QT4_FOUND)
+      message(ERROR "Neither Qt5 nor Qt4 found.")
+      # TODO: Detect appropriate default for OS environment? Should stop at the above error anyway.
+      # set(TEXMACS_GUI "X11")
+    endif(QT4_FOUND)
+  endif(Qt5_FOUND)
+endif(TEXMACS_GUI STREQUAL "Qt")
 
-  include_directories(
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Gui_INCLUDE_DIRS}
-    ${Qt5Widgets_INCLUDE_DIRS}
-    ${Qt5PrintSupport_INCLUDE_DIRS}
-  )
-  add_definitions("-DQTTEXMACS")
-  SET(QTTEXMACS 1)
-  #SET(NO_FAST_ALLOC 1)
-  SET(CONFIG_GUI "QT")
-  SET(CONFIG_QT "Qt")
-  MESSAGE(STATUS "Enabling experimental  Qt port")
 
-ELSEIF(TEXMACS_GUI STREQUAL "Aqua")
+if(TEXMACS_GUI STREQUAL "Qt5")
 
-  IF (APPLE)
-    SET(GUI_TYPE MACOSX_BUNDLE)
+  find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
 
-    SET(NO_FAST_ALLOC 1)
-    SET(AQUATEXMACS 1)
-    SET(COCOA_CFLAGS "")
-    SET(COCOA_LDFLAGS "-framework COCOA")
-    SET(CONFIG_GUI "COCOA")
-    SET(CONFIG_COCOA "Cocoa")
+  if(Qt5_FOUND)
+    # TODO: Test this...
+    set(QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+    # SET(QT_LIBRARIES Qt5::Core Qt5::Gui Qt5::Widgets Qt5::PrintSupport)
 
-    MESSAGE(STATUS "Enabling experimental Cocoa port")
+    set(Qt5Svg_INCLUDE_DIRS )
+    set(Qt5X11Extras_INCLUDE_DIRS )
+    find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS Svg X11Extras) # not REQUIRED; can it even use these?
+    # find_package(Qt5 ${TM_QT5_MIN_VERSION} COMPONENTS QtHelp UiPlugin UiTools WebEngine WebEngineCore WebEngineWidgets)
 
-  ELSE (APPLE)
-  
-    MESSAGE( ERROR "Aqua GUI is not supported on this system")
-    
-  ENDIF (APPLE)
+    if(Qt5Svg_FOUND)
+      set(QT_LIBRARIES ${QT_LIBRARIES} ${Qt5Svg_LIBRARIES})
+    endif(Qt5Svg_FOUND)
+    if(Qt5X11Extras_FOUND)
+      set(QT_LIBRARIES ${QT_LIBRARIES} ${Qt5X11Extras_LIBRARIES})
+    endif(Qt5X11Extras_FOUND)
 
-ELSE(TEXMACS_GUI STREQUAL "Qt")
+    if(WIN32)
+      set(GUI_TYPE WIN32)
+    endif(WIN32)
 
-  FIND_PACKAGE(X11)
+    include_directories(
+      ${Qt5Core_INCLUDE_DIRS}
+      ${Qt5Gui_INCLUDE_DIRS}
+      ${Qt5Widgets_INCLUDE_DIRS}
+      ${Qt5PrintSupport_INCLUDE_DIRS}
+      ${Qt5Svg_INCLUDE_DIRS}
+      ${Qt5X11Extras_INCLUDE_DIRS}
+      )
+    # include(${QT_USE_FILE})
+    add_definitions("-DQTTEXMACS")
+    set(QTTEXMACS 1)
+    # TODO? Is this needed? SET(NO_FAST_ALLOC 1)
+    set(CONFIG_GUI "QT")
+    set(CONFIG_QT "Qt")
+    set(CONFIG_GUI_IS_QT ON)
+    # set(QTPIPES 1)
+    message(STATUS "Enabling Qt GUI")
 
-  SET(CONFIG_X11 "X11 Widkit Ghostscript")
-  SET(CONFIG_GUI "X11")
-  
+  else(Qt5_FOUND)
+    message(ERROR "Doh! Qt5 is required to compile the Qt5 GUI")
+  endif(Qt5_FOUND)
 
-  MESSAGE(STATUS "Enabling standard X11 interface")
+elseif(TEXMACS_GUI STREQUAL "Qt4")
 
-ENDIF(TEXMACS_GUI STREQUAL "Qt")
+  find_package(Qt4 ${TM_QT4_MIN_VERSION} COMPONENTS QtCore QtGui REQUIRED)
+
+  if(QT4_FOUND)
+    if(WIN32)
+     set(GUI_TYPE WIN32)
+    endif(WIN32)
+
+    include(${QT_USE_FILE})
+    add_definitions("-DQTTEXMACS")
+    set(NO_FAST_ALLOC 1)
+    set(CONFIG_GUI "QT")
+    set(CONFIG_QT "Qt")
+    set(CONFIG_GUI_IS_QT ON)
+    set(QTPIPES 1)
+    message(STATUS "Enabling Qt4 GUI")
+  else(QT4_FOUND)
+    message(ERROR "Qt4 is required to compile the Qt4 GUI")
+  endif(QT4_FOUND)
+
+
+elseif(TEXMACS_GUI STREQUAL "Aqua")
+
+  if (APPLE)
+    set(GUI_TYPE MACOSX_BUNDLE)
+
+    set(NO_FAST_ALLOC 1)
+    set(AQUATEXMACS 1)
+    set(COCOA_CFLAGS "")
+    set(COCOA_LDFLAGS "-framework COCOA")
+    set(CONFIG_GUI "COCOA")
+    set(CONFIG_COCOA "Cocoa")
+
+    message(STATUS "Enabling Cocoa GUI")
+
+  else (APPLE)
+
+    message( ERROR "Aqua GUI is not supported on this system")
+
+  endif (APPLE)
+
+
+else(TEXMACS_GUI STREQUAL "Qt")
+
+  find_package(X11)
+
+  set(CONFIG_X11 "X11 Widkit Ghostscript")
+  set(CONFIG_GUI "X11")
+  set(TEXMACS_GUI "X11")
+
+  message(STATUS "Enabling X11 GUI interface")
+
+endif(TEXMACS_GUI STREQUAL "Qt5")
+
+
+### --------------------------------------------------------------------
+### Memory allocation options
+### --------------------------------------------------------------------
+
+cmake_dependent_option(DISABLE_FASTALLOC
+  "Compile with NO_FAST_ALLOC on"
+  OFF
+  "CONFIG_GUI_IS_QT" ON)
+
+if(${DISABLE_FASTALLOC})
+  set(NO_FAST_ALLOC 1)
+endif(${DISABLE_FASTALLOC})
+
+
+
+### --------------------------------------------------------------------
+### Documentation options
+### --------------------------------------------------------------------
+
+include(Doxygen)
+
 
 ### --------------------------------------------------------------------
 ### Debugging options
@@ -351,13 +699,24 @@ ENDIF(TEXMACS_GUI STREQUAL "Qt")
 ### Generate configure headers
 ### --------------------------------------------------------------------
 set(DEBUG_ASSERT 1)
+
 set(USE_GS 1)
-set(GS_EXE /usr/bin/gs)
-set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:)
-set(GS_LIB ../share/ghostscript/9.06/lib:)
-set(GUILE_NUM 1)
+
+# GS_EXE is not really used by the C++ code, which looks in the PATH
+# which is right, since build-configuration time isn't really when to
+# look for it anyway.
+#find_program(GS_EXE gs gswin32c PATHS ENV PATH)
+#message(STATUS "  GS_EXE is ${GS_EXE}")
+
+# These next two are unused by any C++ or Scheme code:
+# set(GS_FONTS ../share/ghostscript/fonts:/usr/share/fonts:) # Unused
+# set(GS_LIB ../share/ghostscript/9.06/lib:) # Unused
+
+# ? set(GUILE_NUM 1)
+
 set(PDF_RENDERER 1)
-set(SIZEOF_VOID_P 8)
+
+# ?? set(SIZEOF_VOID_P 8)
 set(STDC_HEADERS 1)
 set(USE_STACK_TRACE 1)
 
@@ -365,7 +724,12 @@ option(QTPIPES "use Qt pipes" ON)
 
 option(USE_SQLITE3 "Use SQLite3" ON)
 if (USE_SQLITE3)
-  option(LINKED_SQLITE3 "Use Linked SQLite3" ON)
+  pkg_check_modules(sqlite3 sqlite3)
+  if(sqlite3_FOUND)
+    set(USE_SQLITE3 1)
+  endif(sqlite3_FOUND)
+  cmake_dependent_option(LINKED_SQLITE3 "Use Linked SQLite3" ON
+    "USE_SQLITE3;NOT HAVE_DLOPEN" ON)
 endif (USE_SQLITE3)
 
 option(PDFHUMMUS_NO_TIFF "Disable TIFF in PDF Hummus" ON)
@@ -374,11 +738,16 @@ if (APPLE)
   set(MACOSX_EXTENSIONS 1)
   set(OS_MACOS 1)
 endif (APPLE)
-configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
+
 set(CMAKE_CXX_FLAGS "-Wno-deprecated-register -include config.h")
 
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_SOURCE_DIR}/src/System/config.h)
+configure_file(${TEXMACS_SOURCE_DIR}/src/System/config.h.cmake ${TEXMACS_BINARY_DIR}/src/System/config.h)
 
+# see: src/System/Misc/sys_utils.cpp:set_env()
+# TODO: maybe this should be determined at configuration time, right?
 set(CONFIG_STD_SETENV "#define STD_SETENV")
+
 set(tm_orig ${TEXMACS_SOURCE_DIR})
 set(CONFIG_HOST_OS "linux-gnu") # TODO: should not be hard-coded
 set(CONFIG_HOST_VENDOR "pc") # TODO: should not be hard-coded
@@ -397,10 +766,18 @@ set(datarootdir ${prefix}/share)
 set(datadir ${datarootdir})
 set(tmdata ${datarootdir}/TeXmacs)
 set(tmbin ${exec_prefix}/lib/texmacs/TeXmacs)
+set(tmsrc ${TEXMACS_SOURCE_DIR})
 configure_file(misc/scripts/texmacs.in ${TEXMACS_BINARY_DIR}/misc/script/texmacs @ONLY)
 configure_file(misc/scripts/fig2ps.in ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps @ONLY)
 
 configure_file(misc/man/texmacs.1.in ${TEXMACS_SOURCE_DIR}/misc/man/texmacs.1 @ONLY)
+
+file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/control)
+configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/control.in
+  ${TEXMACS_SOURCE_DIR}/packages/debian/control @ONLY)
+file(REMOVE ${TEXMACS_SOURCE_DIR}/packages/debian/changelog)
+configure_file(${TEXMACS_SOURCE_DIR}/packages/debian/changelog.in
+  ${TEXMACS_SOURCE_DIR}/packages/debian/changelog @ONLY)
 
 ### --------------------------------------------------------------------
 ### Set the executable target name and other stuff
@@ -425,10 +802,10 @@ IF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
   SET(BUNDLE_DEBUG_EXTENSION)
   IF (DEBUG)
     SET(BUNDLE_DEBUG_EXTENSION "_debug")
-  ENDIF (DEBUG)  
+  ENDIF (DEBUG)
   SET(APP_BUNDLE_NAME ${TeXmacs_binary_name}${BUNDLE_DEBUG_EXTENSION}".app")
   ADD_CUSTOM_TARGET ( bundle
-            mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS 
+            mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
     COMMAND mkdir -p  ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
     COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/Info.plist ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/Resources
     COMMAND cp ${TEXMACS_SOURCE_DIR}/misc/bundle/TeXmacs ${TEXMACS_BINARY_DIR}/${APP_BUNDLE_NAME}/Contents/MacOS
@@ -440,10 +817,16 @@ ENDIF (APPLE AND NOT TEXMACS_GUI STREQUAL X11)
 ### --------------------------------------------------------------------
 ### Installation
 ### --------------------------------------------------------------------
+
+# TODO: Check for MacOS compatibility; please think of MacPorts.
+include(GNUInstallDirs)
+
 ### bin/
+
+
 install(FILES ${TEXMACS_BINARY_DIR}/misc/script/texmacs
               ${TEXMACS_BINARY_DIR}/misc/scripts/fig2ps
-              misc/scripts/tm_gs 
+              misc/scripts/tm_gs
         DESTINATION bin
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
@@ -475,15 +858,25 @@ install(FILES TeXmacs/misc/pixmaps/TeXmacs.xpm DESTINATION share/pixmaps)
 set(TOOLS "texmacs" "fig2ps")
 set(MAN_SECTION "1")
 foreach(TOOL ${TOOLS})
-  set(TOOL_MANFILE ${CMAKE_CURRENT_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION})
-  set(TOOL_MANFILE_GZ ${CMAKE_CURRENT_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz)
+set(TOOL_MANFILE "${CMAKE_CURRENT_SOURCE_DIR}/misc/man/${TOOL}.${MAN_SECTION}")
+set(TOOL_MANFILE_GZ "${CMAKE_CURRENT_BINARY_DIR}/${TOOL}.${MAN_SECTION}.gz")
   add_custom_command(
-    OUTPUT ${TOOL_MANFILE_GZ}
-    COMMAND gzip -c ${TOOL_MANFILE} > ${TOOL_MANFILE_GZ}
-    MAIN_DEPENDENCY ${TOOL_MANFILE}
+    OUTPUT "${TOOL_MANFILE_GZ}"
+    COMMAND gzip -c "${TOOL_MANFILE}" > "${TOOL_MANFILE_GZ}"
+    MAIN_DEPENDENCY "${TOOL_MANFILE}"
     COMMENT "Building ${TOOL} man page"
     VERBATIM
   )
-  add_custom_target(${TOOL}.${MAN_SECTION} ALL DEPENDS ${TOOL_MANFILE_GZ})
-  install(FILES ${TOOL_MANFILE_GZ} DESTINATION share/man/man${MAN_SECTION})
+  add_custom_target("${TOOL}.${MAN_SECTION}" ALL DEPENDS "${TOOL_MANFILE_GZ}")
+  install(FILES "${TOOL_MANFILE_GZ}" DESTINATION "share/man/man${MAN_SECTION}")
 endforeach(TOOL)
+
+
+### Last so everything is defined when it happens.
+option(SAVE_SYSTEM_INFORMATION
+  "Save cmake System Information to CMakeSystemInformation.txt"
+  OFF)
+if(${SAVE_SYSTEM_INFORMATION})
+  set(RESULT_FILE CMakeSystemInformation.txt)
+  include(SystemInformation)
+endif(${SAVE_SYSTEM_INFORMATION})

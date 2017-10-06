@@ -13,6 +13,11 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'regexp-opt)
+
+;;                                       Defined below...
+(add-hook 'scheme-mode-hook '(lambda () (texmacs-style)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define lists of special keywords
@@ -138,8 +143,6 @@
 ;; Define TeXmacs style
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-hook 'scheme-mode-hook '(lambda () (texmacs-style)))
-
 (defun symbol-var-name (name)
   (let ((r (symbol-name name)))
     (let ((n (length r))
@@ -152,10 +155,93 @@
   "Multiply NUMBER by seven."
   (* 7 number))
 
+
+(defvar texmacs-scheme-imenu-generic-expression nil
+  "Imenu generic expression for Scheme mode.  See `imenu-generic-expression'.")
+
+(setq texmacs-scheme-imenu-generic-expression
+      `((nil
+         ,(concat
+           (regexp-opt
+            (mapcar
+             #'symbol-var-name
+             '(define
+               define-public
+               tm-define
+               tm-property
+               request-handler
+               tm-menu
+               define-menu
+               tm-widget
+               define-widget
+               tm-generate
+               tm-build
+               tm-build-macro
+               tm-build-widget
+               menu-bind
+               define-table
+               extend-table
+               smart-table
+               tm-service
+               tm-call-back
+               define-format
+               define-language
+               define-graphics
+               provide-public
+               define-group
+               define-alternate
+               )))
+           "\\s-+\\s(*\\(?10:\\s_+\\)\\S_")
+         10)
+        ("Types"
+         ,(concat
+           (regexp-opt
+            (mapcar
+             #'symbol-var-name
+             '(define-class
+               define-class-with-accessors-keywords
+               )))
+           "\\s-+\\s(*\\(?10:\\s_+\\)\\S_")
+         10)
+        ("Syntax"
+         ,(concat
+           (regexp-opt
+            (mapcar
+             #'symbol-var-name
+             '(define-macro
+               define-public-macro
+               defmacro
+               defmacro-public
+               define-syntax
+               tm-define-macro
+               lazy-body-macro
+               )))
+           "\\s-+\\s(*\\(?10:\\s_+\\)\\S_")
+         10)
+        ("Modules"
+         ,(concat
+           (regexp-opt
+            (mapcar
+             #'symbol-var-name
+             '(texmacs-module
+               define-module
+               )))
+           "\\s-+\\s(*\\(?10:\\S)+\\)\\s)")
+         10)
+        ))
+
+;;; Todo: Use define-derived-mode instead. See scheme.el.
+
+;; (defvar texmacs-font-lock-keywords
+;;   (eval-when-compile
+;;     (list
+;;      (list
+
 (defun texmacs-style ()
   (set-fill-column 79)
   (setq comment-column 40)
-  (auto-fill-mode 1)
+  ;(auto-fill-mode 1)
+  (setq-local imenu-generic-expression texmacs-scheme-imenu-generic-expression)
   (font-lock-add-keywords 'scheme-mode
    (list
     (cons
@@ -183,4 +269,8 @@
   (dolist (s unary-indent)
     (put s 'scheme-indent-function 1))
   (dolist (s nullary-indent)
-    (put s 'scheme-indent-function 0)))
+    (put s 'scheme-indent-function 0))
+  (put 'let 'scheme-indent-function 'scheme-let-indent))
+
+
+(provide 'tm-mode)
