@@ -9,14 +9,22 @@
 /* Enable experimental style rewriting code */
 #cmakedefine EXPERIMENTAL 1
 
+
+/* Whether to use gs or not */
+#cmakedefine USE_GS 1
+
 /* gs path relative to TEXMACS_PATH */
-#cmakedefine GS_EXE "@GS_EXE@"
+#cmakedefine XXXGS_EXE "@GS_EXE@"
 
 /* gs fonts */
-#cmakedefine GS_FONTS "@GS_FONTS@"
+#cmakedefine XXXGS_FONTS "@GS_FONTS@"
 
 /* gs lib */
-#cmakedefine GS_LIB "@GS_LIB@"
+#cmakedefine XXXGS_LIB "@GS_LIB@"
+
+
+/* Guile version */
+#cmakedefine CONFIG_GUILE_SERIAL @CONFIG_GUILE_SERIAL@
 
 /* Guile version */
 #cmakedefine GUILE_A 1
@@ -30,7 +38,10 @@
 /* Guile version */
 #cmakedefine GUILE_D 1
 
+#cmakedefine SCM_SIZET @SCM_SIZET@
+
 #cmakedefine GUILE_NUM 0
+
 
 /* Define to 1 if the system has the type `FILE'. */
 #cmakedefine HAVE_FILE 1
@@ -93,8 +104,6 @@
 /* Link imlib2 library with TeXmacs */
 #cmakedefine LINKED_IMLIB2 1
 
-#cmakedefine LINKED_SQLITE3 1
-
 #cmakedefine MACOSX_EXTENSIONS 1
 
 #cmakedefine OS_MACOS 1
@@ -130,12 +139,16 @@
 
 #cmakedefine QTPIPES 1
 
-#cmakedefine SIZEOF_VOID_P @SIZEOF_VOID_P@ 
+#cmakedefine SIZEOF_VOID_P 8
 
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine STDC_HEADERS 1
 
-#cmakedefine TM_DYNAMIC_LINKING 1
+#cmakedefine HAVE_LT_DLLOADER_H 1
+#cmakedefine HAVE_LT_MODULE_OPEN 1
+
+#cmakedefine HAVE_DLFCN_H 1
+#cmakedefine TM_DYNAMIC_LINKING dlopen
 
 /* Use axel library */
 #cmakedefine USE_AXEL 1
@@ -157,6 +170,8 @@
 #cmakedefine USE_SPARKLE 1
 
 #cmakedefine USE_SQLITE3 1
+
+#cmakedefine LINKED_SQLITE3 1
 
 #cmakedefine USE_STACK_TRACE 1
 
