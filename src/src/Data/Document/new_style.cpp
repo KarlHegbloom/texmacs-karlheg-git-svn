@@ -106,7 +106,7 @@ cache_file_name (tree t) {
     MD5Generator md5;
     string s;
     cache_file_name_sub (t, md5);
-    s << "__" << string (md5.ToString().c_str());
+    s << "__" << string (md5.ToStringAsString().c_str());
     return s * "__";
 }
 #else
